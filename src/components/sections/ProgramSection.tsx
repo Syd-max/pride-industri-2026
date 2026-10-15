@@ -7,77 +7,87 @@ export default function ProgramSection() {
 
   const scheduleDay1 = [
     {
-      time: '09:00 — 10:30 WIB',
+      time: '13:30 — 14:30 WIB',
+      title: 'Registrasi Undangan & Check-In Peserta',
+      location: 'Gate Utama · Braga City Walk',
+      desc: 'Penerimaan peserta pameran dan tamu undangan menggunakan verifikasi QR scanner mandiri melalui portal website ini.',
+      tag: 'Registrasi',
+      tagColor: 'bg-blue-100 text-blue-800 border-blue-200',
+    },
+    {
+      time: '14:30 — 15:30 WIB',
       title: 'Opening Ceremony PRIDE Industri 2026',
       location: 'Main Stage · Braga City Walk',
-      desc: 'Pembukaan resmi festival, sambutan pimpinan Disdagin Kota Bandung & RRD Organizer, serta pengenalan program kurasi IKM.',
+      desc: 'Pembukaan resmi festival, sambutan pimpinan Disdagin Kota Bandung & RRD Organizer, serta tur pembukaan kurasi produk.',
       tag: 'Seremonial',
-    },
-    {
-      time: '10:30 — 21:00 WIB',
-      title: 'Showcase Produk IKM: Fesyen, Kriya & Kuliner',
-      location: 'Atrium & Koridor Braga City Walk',
-      desc: 'Pameran interaktif produk-produk unggulan IKM binaan Kota Bandung. Eksplorasi cita rasa kuliner olahan lokal dan ragam kriya inovatif.',
-      tag: 'Pameran',
-    },
-    {
-      time: '11:00 — 18:00 WIB',
-      title: 'Sesi Pengambilan Gambar Lomba Video 1 Menit',
-      location: 'Area Festival Braga City Walk',
-      desc: 'Peserta lomba video berburu konten kreatif berdurasi maksimal 60 detik bertema “Karya Lokal, Cerita Lokal” di seluruh spot festival.',
-      tag: 'Kompetisi',
+      tagColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     },
     {
       time: '15:30 — 17:30 WIB',
-      title: 'Fashion Show: Karya Desainer Binaan',
+      title: 'Fashion Show Runway Karya Desainer Binaan',
       location: 'Main Runway · Braga City Walk',
       desc: 'Peragaan busana ready-to-wear kontemporer karya desainer fesyen binaan lokal Kota Bandung dengan konsep runway editorial.',
       tag: 'Fashion Runway',
+      tagColor: 'bg-purple-100 text-purple-800 border-purple-200',
+    },
+    {
+      time: '17:30 — 19:00 WIB',
+      title: 'Istirahat, Sholat & Networking IKM',
+      location: 'Area Festival · Braga City Walk',
+      desc: 'Jeda petang, eksplorasi kuliner lokal binaan di booth pameran, serta temu jejaring antar pelaku usaha.',
+      tag: 'Networking',
+      tagColor: 'bg-slate-100 text-slate-800 border-slate-200',
     },
     {
       time: '19:00 — 21:00 WIB',
       title: 'Live Percussion Beat & DJ Performance',
       location: 'Main Stage · Braga City Walk',
-      desc: 'Penampilan energi perkusi dinamis dipadukan dengan irama elektronik kontemporer menyemarakkan malam festival di koridor Braga.',
+      desc: 'Penampilan dinamis kolaborasi instrumen perkusi dengan irama elektronik kontemporer menyemarakkan malam koridor Braga.',
       tag: 'Musik & Seni',
+      tagColor: 'bg-rose-100 text-rose-800 border-rose-200',
     },
   ];
 
   const scheduleDay2 = [
     {
-      time: '09:00 — 12:00 WIB',
-      title: 'Grand Final & Presentasi Lomba Desain Kemasan',
-      location: 'Creative Stage · Braga City Walk',
-      desc: 'Sesi presentasi konsep, technical pack, dan mockup desain kemasan ramah lingkungan produk kuliner lokal di hadapan dewan juri ahli.',
-      tag: 'Grand Final',
-    },
-    {
-      time: '10:00 — 21:00 WIB',
-      title: 'Showcase & Public Exhibition Day 2',
+      time: '10:00 — 12:00 WIB',
+      title: 'Showcase & Pameran Publik Produk IKM Binaan',
       location: 'Atrium & Koridor Braga City Walk',
-      desc: 'Lanjutan pameran produk IKM binaan Kota Bandung terbuka untuk masyarakat umum dan pembeli potensial.',
+      desc: 'Pameran terbuka produk fesyen, kriya, dan olahan kuliner unggulan binaan Kota Bandung untuk pengunjung umum.',
       tag: 'Pameran',
+      tagColor: 'bg-blue-100 text-blue-800 border-blue-200',
     },
     {
-      time: '13:00 — 16:00 WIB',
-      title: 'Penjurian Lomba Video 1 Menit & Verifikasi',
-      location: 'Digital Hub Room',
-      desc: 'Penilaian orisinalitas, storytelling, dan kualitas visual karya video Reels/TikTok yang telah diunggah dengan tagar resmi.',
-      tag: 'Penjurian',
+      time: '10:00 — 14:00 WIB',
+      title: 'Shooting Lomba Video 1 Menit & Verifikasi',
+      location: 'Seluruh Spot Braga City Walk',
+      desc: 'Peserta lomba video berburu konten kreatif bertema “Karya Lokal, Cerita Lokal” untuk diunggah ke Reels / TikTok.',
+      tag: 'Kompetisi Video',
+      tagColor: 'bg-purple-100 text-purple-800 border-purple-200',
+    },
+    {
+      time: '14:00 — 16:30 WIB',
+      title: 'Penyerahan Simbolis 100 Halal, 3 SNI & 100 Uji Mutu',
+      location: 'Main Stage · Braga City Walk',
+      desc: 'Penyerahan sertifikat jaminan mutu produk kepada perwakilan pelaku IKM binaan Kota Bandung oleh Disdagin.',
+      tag: 'Sertifikasi Mutu',
+      tagColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     },
     {
       time: '16:30 — 18:30 WIB',
-      title: 'Penyerahan Sertifikat Halal, SNI & Uji Mutu',
-      location: 'Main Stage · Braga City Walk',
-      desc: 'Penyerahan simbolis 100 Sertifikat Halal, 3 Sertifikat SNI, dan 100 Uji Mutu kepada perwakilan IKM binaan.',
-      tag: 'Sertifikasi',
+      title: 'Closing Showcase Braga & Transit ke Papandayan',
+      location: 'Braga City Walk → Hotel Papandayan',
+      desc: 'Penutupan area pameran publik di Braga dan persiapan delegasi tamu undangan menuju sesi Malam Penganugerahan.',
+      tag: 'Transit',
+      tagColor: 'bg-slate-100 text-slate-800 border-slate-200',
     },
     {
-      time: '19:00 — 21:30 WIB',
-      title: 'Malam Penghargaan SIINAS & Penganugerahan Pemenang',
+      time: '19:00 — 21:00 WIB',
+      title: 'Malam Penganugerahan SIINAS & Awarding Pemenang',
       location: 'Ballroom Hotel Papandayan',
-      desc: 'Apresiasi tertinggi bagi 200 pelaku IKM atas kepatuhan pelaporan SIINAS serta pengumuman pemenang Lomba Desain Kemasan dan Video 1 Menit.',
-      tag: 'Awarding Gala',
+      desc: 'Apresiasi kepatuhan pelaporan SIINAS bagi 200 pelaku IKM serta pengumuman pemenang Lomba Desain Kemasan dan Lomba Video.',
+      tag: 'Malam Gala SIINAS',
+      tagColor: 'bg-amber-100 text-amber-800 border-amber-200',
     },
   ];
 
@@ -86,87 +96,84 @@ export default function ProgramSection() {
   return (
     <section
       id="program"
-      className="relative py-24 sm:py-32 bg-[#0E0E0E] border-t border-[rgba(255,255,255,0.06)]"
+      className="relative py-20 sm:py-28 bg-slate-50/70 border-t border-slate-200/80"
       aria-label="Rangkaian Program PRIDE Industri 2026"
     >
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-[#E85B26] mb-3">
-            <span className="w-6 h-[1px] bg-[#E85B26]" />
-            Rangkaian Acara
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200 mb-3">
+            <span className="w-2 h-2 rounded-full bg-rose-600" />
+            Agenda Resmi
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl text-[#F5F0E8] font-bold">
-            Agenda Festival & Penganugerahan
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Rangkaian Jadwal Festival & Malam Gala
           </h2>
-          <p className="mt-3 text-sm text-[#8A8A8A]">
+          <p className="mt-3 text-sm text-slate-600">
             Jadwal kegiatan terkonfirmasi 27–28 November 2026 di Braga City Walk
             dan Ballroom Hotel Papandayan.
           </p>
 
-          {/* Day Switcher */}
-          <div className="inline-flex p-1.5 rounded-full bg-[#171717] border border-[rgba(255,255,255,0.08)] mt-8">
+          {/* Day Switcher Tabs */}
+          <div className="inline-flex p-1.5 rounded-full bg-white border border-slate-200 shadow-xs mt-8">
             <button
               onClick={() => setActiveDay('day1')}
-              className={`px-6 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
+              className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-wide transition-all cursor-pointer ${
                 activeDay === 'day1'
-                  ? 'bg-[#C8A96E] text-[#0A0A0A] shadow-md'
-                  : 'text-[#8A8A8A] hover:text-[#F5F0E8]'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Hari 1 · 27 Nov 2026
+              Hari 1 · Jum&apos;at, 27 Nov (13:30–21:00)
             </button>
             <button
               onClick={() => setActiveDay('day2')}
-              className={`px-6 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
+              className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-wide transition-all cursor-pointer ${
                 activeDay === 'day2'
-                  ? 'bg-[#C8A96E] text-[#0A0A0A] shadow-md'
-                  : 'text-[#8A8A8A] hover:text-[#F5F0E8]'
+                  ? 'bg-rose-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Hari 2 · 28 Nov 2026
+              Hari 2 · Sabtu, 28 Nov (10:00–21:00)
             </button>
           </div>
         </div>
 
-        {/* Timeline */}
-        <div className="relative border-l border-[rgba(200,169,110,0.2)] ml-4 sm:ml-8 pl-6 sm:pl-10 space-y-8">
+        {/* Timeline Schedule Cards */}
+        <div className="space-y-4">
           {currentSchedule.map((item, idx) => (
-            <div key={idx} className="relative group">
-              {/* Timeline Node */}
-              <div className="absolute -left-[31px] sm:-left-[47px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#0A0A0A] border-2 border-[#C8A96E] group-hover:bg-[#C8A96E] transition-colors" />
-
-              <div className="glass-card p-6 rounded-xl border border-[rgba(255,255,255,0.06)] hover:border-[rgba(200,169,110,0.3)] transition-all">
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                  <span className="text-xs font-mono font-semibold text-[#E4C584]">
+            <div
+              key={idx}
+              className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            >
+              <div className="space-y-1.5 flex-1">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="font-mono text-xs sm:text-sm font-extrabold text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
                     {item.time}
                   </span>
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded bg-[rgba(255,255,255,0.05)] text-[#B8B0A4] border border-[rgba(255,255,255,0.08)]">
+                  <span
+                    className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${item.tagColor}`}
+                  >
                     {item.tag}
                   </span>
                 </div>
-
-                <h3 className="font-display text-lg sm:text-xl text-[#F5F0E8] font-semibold mb-1">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900">
                   {item.title}
                 </h3>
-
-                <div className="text-xs text-[#E85B26] font-medium mb-3">
-                  📍 {item.location}
-                </div>
-
-                <p className="text-xs sm:text-sm text-[#8A8A8A] leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {item.desc}
                 </p>
+              </div>
+
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-100 self-start sm:self-center flex-shrink-0">
+                <span>📍</span>
+                <span>{item.location}</span>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Note on detailed updates */}
-        <p className="text-center text-xs text-[#6B6560] italic mt-12">
-          * Catatan: Rincian jam teknis dapat diperbarui oleh panitia
-          penyelenggara menjelang hari pelaksanaan.
-        </p>
       </div>
     </section>
   );

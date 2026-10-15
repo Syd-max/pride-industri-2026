@@ -83,49 +83,50 @@ export default function VideoLokalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F5F0E8] py-12 px-4 sm:px-6">
+    <div className="min-h-screen bg-slate-50 text-slate-800 py-10 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
+        
         {/* Navigation Bar / Back */}
-        <div className="flex items-center justify-between pb-8 border-b border-[#1C1C1C] mb-10">
+        <div className="flex items-center justify-between pb-6 border-b border-slate-200 mb-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#B8B0A4] hover:text-[#C8A96E] transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-rose-600 transition-colors"
           >
             ← Kembali ke Beranda Festival
           </Link>
           <div className="flex items-center gap-2">
-            <div className="relative w-6 h-6">
+            <div className="relative w-7 h-7">
               <Image
                 src="/LOGO_PRIDE_INDUSTRI.png"
                 alt="PRIDE 2026"
                 fill
-                sizes="24px"
+                sizes="28px"
                 className="object-contain"
               />
             </div>
-            <span className="text-xs font-display tracking-wider font-semibold text-[#C8A96E]">
-              PRIDE 2026
+            <span className="text-xs font-extrabold tracking-tight text-slate-900">
+              PRIDE <span className="text-rose-600">INDUSTRI 2026</span>
             </span>
           </div>
         </div>
 
         {/* Success State View */}
         {successData ? (
-          <div className="glass-card-gold p-8 sm:p-12 rounded-2xl border border-[rgba(200,169,110,0.3)] text-center space-y-6 animate-fade-in">
-            <div className="w-16 h-16 rounded-full bg-[#E85B26]/20 text-[#E85B26] border border-[#E85B26]/40 flex items-center justify-center mx-auto text-3xl">
+          <div className="bg-white p-8 sm:p-12 rounded-3xl border border-rose-200 shadow-xl text-center space-y-6">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 border-2 border-emerald-300 flex items-center justify-center mx-auto text-3xl font-black">
               ✓
             </div>
 
             <div>
-              <span className="text-xs uppercase font-mono tracking-[0.2em] text-[#E85B26] block mb-1">
+              <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 inline-block mb-3">
                 Pendaftaran Berhasil Terkonfirmasi
               </span>
-              <h1 className="font-display text-3xl sm:text-4xl text-[#F5F0E8] font-bold">
+              <h1 className="text-3xl sm:text-4xl text-slate-900 font-extrabold">
                 Selamat, {successData.full_name}!
               </h1>
-              <p className="text-xs sm:text-sm text-[#B8B0A4] mt-2 max-w-md mx-auto">
-                Anda telah terdaftar dalam{' '}
-                <strong className="text-[#F5F0E8]">
+              <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto">
+                Anda telah terdaftar resmi dalam{' '}
+                <strong className="text-rose-600 font-bold">
                   Lomba Video 1 Menit (60 Detik) PRIDE Industri 2026
                 </strong>
                 .
@@ -133,73 +134,64 @@ export default function VideoLokalPage() {
             </div>
 
             {/* Official Pass Badge */}
-            <div className="p-6 rounded-xl bg-[#141414] border border-[#2A2A2A] max-w-md mx-auto text-left space-y-3">
-              <div className="flex justify-between items-center text-xs pb-3 border-b border-[#222222]">
-                <span className="text-[#8A8A8A] uppercase tracking-wider text-[10px]">
+            <div className="p-6 rounded-2xl bg-rose-50/60 border border-rose-200 max-w-md mx-auto text-left space-y-3">
+              <div className="flex justify-between items-center text-xs pb-3 border-b border-rose-100">
+                <span className="text-slate-500 uppercase tracking-wider text-[11px] font-bold">
                   Kode Registrasi Resmi:
                 </span>
-                <span className="font-mono text-sm font-bold text-[#E4C584]">
+                <span className="font-mono text-base font-extrabold text-rose-700">
                   {successData.registration_code}
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-[#8A8A8A]">Kategori Terpilih:</span>
-                <span className="text-[#F5F0E8] font-medium">
-                  {formData.video_category}
+                <span className="text-slate-500">Kategori Lomba:</span>
+                <span className="text-slate-800 font-bold">
+                  Video 1 Menit ({formData.video_category})
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-[#8A8A8A]">Email Terdaftar:</span>
-                <span className="text-[#F5F0E8] font-mono">{successData.email}</span>
+                <span className="text-slate-500">Email Terdaftar:</span>
+                <span className="text-slate-800 font-mono font-medium">
+                  {successData.email}
+                </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-[#8A8A8A]">Status Kehadiran di Braga:</span>
-                <span className="text-[#fbbf24] font-medium">
+                <span className="text-slate-500">Status Kehadiran:</span>
+                <span className="text-amber-700 font-bold">
                   Belum Check-In di Lokasi
                 </span>
               </div>
             </div>
 
             {/* Next Steps Instructions */}
-            <div className="p-5 rounded-xl bg-[#111111] border border-[#222222] text-xs text-[#8A8A8A] text-left space-y-2 max-w-md mx-auto">
-              <div className="font-semibold text-[#F5F0E8] uppercase tracking-wider text-[11px] mb-2">
-                Instruksi Pengambilan & Pengunggahan Video:
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 text-left space-y-2 max-w-md mx-auto leading-relaxed">
+              <div className="font-extrabold text-slate-800 uppercase tracking-wider text-[11px] mb-2">
+                Langkah Selanjutnya:
               </div>
               <p>
-                1. Pengambilan video wajib dilaksanakan pada{' '}
-                <strong>27–28 November 2026 di Braga City Walk</strong>.
+                1. Simpan kode registrasi Anda sebagai bukti verifikasi panitia.
               </p>
               <p>
-                2. Buat video format Reels vertikal dengan durasi maksimal 60
-                detik.
+                2. Lakukan shooting langsung di area festival Braga City Walk pada tanggal 27–28 November 2026.
               </p>
               <p>
-                3. Unggah ke Instagram Reels / TikTok pribadi dalam kondisi
-                publik.
-              </p>
-              <p className="font-mono text-[11px] text-[#C8A96E] bg-[#1a1a1a] p-2 rounded">
-                Wajib Tagar: #disdaginkotabandung #kemilau #prideindustri2026 #bdg
-                #eventbandung #bandung
-                <br />
-                Tag: @bdg.perdaganganindustri / @disdagin.bandung
+                3. Unggah video berdurasi maksimal 60 detik ke Reels / TikTok dengan tagar: <strong className="text-slate-800">#disdaginkotabandung #kemilau #prideindustri2026</strong> serta tag akun <strong className="text-slate-800">@bdg.perdaganganindustri</strong>.
               </p>
               <p>
-                4. Datang ke venue dan lakukan{' '}
-                <strong className="text-[#C8A96E]">Check-In</strong> di gate masuk
-                menggunakan kamera ponsel Anda.
+                4. Batas akhir publikasi karya adalah Sabtu, 28 November 2026 pukul 14:00 WIB.
               </p>
             </div>
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/check-in"
-                className="btn btn-primary text-xs py-3 px-6 uppercase tracking-wider w-full sm:w-auto"
+                className="px-6 py-3 rounded-full text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-md transition-all w-full sm:w-auto"
               >
                 Buka Menu Check-In
               </Link>
               <Link
                 href="/"
-                className="btn btn-ghost text-xs py-3 px-6 uppercase tracking-wider w-full sm:w-auto"
+                className="px-6 py-3 rounded-full text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all w-full sm:w-auto"
               >
                 Kembali ke Beranda
               </Link>
@@ -208,32 +200,34 @@ export default function VideoLokalPage() {
         ) : (
           /* Form View */
           <div className="space-y-8">
+            
             {/* Header */}
             <div>
-              <div className="inline-block text-[11px] font-semibold tracking-[0.2em] uppercase text-[#E85B26] mb-2">
+              <div className="inline-block text-[11px] font-extrabold tracking-wider uppercase px-3 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-200 mb-3">
                 Formulir Pendaftaran Resmi
               </div>
-              <h1 className="font-display text-3xl sm:text-4xl text-[#F5F0E8] font-bold">
+              <h1 className="text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight">
                 Lomba Video 1 Menit (60 Detik) PRIDE 2026
               </h1>
-              <p className="font-display italic text-base sm:text-lg text-[#C8A96E] mt-2">
+              <p className="text-base sm:text-lg text-slate-700 font-bold italic mt-2">
                 “Karya Lokal, Cerita Lokal”
               </p>
-              <p className="text-xs text-[#8A8A8A] mt-2 leading-relaxed">
-                Terbuka untuk umum (perorangan). Angkat keunikan produk IKM Kota
-                Bandung lewat video Reels/TikTok. Total hadiah Rp 2.250.000.
+              <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+                Terbuka untuk umum (perorangan). Angkat pesona dan keunikan produk IKM Kota
+                Bandung lewat format video vertikal Reels / TikTok. Total hadiah Rp 2.250.000.
               </p>
             </div>
 
             {/* Download Guidelines Notice */}
-            <div className="p-4 rounded-xl bg-[#141414] border border-[#2A2A2A] flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div className="text-[#B8B0A4]">
-                Unduh syarat teknis, kriteria penilaian, dan pakta integritas.
+            <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="text-slate-600">
+                Unduh syarat teknis, kriteria penilaian dewan juri, dan pedoman lomba.
               </div>
               <a
                 href={EVENT_CONFIG.competitions.videoLokal.documentPath}
-                download
-                className="btn btn-secondary text-xs py-1.5 px-3"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 rounded-full text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors"
               >
                 Unduh Syarat & Ketentuan PDF ↗
               </a>
@@ -243,7 +237,7 @@ export default function VideoLokalPage() {
             {errorMessage && (
               <div
                 role="alert"
-                className="p-4 rounded-xl bg-[#2D0F0A] border border-[#7F1D1D] text-xs text-[#FCA5A5] flex items-center gap-3"
+                className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center gap-3 font-medium"
               >
                 <span>⚠️</span>
                 <span>{errorMessage}</span>
@@ -252,15 +246,16 @@ export default function VideoLokalPage() {
 
             {/* Registration Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              
               {/* Personal Data Section */}
-              <div className="p-6 rounded-2xl bg-[#111111] border border-[#222222] space-y-4">
-                <h2 className="font-display text-lg font-semibold text-[#F5F0E8] pb-2 border-b border-[#1C1C1C]">
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <h2 className="text-lg font-extrabold text-slate-900 pb-2 border-b border-slate-100">
                   1. Identitas Peserta
                 </h2>
 
-                <div className="form-field">
-                  <label htmlFor="full_name" className="form-label form-label-required">
-                    Nama Lengkap
+                <div className="space-y-1.5">
+                  <label htmlFor="full_name" className="text-xs font-bold text-slate-700 block">
+                    Nama Lengkap <span className="text-rose-600">*</span>
                   </label>
                   <input
                     id="full_name"
@@ -270,13 +265,13 @@ export default function VideoLokalPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, full_name: e.target.value })
                     }
-                    placeholder="Nama lengkap peserta"
-                    className="form-input"
+                    placeholder="Nama lengkap peserta sesuai identitas"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-rose-500 focus:ring-2 focus:ring-rose-100 outline-none transition-all"
                   />
                 </div>
 
-                <div className="form-field">
-                  <label htmlFor="institution" className="form-label">
+                <div className="space-y-1.5">
+                  <label htmlFor="institution" className="text-xs font-bold text-slate-700 block">
                     Instansi / Asal Komunitas (Opsional)
                   </label>
                   <input
@@ -284,15 +279,15 @@ export default function VideoLokalPage() {
                     type="text"
                     value={institution}
                     onChange={(e) => setInstitution(e.target.value)}
-                    placeholder="Contoh: Universitas Padjadjaran / Umum / Komunitas Kreatif"
-                    className="form-input"
+                    placeholder="Contoh: Universitas Padjadjaran / Mahasiswa / Umum / Komunitas Kreatif"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-rose-500 focus:ring-2 focus:ring-rose-100 outline-none transition-all"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="form-field">
-                    <label htmlFor="email" className="form-label form-label-required">
-                      Alamat Email
+                  <div className="space-y-1.5">
+                    <label htmlFor="email" className="text-xs font-bold text-slate-700 block">
+                      Alamat Email Aktif <span className="text-rose-600">*</span>
                     </label>
                     <input
                       id="email"
@@ -303,13 +298,13 @@ export default function VideoLokalPage() {
                         setFormData({ ...formData, email: e.target.value })
                       }
                       placeholder="nama@email.com"
-                      className="form-input"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-rose-500 focus:ring-2 focus:ring-rose-100 outline-none transition-all"
                     />
                   </div>
 
-                  <div className="form-field">
-                    <label htmlFor="phone" className="form-label form-label-required">
-                      No. WhatsApp / Telepon
+                  <div className="space-y-1.5">
+                    <label htmlFor="phone" className="text-xs font-bold text-slate-700 block">
+                      No. WhatsApp / Telepon <span className="text-rose-600">*</span>
                     </label>
                     <input
                       id="phone"
@@ -320,21 +315,21 @@ export default function VideoLokalPage() {
                         setFormData({ ...formData, phone: e.target.value })
                       }
                       placeholder="08xxxxxxxxxx"
-                      className="form-input"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-rose-500 focus:ring-2 focus:ring-rose-100 outline-none transition-all"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Social Media & Video Category */}
-              <div className="p-6 rounded-2xl bg-[#111111] border border-[#222222] space-y-4">
-                <h2 className="font-display text-lg font-semibold text-[#F5F0E8] pb-2 border-b border-[#1C1C1C]">
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <h2 className="text-lg font-extrabold text-slate-900 pb-2 border-b border-slate-100">
                   2. Akun Media Sosial & Kategori Karya
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="form-field">
-                    <label htmlFor="instagram_handle" className="form-label">
+                  <div className="space-y-1.5">
+                    <label htmlFor="instagram_handle" className="text-xs font-bold text-slate-700 block">
                       Akun Instagram (Tanpa @)
                     </label>
                     <input
@@ -348,12 +343,12 @@ export default function VideoLokalPage() {
                         })
                       }
                       placeholder="username_instagram"
-                      className="form-input"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-rose-500 focus:ring-2 focus:ring-rose-100 outline-none transition-all"
                     />
                   </div>
 
-                  <div className="form-field">
-                    <label htmlFor="tiktok_handle" className="form-label">
+                  <div className="space-y-1.5">
+                    <label htmlFor="tiktok_handle" className="text-xs font-bold text-slate-700 block">
                       Akun TikTok (Tanpa @)
                     </label>
                     <input
@@ -367,18 +362,17 @@ export default function VideoLokalPage() {
                         })
                       }
                       placeholder="username_tiktok"
-                      className="form-input"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-rose-500 focus:ring-2 focus:ring-rose-100 outline-none transition-all"
                     />
                   </div>
                 </div>
-                <span className="text-[11px] text-[#8A8A8A] block">
-                  * Minimal isi salah satu akun yang akan digunakan untuk
-                  mengunggah video lomba (akun wajib berstatus publik).
+                <span className="text-[11px] text-slate-500 block">
+                  * Minimal isi salah satu akun yang akan digunakan untuk mengunggah video lomba (akun wajib berstatus publik).
                 </span>
 
-                <div className="form-field pt-2">
-                  <label htmlFor="video_category" className="form-label form-label-required">
-                    Pilihan Kategori Lomba
+                <div className="space-y-1.5 pt-2">
+                  <label htmlFor="video_category" className="text-xs font-bold text-slate-700 block">
+                    Pilihan Kategori Lomba <span className="text-rose-600">*</span>
                   </label>
                   <select
                     id="video_category"
@@ -389,25 +383,25 @@ export default function VideoLokalPage() {
                         video_category: e.target.value,
                       })
                     }
-                    className="form-input form-select"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-rose-500 focus:ring-2 focus:ring-rose-100 outline-none transition-all bg-white cursor-pointer"
                   >
                     <option value="Fesyen">
-                      Fesyen — Keunikan produk fashion lokal Bandung
+                      Fesyen — Keunikan dan daya tarik produk fashion lokal Bandung
                     </option>
                     <option value="Kuliner">
-                      Kuliner — Eksplorasi daya tarik kuliner & rasa khas lokal
+                      Kuliner — Eksplorasi cita rasa dan ragam kuliner khas lokal
                     </option>
                     <option value="Kriya">
-                      Kriya — Nilai seni, keterampilan & kerajinan lokal
+                      Kriya — Nilai seni, kreativitas & kerajinan tangan lokal
                     </option>
                     <option value="PRIDE Industri 2026">
-                      PRIDE Industri 2026 — Keseruan acara & suasana pameran
+                      PRIDE Industri 2026 — Keseruan acara & kemeriahan festival
                     </option>
                   </select>
                 </div>
 
-                <div className="form-field">
-                  <label htmlFor="video_url" className="form-label">
+                <div className="space-y-1.5">
+                  <label htmlFor="video_url" className="text-xs font-bold text-slate-700 block">
                     Tautan Video Unggahan (Opsional saat pendaftaran awal)
                   </label>
                   <input
@@ -418,23 +412,22 @@ export default function VideoLokalPage() {
                       setFormData({ ...formData, video_url: e.target.value })
                     }
                     placeholder="https://www.instagram.com/reel/... atau https://vt.tiktok.com/..."
-                    className="form-input"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-rose-500 focus:ring-2 focus:ring-rose-100 outline-none transition-all"
                   />
-                  <span className="text-[11px] text-[#6B6560]">
-                    Dapat dilengkapi kemudian setelah video diunggah pada 27–28
-                    November 2026.
+                  <span className="text-[11px] text-slate-500 block">
+                    Dapat dilengkapi kemudian setelah shooting dan posting pada 27–28 November 2026.
                   </span>
                 </div>
               </div>
 
               {/* Declarations & Pakta Integritas */}
-              <div className="p-6 rounded-2xl bg-[#111111] border border-[#222222] space-y-4">
-                <h2 className="font-display text-lg font-semibold text-[#F5F0E8] pb-2 border-b border-[#1C1C1C]">
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <h2 className="text-lg font-extrabold text-slate-900 pb-2 border-b border-slate-100">
                   3. Pakta Integritas & Pernyataan Resmi
                 </h2>
 
                 <div className="space-y-3">
-                  <label className="form-checkbox-row">
+                  <label className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-rose-300 transition-colors">
                     <input
                       type="checkbox"
                       required
@@ -445,20 +438,17 @@ export default function VideoLokalPage() {
                           declaration_original: e.target.checked,
                         })
                       }
+                      className="w-4 h-4 mt-0.5 accent-rose-600 flex-shrink-0"
                     />
-                    <div className="text-xs text-[#8A8A8A]">
-                      <strong className="text-[#F5F0E8] block">
-                        Pakta Integritas Orisinalitas & Legalitas Aset:
+                    <div className="text-xs text-slate-600 leading-relaxed">
+                      <strong className="text-slate-900 block font-bold">
+                        Orisinalitas & Lokasi Pengambilan Gambar:
                       </strong>
-                      Saya menyatakan bahwa karya video yang saya ikutsertakan
-                      merupakan karya asli buatan saya sendiri, pengambilan video
-                      dilaksanakan pada 27–28 November 2026 di Braga City Walk,
-                      serta seluruh audio/musik/visual yang digunakan memiliki izin
-                      penggunaan yang sah.
+                      Saya menyatakan bahwa video merupakan karya asli, diambil langsung di area festival PRIDE Industri 2026 (Braga City Walk) pada tanggal 27–28 November 2026, dan tidak melanggar hak cipta musik/visual pihak lain.
                     </div>
                   </label>
 
-                  <label className="form-checkbox-row">
+                  <label className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-rose-300 transition-colors">
                     <input
                       type="checkbox"
                       required
@@ -469,20 +459,17 @@ export default function VideoLokalPage() {
                           declaration_public_account: e.target.checked,
                         })
                       }
+                      className="w-4 h-4 mt-0.5 accent-rose-600 flex-shrink-0"
                     />
-                    <div className="text-xs text-[#8A8A8A]">
-                      <strong className="text-[#F5F0E8] block">
-                        Pernyataan Akun Publik & Hak Dokumentasi:
+                    <div className="text-xs text-slate-600 leading-relaxed">
+                      <strong className="text-slate-900 block font-bold">
+                        Status Akun Publik & Penandaan Resmi:
                       </strong>
-                      Saya menyatakan akun media sosial saya berada dalam kondisi
-                      publik selama masa penjurian, menyertakan tagar resmi dan
-                      menandai akun panitia, serta bersedia karya video ini
-                      digunakan oleh Dinas Perdagangan dan Perindustrian Kota
-                      Bandung untuk keperluan publikasi dan promosi non-komersial.
+                      Saya memastikan akun media sosial tidak diprivat selama periode lomba dan penjurian, serta wajib menyematkan tagar resmi dan men-tag akun Disdagin Kota Bandung.
                     </div>
                   </label>
 
-                  <label className="form-checkbox-row">
+                  <label className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-rose-300 transition-colors">
                     <input
                       type="checkbox"
                       required
@@ -493,14 +480,13 @@ export default function VideoLokalPage() {
                           declaration_terms: e.target.checked,
                         })
                       }
+                      className="w-4 h-4 mt-0.5 accent-rose-600 flex-shrink-0"
                     />
-                    <div className="text-xs text-[#8A8A8A]">
-                      <strong className="text-[#F5F0E8] block">
-                        Kepatuhan Syarat & Keputusan Dewan Juri:
+                    <div className="text-xs text-slate-600 leading-relaxed">
+                      <strong className="text-slate-900 block font-bold">
+                        Persetujuan Syarat & Ketentuan:
                       </strong>
-                      Saya mematuhi seluruh syarat dan ketentuan lomba, serta
-                      menerima keputusan dewan juri yang bersifat final, mutlak,
-                      dan tidak dapat diganggu gugat.
+                      Saya telah membaca, memahami, dan menyetujui seluruh ketentuan lomba serta menerima keputusan dewan juri yang bersifat mutlak dan tidak dapat diganggu gugat.
                     </div>
                   </label>
                 </div>
@@ -511,25 +497,19 @@ export default function VideoLokalPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="btn btn-primary w-full py-4 text-sm font-semibold tracking-wider uppercase justify-center"
+                  className="w-full py-4 px-6 rounded-full text-sm font-extrabold text-white bg-rose-600 hover:bg-rose-700 shadow-md shadow-rose-500/25 transition-all hover:-translate-y-0.5 cursor-pointer disabled:opacity-50"
                 >
-                  {loading ? (
-                    <span className="flex items-center gap-2">
-                      <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                      Memproses Pendaftaran...
-                    </span>
-                  ) : (
-                    'Kirim Formulir Pendaftaran Video 1 Menit →'
-                  )}
+                  {loading ? 'Memproses Pendaftaran...' : 'Kirim Formulir Pendaftaran Lomba Video →'}
                 </button>
-                <p className="text-center text-[11px] text-[#6B6560] mt-3">
-                  Data Anda tersimpan dengan aman pada database terisolasi PRIDE
-                  Industri 2026.
+                <p className="text-center text-xs text-slate-400 mt-3">
+                  Data Anda tersimpan dengan aman pada database terisolasi PRIDE Industri 2026.
                 </p>
               </div>
+
             </form>
           </div>
         )}
+
       </div>
     </div>
   );

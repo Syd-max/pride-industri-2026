@@ -19,7 +19,7 @@ export default function Navbar() {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -39,7 +39,9 @@ export default function Navbar() {
   // Prevent body scroll when menu open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [menuOpen]);
 
   const handleNavClick = (href: string) => {
@@ -54,268 +56,175 @@ export default function Navbar() {
     <>
       <header
         role="banner"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          transition: 'background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease',
-          background: scrolled
-            ? 'rgba(10, 10, 10, 0.85)'
-            : 'linear-gradient(to bottom, rgba(10,10,10,0.7) 0%, transparent 100%)',
-          borderBottom: scrolled ? '1px solid var(--pride-border)' : '1px solid transparent',
-          backdropFilter: scrolled ? 'blur(16px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
-        }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200 py-3'
+            : 'bg-white/80 backdrop-blur-sm border-b border-slate-100 py-4'
+        }`}
       >
-        <div
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '0 clamp(1rem, 4vw, 2rem)',
-            height: '4rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '1.5rem',
-          }}
-        >
-          {/* Logo */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+          {/* Logo & Brand Identity */}
           <Link
             href="/"
-            aria-label="PRIDE Industri 2026 — beranda"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              textDecoration: 'none',
-              flexShrink: 0,
-            }}
+            aria-label="PRIDE Industri 2026 — Beranda"
+            className="flex items-center gap-3 group text-decoration-none"
           >
-            <div style={{ position: 'relative', width: '2rem', height: '2rem' }}>
+            <div className="relative w-10 h-10 transition-transform group-hover:scale-105">
               <Image
                 src="/LOGO_PRIDE_INDUSTRI.png"
-                alt=""
+                alt="Logo PRIDE Industri 2026"
                 fill
                 style={{ objectFit: 'contain' }}
-                sizes="32px"
+                sizes="40px"
+                priority
               />
             </div>
-            <span
-              style={{
-                fontFamily: 'var(--font-playfair), serif',
-                fontSize: '1rem',
-                fontWeight: '600',
-                color: 'var(--pride-text-primary)',
-                letterSpacing: '0.02em',
-              }}
-            >
-              PRIDE <span style={{ color: 'var(--pride-gold)' }}>2026</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="font-extrabold text-lg tracking-tight leading-none text-slate-900 group-hover:text-blue-600 transition-colors">
+                PRIDE <span className="text-rose-600">INDUSTRI</span>
+              </span>
+              <span className="text-[10px] font-bold tracking-widest text-slate-500 uppercase mt-0.5">
+                27–28 Nov 2026 · Braga Bandung
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
           <nav
             aria-label="Navigasi utama"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '2rem',
-            }}
-            className="hidden-mobile"
+            className="hidden md:flex items-center gap-8"
           >
             {NAV_LINKS.map((link) => (
               <button
                 key={link.href}
                 onClick={() => handleNavClick(link.href)}
-                className="nav-link"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontFamily: 'var(--font-inter), sans-serif',
-                }}
+                className="text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors cursor-pointer py-1 border-b-2 border-transparent hover:border-blue-600"
               >
                 {link.label}
               </button>
             ))}
           </nav>
 
-          {/* Desktop CTAs */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              flexShrink: 0,
-            }}
-            className="hidden-mobile"
-          >
+          {/* Desktop Action Buttons */}
+          <div className="hidden md:flex items-center gap-3">
+            <Link
+              href="/check-in"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-full transition-all hover:-translate-y-0.5"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
+                />
+              </svg>
+              <span>Scan QR Check-In</span>
+            </Link>
+
             <Link
               href="/competition/desain-kemasan"
-              className="btn btn-ghost"
-              style={{ padding: '0.5rem 1rem', fontSize: '0.8125rem' }}
+              className="inline-flex items-center px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-full shadow-sm shadow-blue-500/20 transition-all hover:-translate-y-0.5"
             >
               Desain Kemasan
             </Link>
+
             <Link
               href="/competition/video-lokal"
-              className="btn btn-primary"
-              style={{ padding: '0.5rem 1rem', fontSize: '0.8125rem' }}
+              className="inline-flex items-center px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-full shadow-sm shadow-rose-500/20 transition-all hover:-translate-y-0.5"
             >
-              Daftar Video
+              Lomba Video
             </Link>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile Menu Button */}
           <button
             aria-label={menuOpen ? 'Tutup menu' : 'Buka menu'}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((v) => !v)}
-            className="show-mobile"
-            style={{
-              background: 'none',
-              border: '1px solid var(--pride-border)',
-              borderRadius: '2px',
-              width: '2.5rem',
-              height: '2.5rem',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '5px',
-              cursor: 'pointer',
-              flexShrink: 0,
-            }}
+            className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 p-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
           >
-            {[0, 1, 2].map((i) => (
-              <span
-                key={i}
-                style={{
-                  display: 'block',
-                  width: '1.125rem',
-                  height: '1.5px',
-                  background: 'var(--pride-text-primary)',
-                  transition: 'all 0.3s ease',
-                  transformOrigin: 'center',
-                  transform: menuOpen
-                    ? i === 0
-                      ? 'rotate(45deg) translate(4.5px, 4.5px)'
-                      : i === 1
-                      ? 'scaleX(0)'
-                      : 'rotate(-45deg) translate(4.5px, -4.5px)'
-                    : 'none',
-                  opacity: menuOpen && i === 1 ? 0 : 1,
-                }}
-              />
-            ))}
+            <span
+              className={`w-5 h-0.5 bg-slate-800 transition-transform ${
+                menuOpen ? 'rotate-45 translate-y-2' : ''
+              }`}
+            />
+            <span
+              className={`w-5 h-0.5 bg-slate-800 transition-opacity ${
+                menuOpen ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+            <span
+              className={`w-5 h-0.5 bg-slate-800 transition-transform ${
+                menuOpen ? '-rotate-45 -translate-y-2' : ''
+              }`}
+            />
           </button>
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Drawer Menu */}
       <div
         id="mobile-menu"
         ref={menuRef}
         aria-hidden={!menuOpen}
-        style={{
-          position: 'fixed',
-          top: '4rem',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 99,
-          background: 'rgba(10, 10, 10, 0.98)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          display: 'flex',
-          flexDirection: 'column',
-          padding: '2rem',
-          gap: '0.5rem',
-          transform: menuOpen ? 'translateX(0)' : 'translateX(100%)',
-          transition: 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-          overflowY: 'auto',
-        }}
-        className="show-mobile"
+        className={`fixed inset-x-0 top-[65px] bottom-0 z-40 bg-white/98 backdrop-blur-xl transition-all duration-300 md:hidden flex flex-col justify-between p-6 overflow-y-auto ${
+          menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
       >
-        {NAV_LINKS.map((link, i) => (
-          <button
-            key={link.href}
-            onClick={() => handleNavClick(link.href)}
-            style={{
-              background: 'none',
-              border: 'none',
-              textAlign: 'left',
-              padding: '1rem 0',
-              fontFamily: 'var(--font-playfair), serif',
-              fontSize: '1.5rem',
-              fontWeight: '600',
-              color: 'var(--pride-text-primary)',
-              borderBottom: '1px solid var(--pride-border)',
-              cursor: 'pointer',
-              opacity: menuOpen ? 1 : 0,
-              transform: menuOpen ? 'translateX(0)' : 'translateX(2rem)',
-              transition: `all 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.06}s`,
-              width: '100%',
-            }}
-          >
-            {link.label}
-          </button>
-        ))}
+        <div className="space-y-3">
+          <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+            Menu Festival
+          </div>
+          {NAV_LINKS.map((link) => (
+            <button
+              key={link.href}
+              onClick={() => handleNavClick(link.href)}
+              className="w-full text-left py-3 px-4 rounded-xl text-lg font-bold text-slate-800 hover:bg-slate-50 hover:text-blue-600 transition-colors flex items-center justify-between border-b border-slate-100"
+            >
+              <span>{link.label}</span>
+              <span className="text-slate-400 text-sm">→</span>
+            </button>
+          ))}
+        </div>
 
-        <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div className="space-y-3 pt-6 border-t border-slate-100">
+          <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+            Akses Peserta & Kompetisi
+          </div>
           <Link
             href="/competition/desain-kemasan"
-            className="btn btn-ghost"
             onClick={() => setMenuOpen(false)}
-            style={{ justifyContent: 'center' }}
+            className="w-full py-3.5 px-4 text-center text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl block shadow-sm"
           >
-            Daftar Desain Kemasan
+            Daftar Lomba Desain Kemasan
           </Link>
           <Link
             href="/competition/video-lokal"
-            className="btn btn-primary"
             onClick={() => setMenuOpen(false)}
-            style={{ justifyContent: 'center' }}
+            className="w-full py-3.5 px-4 text-center text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl block shadow-sm"
           >
-            Daftar Video Lokal
+            Daftar Lomba Video 1 Menit
           </Link>
           <Link
             href="/check-in"
-            className="btn btn-ghost"
             onClick={() => setMenuOpen(false)}
-            style={{ justifyContent: 'center' }}
+            className="w-full py-3.5 px-4 text-center text-sm font-bold text-blue-700 bg-blue-50 border border-blue-200 rounded-xl block"
           >
-            Check-In Peserta
+            Kamera QR Check-In
           </Link>
-        </div>
 
-        <div
-          style={{
-            marginTop: 'auto',
-            paddingTop: '2rem',
-            fontSize: '0.8125rem',
-            color: 'var(--pride-text-muted)',
-            textAlign: 'center',
-          }}
-        >
-          {EVENT_CONFIG.venue.name} · {EVENT_CONFIG.venue.city}
+          <div className="text-center text-xs text-slate-400 pt-4">
+            {EVENT_CONFIG.venue.name} · {EVENT_CONFIG.venue.city}
+          </div>
         </div>
       </div>
-
-      {/* Responsive helpers */}
-      <style>{`
-        @media (min-width: 768px) {
-          .hidden-mobile { display: flex !important; }
-          .show-mobile { display: none !important; }
-        }
-        @media (max-width: 767px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: flex !important; }
-        }
-      `}</style>
     </>
   );
 }

@@ -16,7 +16,7 @@ export default function HomePage() {
       <CinematicIntro />
 
       {/* Main Website Experience — always rendered immediately */}
-      <div className="min-h-screen bg-[#0A0A0A] text-[#F5F0E8]">
+      <div className="min-h-screen bg-white text-slate-900 selection:bg-blue-100 selection:text-blue-900">
         <Navbar />
         <main id="main-content">
           <HeroSection />

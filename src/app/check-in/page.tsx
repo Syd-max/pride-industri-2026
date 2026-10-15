@@ -62,7 +62,6 @@ export default function CheckInPage() {
     setScanState('requesting_permission');
 
     try {
-      // 1. Request camera stream explicitly
       const constraints: MediaStreamConstraints = {
         video: { facingMode: { ideal: 'environment' } },
         audio: false,
@@ -78,11 +77,10 @@ export default function CheckInPage() {
 
       setScanState('scanning');
 
-      // 2. Initialize ZXing reader
       const reader = new BrowserMultiFormatReader();
       codeReaderRef.current = reader;
 
-      reader.decodeFromVideoElement(videoRef.current!, (result, error) => {
+      reader.decodeFromVideoElement(videoRef.current!, (result) => {
         if (result) {
           const scannedText = result.getText();
           stopCamera();
@@ -95,7 +93,7 @@ export default function CheckInPage() {
       setScanState('error');
       if (err instanceof DOMException && err.name === 'NotAllowedError') {
         setErrorMessage(
-          'Izin akses kamera ditolak oleh browser. Silakan aktifkan izin kamera di pengaturan browser Anda atau gunakan input token gate manual di bawah.'
+          'Izin akses kamera ditolak oleh browser. Silakan izinkan akses kamera di setelan browser atau gunakan input kode manual di bawah.'
         );
       } else {
         setErrorMessage(
@@ -142,27 +140,28 @@ export default function CheckInPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F5F0E8] py-12 px-4 sm:px-6">
+    <div className="min-h-screen bg-slate-50 text-slate-800 py-10 px-4 sm:px-6">
       <div className="max-w-xl mx-auto">
+        
         {/* Navigation Bar / Back */}
-        <div className="flex items-center justify-between pb-6 border-b border-[#1C1C1C] mb-8">
+        <div className="flex items-center justify-between pb-6 border-b border-slate-200 mb-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#B8B0A4] hover:text-[#C8A96E] transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-blue-600 transition-colors"
           >
             ← Kembali ke Beranda
           </Link>
           <div className="flex items-center gap-2">
-            <div className="relative w-6 h-6">
+            <div className="relative w-7 h-7">
               <Image
                 src="/LOGO_PRIDE_INDUSTRI.png"
                 alt="PRIDE 2026"
                 fill
-                sizes="24px"
+                sizes="28px"
                 className="object-contain"
               />
             </div>
-            <span className="text-xs font-display tracking-wider font-semibold text-[#C8A96E]">
+            <span className="text-xs font-extrabold tracking-tight text-slate-900">
               Gate Check-In
             </span>
           </div>
@@ -170,61 +169,59 @@ export default function CheckInPage() {
 
         {/* Success Attendance Badge */}
         {scanState === 'success' && successInfo ? (
-          <div className="glass-card-gold p-8 sm:p-10 rounded-2xl border border-[rgba(52,211,153,0.3)] text-center space-y-6 animate-fade-in">
-            <div className="w-20 h-20 rounded-full bg-[#052E16] text-[#34D399] border-2 border-[#166534] flex items-center justify-center mx-auto text-4xl shadow-[0_0_30px_rgba(52,211,153,0.3)]">
+          <div className="bg-white p-8 sm:p-10 rounded-3xl border border-emerald-200 shadow-xl text-center space-y-6">
+            <div className="w-20 h-20 rounded-full bg-emerald-100 text-emerald-700 border-2 border-emerald-300 flex items-center justify-center mx-auto text-4xl font-black">
               ✓
             </div>
 
             <div>
-              <span className="inline-block text-[11px] font-bold tracking-[0.2em] uppercase px-3 py-1 rounded bg-[#052E16] text-[#34D399] border border-[#166534] mb-2">
+              <span className="inline-block text-xs font-extrabold tracking-wider uppercase px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 mb-2">
                 Kehadiran Resmi Terverifikasi
               </span>
-              <h1 className="font-display text-3xl text-[#F5F0E8] font-bold">
+              <h1 className="text-3xl text-slate-900 font-extrabold">
                 Selamat Datang di Braga!
               </h1>
-              <p className="font-display italic text-lg text-[#C8A96E] mt-1">
+              <p className="text-xl font-bold text-blue-600 mt-1">
                 {successInfo.full_name}
               </p>
             </div>
 
-            <div className="p-5 rounded-xl bg-[#141414] border border-[#2A2A2A] text-left text-xs space-y-2.5">
-              <div className="flex justify-between items-center pb-2 border-b border-[#222222]">
-                <span className="text-[#8A8A8A]">Kode Peserta:</span>
-                <span className="font-mono font-bold text-[#E4C584]">
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-left text-xs space-y-2.5">
+              <div className="flex justify-between items-center pb-2 border-b border-slate-200">
+                <span className="text-slate-500 font-medium">Kode Peserta:</span>
+                <span className="font-mono font-extrabold text-blue-700 text-sm">
                   {successInfo.registration_code}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[#8A8A8A]">Kategori:</span>
-                <span className="text-[#F5F0E8] font-medium capitalize">
+                <span className="text-slate-500 font-medium">Kategori Lomba:</span>
+                <span className="text-slate-800 font-bold capitalize">
                   {successInfo.competition_id.replace('-', ' ')}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[#8A8A8A]">Waktu Check-In:</span>
-                <span className="text-[#34D399] font-mono">
-                  {new Date(successInfo.checked_in_at).toLocaleTimeString('id-ID')}{' '}
-                  WIB
+                <span className="text-slate-500 font-medium">Waktu Check-In:</span>
+                <span className="text-emerald-700 font-mono font-bold">
+                  {new Date(successInfo.checked_in_at).toLocaleTimeString('id-ID')} WIB
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[#8A8A8A]">Lokasi Gate:</span>
-                <span className="text-[#F5F0E8]">
+                <span className="text-slate-500 font-medium">Lokasi Gate:</span>
+                <span className="text-slate-800 font-medium">
                   Gate Utama · Braga City Walk
                 </span>
               </div>
             </div>
 
-            <p className="text-xs text-[#8A8A8A] leading-relaxed">
-              Kehadiran Anda telah dicatat secara real-time pada sistem
-              monitoring panitia PRIDE Industri 2026. Selamat menikmati seluruh
-              rangkaian festival!
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Kehadiran Anda telah dicatat secara real-time pada sistem monitoring
+              panitia PRIDE Industri 2026. Selamat menikmati seluruh rangkaian acara!
             </p>
 
             <div className="pt-2">
               <Link
                 href="/"
-                className="btn btn-primary w-full py-3.5 text-xs uppercase tracking-wider justify-center"
+                className="w-full py-3.5 px-6 rounded-full text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md block text-center"
               >
                 Lihat Jadwal & Panduan Festival
               </Link>
@@ -234,15 +231,15 @@ export default function CheckInPage() {
           /* Check-In Form & Camera Viewfinder */
           <div className="space-y-6">
             <div className="text-center space-y-2">
-              <div className="inline-block text-[11px] font-semibold tracking-[0.2em] uppercase text-[#C8A96E]">
+              <div className="inline-block text-xs font-extrabold tracking-wider uppercase px-3 py-1 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
                 Sistem Presensi Real-Time
               </div>
-              <h1 className="font-display text-3xl font-bold text-[#F5F0E8]">
+              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Check-In Peserta di Braga
               </h1>
-              <p className="text-xs text-[#8A8A8A] leading-relaxed max-w-sm mx-auto">
-                Buka kamera ponsel Anda dan pindai kode QR yang terpasang di gate
-                masuk Braga City Walk untuk mencatat kehadiran resmi Anda.
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-sm mx-auto">
+                Buka kamera smartphone Anda dan pindai kode QR yang terpasang di
+                gate masuk Braga City Walk untuk mencatat kehadiran resmi Anda.
               </p>
             </div>
 
@@ -250,7 +247,7 @@ export default function CheckInPage() {
             {errorMessage && (
               <div
                 role="alert"
-                className="p-4 rounded-xl bg-[#2D0F0A] border border-[#7F1D1D] text-xs text-[#FCA5A5] flex items-start gap-3"
+                className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-start gap-3 font-medium"
               >
                 <span className="text-base flex-shrink-0">⚠️</span>
                 <div className="flex-1">
@@ -260,35 +257,33 @@ export default function CheckInPage() {
             )}
 
             {/* Step 1: Input Registration Code */}
-            <div className="p-6 rounded-2xl bg-[#111111] border border-[#222222] space-y-4">
-              <div className="form-field">
-                <label
-                  htmlFor="reg_code"
-                  className="form-label form-label-required"
-                >
-                  Kode Registrasi Peserta Anda
-                </label>
-                <input
-                  id="reg_code"
-                  type="text"
-                  required
-                  value={registrationCode}
-                  onChange={(e) => setRegistrationCode(e.target.value)}
-                  placeholder="Contoh: PRIDE-DK-20261021-AB12CD"
-                  className="form-input font-mono uppercase text-sm"
-                  disabled={scanState === 'scanning'}
-                />
-                <span className="text-[11px] text-[#6B6560]">
-                  * Diberikan saat Anda menyelesaikan pendaftaran di website ini.
-                </span>
-              </div>
+            <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-3">
+              <label
+                htmlFor="reg_code"
+                className="text-xs font-bold text-slate-700 block"
+              >
+                Kode Registrasi Peserta Anda <span className="text-rose-600">*</span>
+              </label>
+              <input
+                id="reg_code"
+                type="text"
+                required
+                value={registrationCode}
+                onChange={(e) => setRegistrationCode(e.target.value)}
+                placeholder="Contoh: PRIDE-DK-20261021-AB12CD"
+                className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 font-mono uppercase text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                disabled={scanState === 'scanning'}
+              />
+              <span className="text-[11px] text-slate-500 block">
+                * Diberikan saat Anda menyelesaikan pendaftaran di website ini.
+              </span>
             </div>
 
             {/* Camera Viewfinder Box */}
-            <div className="p-6 rounded-2xl bg-[#111111] border border-[#222222] space-y-4 text-center">
+            <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4 text-center">
               {scanState === 'scanning' ? (
                 <div className="space-y-4">
-                  <div className="camera-viewfinder bg-black">
+                  <div className="camera-viewfinder bg-slate-900">
                     <video
                       ref={videoRef}
                       playsInline
@@ -298,7 +293,7 @@ export default function CheckInPage() {
                     <div className="scan-line" />
                   </div>
 
-                  <p className="text-xs text-[#E4C584] animate-pulse">
+                  <p className="text-xs text-blue-600 font-bold animate-pulse">
                     Arahkan kamera ke kode QR di Gate Braga City Walk...
                   </p>
 
@@ -307,29 +302,29 @@ export default function CheckInPage() {
                       stopCamera();
                       setScanState('idle');
                     }}
-                    className="btn btn-ghost text-xs py-2 px-4"
+                    className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
                   >
                     Hentikan Kamera
                   </button>
                 </div>
               ) : scanState === 'validating' ? (
                 <div className="py-12 space-y-3">
-                  <div className="w-10 h-10 border-3 border-[#C8A96E] border-t-transparent rounded-full animate-spin mx-auto" />
-                  <p className="text-xs font-medium text-[#F5F0E8]">
+                  <div className="w-10 h-10 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
+                  <p className="text-xs font-bold text-slate-800">
                     Memvalidasi Kode Gate & Kehadiran Peserta...
                   </p>
                 </div>
               ) : (
                 <div className="py-6 space-y-4">
-                  <div className="w-16 h-16 rounded-2xl bg-[#1C1C1C] border border-[#2A2A2A] flex items-center justify-center mx-auto text-3xl text-[#C8A96E]">
+                  <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto text-3xl">
                     📷
                   </div>
 
                   <div>
-                    <h3 className="font-display text-base font-semibold text-[#F5F0E8]">
+                    <h3 className="text-base font-extrabold text-slate-900">
                       Pemindai Kamera Browser
                     </h3>
-                    <p className="text-xs text-[#8A8A8A] max-w-xs mx-auto mt-1">
+                    <p className="text-xs text-slate-500 max-w-xs mx-auto mt-1">
                       Browser akan meminta izin akses kamera perangkat untuk
                       memindai kode QR secara langsung.
                     </p>
@@ -338,7 +333,7 @@ export default function CheckInPage() {
                   <button
                     onClick={startScanner}
                     disabled={!registrationCode.trim()}
-                    className="btn btn-primary w-full py-3.5 text-xs uppercase tracking-wider justify-center"
+                    className="w-full py-3.5 px-6 rounded-full text-xs font-extrabold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/25 transition-all hover:-translate-y-0.5 cursor-pointer disabled:opacity-50"
                   >
                     Buka Kamera Scanner QR →
                   </button>
@@ -351,7 +346,7 @@ export default function CheckInPage() {
               <button
                 type="button"
                 onClick={() => setShowManualInput(!showManualInput)}
-                className="text-xs text-[#8A8A8A] hover:text-[#C8A96E] transition-colors underline block mx-auto text-center"
+                className="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors underline block mx-auto text-center cursor-pointer"
               >
                 {showManualInput
                   ? 'Sembunyikan Opsi Manual'
@@ -359,13 +354,13 @@ export default function CheckInPage() {
               </button>
 
               {showManualInput && (
-                <div className="mt-4 p-5 rounded-xl bg-[#141414] border border-[#222222] space-y-3 animate-fade-in">
-                  <div className="text-xs font-semibold text-[#F5F0E8]">
+                <div className="mt-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3">
+                  <div className="text-xs font-bold text-slate-800">
                     Input Manual Token Gate
                   </div>
-                  <p className="text-[11px] text-[#8A8A8A]">
+                  <p className="text-[11px] text-slate-500">
                     Tanyakan kode token gate kepada petugas pintu masuk jika
-                    kamera smartphone Anda tidak dapat aktif.
+                    kamera ponsel Anda tidak dapat aktif.
                   </p>
                   <div className="flex gap-2">
                     <input
@@ -373,12 +368,12 @@ export default function CheckInPage() {
                       value={manualGateToken}
                       onChange={(e) => setManualGateToken(e.target.value)}
                       placeholder="Contoh: PRIDE2026-GATE-BRAGA-MAIN"
-                      className="form-input text-xs font-mono"
+                      className="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-slate-900 font-mono text-xs focus:border-blue-500 outline-none"
                     />
                     <button
                       onClick={() => handleScannedToken(manualGateToken)}
                       disabled={!registrationCode.trim() || !manualGateToken.trim()}
-                      className="btn btn-secondary text-xs px-4 flex-shrink-0"
+                      className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-black transition-colors disabled:opacity-50"
                     >
                       Kirim
                     </button>
@@ -387,9 +382,9 @@ export default function CheckInPage() {
               )}
             </div>
 
-            {/* Quick Demo QR Helper for testing */}
-            <div className="p-4 rounded-xl bg-[#0D0D0D] border border-[#1A1A1A] text-center text-[11px] text-[#6B6560]">
-              <span className="font-semibold text-[#8A8A8A] block mb-1">
+            {/* Demo Gate Token helper for testing */}
+            <div className="p-4 rounded-2xl bg-slate-100 border border-slate-200 text-center text-[11px] text-slate-500">
+              <span className="font-bold text-slate-700 block mb-1">
                 Informasi Pengujian Panitia:
               </span>
               Token QR Gate Resmi:{' '}
@@ -398,13 +393,15 @@ export default function CheckInPage() {
                   setManualGateToken('PRIDE2026-GATE-BRAGA-MAIN');
                   setShowManualInput(true);
                 }}
-                className="font-mono text-[#C8A96E] underline hover:text-[#E4C584]"
+                className="font-mono font-bold text-blue-700 underline hover:text-blue-900 cursor-pointer"
               >
                 PRIDE2026-GATE-BRAGA-MAIN
               </button>
             </div>
+
           </div>
         )}
+
       </div>
     </div>
   );

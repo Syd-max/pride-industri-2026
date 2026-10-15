@@ -32,27 +32,27 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F5F0E8] flex flex-col md:flex-row">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col md:flex-row">
       {/* ─── Desktop Sidebar ─── */}
-      <aside className="w-full md:w-64 bg-[#111111] border-r border-[#1C1C1C] flex flex-col justify-between p-6 flex-shrink-0">
+      <aside className="w-full md:w-64 bg-white border-r border-slate-200 flex flex-col justify-between p-6 flex-shrink-0">
         <div className="space-y-8">
           {/* Logo & Brand */}
-          <div className="flex items-center gap-3 pb-6 border-b border-[#1C1C1C]">
-            <div className="relative w-8 h-8">
+          <div className="flex items-center gap-3 pb-6 border-b border-slate-100">
+            <div className="relative w-9 h-9">
               <Image
                 src="/LOGO_PRIDE_INDUSTRI.png"
                 alt="PRIDE 2026"
                 fill
-                sizes="32px"
+                sizes="36px"
                 className="object-contain"
               />
             </div>
             <div>
-              <div className="font-display font-bold text-sm text-[#F5F0E8]">
+              <div className="font-extrabold text-sm text-slate-900 leading-tight">
                 PRIDE 2026
               </div>
-              <div className="text-[10px] text-[#C8A96E] uppercase tracking-widest font-semibold">
-                Admin Panel
+              <div className="text-[10px] text-blue-600 uppercase tracking-widest font-extrabold">
+                Admin Portal
               </div>
             </div>
           </div>
@@ -65,10 +65,10 @@ export default function AdminLayout({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium tracking-wide transition-colors ${
+                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold tracking-wide transition-all ${
                     isActive
-                      ? 'bg-[#C8A96E] text-[#0A0A0A] font-semibold shadow-md'
-                      : 'text-[#8A8A8A] hover:bg-[#1A1A1A] hover:text-[#F5F0E8]'
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
                   <span className="text-base">{item.icon}</span>
@@ -80,11 +80,11 @@ export default function AdminLayout({
         </div>
 
         {/* Footer Actions */}
-        <div className="pt-6 border-t border-[#1C1C1C] space-y-3">
+        <div className="pt-6 border-t border-slate-100 space-y-3">
           <Link
             href="/"
             target="_blank"
-            className="flex items-center gap-2 text-xs text-[#8A8A8A] hover:text-[#C8A96E] transition-colors"
+            className="flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors"
           >
             <span>🌐</span>
             <span>Buka Website Publik ↗</span>
@@ -92,7 +92,7 @@ export default function AdminLayout({
 
           <button
             onClick={handleLogout}
-            className="w-full btn btn-ghost text-xs py-2 px-3 text-[#F87171] hover:text-[#EF4444] border-[#7F1D1D]/30 justify-start"
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 border border-rose-200 transition-colors cursor-pointer"
           >
             <span>🚪</span>
             <span>Keluar (Sign Out)</span>
@@ -101,7 +101,7 @@ export default function AdminLayout({
       </aside>
 
       {/* ─── Main Content Area ─── */}
-      <main className="flex-1 min-w-0 bg-[#0E0E0E] p-6 sm:p-10 overflow-y-auto">
+      <main className="flex-1 min-w-0 bg-slate-50 p-6 sm:p-10 overflow-y-auto">
         {children}
       </main>
     </div>

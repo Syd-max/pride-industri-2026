@@ -40,7 +40,7 @@ export default function CinematicIntro() {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] bg-[#0A0A0A] flex flex-col items-center justify-center pointer-events-none transition-opacity duration-700 ease-out"
+      className="fixed inset-0 z-[9999] bg-white/95 backdrop-blur-xl flex flex-col items-center justify-center pointer-events-none transition-opacity duration-700 ease-out"
       style={{
         opacity: phase === 'reveal' ? 0 : 1,
       }}
@@ -48,9 +48,9 @@ export default function CinematicIntro() {
     >
       {/* Aperture Ring & Viewfinder */}
       <div className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center">
-        {/* Outer Circular Reticle */}
+        {/* Outer Circular Reticle with Colorful gradient */}
         <div
-          className="absolute inset-0 rounded-full border border-[#C8A96E]/40 transition-transform duration-700 ease-out"
+          className="absolute inset-0 rounded-full border-2 border-blue-600/30 transition-transform duration-700 ease-out"
           style={{
             transform: phase === 'shutter' ? 'scale(1.08)' : 'scale(1)',
           }}
@@ -58,20 +58,20 @@ export default function CinematicIntro() {
 
         {/* Inner Diamond Reticle */}
         <div
-          className="absolute inset-10 rounded-full border border-[#E85B26]/30 transition-transform duration-700 ease-out"
+          className="absolute inset-8 rounded-full border-2 border-rose-500/30 transition-transform duration-700 ease-out"
           style={{
             transform: phase === 'shutter' ? 'rotate(45deg) scale(0.95)' : 'rotate(0deg) scale(1)',
           }}
         />
 
         {/* Viewfinder Target Corners */}
-        <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#C8A96E]" />
-        <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#C8A96E]" />
-        <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#C8A96E]" />
-        <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#C8A96E]" />
+        <div className="absolute top-2 left-2 w-5 h-5 border-t-2 border-l-2 border-blue-600" />
+        <div className="absolute top-2 right-2 w-5 h-5 border-t-2 border-r-2 border-blue-600" />
+        <div className="absolute bottom-2 left-2 w-5 h-5 border-b-2 border-l-2 border-rose-600" />
+        <div className="absolute bottom-2 right-2 w-5 h-5 border-b-2 border-r-2 border-rose-600" />
 
         {/* Shutter Center Glow */}
-        <div className="absolute inset-16 rounded-full bg-[radial-gradient(circle_at_center,_rgba(200,169,110,0.3)_0%,_transparent_70%)] blur-xl" />
+        <div className="absolute inset-16 rounded-full bg-blue-500/10 blur-xl" />
 
         {/* Center Official Logo */}
         <div className="relative w-40 h-40">
@@ -96,10 +96,10 @@ export default function CinematicIntro() {
 
       {/* Narrative Label */}
       <div className="mt-8 text-center space-y-1">
-        <div className="text-[10px] uppercase font-mono tracking-[0.3em] text-[#8A8A8A]">
-          27–28 November 2026 · Bandung
+        <div className="text-[11px] uppercase font-mono tracking-[0.25em] text-slate-500 font-semibold">
+          27–28 November 2026 · Braga Bandung
         </div>
-        <div className="font-display italic text-sm text-[#C8A96E]">
+        <div className="font-display font-medium text-sm text-blue-600">
           Pagelaran Ragam Inovasi dan Eksistensi
         </div>
       </div>

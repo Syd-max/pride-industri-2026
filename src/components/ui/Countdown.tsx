@@ -14,7 +14,6 @@ function getCountdown(): { time: CountdownTime; state: EventState } {
   }
 
   if (now >= start) {
-    // Live — count down to end
     const diff = end.getTime() - now.getTime();
     return {
       state: 'live',
@@ -27,7 +26,6 @@ function getCountdown(): { time: CountdownTime; state: EventState } {
     };
   }
 
-  // Upcoming
   const diff = start.getTime() - now.getTime();
   return {
     state: 'upcoming',
@@ -40,33 +38,56 @@ function getCountdown(): { time: CountdownTime; state: EventState } {
   };
 }
 
-function Digit({ value, label }: { value: number; label: string }) {
-  const [prev, setPrev] = useState(value);
-  const [flip, setFlip] = useState(false);
+interface DigitBoxProps {
+  value: number;
+  label: string;
+  colorScheme: 'blue' | 'rose' | 'amber' | 'emerald';
+}
 
-  useEffect(() => {
-    if (value !== prev) {
-      setFlip(true);
-      const t = setTimeout(() => {
-        setPrev(value);
-        setFlip(false);
-      }, 200);
-      return () => clearTimeout(t);
-    }
-  }, [value, prev]);
+function DigitBox({ value, label, colorScheme }: DigitBoxProps) {
+  const styles = {
+    blue: {
+      bg: 'bg-blue-50/80',
+      border: 'border-blue-200',
+      text: 'text-blue-700',
+      label: 'text-blue-600',
+    },
+    rose: {
+      bg: 'bg-rose-50/80',
+      border: 'border-rose-200',
+      text: 'text-rose-700',
+      label: 'text-rose-600',
+    },
+    amber: {
+      bg: 'bg-amber-50/80',
+      border: 'border-amber-200',
+      text: 'text-amber-700',
+      label: 'text-amber-600',
+    },
+    emerald: {
+      bg: 'bg-emerald-50/80',
+      border: 'border-emerald-200',
+      text: 'text-emerald-700',
+      label: 'text-emerald-600',
+    },
+  }[colorScheme];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '4rem' }}>
+    <div className="flex flex-col items-center">
       <div
-        className="countdown-digit"
-        style={{
-          transform: flip ? 'scale(0.85)' : 'scale(1)',
-          transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
-        }}
+        className={`w-20 h-20 sm:w-28 sm:h-28 rounded-2xl sm:rounded-3xl border-2 ${styles.border} ${styles.bg} shadow-sm flex items-center justify-center transition-transform hover:scale-105`}
       >
-        {String(value).padStart(2, '0')}
+        <span
+          className={`font-black text-3xl sm:text-5xl font-mono tabular-nums ${styles.text}`}
+        >
+          {String(value).padStart(2, '0')}
+        </span>
       </div>
-      <div className="countdown-label">{label}</div>
+      <span
+        className={`mt-2 text-xs sm:text-sm font-extrabold uppercase tracking-widest ${styles.label}`}
+      >
+        {label}
+      </span>
     </div>
   );
 }
@@ -83,7 +104,6 @@ export default function Countdown() {
   }, []);
 
   useEffect(() => {
-    // Only run on client after mount to prevent SSR new Date() prerender blocking in Next.js 16
     setMounted(true);
     setData(getCountdown());
     const interval = setInterval(tick, 1000);
@@ -93,133 +113,66 @@ export default function Countdown() {
   const { time, state } = data;
 
   if (!mounted) {
-    // Return deterministic skeleton state during prerender
     return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-          gap: 'clamp(1rem, 3vw, 2.5rem)',
-          flexWrap: 'wrap',
-          opacity: 0.6,
-        }}
-      >
-        <Digit value={0} label="Hari" />
-        <div className="countdown-digit" style={{ opacity: 0.3, paddingBottom: '1.5rem', alignSelf: 'flex-start', marginTop: '0.25rem' }}>:</div>
-        <Digit value={0} label="Jam" />
-        <div className="countdown-digit" style={{ opacity: 0.3, paddingBottom: '1.5rem', alignSelf: 'flex-start', marginTop: '0.25rem' }}>:</div>
-        <Digit value={0} label="Menit" />
-        <div className="countdown-digit" style={{ opacity: 0.3, paddingBottom: '1.5rem', alignSelf: 'flex-start', marginTop: '0.25rem' }}>:</div>
-        <Digit value={0} label="Detik" />
+      <div className="flex items-center justify-center gap-3 sm:gap-6 py-4 opacity-50">
+        <DigitBox value={0} label="Hari" colorScheme="blue" />
+        <span className="text-2xl sm:text-4xl font-bold text-slate-300 -mt-6">:</span>
+        <DigitBox value={0} label="Jam" colorScheme="rose" />
+        <span className="text-2xl sm:text-4xl font-bold text-slate-300 -mt-6">:</span>
+        <DigitBox value={0} label="Menit" colorScheme="amber" />
+        <span className="text-2xl sm:text-4xl font-bold text-slate-300 -mt-6">:</span>
+        <DigitBox value={0} label="Detik" colorScheme="emerald" />
       </div>
     );
   }
 
   if (state === 'ended') {
     return (
-      <div
-        style={{
-          textAlign: 'center',
-          padding: '2rem',
-          background: 'var(--pride-glass-bg)',
-          border: '1px solid var(--pride-glass-border)',
-          borderRadius: '4px',
-        }}
-      >
-        <p
-          style={{
-            fontFamily: 'var(--font-playfair), serif',
-            fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
-            color: 'var(--pride-gold)',
-            fontStyle: 'italic',
-          }}
-        >
-          PRIDE Industri 2026 telah selesai.
+      <div className="text-center py-6 px-4 bg-slate-50 rounded-2xl border border-slate-200">
+        <p className="text-2xl font-bold text-slate-800">
+          PRIDE Industri 2026 Telah Selesai Diselenggarakan
         </p>
-        <p style={{ color: 'var(--pride-text-muted)', marginTop: '0.5rem' }}>
-          Terima kasih atas partisipasi Anda!
+        <p className="text-sm text-slate-500 mt-1">
+          Terima kasih atas partisipasi seluruh pelaku IKM dan masyarakat Kota Bandung!
         </p>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       {state === 'live' && (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            justifyContent: 'center',
-            marginBottom: '1.5rem',
-          }}
-        >
-          <span
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: '#34d399',
-              animation: 'pulse-live 1.5s ease-in-out infinite',
-            }}
-          />
-          <span
-            style={{
-              fontSize: '0.75rem',
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: '#34d399',
-              fontWeight: '600',
-            }}
-          >
-            LIVE SEKARANG
-          </span>
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold uppercase tracking-wider mx-auto">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-ping" />
+          Sedang Berlangsung Hari Ini di Braga!
         </div>
       )}
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-          gap: 'clamp(1rem, 3vw, 2.5rem)',
-          flexWrap: 'wrap',
-        }}
-      >
-        <Digit value={time.days} label="Hari" />
-        <div className="countdown-digit" style={{ opacity: 0.3, paddingBottom: '1.5rem', alignSelf: 'flex-start', marginTop: '0.25rem' }}>:</div>
-        <Digit value={time.hours} label="Jam" />
-        <div className="countdown-digit" style={{ opacity: 0.3, paddingBottom: '1.5rem', alignSelf: 'flex-start', marginTop: '0.25rem' }}>:</div>
-        <Digit value={time.minutes} label="Menit" />
-        <div className="countdown-digit" style={{ opacity: 0.3, paddingBottom: '1.5rem', alignSelf: 'flex-start', marginTop: '0.25rem' }}>:</div>
-        <Digit value={time.seconds} label="Detik" />
+      {/* Countdown Digits */}
+      <div className="flex items-center justify-center gap-2.5 sm:gap-5 flex-wrap">
+        <DigitBox value={time.days} label="Hari" colorScheme="blue" />
+        <span className="text-xl sm:text-3xl font-extrabold text-slate-300 -mt-6 hidden xs:inline">
+          :
+        </span>
+        <DigitBox value={time.hours} label="Jam" colorScheme="rose" />
+        <span className="text-xl sm:text-3xl font-extrabold text-slate-300 -mt-6 hidden xs:inline">
+          :
+        </span>
+        <DigitBox value={time.minutes} label="Menit" colorScheme="amber" />
+        <span className="text-xl sm:text-3xl font-extrabold text-slate-300 -mt-6 hidden xs:inline">
+          :
+        </span>
+        <DigitBox value={time.seconds} label="Detik" colorScheme="emerald" />
       </div>
 
       {state === 'upcoming' && (
-        <p
-          style={{
-            textAlign: 'center',
-            marginTop: '1.25rem',
-            fontSize: '0.875rem',
-            color: 'var(--pride-text-muted)',
-            letterSpacing: '0.04em',
-          }}
-        >
-          Menuju pembukaan PRIDE Industri 2026 —{' '}
-          <span style={{ color: 'var(--pride-text-secondary)' }}>
-            27 November 2026, Braga City Walk, Bandung
-          </span>
+        <p className="text-xs sm:text-sm font-medium text-slate-500 text-center">
+          Menuju pembukaan resmi pada{' '}
+          <strong className="text-slate-800">
+            Jum&apos;at, 27 November 2026 · 13:30 WIB
+          </strong>
         </p>
       )}
-
-      <style>{`
-        @keyframes pulse-live {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.6; transform: scale(1.3); }
-        }
-      `}</style>
     </div>
   );
 }

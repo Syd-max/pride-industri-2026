@@ -7,92 +7,134 @@ import { EVENT_CONFIG } from '@/config/event';
 export default function Footer() {
   return (
     <footer
-      className="relative bg-[#070707] border-t border-[rgba(255,255,255,0.08)] pt-16 pb-12 text-[#8A8A8A]"
+      className="relative bg-slate-900 border-t border-slate-800 pt-16 pb-12 text-slate-400"
       role="contentinfo"
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-[#1A1A1A]">
-          {/* Col 1: Brand Info */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-slate-800">
+          
+          {/* Col 1: Brand & Organizer */}
           <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="relative w-8 h-8">
+              <div className="relative w-10 h-10">
                 <Image
                   src="/LOGO_PRIDE_INDUSTRI.png"
                   alt="PRIDE Industri 2026"
                   fill
-                  sizes="32px"
+                  sizes="40px"
                   className="object-contain"
                 />
               </div>
-              <span className="font-display text-lg font-bold text-[#F5F0E8] tracking-wide">
-                PRIDE <span className="text-[#C8A96E]">2026</span>
+              <span className="text-xl font-extrabold text-white tracking-tight">
+                PRIDE <span className="text-rose-500">INDUSTRI 2026</span>
               </span>
             </div>
 
-            <p className="font-display italic text-sm text-[#B8B0A4] max-w-sm">
+            <p className="text-sm text-slate-300 font-medium max-w-sm leading-relaxed">
               Pagelaran Ragam Inovasi dan Eksistensi — Merayakan Daya Cipta dan
-              Kemandirian Industri Kecil dan Menengah Kota Bandung.
+              Kemandirian Industri Kecil dan Menengah (IKM) Kota Bandung.
             </p>
 
-            <p className="text-xs text-[#6B6560] leading-relaxed">
-              Diselenggarakan oleh{' '}
-              <strong className="text-[#8A8A8A]">
+            <div className="text-xs text-slate-400 space-y-1">
+              <p>
+                <strong className="text-slate-200">Penyelenggara:</strong>{' '}
                 {EVENT_CONFIG.organizer}
-              </strong>{' '}
-              berkolaborasi dengan mitra strategis dan pelaku IKM Kota Bandung.
-            </p>
+              </p>
+              <p>
+                <strong className="text-slate-200">Didukung Oleh:</strong> Dinas
+                Perdagangan dan Perindustrian Kota Bandung (KEMILAU)
+              </p>
+            </div>
           </div>
 
-          {/* Col 2: Nav Links */}
-          <div className="md:col-span-3 space-y-3">
-            <div className="text-xs font-semibold tracking-[0.15em] uppercase text-[#F5F0E8]">
-              Navigasi Festival
+          {/* Col 2: Navigasi Festival */}
+          <div className="md:col-span-2 space-y-3">
+            <div className="text-xs font-bold uppercase tracking-wider text-white">
+              Navigasi
             </div>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#about" className="hover:text-[#C8A96E] transition-colors">
+                <a href="#about" className="hover:text-white transition-colors">
                   Tentang Acara
                 </a>
               </li>
               <li>
-                <a href="#program" className="hover:text-[#C8A96E] transition-colors">
+                <a href="#program" className="hover:text-white transition-colors">
                   Jadwal Program
                 </a>
               </li>
               <li>
-                <a href="#competitions" className="hover:text-[#C8A96E] transition-colors">
+                <a href="#competitions" className="hover:text-white transition-colors">
                   Kompetisi Resmi
                 </a>
               </li>
               <li>
-                <a href="#location" className="hover:text-[#C8A96E] transition-colors">
+                <a href="#location" className="hover:text-white transition-colors">
                   Lokasi Venue
                 </a>
               </li>
               <li>
-                <a href="#faq" className="hover:text-[#C8A96E] transition-colors">
+                <a href="#faq" className="hover:text-white transition-colors">
                   Tanya Jawab (FAQ)
                 </a>
               </li>
+            </ul>
+          </div>
+
+          {/* Col 3: Akses Peserta */}
+          <div className="md:col-span-2 space-y-3">
+            <div className="text-xs font-bold uppercase tracking-wider text-white">
+              Akses Peserta
+            </div>
+            <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/check-in" className="hover:text-[#C8A96E] transition-colors">
-                  Check-In Peserta
+                <Link
+                  href="/competition/desain-kemasan"
+                  className="hover:text-white transition-colors"
+                >
+                  Daftar Desain Kemasan
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/competition/video-lokal"
+                  className="hover:text-white transition-colors"
+                >
+                  Daftar Lomba Video
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/check-in"
+                  className="hover:text-white transition-colors text-blue-400 font-semibold"
+                >
+                  Kamera QR Check-In
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/admin"
+                  className="hover:text-white transition-colors text-slate-500"
+                >
+                  Portal Admin Panitia
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Social & Contact */}
-          <div className="md:col-span-4 space-y-3">
-            <div className="text-xs font-semibold tracking-[0.15em] uppercase text-[#F5F0E8]">
-              Kanal Resmi & Kontak
+          {/* Col 4: Kontak & Social Media */}
+          <div className="md:col-span-3 space-y-3">
+            <div className="text-xs font-bold uppercase tracking-wider text-white">
+              Kontak Panitia
             </div>
-            <ul className="space-y-2.5 text-xs">
+            <ul className="space-y-2 text-xs">
               <li className="flex items-center gap-2">
                 <span>📧</span>
                 <a
                   href={`mailto:${EVENT_CONFIG.contact.email}`}
-                  className="hover:text-[#C8A96E] transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   {EVENT_CONFIG.contact.email}
                 </a>
@@ -100,52 +142,42 @@ export default function Footer() {
               <li className="flex items-center gap-2">
                 <span>📸</span>
                 <a
-                  href={EVENT_CONFIG.contact.instagram}
+                  href="https://instagram.com/bdg.perdaganganindustri"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-[#C8A96E] transition-colors"
+                  className="hover:text-white transition-colors"
                 >
-                  Instagram: {EVENT_CONFIG.contact.instagramHandle}
+                  @bdg.perdaganganindustri
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <span>🎵</span>
                 <a
-                  href={EVENT_CONFIG.contact.tiktok}
+                  href="https://tiktok.com/@disdagin.bandung"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-[#C8A96E] transition-colors"
+                  className="hover:text-white transition-colors"
                 >
-                  TikTok: {EVENT_CONFIG.contact.tiktokHandle}
+                  @disdagin.bandung
                 </a>
-              </li>
-              <li className="pt-2 text-[11px] text-[#6B6560]">
-                {EVENT_CONFIG.venue.name} · {EVENT_CONFIG.venue.address}
               </li>
             </ul>
           </div>
+
         </div>
 
-        {/* Bottom bar */}
-        <div className="pt-8 flex flex-wrap items-center justify-between gap-4 text-[11px] text-[#6B6560]">
+        {/* Bottom Copyright & Disclaimer */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div>
-            © 2026 PRIDE Industri · RRD Organizer. Hak cipta dilindungi.
+            © 2026 PRIDE Industri Kota Bandung. Hak cipta dilindungi.
           </div>
-          <div className="flex items-center gap-6">
-            <Link
-              href="/privacy"
-              className="hover:text-[#B8B0A4] transition-colors underline"
-            >
-              Kebijakan Privasi Data Peserta
-            </Link>
-            <Link
-              href="/admin/login"
-              className="hover:text-[#B8B0A4] transition-colors text-[#555]"
-            >
-              Portal Panitia (Admin)
-            </Link>
+          <div className="flex items-center gap-4">
+            <span>Braga City Walk Bandung</span>
+            <span>·</span>
+            <span>27–28 November 2026</span>
           </div>
         </div>
+
       </div>
     </footer>
   );

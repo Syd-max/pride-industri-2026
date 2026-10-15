@@ -75,49 +75,50 @@ export default function DesainKemasanPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F5F0E8] py-12 px-4 sm:px-6">
+    <div className="min-h-screen bg-slate-50 text-slate-800 py-10 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
+        
         {/* Navigation Bar / Back */}
-        <div className="flex items-center justify-between pb-8 border-b border-[#1C1C1C] mb-10">
+        <div className="flex items-center justify-between pb-6 border-b border-slate-200 mb-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#B8B0A4] hover:text-[#C8A96E] transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-blue-600 transition-colors"
           >
             ← Kembali ke Beranda Festival
           </Link>
           <div className="flex items-center gap-2">
-            <div className="relative w-6 h-6">
+            <div className="relative w-7 h-7">
               <Image
                 src="/LOGO_PRIDE_INDUSTRI.png"
                 alt="PRIDE 2026"
                 fill
-                sizes="24px"
+                sizes="28px"
                 className="object-contain"
               />
             </div>
-            <span className="text-xs font-display tracking-wider font-semibold text-[#C8A96E]">
-              PRIDE 2026
+            <span className="text-xs font-extrabold tracking-tight text-slate-900">
+              PRIDE <span className="text-blue-600">INDUSTRI 2026</span>
             </span>
           </div>
         </div>
 
         {/* Success State View */}
         {successData ? (
-          <div className="glass-card-gold p-8 sm:p-12 rounded-2xl border border-[rgba(200,169,110,0.3)] text-center space-y-6 animate-fade-in">
-            <div className="w-16 h-16 rounded-full bg-[#C8A96E]/20 text-[#C8A96E] border border-[#C8A96E]/40 flex items-center justify-center mx-auto text-3xl">
+          <div className="bg-white p-8 sm:p-12 rounded-3xl border border-blue-200 shadow-xl text-center space-y-6">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 border-2 border-emerald-300 flex items-center justify-center mx-auto text-3xl font-black">
               ✓
             </div>
 
             <div>
-              <span className="text-xs uppercase font-mono tracking-[0.2em] text-[#C8A96E] block mb-1">
+              <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 inline-block mb-3">
                 Pendaftaran Berhasil Terkonfirmasi
               </span>
-              <h1 className="font-display text-3xl sm:text-4xl text-[#F5F0E8] font-bold">
+              <h1 className="text-3xl sm:text-4xl text-slate-900 font-extrabold">
                 Selamat, {successData.full_name}!
               </h1>
-              <p className="text-xs sm:text-sm text-[#B8B0A4] mt-2 max-w-md mx-auto">
-                Anda telah terdaftar dalam{' '}
-                <strong className="text-[#F5F0E8]">
+              <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto">
+                Anda telah terdaftar resmi dalam{' '}
+                <strong className="text-blue-600 font-bold">
                   Lomba Desain Kemasan PRIDE Industri 2026
                 </strong>
                 .
@@ -125,67 +126,66 @@ export default function DesainKemasanPage() {
             </div>
 
             {/* Official Pass Badge */}
-            <div className="p-6 rounded-xl bg-[#141414] border border-[#2A2A2A] max-w-md mx-auto text-left space-y-3">
-              <div className="flex justify-between items-center text-xs pb-3 border-b border-[#222222]">
-                <span className="text-[#8A8A8A] uppercase tracking-wider text-[10px]">
+            <div className="p-6 rounded-2xl bg-blue-50/60 border border-blue-200 max-w-md mx-auto text-left space-y-3">
+              <div className="flex justify-between items-center text-xs pb-3 border-b border-blue-100">
+                <span className="text-slate-500 uppercase tracking-wider text-[11px] font-bold">
                   Kode Registrasi Resmi:
                 </span>
-                <span className="font-mono text-sm font-bold text-[#E4C584]">
+                <span className="font-mono text-base font-extrabold text-blue-700">
                   {successData.registration_code}
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-[#8A8A8A]">Kategori:</span>
-                <span className="text-[#F5F0E8] font-medium">
+                <span className="text-slate-500">Kategori Lomba:</span>
+                <span className="text-slate-800 font-bold">
                   Desain Kemasan Kuliner Lokal
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-[#8A8A8A]">Email Terdaftar:</span>
-                <span className="text-[#F5F0E8] font-mono">{successData.email}</span>
+                <span className="text-slate-500">Email Terdaftar:</span>
+                <span className="text-slate-800 font-mono font-medium">
+                  {successData.email}
+                </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-[#8A8A8A]">Status Kehadiran:</span>
-                <span className="text-[#fbbf24] font-medium">
+                <span className="text-slate-500">Status Kehadiran:</span>
+                <span className="text-amber-700 font-bold">
                   Belum Check-In di Lokasi
                 </span>
               </div>
             </div>
 
             {/* Next Steps Instructions */}
-            <div className="p-5 rounded-xl bg-[#111111] border border-[#222222] text-xs text-[#8A8A8A] text-left space-y-2 max-w-md mx-auto">
-              <div className="font-semibold text-[#F5F0E8] uppercase tracking-wider text-[11px] mb-2">
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 text-left space-y-2 max-w-md mx-auto leading-relaxed">
+              <div className="font-extrabold text-slate-800 uppercase tracking-wider text-[11px] mb-2">
                 Langkah Selanjutnya:
               </div>
               <p>
-                1. Simpan kode registrasi di atas sebagai tanda bukti kepesertaan
-                Anda.
+                1. Simpan kode registrasi di atas sebagai tanda bukti kepesertaan Anda.
               </p>
               <p>
-                2. Siapkan file karya dalam 1 file PDF maksimal 10 MB (Konsep,
-                Eksplorasi, Pola/Technical Pack, dan Mockup Final).
+                2. Siapkan file karya dalam 1 file PDF maksimal 10 MB (Konsep, Pola/Technical Pack, dan Mockup Final).
               </p>
               <p>
                 3. Pantau pengumuman peserta lolos Grand Final pada tanggal{' '}
-                <strong>25 November 2026</strong>.
+                <strong className="text-slate-800">25 November 2026</strong>.
               </p>
               <p>
-                4. Pada hari acara (27–28 Nov 2026), gunakan menu{' '}
-                <strong className="text-[#C8A96E]">Check-In</strong> di website
-                ini untuk memindai QR gate di Braga City Walk.
+                4. Pada hari festival (27–28 Nov 2026), buka menu{' '}
+                <strong className="text-blue-600 font-bold">Check-In</strong> di website ini untuk memindai QR gate di Braga City Walk.
               </p>
             </div>
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/check-in"
-                className="btn btn-primary text-xs py-3 px-6 uppercase tracking-wider w-full sm:w-auto"
+                className="px-6 py-3 rounded-full text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md transition-all w-full sm:w-auto"
               >
                 Buka Menu Check-In
               </Link>
               <Link
                 href="/"
-                className="btn btn-ghost text-xs py-3 px-6 uppercase tracking-wider w-full sm:w-auto"
+                className="px-6 py-3 rounded-full text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all w-full sm:w-auto"
               >
                 Kembali ke Beranda
               </Link>
@@ -194,33 +194,35 @@ export default function DesainKemasanPage() {
         ) : (
           /* Form View */
           <div className="space-y-8">
+            
             {/* Header */}
             <div>
-              <div className="inline-block text-[11px] font-semibold tracking-[0.2em] uppercase text-[#E85B26] mb-2">
+              <div className="inline-block text-[11px] font-extrabold tracking-wider uppercase px-3 py-1 rounded-full bg-blue-100 text-blue-800 border border-blue-200 mb-3">
                 Formulir Pendaftaran Resmi
               </div>
-              <h1 className="font-display text-3xl sm:text-4xl text-[#F5F0E8] font-bold">
+              <h1 className="text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight">
                 Lomba Desain Kemasan PRIDE Industri 2026
               </h1>
-              <p className="font-display italic text-base sm:text-lg text-[#C8A96E] mt-2">
+              <p className="text-base sm:text-lg text-slate-700 font-bold italic mt-2">
                 “Inovasi Desain Kemasan Ramah Lingkungan untuk Produk Kuliner
                 Berbahan Dasar Lokal”
               </p>
-              <p className="text-xs text-[#8A8A8A] mt-2 leading-relaxed">
-                Pendaftaran terbuka untuk umum WNI (individu), tidak dipungut
-                biaya. Total hadiah Rp 2.250.000.
+              <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+                Pendaftaran terbuka untuk umum WNI (individu), 100% gratis tanpa dipungut
+                biaya. Total hadiah resmi Rp 2.250.000.
               </p>
             </div>
 
             {/* Download Guidelines Notice */}
-            <div className="p-4 rounded-xl bg-[#141414] border border-[#2A2A2A] flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div className="text-[#B8B0A4]">
-                Pastikan Anda telah membaca syarat teknis dan ketentuan karya.
+            <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="text-slate-600">
+                Pastikan Anda telah membaca syarat teknis dan kriteria karya lomba.
               </div>
               <a
                 href={EVENT_CONFIG.competitions.desainKemasan.documentPath}
-                download
-                className="btn btn-secondary text-xs py-1.5 px-3"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 rounded-full text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors"
               >
                 Unduh Syarat & Ketentuan PDF ↗
               </a>
@@ -230,7 +232,7 @@ export default function DesainKemasanPage() {
             {errorMessage && (
               <div
                 role="alert"
-                className="p-4 rounded-xl bg-[#2D0F0A] border border-[#7F1D1D] text-xs text-[#FCA5A5] flex items-center gap-3"
+                className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center gap-3 font-medium"
               >
                 <span>⚠️</span>
                 <span>{errorMessage}</span>
@@ -239,15 +241,16 @@ export default function DesainKemasanPage() {
 
             {/* Registration Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              
               {/* Personal Data Section */}
-              <div className="p-6 rounded-2xl bg-[#111111] border border-[#222222] space-y-4">
-                <h2 className="font-display text-lg font-semibold text-[#F5F0E8] pb-2 border-b border-[#1C1C1C]">
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <h2 className="text-lg font-extrabold text-slate-900 pb-2 border-b border-slate-100">
                   1. Data Diri Peserta
                 </h2>
 
-                <div className="form-field">
-                  <label htmlFor="full_name" className="form-label form-label-required">
-                    Nama Lengkap (Sesuai KTP/Identitas)
+                <div className="space-y-1.5">
+                  <label htmlFor="full_name" className="text-xs font-bold text-slate-700 block">
+                    Nama Lengkap (Sesuai KTP/Identitas) <span className="text-rose-600">*</span>
                   </label>
                   <input
                     id="full_name"
@@ -258,14 +261,14 @@ export default function DesainKemasanPage() {
                       setFormData({ ...formData, full_name: e.target.value })
                     }
                     placeholder="Contoh: Raden Aulia Pratama"
-                    className="form-input"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="form-field">
-                    <label htmlFor="email" className="form-label form-label-required">
-                      Alamat Email Aktif
+                  <div className="space-y-1.5">
+                    <label htmlFor="email" className="text-xs font-bold text-slate-700 block">
+                      Alamat Email Aktif <span className="text-rose-600">*</span>
                     </label>
                     <input
                       id="email"
@@ -276,13 +279,13 @@ export default function DesainKemasanPage() {
                         setFormData({ ...formData, email: e.target.value })
                       }
                       placeholder="nama@email.com"
-                      className="form-input"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                     />
                   </div>
 
-                  <div className="form-field">
-                    <label htmlFor="phone" className="form-label form-label-required">
-                      No. WhatsApp / Telepon
+                  <div className="space-y-1.5">
+                    <label htmlFor="phone" className="text-xs font-bold text-slate-700 block">
+                      No. WhatsApp / Telepon <span className="text-rose-600">*</span>
                     </label>
                     <input
                       id="phone"
@@ -293,14 +296,14 @@ export default function DesainKemasanPage() {
                         setFormData({ ...formData, phone: e.target.value })
                       }
                       placeholder="08123456789"
-                      className="form-input"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                     />
                   </div>
                 </div>
 
-                <div className="form-field">
-                  <label htmlFor="address" className="form-label form-label-required">
-                    Alamat Domisili Lengkap
+                <div className="space-y-1.5">
+                  <label htmlFor="address" className="text-xs font-bold text-slate-700 block">
+                    Alamat Domisili Lengkap <span className="text-rose-600">*</span>
                   </label>
                   <textarea
                     id="address"
@@ -311,21 +314,21 @@ export default function DesainKemasanPage() {
                       setFormData({ ...formData, address: e.target.value })
                     }
                     placeholder="Alamat tempat tinggal saat ini..."
-                    className="form-input"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                   />
                 </div>
               </div>
 
               {/* Product & Design Concept Section */}
-              <div className="p-6 rounded-2xl bg-[#111111] border border-[#222222] space-y-4">
-                <h2 className="font-display text-lg font-semibold text-[#F5F0E8] pb-2 border-b border-[#1C1C1C]">
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <h2 className="text-lg font-extrabold text-slate-900 pb-2 border-b border-slate-100">
                   2. Konsep Desain Kemasan Kuliner
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="form-field">
-                    <label htmlFor="brand_name" className="form-label form-label-required">
-                      Nama Merek Produk (Brand)
+                  <div className="space-y-1.5">
+                    <label htmlFor="brand_name" className="text-xs font-bold text-slate-700 block">
+                      Nama Merek Produk (Brand) <span className="text-rose-600">*</span>
                     </label>
                     <input
                       id="brand_name"
@@ -336,13 +339,13 @@ export default function DesainKemasanPage() {
                         setFormData({ ...formData, brand_name: e.target.value })
                       }
                       placeholder="Contoh: Sangkuriang Crunch"
-                      className="form-input"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                     />
                   </div>
 
-                  <div className="form-field">
-                    <label htmlFor="product_name" className="form-label form-label-required">
-                      Nama Produk Kuliner
+                  <div className="space-y-1.5">
+                    <label htmlFor="product_name" className="text-xs font-bold text-slate-700 block">
+                      Nama Produk Kuliner <span className="text-rose-600">*</span>
                     </label>
                     <input
                       id="product_name"
@@ -353,14 +356,14 @@ export default function DesainKemasanPage() {
                         setFormData({ ...formData, product_name: e.target.value })
                       }
                       placeholder="Contoh: Keripik Ubi Ungu Renyah"
-                      className="form-input"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                     />
                   </div>
                 </div>
 
-                <div className="form-field">
-                  <label htmlFor="local_ingredients" className="form-label form-label-required">
-                    Bahan Dasar Lokal yang Digunakan
+                <div className="space-y-1.5">
+                  <label htmlFor="local_ingredients" className="text-xs font-bold text-slate-700 block">
+                    Bahan Dasar Lokal yang Digunakan <span className="text-rose-600">*</span>
                   </label>
                   <input
                     id="local_ingredients"
@@ -373,34 +376,30 @@ export default function DesainKemasanPage() {
                         local_ingredients: e.target.value,
                       })
                     }
-                    placeholder="Contoh: Ubi ungu, tahu Sumedang, tempe, oncom, dll."
-                    className="form-input"
+                    placeholder="Contoh: Ubi ungu, tahu Sumedang, tempe, oncom, olahan lokal Jawa Barat"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                   />
-                  <span className="text-[11px] text-[#6B6560]">
-                    Sesuai ketentuan lomba: produk kuliner olahan berbahan dasar
-                    lokal khas Jawa Barat / Bandung.
+                  <span className="text-[11px] text-slate-500 block">
+                    Sesuai ketentuan lomba: produk kuliner berbahan dasar lokal khas Kota Bandung / Jawa Barat.
                   </span>
                 </div>
 
                 <div className="pt-2">
-                  <label className="form-checkbox-row">
+                  <label className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-blue-300 transition-colors">
                     <input
                       type="checkbox"
                       checked={formData.ai_used}
                       onChange={(e) =>
                         setFormData({ ...formData, ai_used: e.target.checked })
                       }
+                      className="w-4 h-4 mt-0.5 accent-blue-600 flex-shrink-0"
                     />
                     <div className="text-xs">
-                      <span className="text-[#F5F0E8] font-medium block">
-                        Karya ini menggunakan Artificial Intelligence (AI)
-                        sebagai alat bantu final mockup
+                      <span className="text-slate-900 font-bold block">
+                        Karya ini menggunakan Artificial Intelligence (AI) sebagai alat bantu final mockup
                       </span>
-                      <span className="text-[#8A8A8A] block mt-0.5">
-                        Sesuai Pasal Persyaratan Karya: AI diizinkan hanya
-                        sebagai alat bantu visualisasi final mockup. Peserta
-                        tetap wajib melampirkan bukti proses kreatif dan
-                        eksplorasi konsep orisinal.
+                      <span className="text-slate-500 block mt-0.5">
+                        Sesuai Pasal Persyaratan Karya: AI diizinkan hanya sebagai alat bantu visualisasi final mockup. Peserta tetap wajib melampirkan bukti proses kreatif dan technical pack pola orisinal.
                       </span>
                     </div>
                   </label>
@@ -408,13 +407,13 @@ export default function DesainKemasanPage() {
               </div>
 
               {/* Declarations & Pakta Integritas */}
-              <div className="p-6 rounded-2xl bg-[#111111] border border-[#222222] space-y-4">
-                <h2 className="font-display text-lg font-semibold text-[#F5F0E8] pb-2 border-b border-[#1C1C1C]">
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <h2 className="text-lg font-extrabold text-slate-900 pb-2 border-b border-slate-100">
                   3. Pakta Integritas & Pernyataan Resmi
                 </h2>
 
                 <div className="space-y-3">
-                  <label className="form-checkbox-row">
+                  <label className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-blue-300 transition-colors">
                     <input
                       type="checkbox"
                       required
@@ -425,20 +424,17 @@ export default function DesainKemasanPage() {
                           declaration_original: e.target.checked,
                         })
                       }
+                      className="w-4 h-4 mt-0.5 accent-blue-600 flex-shrink-0"
                     />
-                    <div className="text-xs text-[#8A8A8A]">
-                      <strong className="text-[#F5F0E8] block">
+                    <div className="text-xs text-slate-600 leading-relaxed">
+                      <strong className="text-slate-900 block font-bold">
                         Pakta Integritas Orisinalitas Karya:
                       </strong>
-                      Saya menyatakan bahwa karya desain kemasan yang saya ikut
-                      sertakan merupakan karya asli (orisinal) buatan saya
-                      sendiri, tidak melanggar hak cipta/kekayaan intelektual
-                      pihak lain, dan saya bertanggung jawab penuh atas segala
-                      konsekuensi hukum yang timbul.
+                      Saya menyatakan bahwa karya desain kemasan yang saya ikut sertakan merupakan karya asli (orisinal) buatan saya sendiri, tidak melanggar hak cipta/kekayaan intelektual pihak lain, dan saya bertanggung jawab penuh atas segala konsekuensi hukum yang timbul.
                     </div>
                   </label>
 
-                  <label className="form-checkbox-row">
+                  <label className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-blue-300 transition-colors">
                     <input
                       type="checkbox"
                       required
@@ -449,21 +445,17 @@ export default function DesainKemasanPage() {
                           declaration_unpublished: e.target.checked,
                         })
                       }
+                      className="w-4 h-4 mt-0.5 accent-blue-600 flex-shrink-0"
                     />
-                    <div className="text-xs text-[#8A8A8A]">
-                      <strong className="text-[#F5F0E8] block">
+                    <div className="text-xs text-slate-600 leading-relaxed">
+                      <strong className="text-slate-900 block font-bold">
                         Surat Pernyataan Persetujuan Publikasi:
                       </strong>
-                      Saya menyatakan karya ini belum pernah dipublikasikan
-                      secara komersial/memenangkan perlombaan sejenis, dan
-                      bersedia karyanya digunakan oleh panitia/Dinas Perdagangan
-                      dan Perindustrian Kota Bandung untuk dokumentasi,
-                      publikasi, dan promosi non-komersial dengan tetap
-                      mencantumkan kredit nama saya.
+                      Saya menyatakan karya ini belum pernah dipublikasikan secara komersial/memenangkan perlombaan sejenis, dan bersedia karyanya digunakan oleh panitia/Dinas Perdagangan dan Perindustrian Kota Bandung untuk dokumentasi dan publikasi non-komersial.
                     </div>
                   </label>
 
-                  <label className="form-checkbox-row">
+                  <label className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-blue-300 transition-colors">
                     <input
                       type="checkbox"
                       required
@@ -474,15 +466,13 @@ export default function DesainKemasanPage() {
                           declaration_terms: e.target.checked,
                         })
                       }
+                      className="w-4 h-4 mt-0.5 accent-blue-600 flex-shrink-0"
                     />
-                    <div className="text-xs text-[#8A8A8A]">
-                      <strong className="text-[#F5F0E8] block">
+                    <div className="text-xs text-slate-600 leading-relaxed">
+                      <strong className="text-slate-900 block font-bold">
                         Kepatuhan Syarat & Ketentuan:
                       </strong>
-                      Saya telah membaca, memahami, dan menyetujui seluruh
-                      syarat, ketentuan teknis, jadwal, serta menerima keputusan
-                      Dewan Juri PRIDE Industri 2026 yang bersifat mutlak dan
-                      tidak dapat diganggu gugat.
+                      Saya telah membaca, memahami, dan menyetujui seluruh syarat, ketentuan teknis, jadwal, serta menerima keputusan Dewan Juri PRIDE Industri 2026 yang bersifat mutlak dan tidak dapat diganggu gugat.
                     </div>
                   </label>
                 </div>
@@ -493,25 +483,19 @@ export default function DesainKemasanPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="btn btn-primary w-full py-4 text-sm font-semibold tracking-wider uppercase justify-center"
+                  className="w-full py-4 px-6 rounded-full text-sm font-extrabold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/25 transition-all hover:-translate-y-0.5 cursor-pointer disabled:opacity-50"
                 >
-                  {loading ? (
-                    <span className="flex items-center gap-2">
-                      <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                      Memproses Pendaftaran...
-                    </span>
-                  ) : (
-                    'Kirim Formulir Pendaftaran Desain Kemasan →'
-                  )}
+                  {loading ? 'Memproses Pendaftaran...' : 'Kirim Formulir Pendaftaran Desain Kemasan →'}
                 </button>
-                <p className="text-center text-[11px] text-[#6B6560] mt-3">
-                  Data Anda tersimpan dengan aman pada database terisolasi PRIDE
-                  Industri 2026.
+                <p className="text-center text-xs text-slate-400 mt-3">
+                  Data Anda tersimpan dengan aman pada database terisolasi PRIDE Industri 2026.
                 </p>
               </div>
+
             </form>
           </div>
         )}
+
       </div>
     </div>
   );
