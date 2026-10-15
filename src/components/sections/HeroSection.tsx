@@ -12,7 +12,7 @@ export default function HeroSection() {
 
   useEffect(() => {
     // Trigger entrance animation on mount
-    const timer = setTimeout(() => setIsLoaded(true), 150);
+    const timer = setTimeout(() => setIsLoaded(true), 120);
 
     const handleScroll = () => {
       if (window.scrollY < window.innerHeight * 1.5) {
@@ -45,87 +45,97 @@ export default function HeroSection() {
   return (
     <section
       ref={heroRef}
-      className="relative w-full h-[100svh] min-h-[660px] max-h-[1080px] overflow-hidden flex flex-col justify-between select-none bg-gradient-to-b from-slate-900 via-slate-800 to-[#928e83]"
+      className="relative w-full h-[100svh] min-h-[660px] max-h-[1080px] overflow-hidden flex flex-col justify-between select-none bg-[#18191c]"
       aria-label="Hero PRIDE Industri 2026 — iPhone Depth Experience"
     >
-      {/* ─── LAYER 1: Background Scenery (z-0) — High Resolution 2048x1366, lowered down ─── */}
-      <div
-        className="absolute inset-x-0 -bottom-8 sm:-bottom-12 h-[78vh] sm:h-[82vh] md:h-[85vh] pointer-events-none will-change-transform z-0"
-        style={{
-          transform: `translate3d(${mousePos.x * 5}px, ${mousePos.y * 5 - scrollY * 0.1}px, 0)`,
-          transition: 'transform 0.12s ease-out',
-        }}
-      >
+      {/* ─── AMBIENT ATMOSPHERE BACKDROP (Soft sunset blur for screen edges) ─── */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-30">
         <Image
-          src="/LANDING_BG_HD.jpg"
-          alt="Braga City Walk Bandung Landscape"
+          src="/LANDING_BG.jpg"
+          alt=""
           fill
-          priority
           sizes="100vw"
-          className="object-cover object-bottom filter brightness-[0.98] contrast-[1.04]"
+          className="object-cover object-center filter blur-3xl scale-125 brightness-90"
         />
-
-        {/* Sunrise Ambient Glow in the Sky */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent pointer-events-none" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-amber-400/20 blur-3xl pointer-events-none animate-pulse-glow" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-slate-950/70" />
       </div>
 
-      {/* ─── LAYER 2: PRIDE Logo (z-10) — Positioned clearly in the open sky, lower right touches building ─── */}
-      <div
-        className="absolute inset-x-0 top-[15%] sm:top-[17%] md:top-[19%] z-10 flex items-center justify-center pointer-events-none will-change-transform"
-        style={{
-          // Parallax depth: logo moves slightly faster than background, creating authentic 3D depth
-          transform: `translate3d(${mousePos.x * 12}px, ${
-            mousePos.y * 12 - scrollY * 0.28 + (isLoaded ? 0 : 50)
-          }px, 0)`,
-          opacity: isLoaded ? 1 : 0,
-          transition: 'opacity 1s ease-out, transform 0.16s ease-out',
-        }}
-      >
-        {/* Floating Logo Composition clearly visible in the open sky */}
-        <div className="relative w-[85vw] max-w-[420px] sm:max-w-[480px] md:max-w-[540px] aspect-[16/11] animate-float-slow">
-          
-          {/* Subtle colorful neon aura behind the logo */}
-          <div className="absolute inset-4 rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,184,0,0.35)_0%,_rgba(229,25,55,0.2)_50%,_transparent_75%)] blur-2xl" />
-
+      {/* ─── MAIN STAGE: Natural Aspect Ratio without Zooming (Crisp & Uncropped) ─── */}
+      <div className="absolute inset-x-0 bottom-0 top-14 sm:top-16 z-0 flex items-end justify-center pointer-events-none">
+        <div
+          className="relative w-full max-w-[1240px] h-[74vh] sm:h-[78vh] md:h-[82vh] max-h-[750px] aspect-[1024/683] will-change-transform"
+          style={{
+            transform: `translate3d(${mousePos.x * 4}px, ${mousePos.y * 4 - scrollY * 0.08}px, 0)`,
+            transition: 'transform 0.12s ease-out',
+          }}
+        >
+          {/* LAYER 1: Background Photo (Unzoomed, 100% Crisp Native Aspect Ratio) */}
           <Image
-            src="/LOGO_PRIDE_INDUSTRI.png"
-            alt="Logo PRIDE Industri 2026 — Pagelaran Ragam Inovasi dan Eksistensi"
+            src="/LANDING_BG.jpg"
+            alt="Braga City Walk Landscape"
             fill
             priority
-            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 480px, 540px"
-            className="object-contain filter drop-shadow-[0_18px_32px_rgba(0,0,0,0.65)]"
+            sizes="(max-width: 1280px) 100vw, 1240px"
+            className="object-contain object-bottom filter brightness-[1.02] contrast-[1.02]"
           />
+
+          {/* Sunrise Ambient Glow in the Sky */}
+          <div className="absolute top-[10%] left-[15%] w-72 h-72 rounded-full bg-amber-400/20 blur-3xl pointer-events-none animate-pulse-glow" />
+
+          {/* LAYER 2: PRIDE Logo (In the open sky of the photo, lower right tucks behind roof) */}
+          <div
+            className="absolute z-10 will-change-transform flex items-center justify-center pointer-events-none"
+            style={{
+              // Positioned precisely in the open sky above the street (left of the main building)
+              top: '4%',
+              left: '12%',
+              right: '28%',
+              height: '52%',
+              transform: `translate3d(${mousePos.x * 10}px, ${
+                mousePos.y * 10 - scrollY * 0.22 + (isLoaded ? 0 : 40)
+              }px, 0)`,
+              opacity: isLoaded ? 1 : 0,
+              transition: 'opacity 0.9s ease-out, transform 0.16s ease-out',
+            }}
+          >
+            <div className="relative w-full h-full max-w-[480px] max-h-[320px] animate-float-slow">
+              {/* Subtle warm glow behind the logo */}
+              <div className="absolute inset-4 rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,184,0,0.3)_0%,_rgba(229,25,55,0.15)_50%,_transparent_70%)] blur-2xl" />
+
+              <Image
+                src="/LOGO_PRIDE_INDUSTRI.png"
+                alt="Logo PRIDE Industri 2026"
+                fill
+                priority
+                sizes="(max-width: 640px) 85vw, 480px"
+                className="object-contain filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
+              />
+            </div>
+          </div>
+
+          {/* LAYER 3: Foreground Building Cutout (Exact same object-contain, occludes lower-right of logo) */}
+          <div className="absolute inset-0 z-20 pointer-events-none">
+            <Image
+              src="/LANDING_FOREGROUND.png"
+              alt="Warenhuis De Vries Foreground"
+              fill
+              priority
+              sizes="(max-width: 1280px) 100vw, 1240px"
+              className="object-contain object-bottom filter brightness-[1.02] contrast-[1.02]"
+            />
+          </div>
         </div>
       </div>
 
-      {/* ─── LAYER 3: Foreground Building & Street (z-20) — High Resolution 2048x1366, perfectly aligned ─── */}
-      <div
-        className="absolute inset-x-0 -bottom-8 sm:-bottom-12 h-[78vh] sm:h-[82vh] md:h-[85vh] pointer-events-none will-change-transform z-20"
-        style={{
-          transform: `translate3d(${mousePos.x * 5}px, ${mousePos.y * 5 - scrollY * 0.1}px, 0)`,
-          transition: 'transform 0.12s ease-out',
-        }}
-      >
-        <Image
-          src="/LANDING_FOREGROUND_HD.png"
-          alt="Warenhuis De Vries & Braga Building Cutout"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-bottom filter brightness-[0.98] contrast-[1.04]"
-        />
-      </div>
-
       {/* ─── LAYER 4: iOS Lockscreen UI Header Chrome (z-30) ─── */}
-      <div className="relative z-30 pt-16 sm:pt-20 px-4 text-center space-y-2 pointer-events-auto">
+      <div className="relative z-30 pt-16 sm:pt-20 px-4 text-center space-y-1.5 pointer-events-auto">
         {/* Dynamic Island / Lockscreen Date Pill */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-ios text-xs font-bold text-white tracking-wider uppercase shadow-xl">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
           <span>Jum&apos;at, 27 November 2026 · Braga Bandung</span>
         </div>
 
-        {/* Narrative Subtitle — Cleanly positioned above the logo with breathing room */}
+        {/* Narrative Subtitle */}
         <div className="space-y-0.5 max-w-xl mx-auto">
           <h2 className="text-xs sm:text-sm md:text-base font-extrabold text-amber-300 tracking-wider uppercase drop-shadow-md">
             Pagelaran Ragam Inovasi dan Eksistensi
@@ -137,13 +147,13 @@ export default function HeroSection() {
       </div>
 
       {/* ─── LAYER 5: iOS Lockscreen Bottom Controls & Quick Actions (z-30) ─── */}
-      <div className="relative z-30 pb-6 sm:pb-8 px-4 max-w-3xl mx-auto w-full space-y-3 pointer-events-auto">
+      <div className="relative z-30 pb-5 sm:pb-7 px-4 max-w-3xl mx-auto w-full space-y-3 pointer-events-auto">
         
         {/* iOS Lockscreen Quick Action Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/competition/desain-kemasan"
-            className="px-5 py-3 rounded-full text-xs sm:text-sm font-extrabold text-white bg-blue-600/90 hover:bg-blue-600 shadow-lg shadow-blue-500/30 border border-blue-400/40 backdrop-blur-md transition-all hover:scale-105 flex items-center gap-2"
+            className="px-5 py-2.5 rounded-full text-xs sm:text-sm font-extrabold text-white bg-blue-600/90 hover:bg-blue-600 shadow-lg shadow-blue-500/30 border border-blue-400/40 backdrop-blur-md transition-all hover:scale-105 flex items-center gap-2"
           >
             <span>📦</span>
             <span>Lomba Desain Kemasan</span>
@@ -151,7 +161,7 @@ export default function HeroSection() {
 
           <Link
             href="/competition/video-lokal"
-            className="px-5 py-3 rounded-full text-xs sm:text-sm font-extrabold text-white bg-rose-600/90 hover:bg-rose-600 shadow-lg shadow-rose-500/30 border border-rose-400/40 backdrop-blur-md transition-all hover:scale-105 flex items-center gap-2"
+            className="px-5 py-2.5 rounded-full text-xs sm:text-sm font-extrabold text-white bg-rose-600/90 hover:bg-rose-600 shadow-lg shadow-rose-500/30 border border-rose-400/40 backdrop-blur-md transition-all hover:scale-105 flex items-center gap-2"
           >
             <span>🎬</span>
             <span>Lomba Video 1 Menit</span>
@@ -159,7 +169,7 @@ export default function HeroSection() {
 
           <Link
             href="/check-in"
-            className="px-4 py-3 rounded-full text-xs sm:text-sm font-bold text-white glass-ios hover:bg-white/30 transition-all hover:scale-105 flex items-center gap-2 shadow-lg"
+            className="px-4 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white glass-ios hover:bg-white/30 transition-all hover:scale-105 flex items-center gap-2 shadow-lg"
           >
             <svg
               className="w-4 h-4 text-emerald-300"
