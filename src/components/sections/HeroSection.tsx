@@ -115,27 +115,27 @@ export default function HeroSection() {
       return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     }
 
-    // 1. INTRO ENTRANCE SEQUENCE (00:00 -> 00:05)
+    // 1. INTRO ENTRANCE SEQUENCE (Fast, smooth & crisp)
     const t0 = setTimeout(() => {
       heroLogoRef.current?.classList.add('visible');
-    }, 280);
+    }, 60);
 
     // Floating cursor badges
-    const tBadge1 = setTimeout(() => badgeKulinerRef.current?.classList.add('visible'), 1000);
-    const tBadge2 = setTimeout(() => badgeFesyenRef.current?.classList.add('visible'), 1150);
-    const tBadge3 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 1300);
-    const tBadge4 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 1450);
+    const tBadge1 = setTimeout(() => badgeKulinerRef.current?.classList.add('visible'), 160);
+    const tBadge2 = setTimeout(() => badgeFesyenRef.current?.classList.add('visible'), 240);
+    const tBadge3 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 320);
+    const tBadge4 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 400);
 
-    // Headline Card, Subtitle & Organizer Logos (Smooth, choreographed cascade)
-    const tHeadline = setTimeout(() => headlineBlockRef.current?.classList.add('visible'), 1550);
-    const tSub = setTimeout(() => heroSubtitleRef.current?.classList.add('visible'), 1750);
-    const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 2050);
+    // Headline Card, Subtitle & Organizer Logos
+    const tHeadline = setTimeout(() => headlineBlockRef.current?.classList.add('visible'), 480);
+    const tSub = setTimeout(() => heroSubtitleRef.current?.classList.add('visible'), 580);
+    const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 680);
 
     // Browser Mockup rises into bottom of viewport (peeking bar)
     const tBrowser = setTimeout(() => {
       browserStageRef.current?.classList.add('intro-ready');
       updateTimeline(getScrollProgress());
-    }, 2400);
+    }, 800);
 
     // Calculate scroll progress within scrollStage
     function getScrollProgress(): number {
@@ -294,9 +294,12 @@ export default function HeroSection() {
   return (
     <div className="scroll-stage" id="scrollStage" ref={scrollStageRef}>
       <div className="flow-viewport">
-        {/* Full Braga Scenic Background (Unzoomed & Crisp) */}
-        <div className="scenic-bg" />
-        <div className="scenic-foreground" />
+        {/* Full Braga Scenic Background (Unzoomed & Uncompressed) */}
+        <div className="scenic-bg-wrap">
+          <div className="scenic-bg-ambient" />
+          <div className="scenic-bg-photo" />
+          <div className="scenic-foreground" />
+        </div>
 
         {/* Hero Section — TIDY, SPACIOUS & ELEGANT */}
         <section className="flow-hero-section" id="heroSection" ref={heroSectionRef}>

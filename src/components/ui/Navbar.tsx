@@ -62,34 +62,34 @@ export default function Navbar() {
             : 'bg-slate-950/40 backdrop-blur-md border-b border-white/10 py-3.5'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
           {/* Logo & Brand Identity */}
           <Link
             href="/"
             aria-label="PRIDE Industri 2026 — Beranda"
-            className="flex items-center gap-3 sm:gap-3.5 group text-decoration-none"
+            className="flex items-center gap-2.5 sm:gap-3.5 group text-decoration-none min-w-0"
           >
-            <div className="relative w-16 sm:w-20 md:w-[84px] h-11 sm:h-12 md:h-[50px] transition-transform duration-200 group-hover:scale-105 filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)] shrink-0">
+            <div className="relative w-12 sm:w-20 md:w-[84px] h-9 sm:h-12 md:h-[50px] transition-transform duration-200 group-hover:scale-105 filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)] shrink-0">
               <Image
                 src="/LOGO_PRIDE_INDUSTRI.png"
                 alt="Logo PRIDE Industri 2026"
                 fill
                 style={{ objectFit: 'contain' }}
-                sizes="(max-width: 640px) 140px, 180px"
+                sizes="(max-width: 640px) 100px, 180px"
                 priority
                 className="object-contain"
               />
             </div>
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-col justify-center min-w-0">
               <span
-                className={`font-black text-lg sm:text-xl tracking-tight leading-none transition-colors ${
+                className={`font-black text-base sm:text-xl tracking-tight leading-none transition-colors truncate ${
                   scrolled ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-amber-300 drop-shadow-sm'
                 }`}
               >
                 PRIDE <span className="text-rose-500">INDUSTRI</span>
               </span>
               <span
-                className={`text-[10px] sm:text-[11px] font-bold tracking-widest uppercase mt-1 transition-colors ${
+                className={`text-[9.5px] sm:text-[11px] font-bold tracking-wide sm:tracking-widest uppercase mt-0.5 sm:mt-1 transition-colors truncate ${
                   scrolled ? 'text-slate-500' : 'text-slate-200 drop-shadow-sm'
                 }`}
               >
