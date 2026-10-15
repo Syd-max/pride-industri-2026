@@ -59,7 +59,7 @@ export default function Navbar() {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
             ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200 py-3'
-            : 'bg-white/80 backdrop-blur-sm border-b border-slate-100 py-4'
+            : 'bg-slate-950/40 backdrop-blur-md border-b border-white/10 py-3.5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
@@ -80,10 +80,18 @@ export default function Navbar() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-extrabold text-lg tracking-tight leading-none text-slate-900 group-hover:text-blue-600 transition-colors">
-                PRIDE <span className="text-rose-600">INDUSTRI</span>
+              <span
+                className={`font-extrabold text-lg tracking-tight leading-none transition-colors ${
+                  scrolled ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-amber-300'
+                }`}
+              >
+                PRIDE <span className="text-rose-500">INDUSTRI</span>
               </span>
-              <span className="text-[10px] font-bold tracking-widest text-slate-500 uppercase mt-0.5">
+              <span
+                className={`text-[10px] font-bold tracking-widest uppercase mt-0.5 ${
+                  scrolled ? 'text-slate-500' : 'text-slate-300'
+                }`}
+              >
                 27–28 Nov 2026 · Braga Bandung
               </span>
             </div>
@@ -98,7 +106,11 @@ export default function Navbar() {
               <button
                 key={link.href}
                 onClick={() => handleNavClick(link.href)}
-                className="text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors cursor-pointer py-1 border-b-2 border-transparent hover:border-blue-600"
+                className={`text-sm font-semibold transition-colors cursor-pointer py-1 border-b-2 border-transparent ${
+                  scrolled
+                    ? 'text-slate-600 hover:text-blue-600 hover:border-blue-600'
+                    : 'text-slate-200 hover:text-amber-300 hover:border-amber-300'
+                }`}
               >
                 {link.label}
               </button>
@@ -109,10 +121,14 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             <Link
               href="/check-in"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-full transition-all hover:-translate-y-0.5"
+              className={`inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-full transition-all hover:-translate-y-0.5 ${
+                scrolled
+                  ? 'text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200'
+                  : 'text-white bg-white/15 hover:bg-white/25 border border-white/20 backdrop-blur-md'
+              }`}
             >
               <svg
-                className="w-4 h-4"
+                className={`w-4 h-4 ${scrolled ? 'text-blue-600' : 'text-emerald-300'}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -148,22 +164,26 @@ export default function Navbar() {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((v) => !v)}
-            className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 p-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
+            className={`md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 p-2 rounded-xl border transition-colors ${
+              scrolled
+                ? 'border-slate-200 text-slate-700 hover:bg-slate-50'
+                : 'border-white/20 text-white hover:bg-white/10'
+            }`}
           >
             <span
-              className={`w-5 h-0.5 bg-slate-800 transition-transform ${
-                menuOpen ? 'rotate-45 translate-y-2' : ''
-              }`}
+              className={`w-5 h-0.5 transition-transform ${
+                scrolled ? 'bg-slate-800' : 'bg-white'
+              } ${menuOpen ? 'rotate-45 translate-y-2' : ''}`}
             />
             <span
-              className={`w-5 h-0.5 bg-slate-800 transition-opacity ${
-                menuOpen ? 'opacity-0' : 'opacity-100'
-              }`}
+              className={`w-5 h-0.5 transition-opacity ${
+                scrolled ? 'bg-slate-800' : 'bg-white'
+              } ${menuOpen ? 'opacity-0' : 'opacity-100'}`}
             />
             <span
-              className={`w-5 h-0.5 bg-slate-800 transition-transform ${
-                menuOpen ? '-rotate-45 -translate-y-2' : ''
-              }`}
+              className={`w-5 h-0.5 transition-transform ${
+                scrolled ? 'bg-slate-800' : 'bg-white'
+              } ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`}
             />
           </button>
         </div>
