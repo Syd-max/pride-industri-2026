@@ -220,13 +220,15 @@ export default function HeroSection() {
 
       // Automated smooth vertical follow inside chat stream (Zero manual scrollbar)
       if (chatMessagesRef.current) {
-        if (p < 0.52) {
-          chatMessagesRef.current.scrollTop = 0;
-        } else if (p < 0.74) {
-          const t = easeInOutCubic(mapRange(p, 0.52, 0.74, 0, 1));
-          chatMessagesRef.current.scrollTop = t * 140;
+        const el = chatMessagesRef.current;
+        const maxScroll = Math.max(0, el.scrollHeight - el.clientHeight);
+        if (p < 0.46) {
+          el.scrollTop = 0;
+        } else if (p < 0.75) {
+          const t = easeInOutCubic(mapRange(p, 0.46, 0.75, 0, 1));
+          el.scrollTop = t * maxScroll;
         } else {
-          chatMessagesRef.current.scrollTop = 140;
+          el.scrollTop = maxScroll;
         }
       }
     }
