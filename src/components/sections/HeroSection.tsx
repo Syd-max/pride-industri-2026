@@ -9,7 +9,6 @@ export default function HeroSection() {
   const scrollStageRef = useRef<HTMLDivElement>(null);
   const heroSectionRef = useRef<HTMLElement>(null);
   const browserStageRef = useRef<HTMLDivElement>(null);
-  const trustBadgeRef = useRef<HTMLDivElement>(null);
   const heroLogoRef = useRef<HTMLDivElement>(null);
   const badgeKulinerRef = useRef<HTMLDivElement>(null);
   const badgeFesyenRef = useRef<HTMLDivElement>(null);
@@ -49,7 +48,6 @@ export default function HeroSection() {
 
     // 1. INTRO ENTRANCE SEQUENCE (00:00 -> 00:05)
     const t0 = setTimeout(() => {
-      trustBadgeRef.current?.classList.add('visible');
       heroLogoRef.current?.classList.add('visible');
     }, 280);
 
@@ -251,19 +249,6 @@ export default function HeroSection() {
 
         {/* Hero Section — TIDY, SPACIOUS & ELEGANT */}
         <section className="flow-hero-section" id="heroSection" ref={heroSectionRef}>
-          
-          {/* Social Proof & Date Badge */}
-          <div className="trust-badge" ref={trustBadgeRef}>
-            <div className="avatar-stack">
-              <span className="badge-icon-bubble bg-blue-600">👔</span>
-              <span className="badge-icon-bubble bg-orange-500">🍲</span>
-              <span className="badge-icon-bubble bg-emerald-600">🎨</span>
-            </div>
-            <span className="trust-text">
-              Disdagin Kota Bandung · <strong>27–28 November 2026</strong>
-            </span>
-          </div>
-
           {/* Official Logo Placed Full In Front with 4 Corner Badges */}
           <div className="hero-logo-wrap" ref={heroLogoRef}>
             {/* Ambient Warm Backlight */}
