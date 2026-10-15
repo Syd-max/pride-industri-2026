@@ -723,32 +723,49 @@
   box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
 }
 
-/* Chat Messages */
+/* Chat Messages — Clean automated scroll stream, zero manual scrollbar */
 .chat-messages {
   flex: 1;
-  padding: 20px 24px 12px;
+  padding: 18px 22px 12px;
   display: flex;
   flex-direction: column;
-  gap: 13px;
-  overflow-y: auto;
+  gap: 0;
+  overflow: hidden; /* ELIMINATES MANUAL SCROLLBAR & ARROW BUTTONS */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   position: relative;
   max-width: 720px;
   width: 100%;
   margin: 0 auto;
 }
 
+.chat-messages::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 .msg-item {
   display: flex;
   flex-direction: column;
   opacity: 0;
+  max-height: 0;
+  margin-bottom: 0;
+  overflow: hidden;
   transform: translateY(14px) scale(0.98);
-  transition: opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: 
+    opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    max-height 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    margin-bottom 0.35s ease;
   pointer-events: none;
 }
 
 .msg-item.shown {
   opacity: 1;
+  max-height: 220px;
+  overflow: visible;
+  margin-bottom: 12px;
   transform: translateY(0) scale(1);
   pointer-events: auto;
 }
@@ -891,7 +908,10 @@
 
 .system-pill-wrap {
   align-self: center;
-  margin: 4px 0;
+}
+
+.system-pill-wrap.shown {
+  margin: 4px 0 12px;
 }
 
 .system-pill {

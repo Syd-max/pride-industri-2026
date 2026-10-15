@@ -87,6 +87,7 @@ export default function HeroSection() {
   const heroLogosRef = useRef<HTMLDivElement>(null);
 
   // Chat message refs
+  const chatMessagesRef = useRef<HTMLDivElement>(null);
   const msg1Ref = useRef<HTMLDivElement>(null);
   const msg2Ref = useRef<HTMLDivElement>(null);
   const msg3Ref = useRef<HTMLDivElement>(null);
@@ -97,8 +98,6 @@ export default function HeroSection() {
   const msg6Ref = useRef<HTMLDivElement>(null);
   const msg7Ref = useRef<HTMLDivElement>(null);
   const chatComposerRef = useRef<HTMLDivElement>(null);
-
-  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     // Helper math utilities
@@ -218,6 +217,18 @@ export default function HeroSection() {
       msg6Ref.current?.classList.toggle('shown', p >= 0.63);
       msg7Ref.current?.classList.toggle('shown', p >= 0.69);
       chatComposerRef.current?.classList.toggle('shown', p >= 0.74);
+
+      // Automated smooth vertical follow inside chat stream (Zero manual scrollbar)
+      if (chatMessagesRef.current) {
+        if (p < 0.52) {
+          chatMessagesRef.current.scrollTop = 0;
+        } else if (p < 0.74) {
+          const t = easeInOutCubic(mapRange(p, 0.52, 0.74, 0, 1));
+          chatMessagesRef.current.scrollTop = t * 140;
+        } else {
+          chatMessagesRef.current.scrollTop = 140;
+        }
+      }
     }
 
     // Scroll listener
@@ -249,47 +260,6 @@ export default function HeroSection() {
       window.removeEventListener('resize', handleScroll);
     };
   }, []);
-
-  // 3. AUTO-PLAY SEQUENCE HANDLER
-  const toggleAutoPlay = () => {
-    const stage = scrollStageRef.current;
-    if (!stage) return;
-
-    if (isPlaying) {
-      setIsPlaying(false);
-      return;
-    }
-
-    setIsPlaying(true);
-    const rect = stage.getBoundingClientRect();
-    const stageTop = window.scrollY + rect.top;
-    const scrollDistance = stage.offsetHeight - window.innerHeight;
-    const duration = 19500; // 19.5s sequence
-    const startTime = performance.now();
-
-    function step(now: number) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      window.scrollTo(0, stageTop + progress * scrollDistance);
-
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      } else {
-        setIsPlaying(false);
-      }
-    }
-
-    requestAnimationFrame(step);
-  };
-
-  const handleSeeHow = () => {
-    const stage = scrollStageRef.current;
-    if (!stage) return;
-    const rect = stage.getBoundingClientRect();
-    const stageTop = window.scrollY + rect.top;
-    const scrollDistance = stage.offsetHeight - window.innerHeight;
-    window.scrollTo({ top: stageTop + scrollDistance * 0.25, behavior: 'smooth' });
-  };
 
   return (
     <div className="scroll-stage" id="scrollStage" ref={scrollStageRef}>
@@ -461,8 +431,8 @@ export default function HeroSection() {
                     </div>
                   </div>
 
-                  {/* Animated Chat Messages */}
-                  <div className="chat-messages">
+                  {/* Animated Chat Messages (Automated scroll-driven stream) */}
+                  <div className="chat-messages" ref={chatMessagesRef}>
                     
                     {/* Msg 1: Bot Initial Prompt */}
                     <div className="msg-item msg-right" ref={msg1Ref}>
@@ -569,14 +539,6 @@ export default function HeroSection() {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Floating Controls HUD (Auto-play sequence pill) */}
-        <div className="timeline-hud">
-          <button className="hud-btn" onClick={toggleAutoPlay}>
-            {isPlaying ? '⏸ Jeda Simulasi' : '▶ Auto-Play Simulasi'}
-          </button>
-          <span className="hud-hint">atau gulir untuk scrub timeline</span>
         </div>
       </div>
     </div>
