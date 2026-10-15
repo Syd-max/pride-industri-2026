@@ -52,9 +52,13 @@ export default function CompetitionsAdminPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={handlePrint}
-              className="btn btn-primary text-xs py-2 px-4 flex items-center gap-2"
+              className="btn btn-primary text-xs py-2 px-4 flex items-center gap-2 cursor-pointer"
             >
-              <span>🖨️</span>
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9" />
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                <rect width="12" height="8" x="6" y="14" rx="1" />
+              </svg>
               <span>Cetak Standee Gate</span>
             </button>
           </div>
@@ -146,9 +150,13 @@ export default function CompetitionsAdminPage() {
             <a
               href={EVENT_CONFIG.competitions.desainKemasan.documentPath}
               download
-              className="text-[#C8A96E] hover:underline"
+              className="text-[#C8A96E] hover:underline inline-flex items-center gap-1.5"
             >
-              📄 Unduh Dokumen Syarat (.pdf)
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              <span>Unduh Dokumen Syarat (.pdf)</span>
             </a>
             <span className="text-[#34D399]">File Terverifikasi Aktif</span>
           </div>
@@ -170,9 +178,13 @@ export default function CompetitionsAdminPage() {
             <a
               href={EVENT_CONFIG.competitions.videoLokal.documentPath}
               download
-              className="text-[#C8A96E] hover:underline"
+              className="text-[#C8A96E] hover:underline inline-flex items-center gap-1.5"
             >
-              📄 Unduh Dokumen Syarat (.pdf)
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              <span>Unduh Dokumen Syarat (.pdf)</span>
             </a>
             <span className="text-[#34D399]">File Terverifikasi Aktif</span>
           </div>

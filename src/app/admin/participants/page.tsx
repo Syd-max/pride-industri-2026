@@ -152,9 +152,13 @@ export default function ParticipantsPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={exportToCSV}
-            className="btn btn-secondary text-xs py-2 px-4 flex items-center gap-2"
+            className="btn btn-secondary text-xs py-2 px-4 flex items-center gap-2 cursor-pointer"
           >
-            <span>📥</span>
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
             <span>Ekspor CSV</span>
           </button>
         </div>
@@ -255,18 +259,28 @@ export default function ParticipantsPage() {
                           p.check_in_status === 'checked_in'
                             ? 'badge-checked-in'
                             : 'badge-not-checked-in'
-                        }`}
+                        } inline-flex items-center gap-1.5`}
                         title="Klik untuk mengubah status presensi"
                       >
-                        {p.check_in_status === 'checked_in'
-                          ? '✓ Hadir'
-                          : '○ Belum Hadir'}
+                        {p.check_in_status === 'checked_in' ? (
+                          <>
+                            <svg className="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Hadir</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+                            <span>Belum Hadir</span>
+                          </>
+                        )}
                       </button>
                     </td>
                     <td>
                       <button
                         onClick={() => setSelectedParticipant(p)}
-                        className="text-xs text-[#C8A96E] hover:underline"
+                        className="text-xs text-[#C8A96E] hover:underline cursor-pointer"
                       >
                         Detail Lengkap →
                       </button>
@@ -294,9 +308,13 @@ export default function ParticipantsPage() {
               </div>
               <button
                 onClick={() => setSelectedParticipant(null)}
-                className="w-8 h-8 rounded-full bg-[#1C1C1C] text-[#8A8A8A] hover:text-white flex items-center justify-center text-sm"
+                className="w-8 h-8 rounded-full bg-[#1C1C1C] text-[#8A8A8A] hover:text-white flex items-center justify-center cursor-pointer transition-colors"
+                aria-label="Tutup"
               >
-                ✕
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
               </button>
             </div>
 

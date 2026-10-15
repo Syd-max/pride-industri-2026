@@ -159,7 +159,7 @@ export default function RegistrationsPage() {
                         className="form-input form-select text-xs py-1 px-2 w-auto"
                       >
                         <option value="confirmed">Konfirmasi (Lolos)</option>
-                        <option value="finalist">⭐ Finalis Lomba</option>
+                        <option value="finalist">Finalis Lomba</option>
                         <option value="pending">Pending Review</option>
                         <option value="disqualified">Diskualifikasi</option>
                         <option value="cancelled">Dibatalkan</option>

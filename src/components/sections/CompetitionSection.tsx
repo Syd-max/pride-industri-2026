@@ -168,7 +168,9 @@ export default function CompetitionSection() {
                         key={i}
                         className="text-xs text-slate-600 flex items-start gap-2"
                       >
-                        <span className="text-emerald-600 font-bold">✓</span>
+                        <svg className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
                         <span>{h}</span>
                       </li>
                     ))}

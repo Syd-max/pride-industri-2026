@@ -497,7 +497,12 @@ export default function HeroSection() {
 
                     {/* Msg 6: System Handover Notice */}
                     <div className="msg-item system-pill-wrap" ref={msg6Ref}>
-                      <span className="system-pill">✓ Formulir registrasi online siap diisi · Tersedia QR Check-in</span>
+                      <span className="system-pill inline-flex items-center gap-1.5">
+                        <svg className="w-3 h-3 text-blue-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>Formulir registrasi online siap diisi · Tersedia QR Check-in</span>
+                      </span>
                     </div>
 
                     {/* Msg 7: Panitia Response */}

@@ -111,8 +111,11 @@ export default function CheckInsPage() {
                       Gate Utama Braga City Walk
                     </td>
                     <td>
-                      <span className="badge badge-checked-in">
-                        ✓ Terverifikasi Server
+                      <span className="badge badge-checked-in inline-flex items-center gap-1.5">
+                        <svg className="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>Terverifikasi Server</span>
                       </span>
                     </td>
                   </tr>
