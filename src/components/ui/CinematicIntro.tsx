@@ -1,224 +1,107 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-const INTRO_KEY = 'pride2026_intro_seen_v1';
+const INTRO_KEY = 'pride2026_intro_seen_v2';
 
-export default function CinematicIntro({ onComplete }: { onComplete: () => void }) {
-  const [phase, setPhase] = useState<
-    'idle' | 'focus' | 'shutter' | 'reveal' | 'done'
-  >('idle');
-  const hasRun = useRef(false);
+export default function CinematicIntro() {
+  const [visible, setVisible] = useState(true);
+  const [phase, setPhase] = useState<'focus' | 'shutter' | 'reveal'>('focus');
 
   useEffect(() => {
-    if (hasRun.current) return;
-    hasRun.current = true;
-
-    // Respect reduced-motion — skip immediately
+    // Respect reduced-motion — dismiss immediately
     const prefersReduced =
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
-    // Check if already seen this session
     const alreadySeen = sessionStorage.getItem(INTRO_KEY) === '1';
 
     if (prefersReduced || alreadySeen) {
-      onComplete();
+      setVisible(false);
       return;
     }
 
-    // Cinematic sequence
-    // Phase timeline: idle → focus (0.4s) → shutter (0.8s) → reveal (1.2s) → done (2.0s)
-    const t1 = setTimeout(() => setPhase('focus'), 400);
-    const t2 = setTimeout(() => setPhase('shutter'), 900);
-    const t3 = setTimeout(() => setPhase('reveal'), 1300);
-    const t4 = setTimeout(() => {
-      setPhase('done');
+    // Sequence: focus -> shutter -> reveal -> remove
+    const t1 = setTimeout(() => setPhase('shutter'), 700);
+    const t2 = setTimeout(() => setPhase('reveal'), 1100);
+    const t3 = setTimeout(() => {
+      setVisible(false);
       sessionStorage.setItem(INTRO_KEY, '1');
-      onComplete();
-    }, 2200);
-
-    // Safety valve — never leave user stuck
-    const safety = setTimeout(() => {
-      onComplete();
-      sessionStorage.setItem(INTRO_KEY, '1');
-    }, 4000);
+    }, 1800);
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
-      clearTimeout(t4);
-      clearTimeout(safety);
     };
-  }, [onComplete]);
+  }, []);
 
-  if (phase === 'done') return null;
+  if (!visible) return null;
 
   return (
     <div
-      className="intro-overlay"
-      aria-hidden="true"
+      className="fixed inset-0 z-[9999] bg-[#0A0A0A] flex flex-col items-center justify-center pointer-events-none transition-opacity duration-700 ease-out"
       style={{
         opacity: phase === 'reveal' ? 0 : 1,
-        transition: 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1)',
-        pointerEvents: phase === 'reveal' ? 'none' : 'all',
       }}
+      aria-hidden="true"
     >
-      {/* Camera aperture ring */}
-      <div
-        style={{
-          position: 'relative',
-          width: 'min(280px, 60vw)',
-          height: 'min(280px, 60vw)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {/* Outer aperture ring */}
+      {/* Aperture Ring & Viewfinder */}
+      <div className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center">
+        {/* Outer Circular Reticle */}
         <div
+          className="absolute inset-0 rounded-full border border-[#C8A96E]/40 transition-transform duration-700 ease-out"
           style={{
-            position: 'absolute',
-            inset: 0,
-            borderRadius: '50%',
-            border: '1px solid rgba(200, 169, 110, 0.3)',
-            transform:
-              phase === 'focus' || phase === 'shutter' || phase === 'reveal'
-                ? 'scale(1)'
-                : 'scale(0.7)',
-            opacity:
-              phase === 'focus' || phase === 'shutter' || phase === 'reveal'
-                ? 1
-                : 0,
-            transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-        />
-        {/* Inner aperture ring */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: '20%',
-            borderRadius: '50%',
-            border: '1px solid rgba(200, 169, 110, 0.6)',
-            transform:
-              phase === 'focus' || phase === 'shutter' || phase === 'reveal'
-                ? 'scale(1) rotate(45deg)'
-                : 'scale(0.5) rotate(0deg)',
-            opacity:
-              phase === 'focus' || phase === 'shutter' || phase === 'reveal'
-                ? 1
-                : 0,
-            transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+            transform: phase === 'shutter' ? 'scale(1.08)' : 'scale(1)',
           }}
         />
 
-        {/* Viewfinder corners */}
-        {['top-left', 'top-right', 'bottom-left', 'bottom-right'].map((pos) => {
-          const isTop = pos.startsWith('top');
-          const isLeft = pos.endsWith('left');
-          return (
-            <div
-              key={pos}
-              style={{
-                position: 'absolute',
-                width: '1.5rem',
-                height: '1.5rem',
-                [isTop ? 'top' : 'bottom']: '0.75rem',
-                [isLeft ? 'left' : 'right']: '0.75rem',
-                borderTop: isTop ? '2px solid var(--pride-gold)' : 'none',
-                borderBottom: !isTop ? '2px solid var(--pride-gold)' : 'none',
-                borderLeft: isLeft ? '2px solid var(--pride-gold)' : 'none',
-                borderRight: !isLeft ? '2px solid var(--pride-gold)' : 'none',
-                opacity: phase === 'focus' || phase === 'shutter' || phase === 'reveal' ? 1 : 0,
-                transition: 'opacity 0.4s ease 0.2s',
-              }}
-            />
-          );
-        })}
-
-        {/* Logo in center */}
+        {/* Inner Diamond Reticle */}
         <div
+          className="absolute inset-10 rounded-full border border-[#E85B26]/30 transition-transform duration-700 ease-out"
           style={{
-            position: 'relative',
-            width: '55%',
-            height: '55%',
-            transform:
-              phase === 'focus' || phase === 'shutter' || phase === 'reveal'
-                ? 'scale(1)'
-                : 'scale(0.6)',
-            opacity:
-              phase === 'focus' || phase === 'shutter' || phase === 'reveal'
-                ? 1
-                : 0,
-            transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
-            filter: 'brightness(1.1)',
+            transform: phase === 'shutter' ? 'rotate(45deg) scale(0.95)' : 'rotate(0deg) scale(1)',
           }}
-        >
+        />
+
+        {/* Viewfinder Target Corners */}
+        <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#C8A96E]" />
+        <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#C8A96E]" />
+        <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#C8A96E]" />
+        <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#C8A96E]" />
+
+        {/* Shutter Center Glow */}
+        <div className="absolute inset-16 rounded-full bg-[radial-gradient(circle_at_center,_rgba(200,169,110,0.3)_0%,_transparent_70%)] blur-xl" />
+
+        {/* Center Official Logo */}
+        <div className="relative w-40 h-40">
           <Image
             src="/LOGO_PRIDE_INDUSTRI.png"
             alt="PRIDE Industri 2026"
             fill
-            style={{ objectFit: 'contain' }}
+            sizes="160px"
+            className="object-contain filter brightness-110 drop-shadow-[0_0_20px_rgba(200,169,110,0.4)]"
             priority
           />
         </div>
       </div>
 
-      {/* Shutter flash */}
+      {/* Shutter White Flash Burst */}
       <div
+        className="fixed inset-0 bg-white transition-opacity duration-150 pointer-events-none"
         style={{
-          position: 'fixed',
-          inset: 0,
-          background: '#fff',
-          opacity: phase === 'shutter' ? 0.85 : 0,
-          transition: phase === 'shutter'
-            ? 'opacity 0.05s ease'
-            : 'opacity 0.4s ease',
-          pointerEvents: 'none',
-          zIndex: 1,
+          opacity: phase === 'shutter' ? 0.75 : 0,
         }}
       />
 
-      {/* Event wordmark */}
-      <div
-        style={{
-          marginTop: '2.5rem',
-          textAlign: 'center',
-          opacity:
-            phase === 'focus' || phase === 'shutter' || phase === 'reveal'
-              ? 1
-              : 0,
-          transform:
-            phase === 'focus' || phase === 'shutter' || phase === 'reveal'
-              ? 'translateY(0)'
-              : 'translateY(1rem)',
-          transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s',
-        }}
-      >
-        <p
-          style={{
-            fontSize: '0.6875rem',
-            letterSpacing: '0.25em',
-            textTransform: 'uppercase',
-            color: 'var(--pride-text-muted)',
-            marginBottom: '0.375rem',
-          }}
-        >
-          27–28 November 2026
-        </p>
-        <p
-          style={{
-            fontSize: '0.875rem',
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase',
-            color: 'var(--pride-gold)',
-            fontFamily: 'var(--font-playfair), serif',
-            fontStyle: 'italic',
-          }}
-        >
-          Braga City Walk · Bandung
-        </p>
+      {/* Narrative Label */}
+      <div className="mt-8 text-center space-y-1">
+        <div className="text-[10px] uppercase font-mono tracking-[0.3em] text-[#8A8A8A]">
+          27–28 November 2026 · Bandung
+        </div>
+        <div className="font-display italic text-sm text-[#C8A96E]">
+          Pagelaran Ragam Inovasi dan Eksistensi
+        </div>
       </div>
     </div>
   );
