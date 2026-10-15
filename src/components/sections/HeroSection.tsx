@@ -15,6 +15,7 @@ export default function HeroSection() {
   const badgeKemasanRef = useRef<HTMLDivElement>(null);
   const badgeVideoRef = useRef<HTMLDivElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
+  const headlineBlockRef = useRef<HTMLDivElement>(null);
   const heroLogosRef = useRef<HTMLDivElement>(null);
 
   // Chat message refs
@@ -52,14 +53,15 @@ export default function HeroSection() {
     }, 280);
 
     // Floating cursor badges
-    const tBadge1 = setTimeout(() => badgeKulinerRef.current?.classList.add('visible'), 1200);
-    const tBadge2 = setTimeout(() => badgeFesyenRef.current?.classList.add('visible'), 1350);
-    const tBadge3 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 1500);
-    const tBadge4 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 1650);
+    const tBadge1 = setTimeout(() => badgeKulinerRef.current?.classList.add('visible'), 1000);
+    const tBadge2 = setTimeout(() => badgeFesyenRef.current?.classList.add('visible'), 1150);
+    const tBadge3 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 1300);
+    const tBadge4 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 1450);
 
-    // Subtitle & Organizer Logos
-    const tSub = setTimeout(() => heroSubtitleRef.current?.classList.add('visible'), 1800);
-    const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 2000);
+    // Headline Card, Subtitle & Organizer Logos (Smooth, choreographed cascade)
+    const tHeadline = setTimeout(() => headlineBlockRef.current?.classList.add('visible'), 1550);
+    const tSub = setTimeout(() => heroSubtitleRef.current?.classList.add('visible'), 1750);
+    const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 2050);
 
     // Browser Mockup rises into bottom of viewport (peeking bar)
     const tBrowser = setTimeout(() => {
@@ -192,6 +194,7 @@ export default function HeroSection() {
       clearTimeout(tBadge2);
       clearTimeout(tBadge3);
       clearTimeout(tBadge4);
+      clearTimeout(tHeadline);
       clearTimeout(tSub);
       clearTimeout(tLogos);
       clearTimeout(tBrowser);
@@ -288,11 +291,23 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Clean, Elegant Headline Title with Proper Spaces */}
-          <div className="headline-block">
+          {/* Clean, Elegant Headline Title with Enhanced Visual Styling & Smooth Entrance */}
+          <div className="headline-block" ref={headlineBlockRef}>
+            {/* Top Specular Shimmer Line */}
+            <div className="headline-glow-ambient" />
+
+            {/* Event Category Tag Pill */}
+            <div className="headline-tag-pill">
+              <span className="tag-sparkle">✨</span>
+              <span className="tag-text">Festival Industri Kreatif &amp; Seni Kota Bandung</span>
+              <span className="tag-dot">•</span>
+              <span className="tag-location">17–19 April 2026</span>
+            </div>
+
             <h1 className="hero-title-clean">
-              Pagelaran Ragam Inovasi <span className="text-amber-300">&amp;</span> Eksistensi
+              Pagelaran Ragam Inovasi <span className="title-amp">&amp;</span> Eksistensi
             </h1>
+
             <p className="hero-subtitle-clean" ref={heroSubtitleRef}>
               Merayakan kebangkitan industri kreatif Kota Bandung: pameran produk fesyen &amp; kuliner binaan, panggung apresiasi seni, dan kompetisi bergengsi di Jalan Braga &amp; Hotel Papandayan.
             </p>
