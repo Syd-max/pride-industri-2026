@@ -53,32 +53,21 @@ export default function HeroSection() {
       heroLogoRef.current?.classList.add('visible');
     }, 280);
 
-    // Staggered words
-    const wordEls = document.querySelectorAll('.word-reveal');
-    const wordTimers: NodeJS.Timeout[] = [];
-    wordEls.forEach((word) => {
-      const delay = parseInt(word.getAttribute('data-delay') || '0', 10);
-      const timer = setTimeout(() => {
-        word.classList.add('visible');
-      }, 900 + delay);
-      wordTimers.push(timer);
-    });
-
     // Floating cursor badges
-    const tBadge1 = setTimeout(() => badgeKulinerRef.current?.classList.add('visible'), 1750);
-    const tBadge2 = setTimeout(() => badgeFesyenRef.current?.classList.add('visible'), 1900);
-    const tBadge3 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 2050);
-    const tBadge4 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 2200);
+    const tBadge1 = setTimeout(() => badgeKulinerRef.current?.classList.add('visible'), 1200);
+    const tBadge2 = setTimeout(() => badgeFesyenRef.current?.classList.add('visible'), 1350);
+    const tBadge3 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 1500);
+    const tBadge4 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 1650);
 
     // Subtitle & CTAs
-    const tSub = setTimeout(() => heroSubtitleRef.current?.classList.add('visible'), 2350);
-    const tCtas = setTimeout(() => heroCtasRef.current?.classList.add('visible'), 2550);
+    const tSub = setTimeout(() => heroSubtitleRef.current?.classList.add('visible'), 1800);
+    const tCtas = setTimeout(() => heroCtasRef.current?.classList.add('visible'), 2000);
 
-    // Browser Mockup rises into bottom of viewport
+    // Browser Mockup rises into bottom of viewport (peeking bar)
     const tBrowser = setTimeout(() => {
       browserStageRef.current?.classList.add('intro-ready');
       updateTimeline(getScrollProgress());
-    }, 2850);
+    }, 2400);
 
     // Calculate scroll progress within scrollStage
     function getScrollProgress(): number {
@@ -100,42 +89,42 @@ export default function HeroSection() {
       let browserScale = 1;
 
       if (p <= 0.18) {
-        // Rising into full browser view
+        // Rising from bottom peek to center stage
         const t = easeInOutCubic(mapRange(p, 0, 0.18, 0, 1));
-        heroY = -360 * t;
-        heroOpacity = 1 - 0.92 * t;
-        browserY = -355 * t;
+        heroY = -340 * t;
+        heroOpacity = 1 - 0.95 * t;
+        browserY = -580 * t;
         browserScale = 1;
       } else if (p <= 0.30) {
         // Zooming into active helpdesk & details
         const t = easeInOutCubic(mapRange(p, 0.18, 0.30, 0, 1));
-        heroY = -360 - 80 * t;
-        heroOpacity = 0.08 * (1 - t);
-        browserY = -355 + 28 * t;
+        heroY = -340 - 80 * t;
+        heroOpacity = 0;
+        browserY = -580 + 28 * t;
         browserX = -65 * t;
         browserScale = 1 + 0.24 * t;
       } else if (p <= 0.76) {
         // Holding zoomed-in focus while interaction sequence plays
         const drift = mapRange(p, 0.30, 0.76, 0, 1);
-        heroY = -440;
+        heroY = -420;
         heroOpacity = 0;
-        browserY = -327 - 18 * drift;
+        browserY = -552 - 18 * drift;
         browserX = -65;
         browserScale = 1.24;
       } else if (p <= 0.88) {
         // Zooming out to full dashboard overview
         const t = easeInOutCubic(mapRange(p, 0.76, 0.88, 0, 1));
-        heroY = -440 + 80 * t;
-        heroOpacity = 0.08 * t;
-        browserY = -345 - 10 * t;
+        heroY = -420 + 80 * t;
+        heroOpacity = 0.05 * t;
+        browserY = -570 - 10 * t;
         browserX = -65 * (1 - t);
         browserScale = 1.24 - 0.24 * t;
       } else {
-        // Returning to full overview
+        // Settling gracefully
         const t = easeInOutCubic(mapRange(p, 0.88, 1.0, 0, 1));
-        heroY = -360 * (1 - t);
-        heroOpacity = 0.08 + 0.92 * t;
-        browserY = -355 * (1 - t);
+        heroY = -340 * (1 - t);
+        heroOpacity = 0.05 + 0.95 * t;
+        browserY = -580 * (1 - t);
         browserX = 0;
         browserScale = 1;
       }
@@ -208,7 +197,6 @@ export default function HeroSection() {
       clearTimeout(tSub);
       clearTimeout(tCtas);
       clearTimeout(tBrowser);
-      wordTimers.forEach((timer) => clearTimeout(timer));
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
@@ -251,7 +239,7 @@ export default function HeroSection() {
     const rect = stage.getBoundingClientRect();
     const stageTop = window.scrollY + rect.top;
     const scrollDistance = stage.offsetHeight - window.innerHeight;
-    window.scrollTo({ top: stageTop + scrollDistance * 0.26, behavior: 'smooth' });
+    window.scrollTo({ top: stageTop + scrollDistance * 0.25, behavior: 'smooth' });
   };
 
   return (
@@ -261,7 +249,7 @@ export default function HeroSection() {
         <div className="scenic-bg" />
         <div className="scenic-foreground" />
 
-        {/* Hero Section */}
+        {/* Hero Section — TIDY, SPACIOUS & ELEGANT */}
         <section className="flow-hero-section" id="heroSection" ref={heroSectionRef}>
           
           {/* Social Proof & Date Badge */}
@@ -276,65 +264,57 @@ export default function HeroSection() {
             </span>
           </div>
 
-          {/* Official Logo Placed Full In Front */}
+          {/* Official Logo Placed Full In Front with 4 Corner Badges */}
           <div className="hero-logo-wrap" ref={heroLogoRef}>
+            {/* Ambient Warm Backlight */}
+            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,184,0,0.3)_0%,_rgba(229,25,55,0.15)_50%,_transparent_70%)] blur-2xl pointer-events-none" />
+
             <Image
               src="/LOGO_PRIDE_INDUSTRI.png"
               alt="Logo Resmi PRIDE Industri 2026"
               fill
               priority
-              sizes="320px"
+              sizes="(max-width: 640px) 360px, 440px"
               className="object-contain"
             />
-          </div>
 
-          {/* Headline & Floating Cursor Badges */}
-          <div className="headline-wrapper">
-            <h1 className="hero-title">
-              <span className="hero-line">
-                <span className="word-reveal" data-delay="0">PAGELARAN</span>
-                <span className="word-reveal" data-delay="120">RAGAM</span>
-                <span className="word-reveal messy-word" data-delay="240">INOVASI</span>
-              </span>
-              <span className="hero-line">
-                <span className="word-reveal" data-delay="420">&amp;</span>
-                <span className="word-reveal" data-delay="540">EKSISTENSI</span>
-                <span className="word-reveal" data-delay="660">INDUSTRI.</span>
-              </span>
-            </h1>
-
-            {/* Floating Cursor Tag: Kuliner Lokal */}
-            <div className="cursor-badge badge-kuliner" ref={badgeKulinerRef}>
-              <span>🍲</span> Kuliner Lokal
-              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
-            </div>
-
-            {/* Floating Cursor Tag: Fesyen Binaan */}
+            {/* Floating Cursor Tag: Fesyen Binaan (Top-Left) */}
             <div className="cursor-badge badge-fesyen" ref={badgeFesyenRef}>
               <span>👔</span> Fesyen Binaan
               <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
             </div>
 
-            {/* Floating Cursor Tag: Desain Kemasan */}
-            <div className="cursor-badge badge-kemasan" ref={badgeKemasanRef}>
-              <span>📦</span> Desain Kemasan
+            {/* Floating Cursor Tag: Kuliner Lokal (Top-Right) */}
+            <div className="cursor-badge badge-kuliner" ref={badgeKulinerRef}>
+              <span>🍲</span> Kuliner Lokal
               <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
             </div>
 
-            {/* Floating Cursor Tag: Video 1 Menit */}
+            {/* Floating Cursor Tag: Video 1 Menit (Bottom-Left) */}
             <div className="cursor-badge badge-video" ref={badgeVideoRef}>
-              <span>🎬</span> Video 1 Menit
+              <span>🎬</span> Lomba Video 1 Menit
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
+
+            {/* Floating Cursor Tag: Desain Kemasan (Bottom-Right) */}
+            <div className="cursor-badge badge-kemasan" ref={badgeKemasanRef}>
+              <span>📦</span> Lomba Desain Kemasan
               <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
             </div>
           </div>
 
-          {/* Subtitle */}
-          <p className="hero-subtitle" ref={heroSubtitleRef}>
-            Merayakan kebangkitan industri kreatif Kota Bandung: pameran produk unggulan IKM fesyen &amp; kuliner, panggung apresiasi seni, dan kompetisi bergengsi di Jalan Braga &amp; Hotel Papandayan.
-          </p>
+          {/* Clean, Elegant Headline Title with Proper Spaces */}
+          <div className="headline-block">
+            <h1 className="hero-title-clean">
+              Pagelaran Ragam Inovasi <span className="text-amber-300">&amp;</span> Eksistensi
+            </h1>
+            <p className="hero-subtitle-clean" ref={heroSubtitleRef}>
+              Merayakan kebangkitan industri kreatif Kota Bandung: pameran produk fesyen &amp; kuliner binaan, panggung apresiasi seni, dan kompetisi bergengsi di Jalan Braga &amp; Hotel Papandayan.
+            </p>
+          </div>
 
           {/* Hero Action Buttons */}
-          <div className="hero-ctas" ref={heroCtasRef}>
+          <div className="hero-ctas-clean" ref={heroCtasRef}>
             <Link href="#competitions" className="btn-hero-primary">
               <span>Daftar Kompetisi</span>
               <span>🚀</span>
@@ -344,10 +324,20 @@ export default function HeroSection() {
               <span>Simulasi Interaktif Acara</span>
               <span>↓</span>
             </button>
+
+            <Link href="/check-in" className="btn-hero-secondary" style={{ background: 'rgba(15, 23, 42, 0.7)' }}>
+              <span className="text-emerald-400">📷</span>
+              <span>Check-In QR</span>
+            </Link>
+          </div>
+
+          {/* Subtle Peek Cue above bottom browser */}
+          <div className="peek-cue animate-bounce">
+            <span>↓ Gulir ke bawah untuk simulasi interaktif</span>
           </div>
         </section>
 
-        {/* macOS Browser Window Showcase (PRIDE INDUSTRI 2026 COMMAND CENTER) */}
+        {/* macOS Browser Window Showcase: PEEKS AT BOTTOM, NEVER COVERS PAGE AWAL */}
         <div className="browser-stage" ref={browserStageRef}>
           <div className="browser-frame">
             <div className="browser-inner">
@@ -524,7 +514,7 @@ export default function HeroSection() {
                   </div>
                 </section>
 
-                {/* Col 4: Live Interactive Helpdesk Stream (With simulated click!) */}
+                {/* Col 4: Live Interactive Helpdesk Stream */}
                 <section className="chat-column">
                   <div className="chat-header">
                     <div className="chat-contact">
