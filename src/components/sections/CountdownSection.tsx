@@ -36,7 +36,7 @@ export default function CountdownSection() {
           </span>
         </h2>
 
-        <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto mb-2 font-normal leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-300 max-w-sm sm:max-w-md mx-auto mb-2 font-normal leading-relaxed">
           Mahakarya seni rupa dan presisi industri menyambut pembukaan resmi PRIDE Industri 2026 di koridor historis Jalan Braga Bandung.
         </p>
       </div>

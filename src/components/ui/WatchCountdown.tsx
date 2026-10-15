@@ -56,7 +56,7 @@ export default function WatchCountdown() {
     return () => clearInterval(interval);
   }, [tick]);
 
-  const { time, state } = data;
+  const { time } = data;
 
   // Real-time ticking watch hand angles (in degrees)
   const secondDeg = time.seconds * 6;
@@ -75,43 +75,43 @@ export default function WatchCountdown() {
     <div className="watch-tilt-wrapper">
       <div className="watch-timepiece-assembly" role="region" aria-label="Jam Hitung Mundur PRIDE Industri 2026">
         
-        {/* 1. Diagonal Blue Alligator Straps */}
+        {/* 1. Diagonal Alligator Straps (Top-Left to Bottom-Right) */}
         <div className="watch-strap-top" aria-hidden="true" />
-        <div className="watch-strap-bottom" aria-hidden="true" />
+        <div className="watch-strap-bottom" aria-hidden="true">
+          <div className="strap-keeper" />
+        </div>
 
         {/* 2. Stainless Steel Watch Case */}
         <div className="watch-case">
           
-          {/* Lugs & Screws */}
-          <div className="watch-lug lug-tl" />
-          <div className="watch-lug lug-tr" />
-          <div className="watch-lug lug-bl" />
-          <div className="watch-lug lug-br" />
+          {/* Solid Machined Cylindrical Lug Bars (Haute Horlogerie Engineering - No floating spheres) */}
+          <div className="watch-lug-bar lug-bar-top" />
+          <div className="watch-lug-bar lug-bar-bottom" />
 
-          {/* Crown at 2 o'clock with Sapphire Gem */}
+          {/* Fluted Stainless Steel Crown with Sapphire Cabochon at ~2 o'clock */}
           <div className="watch-crown" />
 
           {/* Stepped Bezel & Enamel Dial Container */}
           <div className="watch-dial-bezel">
             
-            {/* 3. Artistic Enamel Dial Painting (Swirling Koi & Creative Wave Art) */}
+            {/* 3. Artistic Enamel Dial Painting (Swirling Koi & Aquatic Ripples) */}
             <div className="watch-art-dial">
               <svg viewBox="0 0 400 400" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
                 <defs>
                   {/* Swirling Water Radial Gradient */}
                   <radialGradient id="waterFlow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.9" />
-                    <stop offset="40%" stopColor="#0284c7" stopOpacity="0.95" />
-                    <stop offset="75%" stopColor="#0369a1" stopOpacity="1" />
+                    <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.85" />
+                    <stop offset="35%" stopColor="#0284c7" stopOpacity="0.95" />
+                    <stop offset="70%" stopColor="#0369a1" stopOpacity="1" />
                     <stop offset="100%" stopColor="#082f49" stopOpacity="1" />
                   </radialGradient>
 
-                  {/* Red Koi Fish Gradient */}
+                  {/* Red/White Koi Fish Gradient */}
                   <linearGradient id="koiRed" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#ffffff" />
                     <stop offset="25%" stopColor="#f43f5e" />
                     <stop offset="65%" stopColor="#e11d48" />
-                    <stop offset="100%" stopColor="#be123c" />
+                    <stop offset="100%" stopColor="#9f1239" />
                   </linearGradient>
 
                   {/* Golden Lotus Gradient */}
@@ -126,45 +126,43 @@ export default function WatchCountdown() {
                 <circle cx="200" cy="200" r="200" fill="url(#waterFlow)" />
 
                 {/* Water Swirl Current Lines */}
-                <path d="M 200 40 A 160 160 0 0 1 360 200 A 120 120 0 0 1 200 320 A 80 80 0 0 1 120 200 A 40 40 0 0 1 200 160" fill="none" stroke="#bae6fd" strokeWidth="4" strokeLinecap="round" opacity="0.45" />
-                <path d="M 170 60 A 140 140 0 0 1 340 200 A 100 100 0 0 1 200 300 A 60 60 0 0 1 140 200" fill="none" stroke="#7dd3fc" strokeWidth="2.5" strokeDasharray="6 8" opacity="0.5" />
-                <path d="M 230 350 A 150 150 0 0 1 50 200 A 110 110 0 0 1 200 90 A 70 70 0 0 1 270 200" fill="none" stroke="#e0f2fe" strokeWidth="3" opacity="0.4" />
+                <path d="M 200 35 A 165 165 0 0 1 365 200 A 125 125 0 0 1 200 325 A 85 85 0 0 1 115 200 A 45 45 0 0 1 200 155" fill="none" stroke="#bae6fd" strokeWidth="4" strokeLinecap="round" opacity="0.4" />
+                <path d="M 170 55 A 145 145 0 0 1 345 200 A 105 105 0 0 1 200 305 A 65 65 0 0 1 135 200" fill="none" stroke="#7dd3fc" strokeWidth="2" strokeDasharray="6 8" opacity="0.45" />
+                <path d="M 235 355 A 155 155 0 0 1 45 200 A 115 115 0 0 1 200 85 A 75 75 0 0 1 275 200" fill="none" stroke="#e0f2fe" strokeWidth="3" opacity="0.35" />
 
                 {/* Lotus Lily Pads (Emerald Leaves) */}
-                <ellipse cx="90" cy="110" rx="42" ry="24" fill="#047857" opacity="0.8" transform="rotate(-25 90 110)" />
-                <ellipse cx="320" cy="110" rx="38" ry="22" fill="#065f46" opacity="0.8" transform="rotate(35 320 110)" />
-                <ellipse cx="80" cy="290" rx="44" ry="25" fill="#047857" opacity="0.8" transform="rotate(30 80 290)" />
-                <ellipse cx="310" cy="300" rx="46" ry="26" fill="#065f46" opacity="0.8" transform="rotate(-30 310 300)" />
+                <ellipse cx="85" cy="105" rx="38" ry="22" fill="#047857" opacity="0.8" transform="rotate(-25 85 105)" />
+                <ellipse cx="325" cy="105" rx="36" ry="20" fill="#065f46" opacity="0.8" transform="rotate(35 325 105)" />
+                <ellipse cx="75" cy="295" rx="40" ry="23" fill="#047857" opacity="0.8" transform="rotate(30 75 295)" />
+                <ellipse cx="315" cy="305" rx="42" ry="24" fill="#065f46" opacity="0.8" transform="rotate(-30 315 305)" />
 
                 {/* Artistic Koi Fish 1 (Circling Right) */}
                 <path
-                  d="M 220 80 C 310 100 330 190 280 260 C 265 240 275 190 230 140 C 215 125 195 105 220 80 Z"
+                  d="M 220 75 C 315 95 335 190 285 260 C 268 238 278 188 232 138 C 216 122 195 102 220 75 Z"
                   fill="url(#koiRed)"
-                  opacity="0.88"
+                  opacity="0.9"
                 />
-                {/* Koi 1 Fins & Tail */}
-                <path d="M 280 260 Q 310 290 290 320 Q 265 285 270 265 Z" fill="#fda4af" opacity="0.8" />
-                <circle cx="215" cy="95" r="3.5" fill="#ffffff" />
-                <circle cx="215" cy="95" r="1.8" fill="#0f172a" />
+                <path d="M 285 260 Q 315 290 295 322 Q 270 286 275 265 Z" fill="#fda4af" opacity="0.8" />
+                <circle cx="215" cy="90" r="3.5" fill="#ffffff" />
+                <circle cx="215" cy="90" r="1.8" fill="#0f172a" />
 
                 {/* Artistic Koi Fish 2 (Circling Left) */}
                 <path
-                  d="M 180 320 C 90 300 70 210 120 140 C 135 160 125 210 170 260 C 185 275 205 295 180 320 Z"
+                  d="M 180 325 C 85 305 65 210 115 140 C 132 162 122 212 168 262 C 184 278 205 298 180 325 Z"
                   fill="url(#koiRed)"
-                  opacity="0.88"
+                  opacity="0.9"
                 />
-                {/* Koi 2 Fins & Tail */}
-                <path d="M 120 140 Q 90 110 110 80 Q 135 115 130 135 Z" fill="#fda4af" opacity="0.8" />
-                <circle cx="185" cy="305" r="3.5" fill="#ffffff" />
-                <circle cx="185" cy="305" r="1.8" fill="#0f172a" />
+                <path d="M 115 140 Q 85 110 105 78 Q 130 114 125 135 Z" fill="#fda4af" opacity="0.8" />
+                <circle cx="185" cy="310" r="3.5" fill="#ffffff" />
+                <circle cx="185" cy="310" r="1.8" fill="#0f172a" />
 
                 {/* Blooming Lotus Flowers */}
-                <circle cx="95" cy="115" r="11" fill="url(#goldLotus)" opacity="0.9" />
-                <circle cx="315" cy="295" r="12" fill="url(#goldLotus)" opacity="0.9" />
-                <circle cx="315" cy="115" r="9" fill="#f43f5e" opacity="0.85" />
-                <circle cx="85" cy="285" r="10" fill="#e11d48" opacity="0.85" />
+                <circle cx="90" cy="110" r="11" fill="url(#goldLotus)" opacity="0.9" />
+                <circle cx="320" cy="298" r="12" fill="url(#goldLotus)" opacity="0.9" />
+                <circle cx="320" cy="110" r="9" fill="#f43f5e" opacity="0.85" />
+                <circle cx="80" cy="290" r="10" fill="#e11d48" opacity="0.85" />
 
-                {/* Perimeter Hour Markers (12 Swiss Pips) */}
+                {/* Perimeter Hour Markers (12 Swiss Applied Gold Pips) */}
                 {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
                   <circle
                     key={deg}
@@ -180,40 +178,40 @@ export default function WatchCountdown() {
               </svg>
             </div>
 
-            {/* 4. Integrated Haute Horlogerie Chronometer Registers */}
+            {/* 4. Integrated Haute Horlogerie Chronometer Core (Counter-Rotated Upright!) */}
             <div className="watch-chronometer-core">
               
-              {/* Brand Letterpress */}
+              {/* Brand Letterpress Header */}
               <div className="watch-dial-brand">
                 <div className="watch-brand-name">PRIDE INDUSTRI 2026</div>
-                <div className="watch-brand-sub">CHRONOMETRE OFFICIEL</div>
+                <div className="watch-brand-sub">CHRONOMÈTRE OFFICIEL</div>
               </div>
 
-              {/* 4 Complication Registers: HARI, JAM, MENIT, DETIK */}
+              {/* 4 Apple-Style Complication Pods: HARI, JAM, MENIT, DETIK */}
               <div className="watch-registers-grid">
                 
                 {/* 1. HARI */}
                 <div className="watch-register-pod pod-rose">
                   <span className="register-val">{String(time.days).padStart(2, '0')}</span>
-                  <span className="register-lbl text-rose-400">HARI</span>
+                  <span className="register-lbl">HARI</span>
                 </div>
 
                 {/* 2. JAM */}
                 <div className="watch-register-pod pod-amber">
                   <span className="register-val">{String(time.hours).padStart(2, '0')}</span>
-                  <span className="register-lbl text-amber-400">JAM</span>
+                  <span className="register-lbl">JAM</span>
                 </div>
 
                 {/* 3. MENIT */}
                 <div className="watch-register-pod pod-blue">
                   <span className="register-val">{String(time.minutes).padStart(2, '0')}</span>
-                  <span className="register-lbl text-sky-400">MENIT</span>
+                  <span className="register-lbl">MENIT</span>
                 </div>
 
-                {/* 4. DETIK (Live Ticking Cadence) */}
+                {/* 4. DETIK (Live Real-Time Cadence) */}
                 <div className="watch-register-pod pod-green pod-seconds-live">
-                  <span className="register-val text-emerald-400">{String(time.seconds).padStart(2, '0')}</span>
-                  <span className="register-lbl text-emerald-400">DETIK</span>
+                  <span className="register-val">{String(time.seconds).padStart(2, '0')}</span>
+                  <span className="register-lbl">DETIK</span>
                 </div>
               </div>
 
@@ -221,27 +219,27 @@ export default function WatchCountdown() {
               <div className="watch-dial-venue">
                 27–28 NOV · BRAGA BANDUNG
               </div>
-            </div>
 
-            {/* 5. Real Rotating Watch Hands */}
-            <div className="watch-hands-center" aria-hidden="true">
-              {/* Hour Hand */}
-              <div
-                className="watch-hand hand-hour"
-                style={{ transform: `rotate(${hourDeg}deg)` }}
-              />
-              {/* Minute Hand */}
-              <div
-                className="watch-hand hand-minute"
-                style={{ transform: `rotate(${minuteDeg}deg)` }}
-              />
-              {/* Sweeping Seconds Hand */}
-              <div
-                className="watch-hand hand-second"
-                style={{ transform: `rotate(${secondDeg}deg)` }}
-              />
-              {/* Center Pivot Jewel */}
-              <div className="watch-center-pivot" />
+              {/* 5. Precision Rotating Watch Hands (Integrated with Upright Dial) */}
+              <div className="watch-hands-center" aria-hidden="true">
+                {/* Hour Hand */}
+                <div
+                  className="watch-hand hand-hour"
+                  style={{ transform: `rotate(${hourDeg}deg)` }}
+                />
+                {/* Minute Hand */}
+                <div
+                  className="watch-hand hand-minute"
+                  style={{ transform: `rotate(${minuteDeg}deg)` }}
+                />
+                {/* Sweeping Seconds Hand */}
+                <div
+                  className="watch-hand hand-second"
+                  style={{ transform: `rotate(${secondDeg}deg)` }}
+                />
+                {/* Center Pivot Jewel */}
+                <div className="watch-center-pivot" />
+              </div>
             </div>
 
             {/* 6. Sapphire Crystal Glass Glare */}
