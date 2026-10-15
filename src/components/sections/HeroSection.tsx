@@ -45,77 +45,75 @@ export default function HeroSection() {
   return (
     <section
       ref={heroRef}
-      className="relative w-full h-[100svh] min-h-[660px] max-h-[1080px] overflow-hidden flex flex-col justify-between select-none bg-slate-950"
+      className="relative w-full h-[100svh] min-h-[660px] max-h-[1080px] overflow-hidden flex flex-col justify-between select-none bg-gradient-to-b from-slate-900 via-slate-800 to-[#928e83]"
       aria-label="Hero PRIDE Industri 2026 — iPhone Depth Experience"
     >
-      {/* ─── LAYER 1: Background Scenery & Extended Sky (z-0) ─── */}
+      {/* ─── LAYER 1: Background Scenery (z-0) — High Resolution 2048x1366, lowered down ─── */}
       <div
-        className="absolute inset-0 z-0 pointer-events-none will-change-transform"
+        className="absolute inset-x-0 -bottom-8 sm:-bottom-12 h-[78vh] sm:h-[82vh] md:h-[85vh] pointer-events-none will-change-transform z-0"
         style={{
-          transform: `translate3d(${mousePos.x * 5}px, ${mousePos.y * 5 - scrollY * 0.12}px, 0)`,
+          transform: `translate3d(${mousePos.x * 5}px, ${mousePos.y * 5 - scrollY * 0.1}px, 0)`,
           transition: 'transform 0.12s ease-out',
         }}
       >
         <Image
-          src="/LANDING_BG_EXTENDED.jpg"
+          src="/LANDING_BG_HD.jpg"
           alt="Braga City Walk Bandung Landscape"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-bottom filter brightness-[0.94] contrast-[1.05]"
+          className="object-cover object-bottom filter brightness-[0.98] contrast-[1.04]"
         />
 
         {/* Sunrise Ambient Glow in the Sky */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/45 pointer-events-none" />
-        <div className="absolute top-1/6 left-1/4 w-96 h-96 rounded-full bg-amber-400/25 blur-3xl pointer-events-none animate-pulse-glow" />
-        <div className="absolute top-1/4 right-1/4 w-80 h-80 rounded-full bg-rose-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent pointer-events-none" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-amber-400/20 blur-3xl pointer-events-none animate-pulse-glow" />
       </div>
 
-      {/* ─── LAYER 2: Emergent PRIDE Logo (z-10) — In the open sky, lower edge behind building ─── */}
+      {/* ─── LAYER 2: PRIDE Logo (z-10) — Positioned clearly in the open sky, lower right touches building ─── */}
       <div
-        className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none will-change-transform"
+        className="absolute inset-x-0 top-[15%] sm:top-[17%] md:top-[19%] z-10 flex items-center justify-center pointer-events-none will-change-transform"
         style={{
           // Parallax depth: logo moves slightly faster than background, creating authentic 3D depth
-          transform: `translate3d(${mousePos.x * 14}px, ${
-            mousePos.y * 14 - scrollY * 0.32 + (isLoaded ? 0 : 70)
+          transform: `translate3d(${mousePos.x * 12}px, ${
+            mousePos.y * 12 - scrollY * 0.28 + (isLoaded ? 0 : 50)
           }px, 0)`,
           opacity: isLoaded ? 1 : 0,
-          transition: 'opacity 1.2s ease-out, transform 0.16s ease-out',
+          transition: 'opacity 1s ease-out, transform 0.16s ease-out',
         }}
       >
-        {/* Floating Logo Composition positioned in the open Braga sky */}
-        <div className="relative -mt-24 sm:-mt-32 md:-mt-40 w-[85vw] max-w-[440px] sm:max-w-[500px] md:max-w-[560px] lg:max-w-[600px] aspect-[16/11] animate-float-slow">
+        {/* Floating Logo Composition clearly visible in the open sky */}
+        <div className="relative w-[85vw] max-w-[420px] sm:max-w-[480px] md:max-w-[540px] aspect-[16/11] animate-float-slow">
           
           {/* Subtle colorful neon aura behind the logo */}
-          <div className="absolute inset-2 rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,184,0,0.3)_0%,_rgba(229,25,55,0.2)_50%,_transparent_75%)] blur-2xl" />
+          <div className="absolute inset-4 rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,184,0,0.35)_0%,_rgba(229,25,55,0.2)_50%,_transparent_75%)] blur-2xl" />
 
           <Image
             src="/LOGO_PRIDE_INDUSTRI.png"
             alt="Logo PRIDE Industri 2026 — Pagelaran Ragam Inovasi dan Eksistensi"
             fill
             priority
-            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 500px, 600px"
-            className="object-contain filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)]"
+            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 480px, 540px"
+            className="object-contain filter drop-shadow-[0_18px_32px_rgba(0,0,0,0.65)]"
           />
         </div>
       </div>
 
-      {/* ─── LAYER 3: Foreground Building & Street (z-20) ─── */}
-      {/* Sits right in front of the logo, gently occluding only the bottom edge like iOS 16 Lock Screen */}
+      {/* ─── LAYER 3: Foreground Building & Street (z-20) — High Resolution 2048x1366, perfectly aligned ─── */}
       <div
-        className="absolute inset-0 z-20 pointer-events-none will-change-transform"
+        className="absolute inset-x-0 -bottom-8 sm:-bottom-12 h-[78vh] sm:h-[82vh] md:h-[85vh] pointer-events-none will-change-transform z-20"
         style={{
-          transform: `translate3d(${mousePos.x * 5}px, ${mousePos.y * 5 - scrollY * 0.12}px, 0)`,
+          transform: `translate3d(${mousePos.x * 5}px, ${mousePos.y * 5 - scrollY * 0.1}px, 0)`,
           transition: 'transform 0.12s ease-out',
         }}
       >
         <Image
-          src="/LANDING_FOREGROUND_EXTENDED.png"
+          src="/LANDING_FOREGROUND_HD.png"
           alt="Warenhuis De Vries & Braga Building Cutout"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-bottom filter brightness-[0.94] contrast-[1.05]"
+          className="object-cover object-bottom filter brightness-[0.98] contrast-[1.04]"
         />
       </div>
 
