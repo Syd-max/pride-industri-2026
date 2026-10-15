@@ -1,4 +1,3 @@
-import CinematicIntro from '@/components/ui/CinematicIntro';
 import Navbar from '@/components/ui/Navbar';
 import HeroSection from '@/components/sections/HeroSection';
 import CountdownSection from '@/components/sections/CountdownSection';
@@ -11,12 +10,7 @@ import Footer from '@/components/sections/Footer';
 
 export default function HomePage() {
   return (
-    <>
-      {/* Cinematic Camera Intro Overlay — self-dismissing */}
-      <CinematicIntro />
-
-      {/* Main Website Experience — always rendered immediately */}
-      <div className="min-h-screen bg-white text-slate-900 selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen bg-white text-slate-900 selection:bg-blue-100 selection:text-blue-900">
         <Navbar />
         <main id="main-content">
           <HeroSection />
@@ -29,6 +23,5 @@ export default function HomePage() {
         </main>
         <Footer />
       </div>
-    </>
   );
 }
