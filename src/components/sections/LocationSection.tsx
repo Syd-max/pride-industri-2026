@@ -51,7 +51,10 @@ export default function LocationSection() {
               </p>
 
               <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600">
-                <span className="text-lg">📍</span>
+                <svg className="w-5 h-5 text-rose-500 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
                 <div>
                   <strong className="text-slate-800 block">Alamat Lengkap:</strong>
                   {EVENT_CONFIG.venue.address}
@@ -90,7 +93,15 @@ export default function LocationSection() {
               </p>
 
               <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600">
-                <span className="text-lg">🏛️</span>
+                <svg className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 22h16" />
+                  <path d="M2 11h20" />
+                  <path d="M12 2 2 7h20z" />
+                  <path d="M6 11v7" />
+                  <path d="M10 11v7" />
+                  <path d="M14 11v7" />
+                  <path d="M18 11v7" />
+                </svg>
                 <div>
                   <strong className="text-slate-800 block">Alamat Ballroom:</strong>
                   Jl. Gatot Subroto No.83, Malabar, Kec. Lengkong, Kota Bandung, Jawa Barat 40262

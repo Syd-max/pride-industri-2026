@@ -131,7 +131,10 @@ export default function Footer() {
             </div>
             <ul className="space-y-2 text-xs">
               <li className="flex items-center gap-2">
-                <span>📧</span>
+                <svg className="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2" />
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg>
                 <a
                   href={`mailto:${EVENT_CONFIG.contact.email}`}
                   className="hover:text-white transition-colors"
@@ -140,7 +143,11 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <span>📸</span>
+                <svg className="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
                 <a
                   href="https://instagram.com/bdg.perdaganganindustri"
                   target="_blank"
@@ -151,7 +158,9 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <span>🎵</span>
+                <svg className="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                </svg>
                 <a
                   href="https://tiktok.com/@disdagin.bandung"
                   target="_blank"
