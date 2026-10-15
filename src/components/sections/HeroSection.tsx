@@ -15,7 +15,7 @@ export default function HeroSection() {
   const badgeKemasanRef = useRef<HTMLDivElement>(null);
   const badgeVideoRef = useRef<HTMLDivElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
-  const heroCtasRef = useRef<HTMLDivElement>(null);
+  const heroLogosRef = useRef<HTMLDivElement>(null);
 
   // Chat message refs
   const msg1Ref = useRef<HTMLDivElement>(null);
@@ -57,9 +57,9 @@ export default function HeroSection() {
     const tBadge3 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 1500);
     const tBadge4 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 1650);
 
-    // Subtitle & CTAs
+    // Subtitle & Organizer Logos
     const tSub = setTimeout(() => heroSubtitleRef.current?.classList.add('visible'), 1800);
-    const tCtas = setTimeout(() => heroCtasRef.current?.classList.add('visible'), 2000);
+    const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 2000);
 
     // Browser Mockup rises into bottom of viewport (peeking bar)
     const tBrowser = setTimeout(() => {
@@ -193,7 +193,7 @@ export default function HeroSection() {
       clearTimeout(tBadge3);
       clearTimeout(tBadge4);
       clearTimeout(tSub);
-      clearTimeout(tCtas);
+      clearTimeout(tLogos);
       clearTimeout(tBrowser);
       window.removeEventListener('scroll', handleScroll);
     };
@@ -298,27 +298,33 @@ export default function HeroSection() {
             </p>
           </div>
 
-          {/* Hero Action Buttons */}
-          <div className="hero-ctas-clean" ref={heroCtasRef}>
-            <Link href="#competitions" className="btn-hero-primary">
-              <span>Daftar Kompetisi</span>
-              <span>🚀</span>
-            </Link>
+          {/* Official Organizers & Partners Logo Bar */}
+          <div className="hero-organizer-card" ref={heroLogosRef}>
+            <div className="hero-organizer-inner">
+              <div className="organizer-gov-wrap">
+                <Image
+                  src="/LOGOS_GOV_DISDAGIN_KEMILAU_CROPPED.png"
+                  alt="Pemerintah Kota Bandung, DISDAGIN Kota Bandung, KEMILAU"
+                  width={745}
+                  height={97}
+                  priority
+                  className="organizer-gov-img"
+                />
+              </div>
 
-            <button onClick={handleSeeHow} className="btn-hero-secondary">
-              <span>Simulasi Interaktif Acara</span>
-              <span>↓</span>
-            </button>
+              <div className="organizer-divider" />
 
-            <Link href="/check-in" className="btn-hero-secondary" style={{ background: 'rgba(15, 23, 42, 0.7)' }}>
-              <span className="text-emerald-400">📷</span>
-              <span>Check-In QR</span>
-            </Link>
-          </div>
-
-          {/* Subtle Peek Cue above bottom browser */}
-          <div className="peek-cue animate-bounce">
-            <span>↓ Gulir ke bawah untuk simulasi interaktif</span>
+              <div className="organizer-tactlink-wrap">
+                <Image
+                  src="/LOGO_TACTLINK_CROPPED.png"
+                  alt="TACTLINK - Smart Directory With One Touch"
+                  width={492}
+                  height={454}
+                  priority
+                  className="organizer-tactlink-img"
+                />
+              </div>
+            </div>
           </div>
         </section>
 
