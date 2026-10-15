@@ -301,7 +301,7 @@ export default function HeroSection() {
               <span className="tag-sparkle">✨</span>
               <span className="tag-text">Festival Industri Kreatif &amp; Seni Kota Bandung</span>
               <span className="tag-dot">•</span>
-              <span className="tag-location">17–19 April 2026</span>
+              <span className="tag-location">27–28 Nov 2026</span>
             </div>
 
             <h1 className="hero-title-clean">
