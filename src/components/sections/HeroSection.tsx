@@ -259,7 +259,7 @@ export default function HeroSection() {
               alt="Logo Resmi PRIDE Industri 2026"
               fill
               priority
-              sizes="(max-width: 640px) 360px, 440px"
+              sizes="(max-width: 640px) 90vw, (max-width: 768px) 580px, 620px"
               className="object-contain"
             />
 
