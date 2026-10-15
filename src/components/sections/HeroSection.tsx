@@ -85,7 +85,6 @@ export default function HeroSection() {
       let heroY = 0;
       let heroOpacity = 1;
       let browserY = 0;
-      let browserX = 0;
       let browserScale = 1;
 
       if (p <= 0.18) {
@@ -96,36 +95,32 @@ export default function HeroSection() {
         browserY = -580 * t;
         browserScale = 1;
       } else if (p <= 0.30) {
-        // Zooming into active helpdesk & details
+        // Subtle focus zoom into chat conversation
         const t = easeInOutCubic(mapRange(p, 0.18, 0.30, 0, 1));
         heroY = -340 - 80 * t;
         heroOpacity = 0;
-        browserY = -580 + 28 * t;
-        browserX = -65 * t;
-        browserScale = 1 + 0.24 * t;
+        browserY = -580 + 16 * t;
+        browserScale = 1 + 0.05 * t;
       } else if (p <= 0.76) {
-        // Holding zoomed-in focus while interaction sequence plays
+        // Holding focus while chat animation sequence plays
         const drift = mapRange(p, 0.30, 0.76, 0, 1);
         heroY = -420;
         heroOpacity = 0;
-        browserY = -552 - 18 * drift;
-        browserX = -65;
-        browserScale = 1.24;
+        browserY = -564 - 14 * drift;
+        browserScale = 1.05;
       } else if (p <= 0.88) {
-        // Zooming out to full dashboard overview
+        // Zooming out gracefully
         const t = easeInOutCubic(mapRange(p, 0.76, 0.88, 0, 1));
         heroY = -420 + 80 * t;
         heroOpacity = 0.05 * t;
-        browserY = -570 - 10 * t;
-        browserX = -65 * (1 - t);
-        browserScale = 1.24 - 0.24 * t;
+        browserY = -578 - 2 * t;
+        browserScale = 1.05 - 0.05 * t;
       } else {
         // Settling gracefully
         const t = easeInOutCubic(mapRange(p, 0.88, 1.0, 0, 1));
         heroY = -340 * (1 - t);
         heroOpacity = 0.05 + 0.95 * t;
         browserY = -580 * (1 - t);
-        browserX = 0;
         browserScale = 1;
       }
 
@@ -135,23 +130,7 @@ export default function HeroSection() {
       }
 
       if (browserStageRef.current) {
-        browserStageRef.current.style.transform = `translate3d(${browserX}px, ${browserY}px, 0) scale(${browserScale})`;
-      }
-
-      // Populate Sidebar & Cards
-      const sidebarSections = document.querySelectorAll('.sidebar-section');
-      sidebarSections.forEach((sec, idx) => {
-        sec.classList.toggle('populated', p >= 0.07 + idx * 0.02);
-      });
-
-      const inboxCards = document.querySelectorAll('.inbox-card');
-      inboxCards.forEach((card, idx) => {
-        card.classList.toggle('populated', p >= 0.08 + idx * 0.02);
-      });
-
-      const detailsBody = document.getElementById('detailsBody');
-      if (detailsBody) {
-        detailsBody.classList.toggle('populated', p >= 0.08);
+        browserStageRef.current.style.transform = `translate3d(0, ${browserY}px, 0) scale(${browserScale})`;
       }
 
       // Chat Sequence Thresholds
@@ -379,148 +358,10 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              {/* 5-Column Festival Application Interface */}
+              {/* Clean, Focused Interactive Chat Experience */}
               <div className="app-workspace">
                 
-                {/* Col 1: Narrow Icon Rail */}
-                <aside className="icon-rail">
-                  <div className="rail-group">
-                    <div className="rail-logo">✨</div>
-                    <svg className="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-                    <svg className="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    <svg className="rail-icon" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    <svg className="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
-                    <svg className="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                  </div>
-                  <div className="rail-group">
-                    <div className="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold">
-                      BDG
-                    </div>
-                  </div>
-                </aside>
-
-                {/* Col 2: Navigation Filters */}
-                <aside className="nav-sidebar">
-                  <div className="search-box">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    <span>Cari agenda festival...</span>
-                  </div>
-
-                  <div className="sidebar-section" data-pop="1">
-                    <div className="section-label">Panggung &amp; Jalur</div>
-                    <div className="nav-row active">
-                      <span className="nav-row-left">Semua Agenda</span>
-                      <span className="nav-count">18</span>
-                    </div>
-                    <div className="nav-row">
-                      <span className="nav-row-left">👔 Fesyen Binaan</span>
-                      <span className="nav-count">6</span>
-                    </div>
-                    <div className="nav-row">
-                      <span className="nav-row-left">🍲 Kuliner Lokal</span>
-                      <span className="nav-count">8</span>
-                    </div>
-                    <div className="nav-row">
-                      <span className="nav-row-left">🎨 Pameran Kriya</span>
-                      <span className="nav-count">4</span>
-                    </div>
-                  </div>
-
-                  <div className="sidebar-section" data-pop="2">
-                    <div className="section-label">Kompetisi 2026</div>
-                    <div className="nav-row">
-                      <span className="nav-row-left">● Desain Kemasan</span>
-                      <span className="nav-count text-blue-600 font-bold">Rp 15Jt</span>
-                    </div>
-                    <div className="nav-row">
-                      <span className="nav-row-left">● Video 1 Menit</span>
-                      <span className="nav-count text-rose-600 font-bold">Rp 15Jt</span>
-                    </div>
-                  </div>
-
-                  <div className="sidebar-section" data-pop="3">
-                    <div className="section-label">Lokasi Resmi</div>
-                    <div className="nav-row">
-                      <span className="nav-row-left">Braga City Walk</span>
-                      <span className="nav-count">Outdoor</span>
-                    </div>
-                    <div className="nav-row">
-                      <span className="nav-row-left">Hotel Papandayan</span>
-                      <span className="nav-count">Ballroom</span>
-                    </div>
-                  </div>
-
-                  <div className="sidebar-section" data-pop="4">
-                    <div className="section-label">Layanan Panitia</div>
-                    <div className="agent-item">
-                      <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px] font-bold">
-                        DS
-                      </div>
-                      <div className="agent-meta">
-                        <span className="agent-name">Helpdesk Disdagin</span>
-                        <span className="agent-status"><span className="status-dot online" /> Online</span>
-                      </div>
-                    </div>
-                    <div className="agent-item">
-                      <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[9px] font-bold">
-                        JR
-                      </div>
-                      <div className="agent-meta">
-                        <span className="agent-name">Dewan Juri Desain</span>
-                        <span className="agent-status"><span className="status-dot online" /> Online</span>
-                      </div>
-                    </div>
-                  </div>
-                </aside>
-
-                {/* Col 3: Agenda Highlights Stream */}
-                <section className="inbox-column">
-                  <div className="col-header">
-                    <span>← &nbsp;Agenda 27–28 Nov</span>
-                    <span style={{ color: '#9ca3af' }}>+</span>
-                  </div>
-                  <div className="inbox-filters">
-                    <span className="filter-pill">▽</span>
-                    <span className="filter-pill">Semua ▾</span>
-                    <span className="filter-pill">Terbaru ▾</span>
-                  </div>
-                  <div className="inbox-list">
-                    <div className="inbox-card" data-pop="1">
-                      <div className="inbox-card-left">
-                        <div className="inbox-avatar blue">FS</div>
-                        <div className="inbox-text">
-                          <div className="inbox-name">Opening &amp; Runway Show</div>
-                          <div className="inbox-preview">Jalan Braga · 09:00 WIB</div>
-                        </div>
-                      </div>
-                      <span className="unread-badge">Live</span>
-                    </div>
-
-                    <div className="inbox-card" data-pop="2">
-                      <div className="inbox-card-left">
-                        <div className="inbox-avatar orange">DK</div>
-                        <div className="inbox-text">
-                          <div className="inbox-name">Penjurian Desain Kemasan</div>
-                          <div className="inbox-preview">Atrium Braga · 13:00 WIB</div>
-                        </div>
-                      </div>
-                      <span className="unread-badge">50 IKM</span>
-                    </div>
-
-                    <div className="inbox-card" data-pop="3">
-                      <div className="inbox-card-left">
-                        <div className="inbox-avatar green">AW</div>
-                        <div className="inbox-text">
-                          <div className="inbox-name">Awarding &amp; Music Night</div>
-                          <div className="inbox-preview">Ballroom Papandayan · 19:00</div>
-                        </div>
-                      </div>
-                      <span className="unread-badge">Malam</span>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Col 4: Live Interactive Helpdesk Stream */}
+                {/* Live Interactive Helpdesk Stream */}
                 <section className="chat-column">
                   <div className="chat-header">
                     <div className="chat-contact">
@@ -630,71 +471,6 @@ export default function HeroSection() {
                     </div>
                   </div>
                 </section>
-
-                {/* Col 5: Right Event Details Panel */}
-                <aside className="details-column">
-                  <div className="col-header">
-                    <span>Informasi Festival</span>
-                    <span style={{ color: '#2563eb', fontSize: '10.5px' }}>Disdagin</span>
-                  </div>
-
-                  <div className="details-body" id="detailsBody">
-                    <div className="attr-grid">
-                      <div className="attr-row">
-                        <span className="attr-label">📅 Tanggal</span>
-                        <span className="attr-val">27–28 Nov 2026</span>
-                      </div>
-                      <div className="attr-row">
-                        <span className="attr-label">📍 Lokasi</span>
-                        <span className="attr-val">Braga &amp; Papandayan</span>
-                      </div>
-                      <div className="attr-row">
-                        <span className="attr-label">🏛 Lembaga</span>
-                        <span className="attr-val">Disdagin Bandung</span>
-                      </div>
-                      <div className="attr-row">
-                        <span className="attr-label">🏆 Total Hadiah</span>
-                        <span className="attr-val">Rp 30.000.000</span>
-                      </div>
-                      <Link href="#competitions" className="add-attr" style={{ textDecoration: 'none' }}>
-                        + Lihat Syarat Kompetisi
-                      </Link>
-                    </div>
-
-                    <div className="notes-heading">Catatan Penting</div>
-                    <div className="note-card">
-                      <div className="note-card-header">
-                        <div className="note-author">
-                          <div className="note-author-badge">TM</div>
-                          <div>
-                            <div className="note-author-name">Batas Submit</div>
-                            <div className="note-date">20 Nov 2026</div>
-                          </div>
-                        </div>
-                        <span style={{ color: '#9ca3af' }}>⋯</span>
-                      </div>
-                      <div className="note-text">
-                        Karya desain kemasan &amp; video diunggah sebelum 20 November 2026 pukul 23:59 WIB.
-                      </div>
-                    </div>
-
-                    <div className="note-card">
-                      <div className="note-card-header">
-                        <div className="note-author">
-                          <div className="note-author-badge">HM</div>
-                          <div>
-                            <div className="note-author-name">Technical Meeting</div>
-                            <div className="note-date">26 Nov 2026</div>
-                          </div>
-                        </div>
-                        <span style={{ color: '#9ca3af' }}>⋯</span>
-                      </div>
-                      <div className="note-text">
-                        Finalis akan diundang ke Ballroom Hotel The Papandayan untuk presentasi dan kurasi.
-                      </div>
-                    </div>
-                  </div>
-                </aside>
 
               </div>
             </div>
