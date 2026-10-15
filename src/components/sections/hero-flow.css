@@ -116,18 +116,18 @@
   will-change: transform, opacity;
 }
 
-/* Official Logo in front — ENLARGED, CRISP & MAJESTIC */
+/* Official Logo in front — PROMINENT, CRISP & MAJESTIC */
 .hero-logo-wrap {
   position: relative;
   width: 100%;
-  max-width: 590px;
-  height: 195px;
-  margin: 0 auto 12px;
-  filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.75));
+  max-width: 670px;
+  height: 220px;
+  margin: 0 auto 10px;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.78));
   animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Floating Cursor Badges (Positioned safely on the flanks of the logo, never above) */
+/* Floating Cursor Badges (Positioned snugly around the prominent logo) */
 .cursor-badge {
   position: absolute;
   display: inline-flex;
@@ -152,11 +152,11 @@
   height: 13px;
 }
 
-/* Fesyen Binaan Badge (Upper-left shoulder of logo, safely below top edge) */
+/* Fesyen Binaan Badge (Upper-left shoulder of logo) */
 .badge-fesyen {
   background: var(--flow-blue-accent);
-  top: 22px;
-  left: -22px;
+  top: 24px;
+  left: -24px;
 }
 .badge-fesyen svg {
   top: -8px;
@@ -165,11 +165,11 @@
   transform: rotate(75deg);
 }
 
-/* Kuliner Lokal Badge (Upper-right shoulder of logo, safely below top edge) */
+/* Kuliner Lokal Badge (Upper-right shoulder of logo) */
 .badge-kuliner {
   background: var(--flow-orange-accent);
-  top: 22px;
-  right: -22px;
+  top: 24px;
+  right: -24px;
 }
 .badge-kuliner svg {
   bottom: -7px;
@@ -226,21 +226,21 @@
   }
 }
 
-/* Clean, High-Contrast Headline Block (Premium Glassmorphic Capsule) */
+/* Clean, High-Contrast Headline Block (Refined & Compact Glassmorphic Capsule) */
 .headline-block {
   position: relative;
-  margin: 4px auto 8px;
-  max-width: 800px;
-  padding: 12px 24px 14px;
+  margin: 2px auto 8px;
+  max-width: 660px;
+  padding: 8px 18px 10px;
   background: linear-gradient(135deg, rgba(7, 10, 19, 0.82) 0%, rgba(20, 28, 45, 0.65) 50%, rgba(7, 10, 19, 0.78) 100%);
   backdrop-filter: blur(24px) saturate(140%);
   -webkit-backdrop-filter: blur(24px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 20px;
+  border-radius: 18px;
   box-shadow: 
-    0 16px 40px -10px rgba(0, 0, 0, 0.65),
+    0 14px 36px -10px rgba(0, 0, 0, 0.65),
     0 0 0 1px rgba(255, 255, 255, 0.08) inset,
-    0 0 30px rgba(245, 158, 11, 0.12);
+    0 0 25px rgba(245, 158, 11, 0.10);
   overflow: hidden;
   animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 }
@@ -253,9 +253,9 @@
 
 .headline-block:hover {
   box-shadow: 
-    0 24px 54px -10px rgba(0, 0, 0, 0.72),
+    0 20px 48px -10px rgba(0, 0, 0, 0.72),
     0 0 0 1px rgba(255, 255, 255, 0.14) inset,
-    0 0 45px rgba(245, 158, 11, 0.2);
+    0 0 35px rgba(245, 158, 11, 0.18);
 }
 
 /* Ambient Top Shimmer Hairline */
@@ -274,23 +274,23 @@
 .headline-tag-pill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 5px 16px;
+  gap: 6px;
+  padding: 3px 12px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  font-size: 11.5px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #fde68a;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .tag-sparkle {
   display: inline-block;
-  font-size: 13px;
+  font-size: 12px;
   animation: sparklePulse 2.4s ease-in-out infinite;
 }
 
@@ -310,10 +310,10 @@
 
 .hero-title-clean {
   font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  font-size: clamp(21px, 2.9vw, 33px);
+  font-size: clamp(17px, 2.1vw, 24px);
   font-weight: 900;
-  line-height: 1.22;
-  letter-spacing: 0.04em;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
   color: #ffffff;
   text-transform: uppercase;
   text-shadow: 
@@ -329,15 +329,15 @@
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.6));
   font-style: italic;
-  padding: 0 4px;
+  padding: 0 3px;
 }
 
 .hero-subtitle-clean {
   color: #e2e8f0;
-  font-size: 13.5px;
-  line-height: 1.65;
-  max-width: 690px;
-  margin: 10px auto 0;
+  font-size: 12px;
+  line-height: 1.5;
+  max-width: 580px;
+  margin: 6px auto 0;
   font-weight: 500;
   text-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.95),
@@ -425,14 +425,14 @@
 
 @media (max-width: 640px) {
   .flow-hero-section {
-    margin-top: 80px;
+    margin-top: 76px;
     padding: 0 10px;
     max-width: 100vw;
   }
   .hero-logo-wrap {
-    max-width: 310px;
-    height: 105px;
-    margin: 0 auto 4px;
+    max-width: 335px;
+    height: 115px;
+    margin: 0 auto 2px;
   }
   .cursor-badge {
     font-size: 8px;
@@ -443,45 +443,49 @@
     width: 10px;
     height: 10px;
   }
-  .badge-fesyen { left: -2px; top: -2px; }
-  .badge-kuliner { right: -2px; top: -2px; }
-  .badge-video { left: -2px; bottom: -2px; }
-  .badge-kemasan { right: -2px; bottom: -2px; }
+  .badge-fesyen { left: -2px; top: 0px; }
+  .badge-kuliner { right: -2px; top: 0px; }
+  .badge-video { left: -2px; bottom: 0px; }
+  .badge-kemasan { right: -2px; bottom: 0px; }
   .headline-block {
-    padding: 10px 12px;
-    margin: 4px auto 6px;
-    border-radius: 16px;
+    padding: 6px 12px 8px;
+    margin: 2px auto 4px;
+    border-radius: 14px;
+    max-width: 340px;
     width: 100%;
   }
   .hero-title-clean {
-    font-size: 18px;
+    font-size: 14.5px;
+    line-height: 1.22;
+    letter-spacing: 0.02em;
   }
   .headline-tag-pill {
-    font-size: 8.5px;
+    font-size: 8px;
     padding: 2px 7px;
-    gap: 4px;
-    margin-bottom: 6px;
+    gap: 3px;
+    margin-bottom: 4px;
   }
   .hero-subtitle-clean {
-    font-size: 11px;
-    line-height: 1.45;
-    margin-top: 4px;
+    font-size: 9.5px;
+    line-height: 1.38;
+    margin-top: 3px;
+    max-width: 310px;
   }
   .hero-organizer-card {
-    padding: 4px 14px;
-    margin: 2px auto 6px;
+    padding: 3px 12px;
+    margin: 2px auto 4px;
   }
   .hero-organizer-inner {
     gap: 8px;
   }
   .organizer-gov-img {
-    height: 22px;
+    height: 20px;
   }
   .organizer-divider {
-    height: 16px;
+    height: 14px;
   }
   .organizer-tactlink-img {
-    height: 20px;
+    height: 18px;
   }
   .browser-stage {
     width: 95vw;
@@ -1004,8 +1008,8 @@
     padding: 0 16px;
   }
   .hero-logo-wrap {
-    max-width: 530px;
-    height: 175px;
+    max-width: 580px;
+    height: 190px;
   }
   .badge-fesyen { left: -8px; top: 14px; }
   .badge-kuliner { right: -8px; top: 14px; }
