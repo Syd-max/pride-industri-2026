@@ -45,131 +45,101 @@ export default function HeroSection() {
   return (
     <section
       ref={heroRef}
-      className="relative w-full h-[100svh] min-h-[680px] max-h-[1100px] overflow-hidden flex flex-col justify-between select-none bg-slate-950"
+      className="relative w-full h-[100svh] min-h-[660px] max-h-[1080px] overflow-hidden flex flex-col justify-between select-none bg-slate-950"
       aria-label="Hero PRIDE Industri 2026 — iPhone Depth Experience"
     >
-      {/* ─── LAYER 1: Background Scenery & Sky (z-0) ─── */}
+      {/* ─── LAYER 1: Background Scenery & Extended Sky (z-0) ─── */}
       <div
         className="absolute inset-0 z-0 pointer-events-none will-change-transform"
         style={{
-          transform: `translate3d(${mousePos.x * 6}px, ${mousePos.y * 6 - scrollY * 0.12}px, 0) scale(1.04)`,
+          transform: `translate3d(${mousePos.x * 5}px, ${mousePos.y * 5 - scrollY * 0.12}px, 0)`,
           transition: 'transform 0.12s ease-out',
         }}
       >
         <Image
-          src="/LANDING_BG.jpg"
+          src="/LANDING_BG_EXTENDED.jpg"
           alt="Braga City Walk Bandung Landscape"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center filter brightness-[0.92] contrast-[1.05]"
+          className="object-cover object-bottom filter brightness-[0.94] contrast-[1.05]"
         />
 
-        {/* Sunrise Ambient Glow & Radial Vignette */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
+        {/* Sunrise Ambient Glow in the Sky */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/45 pointer-events-none" />
         <div className="absolute top-1/6 left-1/4 w-96 h-96 rounded-full bg-amber-400/25 blur-3xl pointer-events-none animate-pulse-glow" />
-        <div className="absolute top-1/4 right-1/4 w-80 h-80 rounded-full bg-rose-500/20 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/4 right-1/4 w-80 h-80 rounded-full bg-rose-500/15 blur-3xl pointer-events-none" />
       </div>
 
-      {/* ─── LAYER 2: Emergent PRIDE Logo (z-10) — Behind the building roof! ─── */}
+      {/* ─── LAYER 2: Emergent PRIDE Logo (z-10) — In the open sky, lower edge behind building ─── */}
       <div
         className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none will-change-transform"
         style={{
-          // Parallax depth: logo moves slightly faster than background, creating 3D depth
-          transform: `translate3d(${mousePos.x * 16}px, ${
-            mousePos.y * 16 - scrollY * 0.32 + (isLoaded ? 0 : 80)
+          // Parallax depth: logo moves slightly faster than background, creating authentic 3D depth
+          transform: `translate3d(${mousePos.x * 14}px, ${
+            mousePos.y * 14 - scrollY * 0.32 + (isLoaded ? 0 : 70)
           }px, 0)`,
           opacity: isLoaded ? 1 : 0,
           transition: 'opacity 1.2s ease-out, transform 0.16s ease-out',
         }}
       >
         {/* Floating Logo Composition positioned in the open Braga sky */}
-        <div className="relative -mt-16 sm:-mt-24 md:-mt-28 w-[82vw] max-w-[480px] sm:max-w-[560px] md:max-w-[620px] aspect-[16/11] animate-float-slow">
+        <div className="relative -mt-24 sm:-mt-32 md:-mt-40 w-[85vw] max-w-[440px] sm:max-w-[500px] md:max-w-[560px] lg:max-w-[600px] aspect-[16/11] animate-float-slow">
           
           {/* Subtle colorful neon aura behind the logo */}
-          <div className="absolute inset-4 rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,184,0,0.3)_0%,_rgba(229,25,55,0.2)_50%,_transparent_75%)] blur-2xl" />
+          <div className="absolute inset-2 rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,184,0,0.3)_0%,_rgba(229,25,55,0.2)_50%,_transparent_75%)] blur-2xl" />
 
           <Image
             src="/LOGO_PRIDE_INDUSTRI.png"
             alt="Logo PRIDE Industri 2026 — Pagelaran Ragam Inovasi dan Eksistensi"
             fill
             priority
-            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 560px, 620px"
+            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 500px, 600px"
             className="object-contain filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)]"
           />
-
-          {/* Floating Festival Creative Micro-Badges */}
-          <div className="absolute -top-3 left-4 glass-ios px-3 py-1 rounded-full text-[11px] font-bold text-white shadow-lg flex items-center gap-1.5 animate-float-badge">
-            <span>👗</span>
-            <span>Fesyen Binaan</span>
-          </div>
-
-          <div
-            className="absolute -top-3 right-6 glass-ios px-3 py-1 rounded-full text-[11px] font-bold text-amber-300 shadow-lg flex items-center gap-1.5 animate-float-badge"
-            style={{ animationDelay: '1s' }}
-          >
-            <span>☕</span>
-            <span>Kuliner Lokal</span>
-          </div>
-
-          <div
-            className="absolute -bottom-2 left-8 glass-ios px-3 py-1 rounded-full text-[11px] font-bold text-emerald-300 shadow-lg flex items-center gap-1.5 animate-float-badge"
-            style={{ animationDelay: '1.8s' }}
-          >
-            <span>🎨</span>
-            <span>Kriya Inovatif</span>
-          </div>
-
-          <div
-            className="absolute -bottom-2 right-12 glass-ios px-3 py-1 rounded-full text-[11px] font-bold text-rose-300 shadow-lg flex items-center gap-1.5 animate-float-badge"
-            style={{ animationDelay: '2.5s' }}
-          >
-            <span>🏆</span>
-            <span>SIINAS Gala</span>
-          </div>
         </div>
       </div>
 
       {/* ─── LAYER 3: Foreground Building & Street (z-20) ─── */}
-      {/* Sits right in front of the logo, occluding the lower-right side of the logo just like iOS 16 Lock Screen */}
+      {/* Sits right in front of the logo, gently occluding only the bottom edge like iOS 16 Lock Screen */}
       <div
         className="absolute inset-0 z-20 pointer-events-none will-change-transform"
         style={{
-          transform: `translate3d(${mousePos.x * 6}px, ${mousePos.y * 6 - scrollY * 0.12}px, 0) scale(1.04)`,
+          transform: `translate3d(${mousePos.x * 5}px, ${mousePos.y * 5 - scrollY * 0.12}px, 0)`,
           transition: 'transform 0.12s ease-out',
         }}
       >
         <Image
-          src="/LANDING_FOREGROUND.png"
+          src="/LANDING_FOREGROUND_EXTENDED.png"
           alt="Warenhuis De Vries & Braga Building Cutout"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center filter brightness-[0.92] contrast-[1.05]"
+          className="object-cover object-bottom filter brightness-[0.94] contrast-[1.05]"
         />
       </div>
 
       {/* ─── LAYER 4: iOS Lockscreen UI Header Chrome (z-30) ─── */}
-      <div className="relative z-30 pt-20 sm:pt-24 px-4 text-center space-y-2 pointer-events-auto">
+      <div className="relative z-30 pt-16 sm:pt-20 px-4 text-center space-y-2 pointer-events-auto">
         {/* Dynamic Island / Lockscreen Date Pill */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-ios text-xs font-bold text-white tracking-wider uppercase shadow-xl">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
           <span>Jum&apos;at, 27 November 2026 · Braga Bandung</span>
         </div>
 
-        {/* Narrative Subtitle */}
-        <div className="space-y-1">
-          <h2 className="text-sm sm:text-base md:text-lg font-bold text-amber-200 tracking-wider uppercase drop-shadow-md">
+        {/* Narrative Subtitle — Cleanly positioned above the logo with breathing room */}
+        <div className="space-y-0.5 max-w-xl mx-auto">
+          <h2 className="text-xs sm:text-sm md:text-base font-extrabold text-amber-300 tracking-wider uppercase drop-shadow-md">
             Pagelaran Ragam Inovasi dan Eksistensi
           </h2>
-          <p className="text-[11px] sm:text-xs text-slate-300 font-medium tracking-widest uppercase drop-shadow">
+          <p className="text-[10px] sm:text-xs text-slate-300 font-semibold tracking-widest uppercase drop-shadow">
             Braga City Walk & Ballroom Papandayan · Disdagin Kota Bandung
           </p>
         </div>
       </div>
 
       {/* ─── LAYER 5: iOS Lockscreen Bottom Controls & Quick Actions (z-30) ─── */}
-      <div className="relative z-30 pb-6 sm:pb-8 px-4 max-w-3xl mx-auto w-full space-y-4 pointer-events-auto">
+      <div className="relative z-30 pb-6 sm:pb-8 px-4 max-w-3xl mx-auto w-full space-y-3 pointer-events-auto">
         
         {/* iOS Lockscreen Quick Action Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-3">
@@ -213,7 +183,7 @@ export default function HeroSection() {
         {/* iOS Home Bar & Swipe Down Indicator */}
         <button
           onClick={scrollToContent}
-          className="flex flex-col items-center justify-center gap-1 mx-auto text-slate-300 hover:text-white transition-colors cursor-pointer pt-2 group"
+          className="flex flex-col items-center justify-center gap-1 mx-auto text-slate-300 hover:text-white transition-colors cursor-pointer pt-1 group"
           aria-label="Gulir ke bawah untuk eksplorasi festival"
         >
           <span className="text-[10px] uppercase font-bold tracking-widest text-slate-300 group-hover:text-white">
