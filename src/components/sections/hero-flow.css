@@ -53,7 +53,7 @@
   inset: 0;
   z-index: 0;
   background-image: 
-    linear-gradient(180deg, rgba(15, 23, 42, 0.60) 0%, rgba(15, 23, 42, 0.28) 35%, rgba(15, 23, 42, 0.45) 55%, rgba(15, 23, 42, 0.75) 100%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.60) 0%, rgba(15, 23, 42, 0.28) 35%, rgba(15, 23, 42, 0.55) 70%, #070a13 100%),
     url('/LANDING_BG_HD.jpg');
   background-size: cover;
   background-position: center 60%;
@@ -448,7 +448,7 @@
   position: relative;
   width: min(880px, 94vw);
   height: 580px;
-  margin: 32px auto 0;
+  margin: 32px auto 48px;
   z-index: 25;
   transform-origin: center top;
   opacity: 0;
@@ -944,3 +944,85 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   CATWALK FASHION SHOW RUNWAY ANIMATIONS (LIGHTWEIGHT CSS)
+   ============================================================ */
+@keyframes catwalkSpotlightLeft {
+  0% {
+    transform: rotate(8deg) scale(0.96);
+    opacity: 0.25;
+  }
+  100% {
+    transform: rotate(18deg) scale(1.06);
+    opacity: 0.55;
+  }
+}
+
+@keyframes catwalkSpotlightRight {
+  0% {
+    transform: rotate(-8deg) scale(0.96);
+    opacity: 0.25;
+  }
+  100% {
+    transform: rotate(-18deg) scale(1.06);
+    opacity: 0.55;
+  }
+}
+
+@keyframes catwalkLedRun {
+  0%, 100% {
+    opacity: 0.3;
+    filter: drop-shadow(0 0 2px rgba(244, 63, 94, 0.4));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(244, 63, 94, 0.9));
+  }
+}
+
+@keyframes catwalkMarqueeScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes catwalkPodiumPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 20px 48px rgba(244, 63, 94, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+}
+
+.animate-spotlight-left {
+  animation: catwalkSpotlightLeft 6s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+.animate-spotlight-right {
+  animation: catwalkSpotlightRight 6.5s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+.animate-led-run {
+  animation: catwalkLedRun 2.2s ease-in-out infinite;
+}
+
+.animate-catwalk-marquee {
+  display: flex;
+  width: max-content;
+  animation: catwalkMarqueeScroll 28s linear infinite;
+  will-change: transform;
+}
+
+.animate-catwalk-marquee:hover {
+  animation-play-state: paused;
+}
+

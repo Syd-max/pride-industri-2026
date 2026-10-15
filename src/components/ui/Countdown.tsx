@@ -38,56 +38,84 @@ function getCountdown(): { time: CountdownTime; state: EventState } {
   };
 }
 
-interface DigitBoxProps {
+interface RunwayPodiumProps {
   value: number;
   label: string;
-  colorScheme: 'blue' | 'rose' | 'amber' | 'emerald';
+  subLabel: string;
+  theme: 'rose' | 'amber' | 'blue' | 'emerald';
+  icon: React.ReactNode;
+  isSeconds?: boolean;
 }
 
-function DigitBox({ value, label, colorScheme }: DigitBoxProps) {
+function RunwayPodium({ value, label, subLabel, theme, icon, isSeconds }: RunwayPodiumProps) {
   const styles = {
-    blue: {
-      bg: 'bg-blue-50/80',
-      border: 'border-blue-200',
-      text: 'text-blue-700',
-      label: 'text-blue-600',
-    },
     rose: {
-      bg: 'bg-rose-50/80',
-      border: 'border-rose-200',
-      text: 'text-rose-700',
-      label: 'text-rose-600',
+      border: 'border-rose-500/30 hover:border-rose-400/60',
+      glow: 'from-rose-500/20 via-rose-500/5 to-transparent',
+      text: 'text-rose-400',
+      badgeBg: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+      underglow: 'bg-rose-500/25',
     },
     amber: {
-      bg: 'bg-amber-50/80',
-      border: 'border-amber-200',
-      text: 'text-amber-700',
-      label: 'text-amber-600',
+      border: 'border-amber-500/30 hover:border-amber-400/60',
+      glow: 'from-amber-500/20 via-amber-500/5 to-transparent',
+      text: 'text-amber-400',
+      badgeBg: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+      underglow: 'bg-amber-500/25',
+    },
+    blue: {
+      border: 'border-blue-500/30 hover:border-blue-400/60',
+      glow: 'from-blue-500/20 via-blue-500/5 to-transparent',
+      text: 'text-blue-400',
+      badgeBg: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+      underglow: 'bg-blue-500/25',
     },
     emerald: {
-      bg: 'bg-emerald-50/80',
-      border: 'border-emerald-200',
-      text: 'text-emerald-700',
-      label: 'text-emerald-600',
+      border: 'border-emerald-500/30 hover:border-emerald-400/60',
+      glow: 'from-emerald-500/20 via-emerald-500/5 to-transparent',
+      text: 'text-emerald-400',
+      badgeBg: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+      underglow: 'bg-emerald-500/25',
     },
-  }[colorScheme];
+  }[theme];
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="relative group flex flex-col items-center">
+      {/* Catwalk Runway Floor Underglow Spotlight */}
+      <div className={`absolute -bottom-4 inset-x-4 h-8 rounded-full blur-xl pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity ${styles.underglow}`} />
+
+      {/* Podium Elevated Glass Platform */}
       <div
-        className={`w-20 h-20 sm:w-28 sm:h-28 rounded-2xl sm:rounded-3xl border-2 ${styles.border} ${styles.bg} shadow-sm flex items-center justify-center transition-transform hover:scale-105`}
+        className={`relative w-28 h-36 sm:w-44 sm:h-52 rounded-3xl border-2 ${styles.border} bg-slate-900/90 backdrop-blur-xl shadow-2xl flex flex-col items-center justify-between p-3 sm:p-5 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)] ${isSeconds ? 'animate-[pulse_1s_ease-in-out_infinite]' : ''}`}
       >
-        <span
-          className={`font-black text-3xl sm:text-5xl font-mono tabular-nums ${styles.text}`}
-        >
-          {String(value).padStart(2, '0')}
-        </span>
+        {/* Top Runway Stage Spot Accent */}
+        <div className={`absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b ${styles.glow} rounded-t-3xl pointer-events-none`} />
+
+        {/* Podium Top Meta Pill */}
+        <div className="relative z-10 w-full flex items-center justify-between">
+          <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${styles.badgeBg}`}>
+            {icon}
+            <span>{label}</span>
+          </div>
+          <span className="w-1.5 h-1.5 rounded-full bg-white/40 group-hover:bg-white transition-colors" />
+        </div>
+
+        {/* Big Display Digits with Specular Lighting */}
+        <div className="relative z-10 my-auto text-center">
+          <span className="font-mono font-black text-4xl sm:text-6xl text-white tracking-tight tabular-nums drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
+            {String(value).padStart(2, '0')}
+          </span>
+          {/* Subtle reflection floor line */}
+          <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-white/30 to-transparent mx-auto mt-1 sm:mt-2" />
+        </div>
+
+        {/* Podium Bottom Stage Sub-Label */}
+        <div className="relative z-10 text-center">
+          <span className="text-[10px] sm:text-xs font-semibold text-slate-400 group-hover:text-slate-200 transition-colors uppercase tracking-wider">
+            {subLabel}
+          </span>
+        </div>
       </div>
-      <span
-        className={`mt-2 text-xs sm:text-sm font-extrabold uppercase tracking-widest ${styles.label}`}
-      >
-        {label}
-      </span>
     </div>
   );
 }
@@ -114,64 +142,111 @@ export default function Countdown() {
 
   if (!mounted) {
     return (
-      <div className="flex items-center justify-center gap-3 sm:gap-6 py-4 opacity-50">
-        <DigitBox value={0} label="Hari" colorScheme="blue" />
-        <span className="text-2xl sm:text-4xl font-bold text-slate-300 -mt-6">:</span>
-        <DigitBox value={0} label="Jam" colorScheme="rose" />
-        <span className="text-2xl sm:text-4xl font-bold text-slate-300 -mt-6">:</span>
-        <DigitBox value={0} label="Menit" colorScheme="amber" />
-        <span className="text-2xl sm:text-4xl font-bold text-slate-300 -mt-6">:</span>
-        <DigitBox value={0} label="Detik" colorScheme="emerald" />
+      <div className="flex items-center justify-center gap-2.5 sm:gap-6 py-6 opacity-40">
+        <div className="w-28 h-36 sm:w-44 sm:h-52 rounded-3xl bg-slate-900 border border-slate-800 animate-pulse" />
+        <div className="w-28 h-36 sm:w-44 sm:h-52 rounded-3xl bg-slate-900 border border-slate-800 animate-pulse" />
+        <div className="w-28 h-36 sm:w-44 sm:h-52 rounded-3xl bg-slate-900 border border-slate-800 animate-pulse" />
+        <div className="w-28 h-36 sm:w-44 sm:h-52 rounded-3xl bg-slate-900 border border-slate-800 animate-pulse" />
       </div>
     );
   }
 
   if (state === 'ended') {
     return (
-      <div className="text-center py-6 px-4 bg-slate-50 rounded-2xl border border-slate-200">
-        <p className="text-2xl font-bold text-slate-800">
+      <div className="text-center py-8 px-6 bg-slate-900/90 rounded-3xl border border-slate-800 max-w-xl mx-auto backdrop-blur-xl">
+        <p className="text-xl sm:text-2xl font-black text-white uppercase tracking-wider">
           PRIDE Industri 2026 Telah Selesai Diselenggarakan
         </p>
-        <p className="text-sm text-slate-500 mt-1">
-          Terima kasih atas partisipasi seluruh pelaku IKM dan masyarakat Kota Bandung!
+        <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+          Terima kasih atas partisipasi seluruh insan kreatif, desainer binaan, dan wargi Kota Bandung.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Live Runway Alert Beacon if currently ongoing */}
       {state === 'live' && (
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold uppercase tracking-wider mx-auto">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-ping" />
-          Sedang Berlangsung Hari Ini di Braga!
+        <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs font-extrabold uppercase tracking-widest backdrop-blur-md animate-pulse">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+          </span>
+          <span>Catwalk Runway Sedang Berlangsung Hari Ini di Braga!</span>
         </div>
       )}
 
-      {/* Countdown Digits */}
-      <div className="flex items-center justify-center gap-2.5 sm:gap-5 flex-wrap">
-        <DigitBox value={time.days} label="Hari" colorScheme="blue" />
-        <span className="text-xl sm:text-3xl font-extrabold text-slate-300 -mt-6 hidden xs:inline">
-          :
-        </span>
-        <DigitBox value={time.hours} label="Jam" colorScheme="rose" />
-        <span className="text-xl sm:text-3xl font-extrabold text-slate-300 -mt-6 hidden xs:inline">
-          :
-        </span>
-        <DigitBox value={time.minutes} label="Menit" colorScheme="amber" />
-        <span className="text-xl sm:text-3xl font-extrabold text-slate-300 -mt-6 hidden xs:inline">
-          :
-        </span>
-        <DigitBox value={time.seconds} label="Detik" colorScheme="emerald" />
+      {/* The 4 Catwalk Fashion Show Podiums */}
+      <div className="flex items-center justify-center gap-3 sm:gap-6 flex-wrap">
+        <RunwayPodium
+          value={time.days}
+          label="Hari"
+          subLabel="27–28 Nov"
+          theme="rose"
+          icon={
+            <svg className="w-3 h-3 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
+            </svg>
+          }
+        />
+
+        <RunwayPodium
+          value={time.hours}
+          label="Jam"
+          subLabel="WIB / GMT+7"
+          theme="amber"
+          icon={
+            <svg className="w-3 h-3 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          }
+        />
+
+        <RunwayPodium
+          value={time.minutes}
+          label="Menit"
+          subLabel="Presisi Runway"
+          theme="blue"
+          icon={
+            <svg className="w-3 h-3 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          }
+        />
+
+        <RunwayPodium
+          value={time.seconds}
+          label="Detik"
+          subLabel="Live Ticking"
+          theme="emerald"
+          isSeconds
+          icon={
+            <svg className="w-3 h-3 text-emerald-400 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="2" x2="12" y2="6" />
+              <line x1="12" y1="18" x2="12" y2="22" />
+              <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
+              <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
+              <line x1="2" y1="12" x2="6" y2="12" />
+              <line x1="18" y1="12" x2="22" y2="12" />
+              <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
+              <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
+            </svg>
+          }
+        />
       </div>
 
+      {/* Stage Status Callout */}
       {state === 'upcoming' && (
-        <p className="text-xs sm:text-sm font-medium text-slate-500 text-center">
-          Menuju pembukaan resmi pada{' '}
-          <strong className="text-slate-800">
-            Jum&apos;at, 27 November 2026 · 13:30 WIB
-          </strong>
-        </p>
+        <div className="text-center pt-2">
+          <p className="text-xs sm:text-sm font-medium text-slate-400">
+            Panggung Catwalk Fashion Runway dibuka resmi pada{' '}
+            <strong className="text-rose-400 font-bold">
+              Jum&apos;at, 27 November 2026 · 13:30 WIB
+            </strong>
+          </p>
+        </div>
       )}
     </div>
   );
