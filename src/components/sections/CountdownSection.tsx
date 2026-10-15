@@ -1,93 +1,117 @@
 'use client';
 
 import Countdown from '@/components/ui/Countdown';
+import './runway-countdown.css';
 
 export default function CountdownSection() {
   return (
     <section
       id="countdown"
-      className="relative w-full py-20 sm:py-28 bg-[#070a13] text-white overflow-hidden border-t border-rose-950/40"
-      aria-label="Hitung Mundur Catwalk Runway PRIDE Industri 2026"
+      className="runway-section py-20 sm:py-28"
+      aria-label="Hitung Mundur Menuju Panggung Utama PRIDE Industri 2026"
     >
-      {/* 1. Full-Width Top Transition Glow (Seamlessly Closes Hero Section across 100% width) */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-rose-500/60 to-transparent" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-32 bg-gradient-to-b from-rose-600/15 via-rose-500/5 to-transparent blur-3xl pointer-events-none" />
+      {/* 1. Full-Width Top Transition Glow (Seamless continuation from Braga Hero Stage) */}
+      <div className="runway-top-glow" />
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-amber-400/40 via-rose-500/50 to-transparent z-10" />
 
-      {/* 2. Overhead Fashion Show Spotlights (Sweeping Gently from Corners) */}
-      <div className="absolute -top-36 left-4 sm:left-24 w-80 h-[560px] bg-gradient-to-b from-rose-500/20 via-amber-300/10 to-transparent blur-3xl pointer-events-none animate-spotlight-left" />
-      <div className="absolute -top-36 right-4 sm:right-24 w-80 h-[560px] bg-gradient-to-b from-blue-500/20 via-rose-400/10 to-transparent blur-3xl pointer-events-none animate-spotlight-right" />
+      {/* 2. Overhead Stage Spotlights (Cones sweeping across the stage) */}
+      <div className="stage-spotlight stage-spotlight-left" />
+      <div className="stage-spotlight stage-spotlight-right" />
 
-      {/* 3. Center Runway Perspective Track with Illuminated Floor Guides */}
-      <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-full max-w-4xl border-x-2 border-dashed border-rose-500/20 bg-gradient-to-b from-rose-500/5 via-slate-900/30 to-rose-500/5 pointer-events-none" />
+      {/* 3. Runway Ambient Camera Flash Bursts (Paparazzi / Audience Atmosphere) */}
+      <div className="paparazzi-flash flash-1" />
+      <div className="paparazzi-flash flash-2" />
+      <div className="paparazzi-flash flash-3" />
 
-      {/* 4. Running Catwalk Floor Lights (Left & Right Edge LED Indicators) */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-[220px] sm:-translate-x-[420px] w-2 h-2 rounded-full bg-rose-500 animate-led-run pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-[220px] sm:-translate-x-[420px] w-2 h-2 rounded-full bg-amber-400 animate-led-run pointer-events-none" />
-      <div className="absolute top-3/4 left-1/2 -translate-x-[220px] sm:-translate-x-[420px] w-2 h-2 rounded-full bg-blue-400 animate-led-run pointer-events-none" />
+      {/* 4. 3D Runway Perspective Floor (Catwalk Track with Flowing Floor Lines) */}
+      <div className="runway-perspective-stage">
+        <div className="runway-perspective-floor">
+          {/* Animated Center Stride Flow Line */}
+          <div className="runway-center-line" />
 
-      <div className="absolute top-1/4 left-1/2 translate-x-[218px] sm:translate-x-[418px] w-2 h-2 rounded-full bg-rose-500 animate-led-run pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 translate-x-[218px] sm:translate-x-[418px] w-2 h-2 rounded-full bg-amber-400 animate-led-run pointer-events-none" />
-      <div className="absolute top-3/4 left-1/2 translate-x-[218px] sm:translate-x-[418px] w-2 h-2 rounded-full bg-blue-400 animate-led-run pointer-events-none" />
+          {/* Left & Right Runway Edge Guide Beacons */}
+          <div className="runway-edge-beacons">
+            {/* Left Edge Beacons */}
+            <span className="beacon-dot text-rose-500" style={{ top: '15%', left: '8px' }} />
+            <span className="beacon-dot text-amber-400" style={{ top: '40%', left: '8px', animationDelay: '0.4s' }} />
+            <span className="beacon-dot text-blue-400" style={{ top: '65%', left: '8px', animationDelay: '0.8s' }} />
+            <span className="beacon-dot text-emerald-400" style={{ top: '90%', left: '8px', animationDelay: '1.2s' }} />
 
-      {/* Main Content Area */}
+            {/* Right Edge Beacons */}
+            <span className="beacon-dot text-rose-500" style={{ top: '15%', right: '8px' }} />
+            <span className="beacon-dot text-amber-400" style={{ top: '40%', right: '8px', animationDelay: '0.4s' }} />
+            <span className="beacon-dot text-blue-400" style={{ top: '65%', right: '8px', animationDelay: '0.8s' }} />
+            <span className="beacon-dot text-emerald-400" style={{ top: '90%', right: '8px', animationDelay: '1.2s' }} />
+          </div>
+        </div>
+      </div>
+
+      {/* 5. Main Stage Content Area */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
         
-        {/* Catwalk Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-rose-500/10 text-rose-300 border border-rose-500/30 shadow-lg shadow-rose-950/40 mb-4 backdrop-blur-md">
+        {/* Stage Status Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-amber-500/10 text-amber-300 border border-amber-500/30 shadow-lg shadow-amber-950/30 mb-4 backdrop-blur-md">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
           </span>
-          <span>Catwalk Fashion Runway 2026</span>
+          <span>Panggung Eksistensi &amp; Inovasi 2026</span>
         </div>
 
-        {/* Fashion Editorial Headline */}
-        <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase mb-3">
-          Hitung Mundur <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-300 to-rose-400 font-extrabold">Menuju Runway</span>
+        {/* Editorial Fashion Headline */}
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase mb-3 max-w-3xl mx-auto leading-tight">
+          <span className="block sm:inline">Detik-Detik Menuju </span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-rose-400 to-amber-300 font-extrabold whitespace-nowrap">
+            Panggung Utama
+          </span>
         </h2>
         
         <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mb-10 leading-relaxed font-medium">
-          Persiapkan diri Anda menyaksikan peragaan busana ready-to-wear desainer binaan Disdagin Kota Bandung, pameran produk IKM, dan kemeriahan panggung koridor Braga.
+          Sorotan lampu, peragaan busana karya desainer binaan, pameran produk unggulan IKM Kota Bandung, dan malam penganugerahan siap digelar di koridor historis Braga.
         </p>
         
-        {/* The 4 Elevated Runway Podiums */}
+        {/* The 4 Elevated Runway Pedestals */}
         <div className="relative max-w-4xl mx-auto">
           <Countdown />
         </div>
       </div>
 
-      {/* 5. Animated Catwalk Fashion Show Marquee Ribbon at Bottom */}
-      <div className="relative z-10 mt-14 py-3.5 border-y border-white/10 bg-slate-900/60 backdrop-blur-md overflow-hidden">
-        <div className="animate-catwalk-marquee text-xs font-extrabold uppercase tracking-widest text-slate-300">
-          <span className="inline-flex items-center gap-4 mx-6">
-            <span className="text-rose-400">◆</span>
-            <span>Runway Fashion Show Braga City Walk</span>
-            <span className="text-amber-400">◆</span>
-            <span>50+ Koleksi Desainer Binaan Kota Bandung</span>
-            <span className="text-blue-400">◆</span>
-            <span>Ready-to-Wear Kreatif &amp; Fesyen Kurasi</span>
-            <span className="text-emerald-400">◆</span>
+      {/* 6. Dynamic Infinite Highlights Marquee Ribbon */}
+      <div className="runway-marquee-ribbon">
+        <div className="runway-marquee-track text-xs font-extrabold uppercase tracking-widest text-slate-300">
+          <span className="inline-flex items-center gap-5">
+            <span className="text-rose-400">✦</span>
+            <span>Peragaan Busana Desainer Binaan Kota Bandung</span>
+            <span className="text-amber-400">✦</span>
+            <span>Eksibisi 200+ Produk Fesyen, Kuliner &amp; Kriya</span>
+            <span className="text-blue-400">✦</span>
             <span>Malam Penganugerahan SIINAS Hotel Papandayan</span>
-            <span className="text-rose-400">◆</span>
-            <span>27–28 November 2026</span>
+            <span className="text-emerald-400">✦</span>
+            <span>Kompetisi Desain Kemasan Ramah Lingkungan</span>
+            <span className="text-rose-400">✦</span>
+            <span>Lomba Video Sinematik 1 Menit IKM</span>
+            <span className="text-amber-400">✦</span>
+            <span>27–28 November 2026 · Braga City Walk Bandung</span>
           </span>
-          <span className="inline-flex items-center gap-4 mx-6" aria-hidden="true">
-            <span className="text-rose-400">◆</span>
-            <span>Runway Fashion Show Braga City Walk</span>
-            <span className="text-amber-400">◆</span>
-            <span>50+ Koleksi Desainer Binaan Kota Bandung</span>
-            <span className="text-blue-400">◆</span>
-            <span>Ready-to-Wear Kreatif &amp; Fesyen Kurasi</span>
-            <span className="text-emerald-400">◆</span>
+          <span className="inline-flex items-center gap-5" aria-hidden="true">
+            <span className="text-rose-400">✦</span>
+            <span>Peragaan Busana Desainer Binaan Kota Bandung</span>
+            <span className="text-amber-400">✦</span>
+            <span>Eksibisi 200+ Produk Fesyen, Kuliner &amp; Kriya</span>
+            <span className="text-blue-400">✦</span>
             <span>Malam Penganugerahan SIINAS Hotel Papandayan</span>
-            <span className="text-rose-400">◆</span>
-            <span>27–28 November 2026</span>
+            <span className="text-emerald-400">✦</span>
+            <span>Kompetisi Desain Kemasan Ramah Lingkungan</span>
+            <span className="text-rose-400">✦</span>
+            <span>Lomba Video Sinematik 1 Menit IKM</span>
+            <span className="text-amber-400">✦</span>
+            <span>27–28 November 2026 · Braga City Walk Bandung</span>
           </span>
         </div>
       </div>
 
-      {/* 6. Bottom Smooth Blend into White AboutSection */}
-      <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-b from-transparent to-white pointer-events-none" />
+      {/* 7. Bottom Smooth Blend into White AboutSection */}
+      <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-b from-transparent via-[#060912]/50 to-white pointer-events-none z-10" />
     </section>
   );
 }
