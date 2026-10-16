@@ -259,13 +259,15 @@ export default function HeroSection() {
       if (chatMessagesRef.current) {
         const el = chatMessagesRef.current;
         const maxScroll = Math.max(0, el.scrollHeight - el.clientHeight);
-        if (p < 0.46) {
-          el.scrollTop = 0;
-        } else if (p < 0.75) {
-          const t = easeInOutCubic(mapRange(p, 0.46, 0.75, 0, 1));
-          el.scrollTop = t * maxScroll;
-        } else {
-          el.scrollTop = maxScroll;
+        if (maxScroll > 0) {
+          if (p < 0.36) {
+            el.scrollTop = 0;
+          } else if (p < 0.72) {
+            const t = easeInOutCubic(mapRange(p, 0.36, 0.72, 0, 1));
+            el.scrollTop = t * maxScroll;
+          } else {
+            el.scrollTop = maxScroll;
+          }
         }
       }
     }
@@ -422,8 +424,13 @@ export default function HeroSection() {
           <div className="browser-frame">
             <div className="browser-inner">
               
-              {/* Safari Top Bar */}
-              <div className="safari-bar">
+              {/* iOS Sheet Grab Handle Bar (Mobile Only - Apple Native Sheet feel) */}
+              <div className="ios-sheet-handle-bar sm:hidden">
+                <div className="ios-sheet-handle" />
+              </div>
+
+              {/* Safari Top Bar (Desktop & Tablet Only) */}
+              <div className="safari-bar hidden sm:flex">
                 <div className="safari-left">
                   <div className="traffic-lights">
                     <span className="dot red" />
@@ -462,15 +469,16 @@ export default function HeroSection() {
                   <div className="chat-header">
                     <div className="chat-contact">
                       <div className="chat-contact-avatar">PR</div>
-                      <div>
+                      <div className="chat-contact-meta">
                         <div className="chat-contact-name">Helpdesk Resmi PRIDE 2026</div>
                         <div className="chat-contact-status">
-                          <span className="status-dot online" /> Disdagin Kota Bandung
+                          <span className="status-dot online" />
+                          <span>Disdagin Kota Bandung</span>
                         </div>
                       </div>
                     </div>
                     <div className="chat-actions">
-                      <span className="btn-chat-top">
+                      <span className="btn-chat-top hidden sm:flex">
                         <svg className="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                         <span>27–28 Nov</span>
                       </span>
@@ -487,7 +495,7 @@ export default function HeroSection() {
                     {/* Msg 1: Bot Initial Prompt */}
                     <div className="msg-item msg-right" ref={msg1Ref}>
                       <div className="bubble-dark">
-                        Sampurasun! Selamat datang di Portal PRIDE Industri 2026. Ada yang bisa kami bantu seputar pendaftaran lomba atau jadwal pameran?
+                        <span>Sampurasun! Selamat datang di Portal PRIDE Industri 2026. Ada yang bisa kami bantu seputar pendaftaran lomba atau jadwal pameran?</span>
                         <span className="bubble-time">10:00</span>
                       </div>
                       <div className="bot-badge">
@@ -506,7 +514,7 @@ export default function HeroSection() {
                     {/* Msg 3: Bot Delay Notice */}
                     <div className="msg-item msg-right" ref={msg3Ref}>
                       <div className="bubble-dark">
-                        Pendaftaran 100% GRATIS dengan total hadiah Rp 30.000.000. Silakan pilih opsi langkah selanjutnya:
+                        <span>Pendaftaran 100% GRATIS dengan total hadiah Rp 30.000.000. Silakan pilih opsi langkah selanjutnya:</span>
                         <span className="bubble-time">10:01</span>
                       </div>
                       <div className="bot-badge">
@@ -558,7 +566,7 @@ export default function HeroSection() {
                     {/* Msg 7: Panitia Response */}
                     <div className="msg-item msg-right" ref={msg7Ref}>
                       <div className="bubble-dark">
-                        Halo! Tim Disdagin siap memverifikasi berkas Anda. Batas submit karya tanggal 20 November 2026. Sampai jumpa di Braga!
+                        <span>Halo! Tim Disdagin siap memverifikasi berkas Anda. Batas submit karya tanggal 20 November 2026. Sampai jumpa di Braga!</span>
                         <span className="bubble-time">10:02</span>
                       </div>
                       <div className="agent-chat-avatar">DG</div>
