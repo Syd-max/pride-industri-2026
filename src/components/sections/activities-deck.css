@@ -1,21 +1,16 @@
-/* ─── PRIDE Industri 2026 — 6 Program Unggulan (Stacked Card Deck Peel-Down) ────
-   Inspired by Ilia Delin 3D Artist Portfolio card deck interaction
-   Adapted specifically for PRIDE Industri 2026 Festival Activities
+/* ─── PRIDE Industri 2026 — 6 Program Unggulan (Stacked Card Deck) ───────────
+   Playful & Colorful Festival Card Deck matching Official Proposal Palette
+   Anti-AI-Slop, Pure Apple Editorial & Bandung Creative Aesthetic
+   Palette: Red (#E51937), Green (#009E49), Orange (#F69321), Yellow (#FFB800), Blue (#1652F0)
 ─────────────────────────────────────────────────────────────────────────────── */
 
 :root {
   --deck-bg-page: #f8fafc;
-  --deck-card-white: #ffffff;
-  --deck-text-main: #0f172a;
-  --deck-text-muted: #64748b;
-  --deck-pill-dark: #0f172a;
-  --deck-pill-gray: #f1f5f9;
-  --deck-glass-bg: rgba(255, 255, 255, 0.75);
-  --deck-glass-border: rgba(255, 255, 255, 0.65);
-  --deck-card-radius: 32px;
+  --deck-card-radius: 28px;
+  --deck-card-radius-sm: 20px;
 }
 
-/* Scroll Driver: Creates the timeline distance for peeling cards */
+/* Scroll Driver: Timeline for stack peeling */
 .activities-scroll-driver {
   height: 360vh;
   position: relative;
@@ -49,20 +44,7 @@
   box-sizing: border-box;
 }
 
-/* Subtle horizon bottom fade to seamlessly transition into next section */
-.activities-stage::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  background: linear-gradient(to bottom, transparent, var(--deck-bg-page));
-  pointer-events: none;
-  z-index: 20;
-}
-
-/* Blueprint dot matrix backdrop */
+/* Subtle dot matrix backdrop */
 .activities-stage::before {
   content: '';
   position: absolute;
@@ -73,89 +55,576 @@
   pointer-events: none;
 }
 
-/* Base Layer: Revealed When All Cards Peel Down */
-.activities-end-screen {
+/* Smooth bottom horizon fade */
+.activities-stage::after {
+  content: '';
   position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  text-align: center;
-  padding: calc(84px + env(safe-area-inset-top, 0px)) 24px calc(24px + env(safe-area-inset-bottom, 0px));
-  z-index: 1;
-  user-select: none;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  background: linear-gradient(to bottom, transparent, var(--deck-bg-page));
+  pointer-events: none;
+  z-index: 20;
 }
 
-.end-screen-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  border-radius: 999px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #2563eb;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-}
-
-.end-screen-title {
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  font-size: clamp(24px, 4vw, 38px);
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  color: #0f172a;
-  max-width: 600px;
-  line-height: 1.25;
-}
-
-.end-screen-meta {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(11.5px, 1.4vw, 13px);
-  color: #64748b;
-  letter-spacing: 0.02em;
-}
-
-.end-screen-cta {
-  margin-top: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  border-radius: 999px;
-  background: #0f172a;
-  color: #ffffff;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12.5px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
-}
-
-.end-screen-cta:hover {
-  transform: translateY(-2px) scale(1.03);
-  background: #1e293b;
-}
-
-/* Card Deck Wrapper */
+/* ─── Card Deck Container ─── */
 .activities-deck-container {
   position: relative;
   width: 100%;
-  max-width: 1220px;
-  height: calc(100% - 54px);
-  max-height: 640px;
+  max-width: 1180px;
+  height: calc(100% - 58px);
+  max-height: 620px;
   margin: 0 auto;
   z-index: 10;
 }
 
-/* ─── Pinned Deck Navigation HUD (Click + Scroll Synchronized) ─── */
+/* Base Card Layer */
+.activities-card {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--deck-card-radius);
+  overflow: hidden;
+  transform-origin: top center;
+  will-change: transform, opacity;
+  box-shadow: 0 16px 42px -12px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(15, 23, 42, 0.05);
+  user-select: none;
+}
+
+/* ==========================================================================
+   CARD 0: ELEGANT & AESTHETIC COVER CARD ("6 PROGRAM UNGGULAN")
+   ========================================================================== */
+.deck-cover-card {
+  background: linear-gradient(145deg, #ffffff 0%, #fffbfc 55%, #fff1f2 100%);
+  border: 1.5px solid #fecdd3;
+  padding: clamp(24px, 3.8vw, 44px) clamp(24px, 4.2vw, 52px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* Playful Background Geometry Confetti */
+.deck-cover-decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.decor-circle {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(40px);
+  opacity: 0.22;
+}
+
+.decor-red {
+  width: 320px;
+  height: 320px;
+  top: -80px;
+  right: -60px;
+  background: #e51937;
+}
+
+.decor-yellow {
+  width: 260px;
+  height: 260px;
+  bottom: -60px;
+  right: 15%;
+  background: #ffb800;
+}
+
+.decor-blue {
+  width: 280px;
+  height: 280px;
+  bottom: -70px;
+  left: -50px;
+  background: #1652f0;
+}
+
+.decor-green {
+  width: 200px;
+  height: 200px;
+  top: 20%;
+  left: -40px;
+  background: #009e49;
+}
+
+.decor-orange {
+  width: 220px;
+  height: 220px;
+  top: 50%;
+  right: -40px;
+  background: #f69321;
+}
+
+/* Cover Card Top Header */
+.deck-cover-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.deck-cover-venue-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Cover Card Hero Centerpiece */
+.deck-cover-hero {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(10px, 1.8vh, 18px);
+  margin: auto 0;
+  max-width: 900px;
+}
+
+.deck-cover-badge-row {
+  display: flex;
+  align-items: center;
+}
+
+.deck-cover-kicker {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(11px, 1.2vw, 13px);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #e51937;
+  display: inline-block;
+}
+
+.deck-cover-title-group {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2.5vw, 24px);
+}
+
+.deck-cover-large-number {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(68px, 11vw, 136px);
+  font-weight: 900;
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+  color: #e51937;
+  text-shadow: 0 4px 24px rgba(229, 25, 55, 0.18);
+  user-select: none;
+}
+
+.deck-cover-main-title {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(28px, 5.2vw, 68px);
+  font-weight: 900;
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  color: #0f172a;
+  display: flex;
+  flex-direction: column;
+}
+
+.deck-title-highlight {
+  color: #e51937;
+  position: relative;
+  display: inline-block;
+}
+
+.deck-cover-subtitle {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(13px, 1.45vw, 16.5px);
+  line-height: 1.55;
+  color: #475569;
+  font-weight: 500;
+  max-width: 660px;
+}
+
+/* Playful Proposal Palette Indicator Pills */
+.deck-cover-palette-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.palette-chip {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.palette-chip:hover {
+  transform: translateY(-2px);
+}
+
+.chip-red {
+  background: #fff1f2;
+  color: #be123c;
+  border-color: #fecdd3;
+}
+
+.chip-green {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+.chip-orange {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+.chip-yellow {
+  background: #fefce8;
+  color: #a16207;
+  border-color: #fef08a;
+}
+
+.chip-blue {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+/* Cover Card Footer */
+.deck-cover-footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.deck-cover-scroll-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.scroll-arrow-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   CARDS 1 TO 5: PLAYFUL & COLORFUL FESTIVAL CARDS
+   ========================================================================== */
+.deck-festival-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Playful Organic Background Shapes */
+.deck-card-decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.decor-blob {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(48px);
+  opacity: 0.35;
+}
+
+.decor-blob-1 {
+  width: 320px;
+  height: 320px;
+  top: -80px;
+  right: -50px;
+}
+
+.decor-blob-2 {
+  width: 240px;
+  height: 240px;
+  bottom: -60px;
+  left: -40px;
+}
+
+.decor-ring {
+  position: absolute;
+  width: 440px;
+  height: 440px;
+  top: 10%;
+  right: -120px;
+  border-radius: 999px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.6);
+  opacity: 0.4;
+}
+
+/* ─── 5 Proposal Themes ─── */
+/* Theme 1: Vibrant Red (Fashion Show Runway) */
+.theme-red {
+  background: linear-gradient(145deg, #ffffff 0%, #fff5f6 50%, #ffe4e6 100%);
+  border: 1.5px solid #fecdd3;
+}
+.theme-red .decor-blob-1 { background: #e51937; }
+.theme-red .decor-blob-2 { background: #fda4af; }
+.theme-red .deck-card-number { color: #e51937; }
+.theme-red .deck-header-pill { background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
+.theme-red .deck-icon-badge { background: #ffe4e6; color: #e51937; box-shadow: 0 8px 20px rgba(229, 25, 55, 0.15); }
+.theme-red .deck-kicker-tag { color: #be123c; }
+.theme-red .deck-tag-chip { background: #ffffff; color: #9f1239; border: 1px solid #fecdd3; }
+
+/* Theme 2: Emerald Green (Lomba Desain Kemasan) */
+.theme-green {
+  background: linear-gradient(145deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+  border: 1.5px solid #bbf7d0;
+}
+.theme-green .decor-blob-1 { background: #009e49; }
+.theme-green .decor-blob-2 { background: #86efac; }
+.theme-green .deck-card-number { color: #009e49; }
+.theme-green .deck-header-pill { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.theme-green .deck-icon-badge { background: #dcfce7; color: #009e49; box-shadow: 0 8px 20px rgba(0, 158, 73, 0.15); }
+.theme-green .deck-kicker-tag { color: #15803d; }
+.theme-green .deck-tag-chip { background: #ffffff; color: #166534; border: 1px solid #bbf7d0; }
+
+/* Theme 3: Warm Orange (Lomba Video 1 Menit) */
+.theme-orange {
+  background: linear-gradient(145deg, #ffffff 0%, #fff7ed 50%, #ffedd5 100%);
+  border: 1.5px solid #fed7aa;
+}
+.theme-orange .decor-blob-1 { background: #f69321; }
+.theme-orange .decor-blob-2 { background: #fdba74; }
+.theme-orange .deck-card-number { color: #f69321; }
+.theme-orange .deck-header-pill { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+.theme-orange .deck-icon-badge { background: #ffedd5; color: #f69321; box-shadow: 0 8px 20px rgba(246, 147, 33, 0.15); }
+.theme-orange .deck-kicker-tag { color: #c2410c; }
+.theme-orange .deck-tag-chip { background: #ffffff; color: #9a3412; border: 1px solid #fed7aa; }
+
+/* Theme 4: Golden Yellow (Malam Gala SIINAS) */
+.theme-yellow {
+  background: linear-gradient(145deg, #ffffff 0%, #fefce8 50%, #fef9c3 100%);
+  border: 1.5px solid #fef08a;
+}
+.theme-yellow .decor-blob-1 { background: #ffb800; }
+.theme-yellow .decor-blob-2 { background: #fde047; }
+.theme-yellow .deck-card-number { color: #d97706; }
+.theme-yellow .deck-header-pill { background: #fefce8; color: #a16207; border: 1px solid #fef08a; }
+.theme-yellow .deck-icon-badge { background: #fef9c3; color: #d97706; box-shadow: 0 8px 20px rgba(217, 119, 6, 0.15); }
+.theme-yellow .deck-kicker-tag { color: #a16207; }
+.theme-yellow .deck-tag-chip { background: #ffffff; color: #854d0e; border: 1px solid #fef08a; }
+
+/* Theme 5: Royal Blue (Sertifikasi Halal & Seni Budaya) */
+.theme-blue {
+  background: linear-gradient(145deg, #ffffff 0%, #eff6ff 50%, #dbeafe 100%);
+  border: 1.5px solid #bfdbfe;
+}
+.theme-blue .decor-blob-1 { background: #1652f0; }
+.theme-blue .decor-blob-2 { background: #93c5fd; }
+.theme-blue .deck-card-number { color: #1652f0; }
+.theme-blue .deck-header-pill { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.theme-blue .deck-icon-badge { background: #dbeafe; color: #1652f0; box-shadow: 0 8px 20px rgba(22, 82, 240, 0.15); }
+.theme-blue .deck-kicker-tag { color: #1d4ed8; }
+.theme-blue .deck-tag-chip { background: #ffffff; color: #1e40af; border: 1px solid #bfdbfe; }
+
+/* ─── Card Inner Structure ─── */
+.deck-card-inner {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(22px, 3.2vw, 38px) clamp(24px, 3.8vw, 44px);
+}
+
+/* Card Header */
+.deck-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.deck-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.deck-card-number {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.deck-header-pill {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.deck-header-venue {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* Card Body */
+.deck-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.8vh, 16px);
+  margin: auto 0;
+}
+
+.deck-hero-content {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2vw, 18px);
+}
+
+.deck-icon-badge {
+  width: clamp(44px, 4.8vw, 54px);
+  height: clamp(44px, 4.8vw, 54px);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.deck-kicker-tag {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.deck-card-title {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(20px, 2.5vw, 32px);
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  color: #0f172a;
+}
+
+/* Feature Tag Pills */
+.deck-feature-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.deck-tag-chip {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.deck-card-desc {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(13px, 1.3vw, 15px);
+  line-height: 1.55;
+  color: #334155;
+  font-weight: 450;
+  max-width: 820px;
+}
+
+/* Card Footer */
+.deck-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.deck-footer-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #475569;
+  flex-wrap: wrap;
+}
+
+.footer-meta-sep {
+  color: #cbd5e1;
+}
+
+.deck-status-badge {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.status-public {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.status-vip {
+  background: #fef9c3;
+  color: #854d0e;
+  border: 1px solid #fde047;
+}
+
+/* ==========================================================================
+   FLOATING DECK NAVIGATION HUD (Clean, Playful & Translucent)
+   ========================================================================== */
 .deck-nav-hud {
   position: absolute;
   bottom: calc(14px + env(safe-area-inset-bottom, 0px));
@@ -164,22 +633,22 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 14px;
-  background: rgba(15, 23, 42, 0.88);
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(226, 232, 240, 0.9);
   border-radius: 999px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   z-index: 50;
   user-select: none;
 }
 
 .deck-hud-btn {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 11.5px;
   font-weight: 700;
-  color: #e2e8f0;
+  color: #334155;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -192,8 +661,8 @@
 }
 
 .deck-hud-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.14);
-  color: #ffffff;
+  background: #f1f5f9;
+  color: #0f172a;
   transform: translateY(-1px);
 }
 
@@ -213,7 +682,7 @@
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.25);
+  background: #cbd5e1;
   border: none;
   cursor: pointer;
   padding: 0;
@@ -221,527 +690,52 @@
 }
 
 .deck-hud-dot:hover {
-  background: rgba(255, 255, 255, 0.6);
+  background: #94a3b8;
   transform: scale(1.2);
 }
 
 .deck-hud-dot.active {
   width: 22px;
-  background: #e11d48;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.deck-hud-dot.dot-0.active,
+.deck-hud-dot.dot-1.active {
+  background: #e51937;
+  box-shadow: 0 2px 8px rgba(229, 25, 55, 0.35);
+}
+
+.deck-hud-dot.dot-2.active {
+  background: #009e49;
+  box-shadow: 0 2px 8px rgba(0, 158, 73, 0.35);
+}
+
+.deck-hud-dot.dot-3.active {
+  background: #f69321;
+  box-shadow: 0 2px 8px rgba(246, 147, 33, 0.35);
+}
+
+.deck-hud-dot.dot-4.active {
+  background: #ffb800;
+  box-shadow: 0 2px 8px rgba(255, 184, 0, 0.35);
+}
+
+.deck-hud-dot.dot-5.active {
+  background: #1652f0;
+  box-shadow: 0 2px 8px rgba(22, 82, 240, 0.35);
 }
 
 .deck-hud-label {
-  font-size: 11px;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 11.5px;
   font-weight: 700;
-  color: #94a3b8;
-  letter-spacing: 0.05em;
+  color: #64748b;
   padding: 0 4px;
   white-space: nowrap;
 }
 
-/* Individual Card Layer */
-.activities-card {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: var(--deck-card-radius);
-  overflow: hidden;
-  transform-origin: top center;
-  will-change: transform;
-  box-shadow: 0 -8px 36px rgba(0, 0, 0, 0.12);
-  user-select: none;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-/* ============================================================
-   CARD 0: WHITE INTRO COVER CARD
-   ============================================================ */
-.deck-intro-card {
-  background: var(--deck-card-white);
-  padding: clamp(28px, 4vw, 44px) clamp(24px, 4.5vw, 54px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border: 1px solid rgba(0, 0, 0, 0.07);
-}
-
-.deck-intro-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.deck-hero-name {
-  font-family: 'JetBrains Mono', 'Space Mono', monospace;
-  font-size: clamp(30px, 5.2vw, 84px);
-  font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-  color: var(--deck-text-main);
-  cursor: default;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0 4px;
-}
-
-.deck-word {
-  display: inline-flex;
-  white-space: nowrap;
-}
-
-.deck-word-space {
-  display: inline;
-}
-
-.deck-hero-char {
-  display: inline-block;
-  transition: transform 0.15s ease, color 0.15s ease;
-}
-
-.deck-hero-char:hover {
-  color: #2563eb;
-  transform: translateY(-2px);
-}
-
-.deck-intro-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.deck-btn-pill {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  padding: 10px 18px;
-  border-radius: 999px;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              background-color 0.2s ease,
-              color 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  white-space: nowrap;
-}
-
-.deck-btn-dark {
-  background: var(--deck-pill-dark);
-  color: #ffffff;
-}
-
-.deck-btn-dark:hover {
-  transform: scale(1.04);
-  background: #1e293b;
-}
-
-.deck-btn-gray {
-  background: var(--deck-pill-gray);
-  color: var(--deck-text-main);
-}
-
-.deck-btn-gray:hover {
-  background: #e2e8f0;
-  transform: scale(1.04);
-}
-
-/* ─── Card 0: 6 Program Showcase Grid (Rich Center, No Empty Void) ─── */
-.deck-intro-showcase {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: clamp(10px, 1.8vh, 18px) 0;
-  width: 100%;
-}
-
-.deck-showcase-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.deck-program-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  width: 100%;
-}
-
-.deck-program-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.deck-program-item:hover {
-  background: #ffffff;
-  border-color: #cbd5e1;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-}
-
-.deck-program-item-top {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.deck-prog-idx {
-  font-size: 11px;
-  color: #94a3b8;
-  font-weight: 700;
-}
-
-.deck-program-item-body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5px;
-}
-
-.deck-prog-title {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #0f172a;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: -0.01em;
-}
-
-.deck-prog-meta {
-  font-size: 10.5px;
-  color: #64748b;
-  font-family: 'JetBrains Mono', monospace;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.deck-program-arrow {
-  font-size: 13px;
-  color: #94a3b8;
-  font-weight: 700;
-  transition: transform 0.2s ease, color 0.2s ease;
-  flex-shrink: 0;
-}
-
-.deck-program-item:hover .deck-program-arrow {
-  transform: translateX(3px);
-  color: #e11d48;
-}
-
-.deck-intro-bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 820px;
-}
-
-.deck-meta-tags {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 0.02em;
-}
-
-.deck-meta-tags a,
-.deck-meta-tags span {
-  color: var(--deck-text-muted);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.deck-meta-tags a:hover {
-  color: #2563eb;
-}
-
-.deck-bio-copy {
-  font-size: clamp(16px, 1.8vw, 23px);
-  line-height: 1.45;
-  font-weight: 500;
-  letter-spacing: -0.015em;
-  color: #334155;
-}
-
-.deck-scroll-hint {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* ============================================================
-   PROJECT CARDS (CARDS 1 TO 5)
-   ============================================================ */
-.deck-project-card {
-  background: #0f172a;
-  cursor: pointer;
-}
-
-.deck-project-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.deck-project-card:hover .deck-project-canvas {
-  transform: scale(1.025);
-}
-
-/* Project UI Overlay */
-.deck-project-overlay {
-  position: absolute;
-  inset: 0;
-  padding: clamp(22px, 3.5vw, 38px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  pointer-events: none;
-}
-
-.deck-project-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-/* Top-left Frosted Glass Info Box */
-.deck-info-pill {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  padding: 13px 20px;
-  border-radius: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  pointer-events: auto;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
-}
-
-.deck-project-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(16px, 1.9vw, 20px);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: #0f172a;
-  text-transform: uppercase;
-}
-
-.deck-project-subtitle {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
-  color: #475569;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-/* Top-right Category Pills */
-.deck-project-tags {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  pointer-events: auto;
-}
-
-.deck-tag-pill {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  padding: 8px 16px;
-  border-radius: 999px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
-  font-weight: 600;
-  color: #0f172a;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-}
-
-/* ─── Elegant Center Description Card (Apple Editorial Style) ─── */
-.deck-center-box {
-  position: absolute;
-  top: 52%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: calc(100% - 56px);
-  max-width: 680px;
-  background: rgba(11, 17, 32, 0.96);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 26px;
-  padding: clamp(20px, 3.2vw, 32px) clamp(24px, 3.8vw, 36px);
-  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.14);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  pointer-events: auto;
-  text-align: left;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.deck-project-card:hover .deck-center-box {
-  border-color: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 30px 70px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.22);
-  transform: translate(-50%, -52%);
-}
-
-.deck-center-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  align-self: flex-start;
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #60a5fa;
-}
-
-.deck-center-title {
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  font-size: clamp(19px, 2.3vw, 25px);
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
-}
-
-.deck-center-desc {
-  font-size: clamp(13px, 1.35vw, 15px);
-  line-height: 1.6;
-  color: #cbd5e1;
-  font-weight: 400;
-  letter-spacing: -0.005em;
-}
-
-.deck-center-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
-  color: #94a3b8;
-  padding-top: 12px;
-  margin-top: 2px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Floating HUD Auto-Player (Bottom Right) */
-.deck-hud {
-  position: absolute;
-  bottom: 20px;
-  right: 28px;
-  z-index: 100;
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #f8fafc;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-}
-
-.deck-hud button {
-  background: #ffffff;
-  color: #0f172a;
-  border: none;
-  border-radius: 999px;
-  padding: 5px 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.18s ease, background 0.18s;
-}
-
-.deck-hud button:hover {
-  transform: scale(1.04);
-  background: #f1f5f9;
-}
-
-/* Responsive Breakpoints */
-@media (max-width: 880px) {
-  .deck-intro-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-  }
-  .deck-intro-actions {
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 1024px) {
-  .deck-program-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-  .deck-program-item {
-    padding: 8px 10px;
-  }
-  .deck-prog-title {
-    font-size: 11.5px;
-  }
-}
-
+/* ==========================================================================
+   RESPONSIVE DESIGN (TABLET & MOBILE)
+   ========================================================================== */
 @media (max-width: 768px) {
   .activities-stage {
     padding-top: calc(56px + env(safe-area-inset-top, 0px));
@@ -750,127 +744,106 @@
     padding-right: 12px;
     justify-content: flex-start;
   }
+
   .activities-deck-container {
     height: calc(100dvh - 104px);
     max-height: 560px;
     margin: 8px auto 0;
   }
-  .deck-intro-card {
+
+  .activities-card {
+    border-radius: var(--deck-card-radius-sm);
+  }
+
+  .deck-cover-card {
     padding: 18px 16px 20px;
-    border-radius: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    border-radius: var(--deck-card-radius-sm);
   }
-  .deck-hero-name {
-    font-size: clamp(22px, 6.2vw, 30px);
-    line-height: 1.08;
-    letter-spacing: -0.02em;
+
+  .deck-cover-venue-pill {
+    padding: 4px 10px;
+    font-size: 10.5px;
   }
-  .deck-btn-pill {
-    padding: 8px 13px;
-    font-size: 11.5px;
+
+  .deck-cover-large-number {
+    font-size: clamp(52px, 14vw, 76px);
   }
-  .deck-intro-showcase {
-    gap: 6px;
-    margin: 8px 0;
+
+  .deck-cover-main-title {
+    font-size: clamp(24px, 6.8vw, 36px);
+    line-height: 0.98;
   }
-  .deck-program-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
+
+  .deck-cover-subtitle {
+    font-size: clamp(12px, 3.4vw, 13.5px);
+    line-height: 1.45;
   }
-  .deck-program-item {
-    padding: 7px 10px;
-    border-radius: 10px;
+
+  .palette-chip {
+    font-size: 10.5px;
+    padding: 4px 9px;
+  }
+
+  .deck-cover-scroll-indicator {
+    padding: 6px 12px;
+    font-size: 11px;
     gap: 7px;
   }
-  .deck-prog-title {
-    font-size: 11px;
+
+  .deck-card-inner {
+    padding: 18px 16px 18px;
   }
-  .deck-prog-meta {
-    font-size: 9px;
-  }
-  .deck-meta-tags {
+
+  .deck-header-venue {
+    padding: 4px 9px;
     font-size: 10px;
-    gap: 6px;
-    margin-bottom: 2px;
   }
-  .deck-bio-copy {
-    font-size: clamp(12px, 3.2vw, 13.5px);
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+
+  .deck-card-title {
+    font-size: clamp(17px, 4.4vw, 22px);
+    line-height: 1.22;
   }
-  .deck-scroll-hint {
-    font-size: 10px;
-    gap: 4px;
-  }
-  .deck-project-card {
-    border-radius: 24px;
-  }
-  .deck-project-overlay {
-    padding: 14px 14px 16px;
-  }
-  .deck-info-pill {
-    padding: 8px 12px;
+
+  .deck-icon-badge {
+    width: 40px;
+    height: 40px;
     border-radius: 12px;
-    gap: 3px;
   }
-  .deck-project-title {
-    font-size: 14px;
-    letter-spacing: 0;
+
+  .deck-tag-chip {
+    font-size: 10.5px;
+    padding: 4px 9px;
   }
-  .deck-project-subtitle {
-    font-size: 10px;
-  }
-  .deck-project-tags {
-    gap: 4px;
-  }
-  .deck-tag-pill {
-    padding: 4px 8px;
-    font-size: 9.5px;
-  }
-  .deck-center-box {
-    width: calc(100% - 24px);
-    padding: 16px 18px;
-    border-radius: 20px;
-    gap: 8px;
-    top: 50%;
-  }
-  .deck-center-title {
-    font-size: 16px;
-  }
-  .deck-center-desc {
-    font-size: 12px;
+
+  .deck-card-desc {
+    font-size: clamp(11.5px, 3.1vw, 13px);
     line-height: 1.45;
     display: -webkit-box;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .deck-center-meta {
-    font-size: 10px;
-    gap: 6px;
-    padding-top: 8px;
-  }
+
   .deck-nav-hud {
     bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-    padding: 4px 10px;
+    padding: 4px 12px;
     gap: 8px;
   }
+
   .deck-hud-btn {
     font-size: 10px;
     padding: 3px 6px;
   }
+
   .deck-hud-dot {
     width: 6px;
     height: 6px;
   }
+
   .deck-hud-dot.active {
     width: 16px;
   }
+
   .deck-hud-label {
     font-size: 10px;
   }
@@ -882,108 +855,62 @@
     padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     padding-left: 10px;
     padding-right: 10px;
-    justify-content: flex-start;
   }
+
   .activities-deck-container {
     height: calc(100dvh - 92px);
     max-height: 530px;
     margin: 4px auto 0;
   }
-  .deck-intro-card {
-    padding: 14px 12px 16px;
-    border-radius: 20px;
+
+  .deck-cover-card {
+    padding: 16px 14px 16px;
   }
-  .deck-hero-name {
-    font-size: clamp(20px, 6vw, 25px);
-    line-height: 1.1;
-  }
-  .deck-btn-pill {
-    padding: 6.5px 10px;
-    font-size: 10.5px;
-  }
-  .deck-intro-showcase {
-    gap: 5px;
-    margin: 6px 0;
-  }
-  .deck-program-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 5px;
-  }
-  .deck-program-item {
-    padding: 6px 7px;
-    border-radius: 8px;
-    gap: 6px;
-  }
-  .deck-prog-icon {
-    font-size: 13px;
-  }
-  .deck-prog-idx {
-    font-size: 9px;
-  }
-  .deck-prog-title {
+
+  .deck-cover-kicker {
     font-size: 10px;
-    line-height: 1.2;
   }
-  .deck-prog-meta {
-    display: none;
+
+  .deck-cover-large-number {
+    font-size: 54px;
   }
-  .deck-program-arrow {
-    display: none;
+
+  .deck-cover-main-title {
+    font-size: 24px;
   }
-  .deck-meta-tags {
-    font-size: 9px;
-    gap: 4px;
+
+  .deck-cover-subtitle {
+    font-size: 11.5px;
+    line-height: 1.4;
   }
-  .deck-bio-copy {
-    font-size: 11px;
-    line-height: 1.35;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+
+  .deck-card-inner {
+    padding: 15px 14px 15px;
   }
-  .deck-project-card {
-    border-radius: 20px;
+
+  .deck-card-title {
+    font-size: 16px;
   }
-  .deck-project-tags {
-    display: none;
+
+  .deck-tag-chip {
+    font-size: 9.5px;
+    padding: 3px 7px;
   }
-  .deck-center-box {
-    padding: 14px 15px;
-    border-radius: 18px;
-    gap: 6px;
-    width: calc(100% - 16px);
-  }
-  .deck-center-title {
-    font-size: 14.5px;
-  }
-  .deck-center-desc {
+
+  .deck-card-desc {
     font-size: 11px;
     line-height: 1.4;
     -webkit-line-clamp: 3;
   }
-  .deck-center-meta {
-    font-size: 9px;
+
+  .deck-footer-meta {
+    font-size: 10.5px;
     gap: 4px;
   }
-  .deck-nav-hud {
-    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+
+  .deck-status-badge {
+    font-size: 9.5px;
     padding: 3px 8px;
-    gap: 6px;
-  }
-  .deck-hud-btn {
-    font-size: 9.5px;
-    padding: 2px 5px;
-  }
-  .deck-hud-dot {
-    width: 5px;
-    height: 5px;
-  }
-  .deck-hud-dot.active {
-    width: 14px;
-  }
-  .deck-hud-label {
-    font-size: 9.5px;
   }
 }
 
