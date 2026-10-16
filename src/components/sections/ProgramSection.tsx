@@ -25,6 +25,7 @@ interface ScheduleItem {
 export default function ProgramSection() {
   const [activeDay, setActiveDay] = useState<'day1' | 'day2'>('day1');
   const [venueFilter, setVenueFilter] = useState<'all' | 'braga' | 'papandayan'>('all');
+  const [expandedIds, setExpandedIds] = useState<string[]>([]);
 
   const scheduleDay1: ScheduleItem[] = [
     {
@@ -227,6 +228,24 @@ export default function ProgramSection() {
     (item) => venueFilter === 'all' || item.venueKey === venueFilter
   );
 
+  const toggleItem = (id: string) => {
+    setExpandedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const allExpanded =
+    filteredSchedule.length > 0 &&
+    filteredSchedule.every((item) => expandedIds.includes(item.id));
+
+  const toggleAll = () => {
+    if (allExpanded) {
+      setExpandedIds([]);
+    } else {
+      setExpandedIds(filteredSchedule.map((s) => s.id));
+    }
+  };
+
   const googleCalUrlDay1 =
     'https://calendar.google.com/calendar/render?action=TEMPLATE&text=PRIDE+Industri+2026+-+Hari+1&dates=20261127T063000Z/20261127T140000Z&details=Hari+1+PRIDE+Industri+2026+di+Braga+City+Walk.+Opening,+Fashion+Runway,+Musik+Perkusi.&location=Braga+City+Walk,+Bandung';
   const googleCalUrlDay2 =
@@ -268,6 +287,7 @@ export default function ProgramSection() {
               onClick={() => {
                 setActiveDay('day1');
                 setVenueFilter('all');
+                setExpandedIds([]);
               }}
               className={`px-5 py-3 rounded-xl sm:rounded-full text-left sm:text-center transition-all cursor-pointer flex items-center justify-between sm:justify-center gap-3 ${
                 activeDay === 'day1'
@@ -294,6 +314,7 @@ export default function ProgramSection() {
               onClick={() => {
                 setActiveDay('day2');
                 setVenueFilter('all');
+                setExpandedIds([]);
               }}
               className={`px-5 py-3 rounded-xl sm:rounded-full text-left sm:text-center transition-all cursor-pointer flex items-center justify-between sm:justify-center gap-3 ${
                 activeDay === 'day2'
@@ -359,21 +380,42 @@ export default function ProgramSection() {
               )}
             </div>
 
-            {/* Right: Clean Matching Calendar Action Button */}
-            <a
-              href={activeDay === 'day1' ? googleCalUrlDay1 : googleCalUrlDay2}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center sm:justify-start gap-1.5 text-blue-600 hover:text-blue-700 bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200/60 px-3.5 py-1.5 rounded-lg font-bold text-xs transition-colors shrink-0 w-full sm:w-auto"
-            >
-              <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
-                <line x1="16" y1="2" x2="16" y2="6"/>
-                <line x1="8" y1="2" x2="8" y2="6"/>
-                <line x1="3" y1="10" x2="21" y2="10"/>
-              </svg>
-              <span>+ Simpan Jadwal ke Kalender</span>
-            </a>
+            {/* Right: Actions - Buka/Tutup Semua & Simpan Jadwal ke Kalender */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto shrink-0">
+              <button
+                type="button"
+                onClick={toggleAll}
+                className="inline-flex items-center justify-center gap-1.5 text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200 px-3.5 py-1.5 rounded-lg font-bold text-xs transition-colors shrink-0 cursor-pointer shadow-2xs"
+              >
+                <svg
+                  className={`w-3.5 h-3.5 transition-transform duration-200 ${allExpanded ? 'rotate-180 text-blue-600' : 'text-slate-500'}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+                <span>{allExpanded ? 'Tutup Semua' : 'Buka Semua'}</span>
+              </button>
+
+              <a
+                href={activeDay === 'day1' ? googleCalUrlDay1 : googleCalUrlDay2}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 text-blue-600 hover:text-blue-700 bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200/60 px-3.5 py-1.5 rounded-lg font-bold text-xs transition-colors shrink-0"
+              >
+                <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <span>+ Simpan ke Kalender</span>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -386,88 +428,147 @@ export default function ProgramSection() {
             aria-hidden="true"
           />
 
-          {filteredSchedule.map((item) => (
-            <div
-              key={item.id}
-              className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-8 group"
-            >
-              {/* Left Column: Prominent Large Time Anchor (Instant visual scan) */}
-              <div className="w-full sm:w-[130px] flex-shrink-0 pt-1 flex flex-wrap sm:flex-col justify-between sm:justify-start items-baseline sm:items-end gap-1.5 border-b sm:border-b-0 pb-2 sm:pb-0 border-slate-200/60">
-                <div className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900 leading-none group-hover:text-blue-600 transition-colors">
-                  {item.startTime}
-                </div>
-                <div className="text-[11px] font-mono font-medium text-slate-500 whitespace-nowrap">
-                  s/d {item.endTime}
-                </div>
-                <div className="inline-flex items-center gap-1 font-mono text-[10px] font-bold text-slate-600 bg-slate-100/90 px-2 py-0.5 rounded-md mt-0.5 whitespace-nowrap">
-                  <svg className="w-2.5 h-2.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12 6 12 12 16 14"/>
-                  </svg>
-                  <span>{item.duration}</span>
-                </div>
-              </div>
+          {filteredSchedule.map((item) => {
+            const isExpanded = expandedIds.includes(item.id);
 
-              {/* Center Timeline Node Bead (Desktop only) */}
+            return (
               <div
-                className="hidden sm:flex items-center justify-center relative z-10 flex-shrink-0 pt-2"
-                aria-hidden="true"
+                key={item.id}
+                className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-8 group"
               >
-                <div
-                  className={`w-4 h-4 rounded-full border-2 border-white ring-4 ${item.theme.accentRing} ${item.theme.dotColor} shadow-xs transition-transform group-hover:scale-125`}
-                />
-              </div>
-
-              {/* Right Column: Apple-Style Refined Card */}
-              <div className="flex-1 w-full bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-slate-200/90 shadow-[0_2px_12px_rgba(15,23,42,0.03)] hover:shadow-[0_16px_36px_-6px_rgba(15,23,42,0.07)] hover:border-slate-300 transition-all">
-                {/* Card Top Metadata: Category Pill + Location Pill */}
-                <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide border ${item.theme.badgeBg} ${item.theme.badgeText} ${item.theme.badgeBorder}`}
-                    >
-                      <span className={`w-1.5 h-1.5 rounded-full ${item.theme.dotColor}`} />
-                      <span>{item.category}</span>
-                    </span>
+                {/* Left Column: Prominent Large Time Anchor (Instant visual scan) */}
+                <div className="w-full sm:w-[130px] flex-shrink-0 pt-1 flex flex-wrap sm:flex-col justify-between sm:justify-start items-baseline sm:items-end gap-1.5 border-b sm:border-b-0 pb-2 sm:pb-0 border-slate-200/60">
+                  <div className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900 leading-none group-hover:text-blue-600 transition-colors">
+                    {item.startTime}
                   </div>
-
-                  <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-50 px-3 py-1 rounded-xl border border-slate-200/70">
-                    <svg className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                      <circle cx="12" cy="10" r="3"/>
+                  <div className="text-[11px] font-mono font-medium text-slate-500 whitespace-nowrap">
+                    s/d {item.endTime}
+                  </div>
+                  <div className="inline-flex items-center gap-1 font-mono text-[10px] font-bold text-slate-600 bg-slate-100/90 px-2 py-0.5 rounded-md mt-0.5 whitespace-nowrap">
+                    <svg className="w-2.5 h-2.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
                     </svg>
-                    <span>{item.location}</span>
+                    <span>{item.duration}</span>
                   </div>
                 </div>
 
-                {/* Card Main Title */}
-                <h3 className="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight mt-3 group-hover:text-blue-600 transition-colors">
-                  {item.title}
-                </h3>
+                {/* Center Timeline Node Bead (Desktop only) */}
+                <div
+                  className="hidden sm:flex items-center justify-center relative z-10 flex-shrink-0 pt-2"
+                  aria-hidden="true"
+                >
+                  <div
+                    className={`w-4 h-4 rounded-full border-2 border-white ring-4 ${item.theme.accentRing} ${item.theme.dotColor} shadow-xs transition-transform group-hover:scale-125`}
+                  />
+                </div>
 
-                {/* Card Description */}
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mt-2">
-                  {item.desc}
-                </p>
+                {/* Right Column: Apple-Style Refined Card */}
+                <div className={`flex-1 w-full bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 border transition-all ${
+                  isExpanded
+                    ? 'border-blue-200 shadow-[0_12px_32px_-8px_rgba(15,23,42,0.08)] ring-1 ring-blue-100'
+                    : 'border-slate-200/90 shadow-[0_2px_12px_rgba(15,23,42,0.03)] hover:border-slate-300 hover:shadow-[0_8px_24px_-6px_rgba(15,23,42,0.05)]'
+                }`}>
+                  {/* Card Top Metadata: Category Pill + Location Pill */}
+                  <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide border ${item.theme.badgeBg} ${item.theme.badgeText} ${item.theme.badgeBorder}`}
+                      >
+                        <span className={`w-1.5 h-1.5 rounded-full ${item.theme.dotColor}`} />
+                        <span>{item.category}</span>
+                      </span>
+                    </div>
 
-                {/* Highlight Checkpoints Chips */}
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-4 pt-3 border-t border-slate-100">
-                  <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider mr-1">
-                    Sorotan:
-                  </span>
-                  {item.highlights.map((h, hIdx) => (
-                    <span
-                      key={hIdx}
-                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 bg-slate-50 border border-slate-200/80 px-2.5 py-0.5 rounded-lg"
+                    <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-50 px-3 py-1 rounded-xl border border-slate-200/70">
+                      <svg className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                      </svg>
+                      <span>{item.location}</span>
+                    </div>
+                  </div>
+
+                  {/* Card Main Title + Accordion Toggle Header */}
+                  <div
+                    onClick={() => toggleItem(item.id)}
+                    className="flex items-start sm:items-center justify-between gap-3 mt-3 cursor-pointer group/title select-none"
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleItem(item.id);
+                      }
+                    }}
+                    aria-expanded={isExpanded}
+                  >
+                    <h3 className="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight group-hover/title:text-blue-600 transition-colors leading-snug">
+                      {item.title}
+                    </h3>
+
+                    {/* Chevron Toggle Button with Down/Up > < Arrow */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleItem(item.id);
+                      }}
+                      aria-label={isExpanded ? `Tutup detail ${item.title}` : `Buka detail ${item.title}`}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                        isExpanded
+                          ? 'bg-blue-50 text-blue-700 border border-blue-200/90 shadow-2xs hover:bg-blue-100'
+                          : 'bg-slate-100/90 text-slate-700 border border-slate-200/90 hover:bg-slate-200/80 hover:text-slate-900'
+                      }`}
                     >
-                      <span className="text-blue-500 font-bold">✦</span>
-                      <span>{h}</span>
-                    </span>
-                  ))}
+                      <span className="text-[11px] font-mono font-bold uppercase tracking-wider">
+                        {isExpanded ? 'Tutup' : 'Buka'}
+                      </span>
+                      <svg
+                        className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                          isExpanded ? 'rotate-180 text-blue-600' : 'rotate-0 text-slate-500'
+                        }`}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Accordion Detail: Only shown when opened (isExpanded = true) */}
+                  {isExpanded && (
+                    <div className="pt-2 animate-in fade-in slide-in-from-top-1 duration-200">
+                      {/* Card Description */}
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mt-2">
+                        {item.desc}
+                      </p>
+
+                      {/* Highlight Checkpoints Chips */}
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-4 pt-3 border-t border-slate-100">
+                        <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider mr-1">
+                          Sorotan:
+                        </span>
+                        {item.highlights.map((h, hIdx) => (
+                          <span
+                            key={hIdx}
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 bg-slate-50 border border-slate-200/80 px-2.5 py-0.5 rounded-lg"
+                          >
+                            <span className="text-blue-500 font-bold">✦</span>
+                            <span>{h}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {filteredSchedule.length === 0 && (
             <div className="text-center py-12 bg-white rounded-3xl border border-slate-200/80 p-8">
