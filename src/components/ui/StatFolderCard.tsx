@@ -21,13 +21,19 @@ export default function StatFolderCard({
   docTitle,
   docItems,
 }: StatFolderCardProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isToggled, setIsToggled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [displayNumber, setDisplayNumber] = useState(number);
   const animFrameRef = useRef<number | null>(null);
   const scrambleIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const autoCloseTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const isOpen = isHovered || isToggled;
+  // Clear any existing auto-close timer
+  const clearAutoClose = useCallback(() => {
+    if (autoCloseTimerRef.current) {
+      clearTimeout(autoCloseTimerRef.current);
+      autoCloseTimerRef.current = null;
+    }
+  }, []);
 
   // Mechanical Odometer / Rolling Number Animation
   const triggerRoll = useCallback(() => {
@@ -84,26 +90,28 @@ export default function StatFolderCard({
     }
   }, [number]);
 
-  // Trigger rolling animation automatically when hovered
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    triggerRoll();
-  };
+  // Touch / Click Handler: Opens folder, holds for 6 seconds, then automatically closes
+  const handleTouch = useCallback(() => {
+    clearAutoClose();
 
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
-  // Click/tap toggle support (especially for mobile/touch screens)
-  const handleClick = () => {
-    setIsToggled((prev) => !prev);
-    triggerRoll();
-  };
+    setIsOpen((prev) => {
+      const willBeOpen = !prev;
+      if (willBeOpen) {
+        triggerRoll();
+        // Hold open for 6 seconds (6000ms), then automatically close itself
+        autoCloseTimerRef.current = setTimeout(() => {
+          setIsOpen(false);
+          autoCloseTimerRef.current = null;
+        }, 6000);
+      }
+      return willBeOpen;
+    });
+  }, [clearAutoClose, triggerRoll]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      handleClick();
+      handleTouch();
     }
   };
 
@@ -111,6 +119,7 @@ export default function StatFolderCard({
     return () => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       if (scrambleIntervalRef.current) clearInterval(scrambleIntervalRef.current);
+      if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current);
     };
   }, []);
 
@@ -119,11 +128,9 @@ export default function StatFolderCard({
       role="button"
       tabIndex={0}
       aria-expanded={isOpen}
-      aria-label={`Folder berkas ${label}: ${number}. Arahkan kursor atau ketuk untuk rincian arsip.`}
+      aria-label={`Folder berkas ${label}: ${number}. Sentuh untuk membuka rincian selama 6 detik.`}
       className={`folder-card-wrapper folder-theme-${theme} ${isOpen ? 'is-open' : ''}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
+      onClick={handleTouch}
       onKeyDown={handleKeyDown}
     >
       <div className="folder-assembly">
@@ -176,7 +183,7 @@ export default function StatFolderCard({
             </span>
 
             <span className="text-[10px] opacity-75 font-mono tracking-wider">
-              {isOpen ? 'DOKUMEN TERBUKA' : 'SOROT KURSOR'}
+              {isOpen ? 'DOKUMEN TERBUKA' : 'SENTUH UNTUK BUKA'}
             </span>
           </div>
         </div>
