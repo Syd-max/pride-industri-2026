@@ -228,7 +228,7 @@
 .deck-hud-dot.active {
   width: 22px;
   background: #e11d48;
-  box-shadow: 0 0 10px rgba(225, 29, 72, 0.55);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 
 .deck-hud-label {

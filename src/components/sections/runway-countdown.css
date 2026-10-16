@@ -351,11 +351,9 @@
 @keyframes second-stride-beat {
   0%, 100% {
     transform: scale(1);
-    filter: drop-shadow(0 0 0 rgba(229, 25, 55, 0));
   }
   15% {
     transform: scale(1.025);
-    filter: drop-shadow(0 0 16px rgba(255, 184, 0, 0.5));
   }
 }
 
