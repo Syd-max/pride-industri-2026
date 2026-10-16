@@ -1,34 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import './activities-deck.css';
 
 export default function ActivitiesDeckSection() {
   const scrollDriverRef = useRef<HTMLDivElement>(null);
   const deckContainerRef = useRef<HTMLDivElement>(null);
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
-
-  // Jump smoothly to a specific card index (0 to 5)
-  const scrollToCard = useCallback((cardIdx: number) => {
-    if (!scrollDriverRef.current) return;
-    const driver = scrollDriverRef.current;
-    const rect = driver.getBoundingClientRect();
-    const driverTop = window.scrollY + rect.top;
-    const totalScroll = driver.offsetHeight - window.innerHeight;
-    if (totalScroll <= 0) return;
-
-    let targetProgress = 0;
-    if (cardIdx <= 0) {
-      targetProgress = 0.02;
-    } else if (cardIdx >= 5) {
-      targetProgress = 0.96;
-    } else {
-      targetProgress = 0.05 + (cardIdx / 5) * 0.90;
-    }
-
-    const targetY = driverTop + targetProgress * totalScroll;
-    window.scrollTo({ top: targetY, behavior: 'smooth' });
-  }, []);
 
   useEffect(() => {
     const container = deckContainerRef.current;
@@ -51,9 +28,6 @@ export default function ActivitiesDeckSection() {
       // Calibration with entry dwell (0.0 to 0.05) & exit dwell (0.95 to 1.0)
       const peelableCount = totalCards - 1; // 5 transitions
       const t = clamp((scrollProgress - 0.05) / 0.90, 0, 1) * peelableCount;
-
-      const currentIdx = clamp(Math.round(t), 0, totalCards - 1);
-      setActiveCardIndex(currentIdx);
 
       cards.forEach((card, i) => {
         // Z-Index order: Card 0 is 60, Card 1 is 50, ..., Card 5 is 10
@@ -544,45 +518,6 @@ export default function ActivitiesDeckSection() {
             </div>
           </section>
 
-        </div>
-
-        {/* ─── FLOATING DECK NAVIGATION HUD (Clean & Responsive) ─── */}
-        <div className="deck-nav-hud" aria-label="Navigasi Kartu Program">
-          <button
-            type="button"
-            onClick={() => scrollToCard(Math.max(0, activeCardIndex - 1))}
-            disabled={activeCardIndex === 0}
-            className="deck-hud-btn"
-            title="Kartu Sebelumnya"
-          >
-            ← Prev
-          </button>
-          
-          <div className="deck-hud-dots">
-            {[0, 1, 2, 3, 4, 5].map((idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => scrollToCard(idx)}
-                className={`deck-hud-dot dot-${idx} ${activeCardIndex === idx ? 'active' : ''}`}
-                title={`Buka Kartu ${idx === 0 ? 'Sampul' : idx}`}
-              />
-            ))}
-          </div>
-
-          <span className="deck-hud-label font-bold">
-            {activeCardIndex === 0 ? 'Sampul' : `0${activeCardIndex} / 05`}
-          </span>
-
-          <button
-            type="button"
-            onClick={() => scrollToCard(Math.min(5, activeCardIndex + 1))}
-            disabled={activeCardIndex === 5}
-            className="deck-hud-btn"
-            title="Kartu Selanjutnya"
-          >
-            Next →
-          </button>
         </div>
 
       </section>

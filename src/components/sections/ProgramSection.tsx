@@ -254,7 +254,7 @@ export default function ProgramSection() {
   return (
     <section
       id="program"
-      className="relative py-10 sm:py-14 lg:py-16 bg-[#f8fafc] border-t border-slate-200/80 overflow-hidden"
+      className="relative pt-6 pb-10 sm:py-14 lg:py-16 bg-[#f8fafc] border-t border-slate-200/80 overflow-hidden"
       aria-label="Rangkaian Program PRIDE Industri 2026"
     >
       <div id="agenda" className="absolute -top-20" />

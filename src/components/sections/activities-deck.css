@@ -1,6 +1,7 @@
 /* ─── PRIDE Industri 2026 — 6 Program Unggulan (Stacked Card Deck) ───────────
    Playful & Colorful Festival Card Deck matching Official Proposal Palette
    Anti-AI-Slop, Pure Apple Editorial & Bandung Creative Aesthetic
+   Natural Scroll-driven interaction (No bottom HUD overlay)
    Palette: Red (#E51937), Green (#009E49), Orange (#F69321), Yellow (#FFB800), Blue (#1652F0)
 ─────────────────────────────────────────────────────────────────────────────── */
 
@@ -10,16 +11,16 @@
   --deck-card-radius-sm: 20px;
 }
 
-/* Scroll Driver: Timeline for stack peeling */
+/* Scroll Driver: Fast & responsive timeline for natural scrolling */
 .activities-scroll-driver {
-  height: 360vh;
+  height: 320vh;
   position: relative;
   width: 100%;
 }
 
 @media (max-width: 768px) {
   .activities-scroll-driver {
-    height: 280vh;
+    height: 200vh;
   }
 }
 
@@ -55,14 +56,14 @@
   pointer-events: none;
 }
 
-/* Smooth bottom horizon fade */
+/* Subtle bottom horizon fade */
 .activities-stage::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 36px;
+  height: 20px;
   background: linear-gradient(to bottom, transparent, var(--deck-bg-page));
   pointer-events: none;
   z-index: 20;
@@ -73,8 +74,7 @@
   position: relative;
   width: 100%;
   max-width: 1180px;
-  height: calc(100% - 58px);
-  max-height: 620px;
+  height: min(620px, calc(100vh - 120px));
   margin: 0 auto;
   z-index: 10;
 }
@@ -623,132 +623,22 @@
 }
 
 /* ==========================================================================
-   FLOATING DECK NAVIGATION HUD (Clean, Playful & Translucent)
-   ========================================================================== */
-.deck-nav-hud {
-  position: absolute;
-  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 16px;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  z-index: 50;
-  user-select: none;
-}
-
-.deck-hud-btn {
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  font-size: 11.5px;
-  font-weight: 700;
-  color: #334155;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.deck-hud-btn:hover:not(:disabled) {
-  background: #f1f5f9;
-  color: #0f172a;
-  transform: translateY(-1px);
-}
-
-.deck-hud-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.deck-hud-dots {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.deck-hud-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: #cbd5e1;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.deck-hud-dot:hover {
-  background: #94a3b8;
-  transform: scale(1.2);
-}
-
-.deck-hud-dot.active {
-  width: 22px;
-}
-
-.deck-hud-dot.dot-0.active,
-.deck-hud-dot.dot-1.active {
-  background: #e51937;
-  box-shadow: 0 2px 8px rgba(229, 25, 55, 0.35);
-}
-
-.deck-hud-dot.dot-2.active {
-  background: #009e49;
-  box-shadow: 0 2px 8px rgba(0, 158, 73, 0.35);
-}
-
-.deck-hud-dot.dot-3.active {
-  background: #f69321;
-  box-shadow: 0 2px 8px rgba(246, 147, 33, 0.35);
-}
-
-.deck-hud-dot.dot-4.active {
-  background: #ffb800;
-  box-shadow: 0 2px 8px rgba(255, 184, 0, 0.35);
-}
-
-.deck-hud-dot.dot-5.active {
-  background: #1652f0;
-  box-shadow: 0 2px 8px rgba(22, 82, 240, 0.35);
-}
-
-.deck-hud-label {
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  font-size: 11.5px;
-  font-weight: 700;
-  color: #64748b;
-  padding: 0 4px;
-  white-space: nowrap;
-}
-
-/* ==========================================================================
-   RESPONSIVE DESIGN (TABLET & MOBILE)
+   RESPONSIVE DESIGN (TABLET & MOBILE) — TIGHT & SEAMLESS SECTION GAPS
    ========================================================================== */
 @media (max-width: 768px) {
   .activities-stage {
-    padding-top: calc(56px + env(safe-area-inset-top, 0px));
+    padding-top: calc(52px + env(safe-area-inset-top, 0px));
     padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    padding-left: 12px;
-    padding-right: 12px;
-    justify-content: flex-start;
+    padding-left: 14px;
+    padding-right: 14px;
+    justify-content: center;
   }
 
   .activities-deck-container {
-    height: calc(100dvh - 104px);
-    max-height: 560px;
-    margin: 8px auto 0;
+    width: 100%;
+    height: min(560px, calc(100dvh - 84px));
+    max-height: 580px;
+    margin: 0 auto;
   }
 
   .activities-card {
@@ -756,7 +646,7 @@
   }
 
   .deck-cover-card {
-    padding: 18px 16px 20px;
+    padding: 20px 18px 22px;
     border-radius: var(--deck-card-radius-sm);
   }
 
@@ -791,7 +681,7 @@
   }
 
   .deck-card-inner {
-    padding: 18px 16px 18px;
+    padding: 20px 18px 20px;
   }
 
   .deck-header-venue {
@@ -823,44 +713,22 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-
-  .deck-nav-hud {
-    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-    padding: 4px 12px;
-    gap: 8px;
-  }
-
-  .deck-hud-btn {
-    font-size: 10px;
-    padding: 3px 6px;
-  }
-
-  .deck-hud-dot {
-    width: 6px;
-    height: 6px;
-  }
-
-  .deck-hud-dot.active {
-    width: 16px;
-  }
-
-  .deck-hud-label {
-    font-size: 10px;
-  }
 }
 
 @media (max-width: 480px) {
   .activities-stage {
-    padding-top: calc(52px + env(safe-area-inset-top, 0px));
+    padding-top: calc(48px + env(safe-area-inset-top, 0px));
     padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     padding-left: 10px;
     padding-right: 10px;
+    justify-content: center;
   }
 
   .activities-deck-container {
-    height: calc(100dvh - 92px);
-    max-height: 530px;
-    margin: 4px auto 0;
+    width: 100%;
+    height: min(520px, calc(100dvh - 72px));
+    max-height: 540px;
+    margin: 0 auto;
   }
 
   .deck-cover-card {
@@ -885,7 +753,7 @@
   }
 
   .deck-card-inner {
-    padding: 15px 14px 15px;
+    padding: 16px 14px 16px;
   }
 
   .deck-card-title {
