@@ -1,77 +1,70 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
 import { sanitizeString, isRateLimited } from '@/lib/utils';
-import { EVENT_CONFIG } from '@/config/event';
-import type { ApiResponse, CheckInSuccessData } from '@/types';
+import { getSharedRegistrations, updateSharedRegistration, addSharedVisitor } from '@/lib/store';
 
-// Default fallback token for PRIDE 2026 Braga Main Gate
 const DEFAULT_GATE_TOKEN = 'PRIDE2026-GATE-BRAGA-MAIN';
 
-// In-memory check-in store for preview/demo mode
-const memoryCheckIns: Array<{
-  registration_code: string;
-  gate_token: string;
-  checked_in_at: string;
-}> = [];
-
-export async function POST(
-  request: NextRequest
-): Promise<NextResponse<ApiResponse<CheckInSuccessData>>> {
+export async function POST(request: NextRequest) {
   try {
-    // 1. Rate Limiting (15 check-in attempts per minute per IP)
+    // 1. Rate Limiting (30 check-ins per minute per IP for busy gate scanning)
     const ip = request.headers.get('x-forwarded-for') || 'checkin-client';
-    if (isRateLimited(`checkin:${ip}`, 15, 60_000)) {
+    if (isRateLimited(`checkin:${ip}`, 30, 60_000)) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Terlalu banyak permintaan check-in. Mohon tunggu 1 menit.',
+          error: 'Terlalu banyak permintaan presensi. Mohon tunggu beberapa detik.',
           code: 'RATE_LIMIT',
         },
         { status: 429 }
       );
     }
 
-    // 2. Parse payload
     const body = await request.json();
-    const registrationCode = sanitizeString(body.registration_code).toUpperCase();
-    const gateToken = sanitizeString(body.gate_token);
+    const visitorType = body.visitor_type === 'umum' ? 'umum' : 'peserta';
+    const gateToken = sanitizeString(body.gate_token) || DEFAULT_GATE_TOKEN;
 
-    if (!registrationCode) {
+    // ─── ALUR 1: VISITOR UMUM (PENGUNJUNG UMUM FESTIVAL) ───
+    if (visitorType === 'umum') {
+      const fullName = sanitizeString(body.full_name) || 'Pengunjung Umum';
+      const city = sanitizeString(body.city) || 'Kota Bandung';
+      const groupSize = Number(body.group_size) || 1;
+
+      const newVisitor = addSharedVisitor({
+        full_name: fullName,
+        city,
+        group_size: groupSize,
+        visitor_type: 'umum',
+      });
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          visitor_type: 'umum',
+          ticket_code: newVisitor.ticket_code,
+          full_name: newVisitor.full_name,
+          city: newVisitor.city,
+          group_size: newVisitor.group_size,
+          checked_in_at: newVisitor.checked_in_at,
+          gate_name: 'Main Entrance Braga City Walk',
+        },
+      });
+    }
+
+    // ─── ALUR 2: VISITOR PESERTA (PESERTA LOMBA PRIDE 2026) ───
+    const inputQuery = sanitizeString(body.registration_code || body.phone || '').toUpperCase();
+
+    if (!inputQuery) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Kode registrasi peserta wajib disertakan.',
-          code: 'MISSING_REGISTRATION_CODE',
+          error: 'Kode registrasi atau nomor telepon peserta wajib dimasukkan.',
+          code: 'MISSING_CREDENTIALS',
         },
         { status: 400 }
       );
     }
 
-    if (!gateToken) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Kode QR gate tidak terbaca atau kosong.',
-          code: 'MISSING_GATE_TOKEN',
-        },
-        { status: 400 }
-      );
-    }
-
-    // 3. Time Window Validation
-    const now = new Date();
-    // Allow check-in during test/preview or during the actual event window
-    const isWithinEvent =
-      now >= EVENT_CONFIG.checkin.windowStart &&
-      now <= EVENT_CONFIG.checkin.windowEnd;
-
-    // We allow preview validation if not in strict production mode, or if query param / header allows preview
-    const allowPreview =
-      process.env.NODE_ENV !== 'production' ||
-      body.preview_mode === true ||
-      !isWithinEvent; // In 2026 prior to event, give clear message or permit preview simulation
-
-    // 4. Validate with Supabase if configured
     const hasSupabase =
       Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
       Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) &&
@@ -80,73 +73,87 @@ export async function POST(
     if (hasSupabase) {
       const supabase = createAdminClient();
 
-      // Verify Registration
+      // Check by registration code or phone number
       const { data: registration, error: regError } = await supabase
         .from('pride_registrations')
-        .select('id, registration_code, full_name, competition_id, check_in_status, checked_in_at')
-        .eq('registration_code', registrationCode)
+        .select('*')
+        .or(`registration_code.ilike.%${inputQuery}%,phone.eq.${inputQuery}`)
         .maybeSingle();
 
       if (regError || !registration) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: `Kode registrasi "${registrationCode}" tidak ditemukan di database peserta. Pastikan Anda telah terdaftar.`,
-            code: 'INVALID_REGISTRATION',
-          },
-          { status: 404 }
+        // Fallback to in-memory check
+        const memTarget = getSharedRegistrations().find(
+          (r) =>
+            r.registration_code.toUpperCase() === inputQuery ||
+            r.phone === inputQuery
         );
-      }
 
-      // Check if already checked in
-      if (registration.check_in_status === 'checked_in') {
-        return NextResponse.json(
-          {
-            success: false,
-            error: `Peserta ${registration.full_name} sudah melakukan check-in sebelumnya pada ${new Date(
-              registration.checked_in_at
-            ).toLocaleTimeString('id-ID')} WIB.`,
-            code: 'ALREADY_CHECKED_IN',
-          },
-          { status: 409 }
-        );
-      }
-
-      // Verify Gate Token (Match either pride_gate_tokens or default token)
-      let gateTokenId: string | null = null;
-      const { data: tokenRecord } = await supabase
-        .from('pride_gate_tokens')
-        .select('id, is_active, valid_from, valid_until')
-        .eq('token', gateToken)
-        .maybeSingle();
-
-      if (tokenRecord) {
-        if (!tokenRecord.is_active) {
+        if (!memTarget) {
           return NextResponse.json(
             {
               success: false,
-              error: 'Kode QR gate ini sudah dinonaktifkan oleh panitia.',
-              code: 'TOKEN_INACTIVE',
+              error: `Kode "${inputQuery}" tidak ditemukan di daftar peserta resmi. Pastikan Anda telah terdaftar lomba.`,
+              code: 'INVALID_REGISTRATION',
             },
-            { status: 403 }
+            { status: 404 }
           );
         }
-        gateTokenId = tokenRecord.id;
-      } else if (gateToken === DEFAULT_GATE_TOKEN) {
-        // Fallback default token accepted
-        gateTokenId = null;
-      } else {
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Kode QR gate tidak valid atau bukan merupakan QR resmi gate PRIDE 2026.',
-            code: 'INVALID_GATE_TOKEN',
+
+        // Already checked in?
+        if (memTarget.check_in_status === 'checked_in') {
+          return NextResponse.json({
+            success: true,
+            already_checked_in: true,
+            message: `Peserta ${memTarget.full_name} sudah presensi sebelumnya.`,
+            data: {
+              visitor_type: 'peserta',
+              registration_code: memTarget.registration_code,
+              full_name: memTarget.full_name,
+              competition_id: memTarget.competition_id,
+              checked_in_at: memTarget.checked_in_at,
+              gate_name: 'Braga Main Gate',
+            },
+          });
+        }
+
+        const checkedInAt = new Date().toISOString();
+        updateSharedRegistration(memTarget.id, {
+          check_in_status: 'checked_in',
+          checked_in_at: checkedInAt,
+        });
+
+        return NextResponse.json({
+          success: true,
+          data: {
+            visitor_type: 'peserta',
+            registration_code: memTarget.registration_code,
+            full_name: memTarget.full_name,
+            competition_id: memTarget.competition_id,
+            checked_in_at: checkedInAt,
+            gate_name: 'Braga Main Gate',
           },
-          { status: 400 }
-        );
+        });
       }
 
-      // Atomically record attendance
+      // Check if already checked in in Supabase
+      if (registration.check_in_status === 'checked_in') {
+        return NextResponse.json({
+          success: true,
+          already_checked_in: true,
+          message: `Peserta ${registration.full_name} sudah presensi sebelumnya pada ${new Date(
+            registration.checked_in_at
+          ).toLocaleTimeString('id-ID')} WIB.`,
+          data: {
+            visitor_type: 'peserta',
+            registration_code: registration.registration_code,
+            full_name: registration.full_name,
+            competition_id: registration.competition_id,
+            checked_in_at: registration.checked_in_at,
+            gate_name: 'Braga Main Gate',
+          },
+        });
+      }
+
       const checkedInAt = new Date().toISOString();
 
       await supabase
@@ -157,74 +164,74 @@ export async function POST(
         })
         .eq('id', registration.id);
 
-      if (gateTokenId) {
-        await supabase.from('pride_checkins').insert({
-          registration_id: registration.id,
-          gate_token_id: gateTokenId,
-          source: 'qr_scan',
-          checked_in_at: checkedInAt,
-        });
-      }
-
-      return NextResponse.json({
-        success: true,
-        data: {
-          registration_code: registration.registration_code,
-          full_name: registration.full_name,
-          competition_id: registration.competition_id as 'desain-kemasan' | 'video-lokal',
-          checked_in_at: checkedInAt,
-        },
-      });
-    } else {
-      // Demo / In-Memory check-in validation
-      const existingCheckin = memoryCheckIns.find(
-        (c) => c.registration_code === registrationCode
-      );
-
-      if (existingCheckin) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: `Kode registrasi "${registrationCode}" sudah tercatat hadir sebelumnya.`,
-            code: 'ALREADY_CHECKED_IN',
-          },
-          { status: 409 }
-        );
-      }
-
-      // Verify gate token format
-      const isValidGate =
-        gateToken === DEFAULT_GATE_TOKEN ||
-        gateToken.startsWith('PRIDE2026') ||
-        gateToken.length >= 8;
-
-      if (!isValidGate) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Kode QR yang dipindai bukan kode gate PRIDE 2026.',
-            code: 'INVALID_GATE_TOKEN',
-          },
-          { status: 400 }
-        );
-      }
-
-      const checkedInAt = new Date().toISOString();
-      memoryCheckIns.push({
-        registration_code: registrationCode,
-        gate_token: gateToken,
+      updateSharedRegistration(registration.registration_code, {
+        check_in_status: 'checked_in',
         checked_in_at: checkedInAt,
       });
 
-      const isDK = registrationCode.includes('-DK-');
+      return NextResponse.json({
+        success: true,
+        data: {
+          visitor_type: 'peserta',
+          registration_code: registration.registration_code,
+          full_name: registration.full_name,
+          competition_id: registration.competition_id,
+          checked_in_at: checkedInAt,
+          gate_name: 'Braga Main Gate',
+        },
+      });
+    } else {
+      // In-memory evaluation
+      const memTarget = getSharedRegistrations().find(
+        (r) =>
+          r.registration_code.toUpperCase() === inputQuery ||
+          r.phone === inputQuery
+      );
+
+      if (!memTarget) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Kode "${inputQuery}" tidak ditemukan di daftar peserta resmi. Periksa kembali atau tanyakan ke panitia registrasi.`,
+            code: 'INVALID_REGISTRATION',
+          },
+          { status: 404 }
+        );
+      }
+
+      if (memTarget.check_in_status === 'checked_in') {
+        return NextResponse.json({
+          success: true,
+          already_checked_in: true,
+          message: `Peserta ${memTarget.full_name} sudah presensi sebelumnya pada ${new Date(
+            memTarget.checked_in_at || ''
+          ).toLocaleTimeString('id-ID')} WIB.`,
+          data: {
+            visitor_type: 'peserta',
+            registration_code: memTarget.registration_code,
+            full_name: memTarget.full_name,
+            competition_id: memTarget.competition_id,
+            checked_in_at: memTarget.checked_in_at,
+            gate_name: 'Braga Main Gate',
+          },
+        });
+      }
+
+      const checkedInAt = new Date().toISOString();
+      updateSharedRegistration(memTarget.id, {
+        check_in_status: 'checked_in',
+        checked_in_at: checkedInAt,
+      });
 
       return NextResponse.json({
         success: true,
         data: {
-          registration_code: registrationCode,
-          full_name: 'Peserta Terverifikasi PRIDE 2026',
-          competition_id: isDK ? 'desain-kemasan' : 'video-lokal',
+          visitor_type: 'peserta',
+          registration_code: memTarget.registration_code,
+          full_name: memTarget.full_name,
+          competition_id: memTarget.competition_id,
           checked_in_at: checkedInAt,
+          gate_name: 'Braga Main Gate',
         },
       });
     }
@@ -233,7 +240,7 @@ export async function POST(
     return NextResponse.json(
       {
         success: false,
-        error: 'Terjadi kegagalan server saat memproses kehadiran.',
+        error: 'Terjadi kegagalan server saat memproses presensi gate.',
         code: 'SERVER_ERROR',
       },
       { status: 500 }

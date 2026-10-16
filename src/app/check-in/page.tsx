@@ -1,417 +1,485 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BrowserMultiFormatReader } from '@zxing/browser';
 
-type ScanState =
-  | 'idle'
-  | 'requesting_permission'
-  | 'scanning'
-  | 'validating'
-  | 'success'
-  | 'error';
+type VisitorTab = 'umum' | 'peserta';
+
+interface CheckInResult {
+  visitor_type: 'umum' | 'peserta';
+  full_name: string;
+  ticket_code?: string;
+  registration_code?: string;
+  competition_id?: string;
+  city?: string;
+  checked_in_at: string;
+  gate_name?: string;
+}
 
 export default function CheckInPage() {
-  const [registrationCode, setRegistrationCode] = useState('');
-  const [scanState, setScanState] = useState<ScanState>('idle');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successInfo, setSuccessInfo] = useState<{
-    full_name: string;
-    registration_code: string;
-    competition_id: string;
-    checked_in_at: string;
-  } | null>(null);
+  const [activeTab, setActiveTab] = useState<VisitorTab>('umum');
 
-  const [manualGateToken, setManualGateToken] = useState('');
-  const [showManualInput, setShowManualInput] = useState(false);
+  // Form states - Visitor Umum
+  const [umumName, setUmumName] = useState('');
+  const [umumCity, setUmumCity] = useState('Kota Bandung');
 
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const codeReaderRef = useRef<BrowserMultiFormatReader | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
+  // Form states - Visitor Peserta
+  const [pesertaCode, setPesertaCode] = useState('');
 
-  // Stop camera helper
-  const stopCamera = () => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
-      streamRef.current = null;
-    }
-    if (videoRef.current) {
-      videoRef.current.srcObject = null;
-    }
-  };
+  // Status & Result states
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [infoMsg, setInfoMsg] = useState<string | null>(null);
+  const [successResult, setSuccessResult] = useState<CheckInResult | null>(null);
 
+  // Auto-detect gate query parameter if scanned from dynamic QR
   useEffect(() => {
-    return () => {
-      stopCamera();
-    };
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const initialTab = params.get('type');
+      if (initialTab === 'peserta' || initialTab === 'umum') {
+        setActiveTab(initialTab);
+      }
+      const codeParam = params.get('code');
+      if (codeParam) {
+        setPesertaCode(codeParam.toUpperCase());
+        setActiveTab('peserta');
+      }
+    }
   }, []);
 
-  // Start real browser camera scanner
-  const startScanner = async () => {
-    setErrorMessage(null);
-
-    if (!registrationCode.trim()) {
-      setErrorMessage(
-        'Masukkan kode registrasi Anda terlebih dahulu sebelum memindai QR gate.'
-      );
-      return;
-    }
-
-    setScanState('requesting_permission');
-
-    try {
-      const constraints: MediaStreamConstraints = {
-        video: { facingMode: { ideal: 'environment' } },
-        audio: false,
-      };
-
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      streamRef.current = stream;
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
-
-      setScanState('scanning');
-
-      const reader = new BrowserMultiFormatReader();
-      codeReaderRef.current = reader;
-
-      reader.decodeFromVideoElement(videoRef.current!, (result) => {
-        if (result) {
-          const scannedText = result.getText();
-          stopCamera();
-          handleScannedToken(scannedText);
-        }
-      });
-    } catch (err: unknown) {
-      console.error('Camera error:', err);
-      stopCamera();
-      setScanState('error');
-      if (err instanceof DOMException && err.name === 'NotAllowedError') {
-        setErrorMessage(
-          'Izin akses kamera ditolak oleh browser. Silakan izinkan akses kamera di setelan browser atau gunakan input kode manual di bawah.'
-        );
-      } else {
-        setErrorMessage(
-          'Kamera tidak dapat diakses atau perangkat tidak mendukung. Anda dapat menggunakan opsi input token manual.'
-        );
-      }
-      setShowManualInput(true);
-    }
-  };
-
-  // Submit scanned or manual gate token to backend
-  const handleScannedToken = async (gateToken: string) => {
-    setScanState('validating');
-    setErrorMessage(null);
+  // Handle General Visitor Check-In
+  const handleCheckInUmum = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg(null);
+    setInfoMsg(null);
 
     try {
       const res = await fetch('/api/check-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          registration_code: registrationCode.trim(),
-          gate_token: gateToken.trim(),
+          visitor_type: 'umum',
+          full_name: umumName.trim() || 'Pengunjung Umum',
+          city: umumCity.trim() || 'Kota Bandung',
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        setErrorMsg(json.error || 'Gagal memproses presensi gate.');
+        return;
+      }
+
+      setSuccessResult(json.data);
+    } catch {
+      setErrorMsg('Koneksi internet bermasalah. Silakan coba lagi.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle Competition Participant Check-In
+  const handleCheckInPeserta = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const query = pesertaCode.trim().toUpperCase();
+
+    if (!query) {
+      setErrorMsg('Masukkan kode registrasi Anda terlebih dahulu.');
+      return;
+    }
+
+    setLoading(true);
+    setErrorMsg(null);
+    setInfoMsg(null);
+
+    try {
+      const res = await fetch('/api/check-in', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          visitor_type: 'peserta',
+          registration_code: query,
         }),
       });
 
       const json = await res.json();
 
       if (!res.ok || !json.success) {
-        setScanState('error');
-        setErrorMessage(
-          json.error || 'Check-in gagal. Periksa kembali kode Anda.'
+        setErrorMsg(
+          json.error || 'Kode registrasi tidak ditemukan. Periksa kembali huruf dan angka kode Anda.'
         );
         return;
       }
 
-      setSuccessInfo(json.data);
-      setScanState('success');
+      if (json.already_checked_in) {
+        setInfoMsg(json.message);
+      }
+
+      setSuccessResult(json.data);
     } catch {
-      setScanState('error');
-      setErrorMessage(
-        'Koneksi ke server terputus saat validasi. Silakan ulangi.'
-      );
+      setErrorMsg('Koneksi internet bermasalah. Silakan coba lagi.');
+    } finally {
+      setLoading(false);
     }
   };
 
+  const resetForm = () => {
+    setSuccessResult(null);
+    setErrorMsg(null);
+    setInfoMsg(null);
+    setPesertaCode('');
+    setUmumName('');
+  };
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 py-10 px-4 sm:px-6">
-      <div className="max-w-xl mx-auto">
-        
-        {/* Navigation Bar / Back */}
-        <div className="flex items-center justify-between pb-6 border-b border-slate-200 mb-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-blue-600 transition-colors"
-          >
-            ← Kembali ke Beranda
-          </Link>
-          <div className="flex items-center gap-2">
-            <div className="relative w-7 h-7">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col justify-between antialiased">
+      {/* ─── Top Brand Header ─── */}
+      <header className="bg-white border-b border-slate-200 px-4 py-3.5 sticky top-0 z-30 shadow-2xs">
+        <div className="max-w-md mx-auto flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="relative w-9 h-9 flex-shrink-0">
               <Image
                 src="/LOGO_PRIDE_INDUSTRI.png"
                 alt="PRIDE 2026"
                 fill
-                sizes="28px"
+                sizes="36px"
                 className="object-contain"
+                priority
               />
             </div>
-            <span className="text-xs font-extrabold tracking-tight text-slate-900">
-              Gate Check-In
-            </span>
-          </div>
-        </div>
+            <div className="flex flex-col">
+              <span className="font-extrabold text-xs text-slate-900 leading-tight">
+                PRIDE 2026
+              </span>
+              <span className="text-[10px] text-blue-600 font-bold tracking-wider uppercase">
+                Braga City Walk
+              </span>
+            </div>
+          </Link>
 
-        {/* Success Attendance Badge */}
-        {scanState === 'success' && successInfo ? (
-          <div className="bg-white p-8 sm:p-10 rounded-3xl border border-emerald-200 shadow-xl text-center space-y-6">
-            <div className="w-20 h-20 rounded-full bg-emerald-100 text-emerald-700 border-2 border-emerald-300 flex items-center justify-center mx-auto">
-              <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            Gate Masuk Aktif
+          </span>
+        </div>
+      </header>
+
+      {/* ─── Main Content Container ─── */}
+      <main className="flex-1 max-w-md w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
+        {/* SUCCESS PASS / BADGE SCREEN */}
+        {successResult ? (
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl text-center space-y-6 animate-in zoom-in-95 duration-250">
+            {/* Success Icon */}
+            <div className="w-16 h-16 mx-auto rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shadow-inner">
+              <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
 
+            {/* Badge Title */}
             <div>
-              <span className="inline-block text-xs font-extrabold tracking-wider uppercase px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 mb-2">
-                Kehadiran Resmi Terverifikasi
+              <span className={`inline-block px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider mb-2 ${
+                successResult.visitor_type === 'peserta'
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                  : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+              }`}>
+                {successResult.visitor_type === 'peserta'
+                  ? 'E-Badge Peserta Lomba'
+                  : 'E-Pass Pengunjung Festival'}
               </span>
-              <h1 className="text-3xl text-slate-900 font-extrabold">
-                Selamat Datang di Braga!
+              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight">
+                {infoMsg ? 'Presensi Sudah Terdata' : 'Presensi Berhasil!'}
               </h1>
-              <p className="text-xl font-bold text-blue-600 mt-1">
-                {successInfo.full_name}
+              <p className="text-xs text-slate-500 mt-1">
+                Selamat Datang di Festival PRIDE Industri 2026
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-left text-xs space-y-2.5">
-              <div className="flex justify-between items-center pb-2 border-b border-slate-200">
-                <span className="text-slate-500 font-medium">Kode Peserta:</span>
-                <span className="font-mono font-extrabold text-blue-700 text-sm">
-                  {successInfo.registration_code}
-                </span>
+            {/* Verification Detail Card */}
+            <div className={`p-4 rounded-2xl border text-left space-y-2.5 ${
+              successResult.visitor_type === 'peserta'
+                ? 'bg-blue-50/50 border-blue-100'
+                : 'bg-emerald-50/50 border-emerald-100'
+            }`}>
+              <div className="flex justify-between items-start text-xs border-b pb-2 border-slate-200/60">
+                <span className="text-slate-500 font-medium">Nama Pengunjung:</span>
+                <span className="font-extrabold text-slate-900 text-right">{successResult.full_name}</span>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-500 font-medium">Kategori Lomba:</span>
-                <span className="text-slate-800 font-bold capitalize">
-                  {successInfo.competition_id.replace('-', ' ')}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-500 font-medium">Waktu Check-In:</span>
-                <span className="text-emerald-700 font-mono font-bold">
-                  {new Date(successInfo.checked_in_at).toLocaleTimeString('id-ID')} WIB
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-500 font-medium">Lokasi Gate:</span>
-                <span className="text-slate-800 font-medium">
-                  Gate Utama · Braga City Walk
+
+              {successResult.visitor_type === 'peserta' ? (
+                <>
+                  <div className="flex justify-between items-center text-xs border-b pb-2 border-slate-200/60">
+                    <span className="text-slate-500 font-medium">Kode Registrasi:</span>
+                    <span className="font-mono font-bold text-blue-700 bg-white px-2 py-0.5 rounded border border-blue-200">
+                      {successResult.registration_code}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs border-b pb-2 border-slate-200/60">
+                    <span className="text-slate-500 font-medium">Kategori Lomba:</span>
+                    <span className="font-bold text-slate-800">
+                      {successResult.competition_id === 'desain-kemasan'
+                        ? 'Desain Kemasan'
+                        : 'Video 1 Menit'}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex justify-between items-center text-xs border-b pb-2 border-slate-200/60">
+                    <span className="text-slate-500 font-medium">Nomor Tiket:</span>
+                    <span className="font-mono font-bold text-emerald-800 bg-white px-2 py-0.5 rounded border border-emerald-200">
+                      {successResult.ticket_code}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs border-b pb-2 border-slate-200/60">
+                    <span className="text-slate-500 font-medium">Asal Domisili:</span>
+                    <span className="font-bold text-slate-800">{successResult.city}</span>
+                  </div>
+                </>
+              )}
+
+              <div className="flex justify-between items-center text-xs pt-0.5">
+                <span className="text-slate-500 font-medium">Waktu Presensi:</span>
+                <span className="font-mono text-slate-700 font-bold">
+                  {new Date(successResult.checked_in_at).toLocaleTimeString('id-ID')} WIB
                 </span>
               </div>
             </div>
 
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Kehadiran Anda telah dicatat secara real-time pada sistem monitoring
-              panitia PRIDE Industri 2026. Selamat menikmati seluruh rangkaian acara!
-            </p>
+            {/* Instruction Notice */}
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed">
+              {successResult.visitor_type === 'peserta' ? (
+                <p>
+                  🏆 <strong>Informasi Peserta:</strong> Silakan tunjukkan halaman ini ke meja registrasi lomba di dekat panggung utama untuk pengambilan <strong>ID Card &amp; Kit Peserta</strong>.
+                </p>
+              ) : (
+                <p>
+                  🎉 <strong>Selamat Menikmati Acara:</strong> Kunjungi booth pameran IKM unggulan, bazar kuliner lokal, dan panggung pertunjukan di sepanjang selasar Braga City Walk!
+                </p>
+              )}
+            </div>
 
-            <div className="pt-2">
+            {/* Actions */}
+            <div className="space-y-2.5 pt-2">
               <Link
                 href="/"
-                className="w-full py-3.5 px-6 rounded-full text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md block text-center"
+                className="w-full py-3 px-4 rounded-xl text-xs font-extrabold text-white bg-slate-900 hover:bg-slate-800 transition-colors block shadow-md"
               >
-                Lihat Jadwal & Panduan Festival
+                Buka Rundown Acara &amp; Denah Booth
               </Link>
+
+              <button
+                type="button"
+                onClick={resetForm}
+                className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                Presensi untuk Orang Lain
+              </button>
             </div>
           </div>
         ) : (
-          /* Check-In Form & Camera Viewfinder */
+          /* FORM PILIHAN PENGUNJUNG SCREEN */
           <div className="space-y-6">
-            <div className="text-center space-y-2">
-              <div className="inline-block text-xs font-extrabold tracking-wider uppercase px-3 py-1 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
-                Sistem Presensi Real-Time
-              </div>
-              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-                Check-In Peserta di Braga
+            {/* Welcome Heading */}
+            <div className="text-center space-y-1.5">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Presensi Gate Masuk
               </h1>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-sm mx-auto">
-                Buka kamera smartphone Anda dan pindai kode QR yang terpasang di
-                gate masuk Braga City Walk untuk mencatat kehadiran resmi Anda.
+              <p className="text-xs sm:text-sm text-slate-500">
+                Pindai Barcode Selesai! Pilih kategori kunjungan Anda untuk masuk gate Braga City Walk:
               </p>
             </div>
 
-            {/* Error Feedback */}
-            {errorMessage && (
-              <div
-                role="alert"
-                className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-start gap-3 font-medium"
+            {/* Segmented Choice Buttons (Umum vs Peserta) */}
+            <div className="grid grid-cols-2 p-1.5 bg-slate-200/80 rounded-2xl gap-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('umum');
+                  setErrorMsg(null);
+                }}
+                className={`py-3 px-3 rounded-xl text-xs font-extrabold transition-all flex flex-col items-center gap-1 cursor-pointer ${
+                  activeTab === 'umum'
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
               >
-                <svg className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-                  <line x1="12" y1="9" x2="12" y2="13" />
-                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                <span className="text-base">👥</span>
+                <span>Visitor Umum</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('peserta');
+                  setErrorMsg(null);
+                }}
+                className={`py-3 px-3 rounded-xl text-xs font-extrabold transition-all flex flex-col items-center gap-1 cursor-pointer ${
+                  activeTab === 'peserta'
+                    ? 'bg-white text-blue-700 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <span className="text-base">🎖️</span>
+                <span>Visitor Peserta Lomba</span>
+              </button>
+            </div>
+
+            {/* Error Notification */}
+            {errorMsg && (
+              <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium flex items-start gap-2.5 animate-shake">
+                <svg className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
-                <div className="flex-1">
-                  <span>{errorMessage}</span>
-                </div>
+                <span>{errorMsg}</span>
               </div>
             )}
 
-            {/* Step 1: Input Registration Code */}
-            <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-3">
-              <label
-                htmlFor="reg_code"
-                className="text-xs font-bold text-slate-700 block"
+            {/* TAB 1: VISITOR UMUM */}
+            {activeTab === 'umum' && (
+              <form
+                onSubmit={handleCheckInUmum}
+                className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-5 animate-in fade-in-50 duration-200"
               >
-                Kode Registrasi Peserta Anda <span className="text-rose-600">*</span>
-              </label>
-              <input
-                id="reg_code"
-                type="text"
-                required
-                value={registrationCode}
-                onChange={(e) => setRegistrationCode(e.target.value)}
-                placeholder="Contoh: PRIDE-DK-20261021-AB12CD"
-                className="w-full px-4 py-3 rounded-xl border border-slate-300 text-slate-900 font-mono uppercase text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
-                disabled={scanState === 'scanning'}
-              />
-              <span className="text-[11px] text-slate-500 block">
-                * Diberikan saat Anda menyelesaikan pendaftaran di website ini.
-              </span>
-            </div>
-
-            {/* Camera Viewfinder Box */}
-            <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4 text-center">
-              {scanState === 'scanning' ? (
-                <div className="space-y-4">
-                  <div className="camera-viewfinder bg-slate-900">
-                    <video
-                      ref={videoRef}
-                      playsInline
-                      muted
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="scan-line" />
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold uppercase tracking-wider">
+                    <span>1-Klik Langsung Masuk</span>
                   </div>
-
-                  <p className="text-xs text-blue-600 font-bold animate-pulse">
-                    Arahkan kamera ke kode QR di Gate Braga City Walk...
-                  </p>
-
-                  <button
-                    onClick={() => {
-                      stopCamera();
-                      setScanState('idle');
-                    }}
-                    className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
-                  >
-                    Hentikan Kamera
-                  </button>
-                </div>
-              ) : scanState === 'validating' ? (
-                <div className="py-12 space-y-3">
-                  <div className="w-10 h-10 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
-                  <p className="text-xs font-bold text-slate-800">
-                    Memvalidasi Kode Gate & Kehadiran Peserta...
+                  <h2 className="text-base font-bold text-slate-900">
+                    Pengunjung Umum Festival
+                  </h2>
+                  <p className="text-xs text-slate-500">
+                    Untuk masyarakat umum, penikmat bazar kuliner IKM, pameran seni kriya, fashion show, dan pertunjukan musik.
                   </p>
                 </div>
-              ) : (
-                <div className="py-6 space-y-4">
-                  <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto text-blue-600">
-                    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
-                      <circle cx="12" cy="13" r="3" />
-                    </svg>
+
+                <div className="space-y-3.5">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Nama Lengkap / Panggilan (Opsional)
+                    </label>
+                    <input
+                      type="text"
+                      value={umumName}
+                      onChange={(e) => setUmumName(e.target.value)}
+                      placeholder="Contoh: Budi Santoso"
+                      className="form-input text-xs py-2.5 px-3.5 w-full rounded-xl"
+                    />
                   </div>
 
                   <div>
-                    <h3 className="text-base font-extrabold text-slate-900">
-                      Pemindai Kamera Browser
-                    </h3>
-                    <p className="text-xs text-slate-500 max-w-xs mx-auto mt-1">
-                      Browser akan meminta izin akses kamera perangkat untuk
-                      memindai kode QR secara langsung.
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={startScanner}
-                    disabled={!registrationCode.trim()}
-                    className="w-full py-3.5 px-6 rounded-full text-xs font-extrabold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/25 transition-all hover:-translate-y-0.5 cursor-pointer disabled:opacity-50"
-                  >
-                    Buka Kamera Scanner QR →
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Alternative: Manual Token Input Fallback */}
-            <div className="pt-2">
-              <button
-                type="button"
-                onClick={() => setShowManualInput(!showManualInput)}
-                className="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors underline block mx-auto text-center cursor-pointer"
-              >
-                {showManualInput
-                  ? 'Sembunyikan Opsi Manual'
-                  : 'Kamera bermasalah? Masukkan kode token gate secara manual'}
-              </button>
-
-              {showManualInput && (
-                <div className="mt-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3">
-                  <div className="text-xs font-bold text-slate-800">
-                    Input Manual Token Gate
-                  </div>
-                  <p className="text-[11px] text-slate-500">
-                    Tanyakan kode token gate kepada petugas pintu masuk jika
-                    kamera ponsel Anda tidak dapat aktif.
-                  </p>
-                  <div className="flex gap-2">
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Asal Kota / Domisili
+                    </label>
                     <input
                       type="text"
-                      value={manualGateToken}
-                      onChange={(e) => setManualGateToken(e.target.value)}
-                      placeholder="Contoh: PRIDE2026-GATE-BRAGA-MAIN"
-                      className="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-slate-900 font-mono text-xs focus:border-blue-500 outline-none"
+                      value={umumCity}
+                      onChange={(e) => setUmumCity(e.target.value)}
+                      placeholder="Kota Bandung"
+                      className="form-input text-xs py-2.5 px-3.5 w-full rounded-xl"
                     />
-                    <button
-                      onClick={() => handleScannedToken(manualGateToken)}
-                      disabled={!registrationCode.trim() || !manualGateToken.trim()}
-                      className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-black transition-colors disabled:opacity-50"
-                    >
-                      Kirim
-                    </button>
                   </div>
                 </div>
-              )}
-            </div>
 
-            {/* Demo Gate Token helper for testing */}
-            <div className="p-4 rounded-2xl bg-slate-100 border border-slate-200 text-center text-[11px] text-slate-500">
-              <span className="font-bold text-slate-700 block mb-1">
-                Informasi Pengujian Panitia:
-              </span>
-              Token QR Gate Resmi:{' '}
-              <button
-                onClick={() => {
-                  setManualGateToken('PRIDE2026-GATE-BRAGA-MAIN');
-                  setShowManualInput(true);
-                }}
-                className="font-mono font-bold text-blue-700 underline hover:text-blue-900 cursor-pointer"
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3.5 px-6 rounded-2xl text-xs font-extrabold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer"
+                >
+                  {loading ? (
+                    <span>Memproses Masuk...</span>
+                  ) : (
+                    <>
+                      <span>Pencet Umum Scan Masuk</span>
+                      <span>→</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* TAB 2: VISITOR PESERTA */}
+            {activeTab === 'peserta' && (
+              <form
+                onSubmit={handleCheckInPeserta}
+                className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-5 animate-in fade-in-50 duration-200"
               >
-                PRIDE2026-GATE-BRAGA-MAIN
-              </button>
-            </div>
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200 text-[10px] font-bold uppercase tracking-wider">
+                    <span>Peserta Lomba Resmi</span>
+                  </div>
+                  <h2 className="text-base font-bold text-slate-900">
+                    Verifikasi Kode Peserta
+                  </h2>
+                  <p className="text-xs text-slate-500">
+                    Masukkan kode pendaftaran resmi yang Anda terima saat mendaftar (contoh: PRIDE-DK-... atau PRIDE-VL-...).
+                  </p>
+                </div>
 
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Kode Registrasi Peserta (atau No. WhatsApp)
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={pesertaCode}
+                      onChange={(e) => setPesertaCode(e.target.value.toUpperCase())}
+                      placeholder="PRIDE-DK-20261021-X9K2L1"
+                      className="form-input font-mono text-xs sm:text-sm uppercase py-3 px-3.5 w-full rounded-xl tracking-wider font-bold text-blue-900 bg-blue-50/30 border-blue-200 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  <p className="text-[11px] text-slate-400 mt-1.5">
+                    💡 Kode ini tertera di email bukti pendaftaran atau kartu peserta digital Anda.
+                  </p>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3.5 px-6 rounded-2xl text-xs font-extrabold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer"
+                >
+                  {loading ? (
+                    <span>Memverifikasi Kode...</span>
+                  ) : (
+                    <>
+                      <span>Verifikasi &amp; Scan Masuk Peserta</span>
+                      <span>→</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* Bottom Help Notice */}
+            <div className="text-center pt-2 text-[11px] text-slate-400 space-y-1">
+              <p>Mengalami kesulitan saat check-in?</p>
+              <p>
+                Hubungi panitia di Meja Registrasi Utama Braga City Walk atau WhatsApp ke{' '}
+                <a
+                  href="https://wa.me/6281223456789"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 font-bold hover:underline"
+                >
+                  0812-2345-6789
+                </a>
+              </p>
+            </div>
           </div>
         )}
+      </main>
 
-      </div>
+      {/* ─── Footer ─── */}
+      <footer className="py-4 text-center text-[10px] text-slate-400 border-t border-slate-200 bg-white">
+        Dinas Perdagangan dan Perindustrian Kota Bandung · PRIDE 2026
+      </footer>
     </div>
   );
 }
