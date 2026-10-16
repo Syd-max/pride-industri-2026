@@ -212,116 +212,13 @@ export default function CompetitionSection() {
           </div>
         </header>
 
-        {/* ─── 3 Ticket Cards Grid ─── */}
+        {/* ─── 2 Ticket Cards Grid: Lomba Video & Kreasi Kemasan ─── */}
         <div className="tickets-grid">
-          {/* CARD 1: LOMBA DESAIN KEMASAN */}
-          <article className="ticket-card">
-            <div className="ticket-top">
-              <div className="ticket-title-row">
-                <h3 className="ticket-plan-name">Desain Kemasan</h3>
-                <span className="badge-category">Kuliner Lokal</span>
-              </div>
-              <p className="ticket-plan-desc">
-                Inovasi kemasan ramah lingkungan produk kuliner berbahan dasar lokal khas Bandung.
-              </p>
-
-              <div className="price-block">
-                <div className="price-amount-wrap">
-                  <div className="price-roller">
-                    <span>Rp 2,25 Jt</span>
-                    <span>Sertifikat</span>
-                  </div>
-                </div>
-                <div className="price-meta">
-                  <strong>
-                    {viewMode === 'benefit' ? '+ Binaan IKM' : 'Total Hadiah'}
-                  </strong>
-                  <span>
-                    {viewMode === 'benefit' ? 'Disdagin Kota Bandung' : 'Juara 1 s.d 3'}
-                  </span>
-                </div>
-              </div>
-
-              <p className="ticket-schedule-note">
-                {viewMode === 'benefit'
-                  ? 'Fasilitasi HKI & promosi kurasi ekspor'
-                  : 'Pendaftaran 21 Okt – 21 Nov 2026 · Gratis'}
-              </p>
-
-              <Link
-                href="/competition/desain-kemasan"
-                className="btn-register-ticket"
-              >
-                <span>Daftar Desain Kemasan</span>
-                <span>→</span>
-              </Link>
-            </div>
-
-            <div className="ticket-divider">
-              <span className="notch left" />
-              <div className="perforation-line" />
-              <span className="notch right" />
-            </div>
-
-            <div className="ticket-bottom">
-              <ul className="feature-list">
-                <li>
-                  <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  <span>Juara I: Rp 1.000.000 · Juara II: Rp 750.000 · Juara III: Rp 500.000</span>
-                </li>
-                <li>
-                  <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  <span>Eksplorasi material ramah lingkungan pangan olahan lokal</span>
-                </li>
-                <li>
-                  <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  <span>Format 1 PDF Maks. 10 MB (Konsep, Pola &amp; Mockup 3D)</span>
-                </li>
-                <li>
-                  <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  <span>100% Gratis / Tanpa Biaya Pendaftaran</span>
-                </li>
-                <li>
-                  <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  <span>Grand Final &amp; Display Karya di Braga City Walk (28 Nov)</span>
-                </li>
-              </ul>
-
-              <a
-                href="/syarat-desain-kemasan.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-pdf-link"
-              >
-                <svg className="w-3.5 h-3.5 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                </svg>
-                <span>Unduh Syarat &amp; Ketentuan PDF</span>
-              </a>
-
-              <div className="ticket-footer">
-                <span>PRIDE-DK / KEMASAN-2026</span>
-                <div className="barcode" />
-              </div>
-            </div>
-          </article>
-
-          {/* CARD 2: LOMBA VIDEO 1 MENIT (FEATURED BLUE TICKET WITH PEELABLE STICKER) */}
+          {/* CARD 1: LOMBA VIDEO 60 DETIK (FEATURED BLUE TICKET WITH PEELABLE STICKER) */}
           <article className="ticket-card featured">
             <div className="ticket-top">
               <div className="ticket-title-row">
-                <h3 className="ticket-plan-name">Video 60 Detik</h3>
+                <h3 className="ticket-plan-name">Lomba Video</h3>
                 <span className="badge-popular">Favorit Kreator</span>
               </div>
               <p className="ticket-plan-desc">
@@ -453,47 +350,47 @@ export default function CompetitionSection() {
             </div>
           </article>
 
-          {/* CARD 3: ALL-ACCESS PESERTA & INKUBASI IKM */}
+          {/* CARD 2: KREASI KEMASAN */}
           <article className="ticket-card">
             <div className="ticket-top">
               <div className="ticket-title-row">
-                <h3 className="ticket-plan-name">All-Access Peserta</h3>
-                <span className="badge-category">Inkubasi IKM</span>
+                <h3 className="ticket-plan-name">Kreasi Kemasan</h3>
+                <span className="badge-category">Kuliner Lokal</span>
               </div>
               <p className="ticket-plan-desc">
-                Seluruh peserta otomatis terdaftar dalam jejaring talenta &amp; pembinaan industri.
+                Inovasi kemasan ramah lingkungan produk kuliner berbahan dasar lokal khas Bandung.
               </p>
 
               <div className="price-block">
                 <div className="price-amount-wrap">
                   <div className="price-roller">
-                    <span>Rp 4,5 Jt</span>
-                    <span>GRATIS</span>
+                    <span>Rp 2,25 Jt</span>
+                    <span>Sertifikat</span>
                   </div>
                 </div>
                 <div className="price-meta">
                   <strong>
-                    {viewMode === 'benefit' ? 'Akses Ekosistem' : 'Akumulasi Hadiah'}
+                    {viewMode === 'benefit' ? '+ Binaan IKM' : 'Total Hadiah'}
                   </strong>
                   <span>
-                    {viewMode === 'benefit' ? 'Seluruh Peserta Terdaftar' : 'Kedua Cabang Lomba'}
+                    {viewMode === 'benefit' ? 'Disdagin Kota Bandung' : 'Juara 1 s.d 3'}
                   </span>
                 </div>
               </div>
 
               <p className="ticket-schedule-note">
                 {viewMode === 'benefit'
-                  ? 'Akses temu bisnis & seminar ekspor gratis'
-                  : 'Penganugerahan Resmi di Main Stage Braga'}
+                  ? 'Fasilitasi HKI & promosi kurasi ekspor'
+                  : 'Pendaftaran 21 Okt – 21 Nov 2026 · Gratis'}
               </p>
 
-              <a
-                href="#agenda"
+              <Link
+                href="/competition/desain-kemasan"
                 className="btn-register-ticket"
               >
-                <span>Lihat Rundown Festival</span>
-                <span>↓</span>
-              </a>
+                <span>Daftar Kreasi Kemasan</span>
+                <span>→</span>
+              </Link>
             </div>
 
             <div className="ticket-divider">
@@ -508,41 +405,49 @@ export default function CompetitionSection() {
                   <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  <span>E-Sertifikat Kepesertaan Resmi Dinas Perdagangan &amp; Perindustrian</span>
+                  <span>Juara I: Rp 1.000.000 · Juara II: Rp 750.000 · Juara III: Rp 500.000</span>
                 </li>
                 <li>
                   <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  <span>Akses VIP ke Sesi Gelar Wicara &amp; Temu Bisnis Ekspor</span>
+                  <span>Eksplorasi material ramah lingkungan pangan olahan lokal</span>
                 </li>
                 <li>
                   <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  <span>Peluang kurasi &amp; pendampingan merek / HKI IKM binaan</span>
+                  <span>Format 1 PDF Maks. 10 MB (Konsep, Pola &amp; Mockup 3D)</span>
                 </li>
                 <li>
                   <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  <span>Showcase karya terpilih di galeri seni Braga City Walk</span>
+                  <span>100% Gratis / Tanpa Biaya Pendaftaran</span>
                 </li>
                 <li>
                   <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  <span>Jejaring kolaborasi dengan 100+ pelaku usaha kreatif Bandung</span>
+                  <span>Grand Final &amp; Display Karya di Braga City Walk (28 Nov)</span>
                 </li>
               </ul>
 
-              <div className="btn-pdf-link cursor-default opacity-85">
-                <span className="text-emerald-600 font-bold">✓</span>
-                <span>Otomatis Aktif untuk Seluruh Pendaftar</span>
-              </div>
+              <a
+                href="/syarat-desain-kemasan.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-pdf-link"
+              >
+                <svg className="w-3.5 h-3.5 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                </svg>
+                <span>Unduh Syarat &amp; Ketentuan PDF</span>
+              </a>
 
               <div className="ticket-footer">
-                <span>PRIDE-ALL / FESTIVAL-2026</span>
+                <span>PRIDE-DK / KEMASAN-2026</span>
                 <div className="barcode" />
               </div>
             </div>
