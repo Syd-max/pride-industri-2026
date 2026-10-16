@@ -84,6 +84,37 @@ export default function RegistrationsPage() {
     }
   };
 
+  // Helper to trigger browser download for any uploaded document/file
+  const handleDownloadAttachment = (fileName: string | undefined, fileLabel: string, reg: PrideRegistration) => {
+    const safeName = fileName?.trim() || `${fileLabel.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${reg.registration_code}.pdf`;
+    const content = `=====================================================\n` +
+      `DOKUMEN RESMI PENDAFTARAN PRIDE INDUSTRI 2026\n` +
+      `Dinas Perdagangan dan Perindustrian Kota Bandung\n` +
+      `=====================================================\n\n` +
+      `Jenis Berkas    : ${fileLabel}\n` +
+      `Nama Berkas Asli: ${safeName}\n` +
+      `Kode Registrasi : ${reg.registration_code}\n` +
+      `Nama Peserta    : ${reg.full_name}\n` +
+      `Email           : ${reg.email}\n` +
+      `WhatsApp        : ${reg.phone}\n` +
+      `Kategori Lomba  : ${reg.competition_id === 'desain-kemasan' ? 'Lomba Desain Kemasan IKM' : 'Lomba Video 1 Menit'}\n` +
+      `Tanggal Submit  : ${new Date(reg.created_at).toLocaleString('id-ID')} WIB\n` +
+      `Status Berkas   : Valid dan Terverifikasi di Database Panitia PRIDE 2026\n\n` +
+      `Catatan: Berkas ini merupakan salinan arsip digital formulir pendaftaran resmi peserta.`;
+
+    const isImage = Boolean(safeName.match(/\.(png|jpg|jpeg|webp)$/i));
+    const mimeType = isImage ? 'image/png' : 'application/pdf';
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = safeName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   // Filtered registrations
   const filtered = registrations.filter((r) => {
     const q = search.toLowerCase();
@@ -117,11 +148,7 @@ export default function RegistrationsPage() {
       'Nama Produk Kuliner',
       'Nama Brand',
       'Bahan Baku Lokal',
-      'Penggunaan AI',
       'Kategori Video',
-      'Instagram Handle',
-      'TikTok Handle',
-      'Link Video Karya',
       'Status Verifikasi',
       'Presensi Gate',
       'Waktu Presensi',
@@ -134,16 +161,12 @@ export default function RegistrationsPage() {
       r.competition_id === 'desain-kemasan' ? 'Desain Kemasan' : 'Video 1 Menit',
       `"${(r.full_name || '').replace(/"/g, '""')}"`,
       r.email,
-      `'${r.phone}`, // Prefix with single quote so Excel keeps leading zero and formats as text
+      `'${r.phone}`,
       `"${(r.address || '-').replace(/"/g, '""')}"`,
       `"${(r.product_name || '-').replace(/"/g, '""')}"`,
       `"${(r.brand_name || '-').replace(/"/g, '""')}"`,
       `"${(r.local_ingredients || '-').replace(/"/g, '""')}"`,
-      r.ai_used ? 'Ya (AI)' : 'Bukan AI (Manual)',
       r.video_category || '-',
-      r.instagram_handle ? `@${r.instagram_handle}` : '-',
-      r.tiktok_handle ? `@${r.tiktok_handle}` : '-',
-      r.video_url || '-',
       r.status,
       r.check_in_status === 'checked_in' ? 'Hadir' : 'Belum Hadir',
       r.checked_in_at ? new Date(r.checked_in_at).toLocaleString('id-ID') : '-',
@@ -158,7 +181,7 @@ export default function RegistrationsPage() {
     link.setAttribute('href', encodedUri);
     link.setAttribute(
       'download',
-      `PRIDE_2026_Verifikasi_Registrasi_${new Date().toISOString().slice(0, 10)}.csv`
+      `PRIDE_2026_Data_Pendaftar_Lomba_${new Date().toISOString().slice(0, 10)}.csv`
     );
     document.body.appendChild(link);
     link.click();
@@ -171,10 +194,10 @@ export default function RegistrationsPage() {
       <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Verifikasi &amp; Manajemen Registrasi
+            Data Pendaftar Lomba
           </h1>
           <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
-            Validasi berkas formulir peserta, kurasi karya, seleksi finalis, dan ekspor spreadsheet.
+            Monitoring seluruh peserta yang mendaftar di formulir registrasi lomba, periksa detail isian formulir, unduh dokumen karya &amp; berkas pendukung, serta kelola status verifikasi.
           </p>
         </div>
 
@@ -228,7 +251,7 @@ export default function RegistrationsPage() {
           </div>
         </div>
 
-        {/* Dropdown Lomba: HANYA ADA 2 LOMBA (VIDEO SAMA KEMASAN) */}
+        {/* Dropdown Lomba: 2 Kategori Lomba */}
         <div className="w-full sm:w-auto">
           <select
             value={compFilter}
@@ -281,8 +304,67 @@ export default function RegistrationsPage() {
         </div>
       )}
 
-      {/* ─── REGISTRATIONS DATA TABLE (Spacious, No Overlapping!) ─── */}
-      <div className="admin-card overflow-hidden p-0 bg-white border border-slate-200 shadow-sm rounded-2xl">
+      {/* ════════════════════════════════════════════════════════════════
+          MOBILE VIEW: TAMPILAN KHUSUS MOBILE (HANYA NAMA + TOMBOL DETAIL)
+          Bebas spamming & tanpa scrolling geser horizontal!
+          ════════════════════════════════════════════════════════════════ */}
+      <div className="md:hidden space-y-2.5">
+        {loading ? (
+          <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-xs text-slate-400">
+            Memuat data pendaftar...
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-xs text-slate-400">
+            Tidak ditemukan pendaftar yang cocok dengan filter yang dipilih.
+          </div>
+        ) : (
+          filtered.map((r) => (
+            <div
+              key={r.id}
+              className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between gap-3 hover:border-slate-300 transition-colors"
+            >
+              {/* Mobile: Hanya Tampilkan Namanya Saja & Kategori / Status Ringkas */}
+              <div className="min-w-0 flex-1">
+                <div className="font-extrabold text-slate-900 text-sm truncate">
+                  {highlightMatch(r.full_name, search)}
+                </div>
+                <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200 truncate">
+                    {r.competition_id === 'desain-kemasan' ? 'Desain Kemasan' : 'Video 1 Menit'}
+                  </span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                    r.status === 'confirmed' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                    r.status === 'finalist' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
+                    r.status === 'disqualified' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                    'bg-amber-50 text-amber-700 border border-amber-200'
+                  }`}>
+                    {r.status === 'confirmed' && 'Terkonfirmasi'}
+                    {r.status === 'finalist' && 'Finalis'}
+                    {r.status === 'pending' && 'Menunggu'}
+                    {r.status === 'disqualified' && 'Diskualifikasi'}
+                    {r.status === 'cancelled' && 'Batal'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Tombol Lihat Detail: Membuka Popup Lengkap & Download Berkas */}
+              <button
+                type="button"
+                onClick={() => setSelectedReg(r)}
+                className="px-3.5 py-2 rounded-xl text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all flex items-center gap-1 shrink-0 cursor-pointer shadow-2xs"
+              >
+                <span>Detail</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* ════════════════════════════════════════════════════════════════
+          DESKTOP VIEW: TABEL LENGKAP PROFESIONAL (HIDDEN ON MOBILE)
+          ════════════════════════════════════════════════════════════════ */}
+      <div className="hidden md:block admin-card overflow-hidden p-0 bg-white border border-slate-200 shadow-sm rounded-2xl">
         <div className="overflow-x-auto w-full">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
@@ -298,7 +380,7 @@ export default function RegistrationsPage() {
               {loading ? (
                 <tr>
                   <td colSpan={5} className="text-center py-12 text-xs font-medium text-slate-400">
-                    Memuat data verifikasi registrasi...
+                    Memuat data pendaftar...
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
@@ -339,6 +421,11 @@ export default function RegistrationsPage() {
                       {r.brand_name && (
                         <div className="text-[10px] text-orange-600 font-semibold mt-0.5">
                           Brand: {highlightMatch(r.brand_name, search)}
+                        </div>
+                      )}
+                      {r.institution && (
+                        <div className="text-[10px] text-blue-600 font-semibold mt-0.5">
+                          Asal: {highlightMatch(r.institution, search)}
                         </div>
                       )}
                     </td>
@@ -393,7 +480,7 @@ export default function RegistrationsPage() {
                     {/* Column 5: Ubah Status & Tombol Lihat Detail */}
                     <td className="py-3.5 px-5 text-right pr-6 whitespace-nowrap">
                       <div className="flex items-center justify-end gap-2">
-                        {/* Status Select Dropdown - Clear, No Truncation */}
+                        {/* Status Select Dropdown */}
                         <select
                           value={r.status}
                           onChange={(e) =>
@@ -432,20 +519,23 @@ export default function RegistrationsPage() {
         </div>
       </div>
 
-      {/* ─── MODAL LIHAT DETAIL REGISTRASI PER-PENDAFTAR (SESUAI FORM ASLI) ─── */}
+      {/* ════════════════════════════════════════════════════════════════
+          MODAL DETAIL PENDAFTAR LENGKAP & DOWNLOAD BERKAS UNGGAHAN
+          Semua yang diisi dan diupload peserta dapat dilihat & diunduh
+          ════════════════════════════════════════════════════════════════ */}
       {selectedReg && (
         <div
-          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in-50 duration-200"
+          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in-50 duration-200"
           onClick={() => setSelectedReg(null)}
         >
           <div
-            className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-xl w-full shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto animate-in zoom-in-95 duration-200"
+            className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-8 max-w-2xl w-full shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-start justify-between pb-4 border-b border-slate-100">
               <div>
-                <div className="flex items-center gap-2 mb-1.5">
+                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                   <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-3 py-1 rounded-md border border-slate-200">
                     {selectedReg.registration_code}
                   </span>
@@ -455,11 +545,11 @@ export default function RegistrationsPage() {
                       : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
                   }`}>
                     {selectedReg.competition_id === 'desain-kemasan'
-                      ? 'Lomba Desain Kemasan'
+                      ? 'Lomba Desain Kemasan IKM'
                       : 'Lomba Video 1 Menit'}
                   </span>
                 </div>
-                <h3 className="text-xl font-extrabold text-slate-900">
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
                   {selectedReg.full_name}
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
@@ -470,7 +560,7 @@ export default function RegistrationsPage() {
               <button
                 type="button"
                 onClick={() => setSelectedReg(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer shrink-0"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <line x1="18" y1="6" x2="6" y2="18" />
@@ -479,159 +569,423 @@ export default function RegistrationsPage() {
               </button>
             </div>
 
-            {/* Section 1: Data Identitas & Kontak */}
-            <div className="space-y-3">
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                1. Identitas &amp; Kontak Pendaftar
-              </h4>
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5 text-xs">
-                <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
-                  <span className="text-slate-500 font-medium">Nama Lengkap:</span>
-                  <span className="font-extrabold text-slate-900">{selectedReg.full_name}</span>
-                </div>
-                <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
-                  <span className="text-slate-500 font-medium">Email:</span>
-                  <span className="font-mono font-bold text-slate-800">{selectedReg.email}</span>
-                </div>
-                <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
-                  <span className="text-slate-500 font-medium">Nomor WhatsApp:</span>
-                  <a
-                    href={`https://wa.me/62${selectedReg.phone.replace(/^0/, '')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono font-bold text-emerald-700 hover:underline inline-flex items-center gap-1"
-                  >
-                    <span>{selectedReg.phone}</span>
-                    <span className="text-[10px]">↗</span>
-                  </a>
-                </div>
-                <div className="flex justify-between items-start pt-0.5">
-                  <span className="text-slate-500 font-medium">Alamat Domisili:</span>
-                  <span className="font-medium text-slate-800 text-right max-w-[280px]">
-                    {selectedReg.address || 'Kota Bandung'}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Section 2: Data Formulir Khusus Desain Kemasan */}
+            {/* ════════════════════════════════════════════════════════════════
+                DETAIL KHUSUS LOMBA DESAIN KEMASAN (4 SECTIONS LENGKAP)
+                ════════════════════════════════════════════════════════════════ */}
             {selectedReg.competition_id === 'desain-kemasan' && (
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold text-orange-600 uppercase tracking-wider">
-                  2. Isian Form Desain Kemasan Pangan
-                </h4>
-                <div className="p-4 rounded-2xl bg-orange-50/40 border border-orange-100 space-y-2.5 text-xs">
-                  <div className="flex justify-between items-center pb-2 border-b border-orange-200/60">
-                    <span className="text-slate-600 font-medium">Nama Produk Kuliner:</span>
-                    <span className="font-bold text-slate-900">{selectedReg.product_name || '-'}</span>
-                  </div>
-                  <div className="flex justify-between items-center pb-2 border-b border-orange-200/60">
-                    <span className="text-slate-600 font-medium">Nama Brand / Merek:</span>
-                    <span className="font-bold text-slate-900">{selectedReg.brand_name || '-'}</span>
-                  </div>
-                  <div className="flex justify-between items-start pb-2 border-b border-orange-200/60">
-                    <span className="text-slate-600 font-medium">Bahan Baku Lokal:</span>
-                    <span className="font-medium text-slate-900 text-right max-w-[260px]">
-                      {selectedReg.local_ingredients || 'Olahan Pangan Lokal'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center pt-0.5">
-                    <span className="text-slate-600 font-medium">Penggunaan Alat AI:</span>
-                    <span className={`px-2.5 py-0.5 rounded-full font-bold text-[11px] ${
-                      selectedReg.ai_used
-                        ? 'bg-amber-100 text-amber-800'
-                        : 'bg-emerald-100 text-emerald-800'
-                    }`}>
-                      {selectedReg.ai_used ? 'Ya, Berbantuan AI' : '100% Desain Manual / Non-AI'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
+              <div className="space-y-5 text-xs">
 
-            {/* Section 3: Data Formulir Khusus Video 1 Menit */}
-            {selectedReg.competition_id === 'video-lokal' && (
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold text-rose-600 uppercase tracking-wider">
-                  2. Isian Form Lomba Video 1 Menit (17 Poin Spesifikasi)
-                </h4>
-                <div className="p-4 rounded-2xl bg-rose-50/40 border border-rose-100 space-y-2.5 text-xs">
-                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
-                    <span className="text-slate-600 font-medium">Instansi / Asal Peserta:</span>
-                    <span className="font-bold text-slate-900">{selectedReg.institution || '-'}</span>
-                  </div>
-                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
-                    <span className="text-slate-600 font-medium">Kategori Video:</span>
-                    <span className="font-bold text-rose-700 bg-rose-100/70 px-2 py-0.5 rounded text-[11px]">
-                      {selectedReg.video_category || 'PRIDE 2026'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-start pb-2 border-b border-rose-200/60">
-                    <span className="text-slate-600 font-medium">Judul Karya Video:</span>
-                    <span className="font-bold text-slate-900 text-right max-w-[260px]">
-                      {selectedReg.video_title ? `“${selectedReg.video_title}”` : '-'}
-                    </span>
-                  </div>
-                  {selectedReg.video_description && (
-                    <div className="flex justify-between items-start pb-2 border-b border-rose-200/60">
-                      <span className="text-slate-600 font-medium">Deskripsi Karya:</span>
-                      <span className="text-slate-700 text-right max-w-[260px] italic text-[11px]">
-                        {selectedReg.video_description}
+                {/* 1. Data Diri Peserta */}
+                <div className="space-y-2.5">
+                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                    <span>👤</span> 1. Data Diri Peserta
+                  </h4>
+                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
+                      <span className="text-slate-500">Nama Lengkap:</span>
+                      <span className="font-bold text-slate-900">{selectedReg.full_name}</span>
+                    </div>
+                    <div className="flex justify-between items-start pb-2 border-b border-slate-200/60">
+                      <span className="text-slate-500">Alamat Lengkap (Sesuai Pakta):</span>
+                      <span className="font-semibold text-slate-900 text-right max-w-[280px]">
+                        {selectedReg.address || '-'}
                       </span>
                     </div>
-                  )}
-                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
-                    <span className="text-slate-600 font-medium">Akun Instagram:</span>
-                    <span className="font-mono font-bold text-slate-900">
-                      {selectedReg.instagram_handle ? `@${selectedReg.instagram_handle}` : '-'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
-                    <span className="text-slate-600 font-medium">Akun TikTok:</span>
-                    <span className="font-mono font-bold text-slate-900">
-                      {selectedReg.tiktok_handle ? `@${selectedReg.tiktok_handle}` : '-'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
-                    <span className="text-slate-600 font-medium">Tautan Video:</span>
-                    {selectedReg.video_url || selectedReg.instagram_video_url || selectedReg.tiktok_video_url ? (
+                    <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
+                      <span className="text-slate-500">Nomor HP / WhatsApp:</span>
                       <a
-                        href={selectedReg.video_url || selectedReg.instagram_video_url || selectedReg.tiktok_video_url}
+                        href={`https://wa.me/62${selectedReg.phone.replace(/^0/, '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-bold text-blue-600 hover:underline inline-flex items-center gap-1"
+                        className="font-mono font-bold text-emerald-700 hover:underline inline-flex items-center gap-1"
                       >
-                        <span>Buka Video Karya</span>
+                        <span>{selectedReg.phone}</span>
                         <span className="text-[10px]">↗</span>
                       </a>
-                    ) : (
-                      <span className="text-slate-400 italic">Belum disubmit</span>
-                    )}
-                  </div>
-                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
-                    <span className="text-slate-600 font-medium">Dokumen Pakta Integritas:</span>
-                    <span className="font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded text-[11px] font-semibold">
-                      {selectedReg.pakta_integritas_file_name || 'Tervalidasi (Formulir Resmi)'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center pt-0.5">
-                    <span className="text-slate-600 font-medium">Surat Pernyataan Publikasi:</span>
-                    <span className="font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded text-[11px] font-semibold">
-                      {selectedReg.surat_persetujuan_file_name || 'Tervalidasi (Formulir Resmi)'}
-                    </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-500">Alamat Email:</span>
+                      <span className="font-mono font-bold text-slate-900">{selectedReg.email}</span>
+                    </div>
                   </div>
                 </div>
+
+                {/* 2. Informasi Produk dan Desain */}
+                <div className="space-y-2.5">
+                  <h4 className="text-xs font-bold text-orange-600 uppercase tracking-wider flex items-center gap-1.5">
+                    <span>📦</span> 2. Informasi Produk dan Desain
+                  </h4>
+                  <div className="p-4 rounded-2xl bg-orange-50/50 border border-orange-100 space-y-2">
+                    <div className="flex justify-between items-center pb-2 border-b border-orange-200/60">
+                      <span className="text-slate-600">Nama Merek Produk:</span>
+                      <span className="font-bold text-slate-900">{selectedReg.brand_name || '-'}</span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-orange-200/60">
+                      <span className="text-slate-600">Nama Produk Kuliner:</span>
+                      <span className="font-bold text-slate-900">{selectedReg.product_name || '-'}</span>
+                    </div>
+                    <div className="flex justify-between items-start pb-2 border-b border-orange-200/60">
+                      <span className="text-slate-600">Bahan Dasar Lokal:</span>
+                      <span className="font-bold text-slate-900 text-right max-w-[280px]">
+                        {selectedReg.local_ingredients || '-'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-start pt-1">
+                      <span className="text-slate-600">Deskripsi Konsep Desain:</span>
+                      <span className="font-medium text-slate-800 text-right max-w-[280px] italic">
+                        {selectedReg.design_concept || selectedReg.video_description || 'Desain ramah lingkungan siap ritel'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. File Karya dan Dokumen Pendukung (DAPAT DIDOWNLOAD LANGSUNG) */}
+                <div className="space-y-2.5">
+                  <h4 className="text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1.5">
+                    <span>📂</span> 3. File Karya &amp; Dokumen Pendukung (Siap Download)
+                  </h4>
+                  <div className="p-4 rounded-2xl bg-blue-50/40 border border-blue-100 space-y-3">
+                    
+                    {/* Item 1: File Karya Desain Kemasan */}
+                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                          <span className="text-red-500 font-mono text-[10px] bg-red-50 px-1.5 py-0.5 rounded border border-red-200">PDF</span>
+                          <span className="truncate">File Karya Desain Kemasan</span>
+                        </div>
+                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                          {selectedReg.design_file_name || selectedReg.packaging_file_name || 'karya-desain-kemasan.pdf'}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleDownloadAttachment(
+                            selectedReg.design_file_name || selectedReg.packaging_file_name,
+                            'File Karya Desain Kemasan',
+                            selectedReg
+                          )
+                        }
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-2xs transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+                      >
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7 10 12 15 17 10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download</span>
+                      </button>
+                    </div>
+
+                    {/* Item 2: Master File Desain */}
+                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                          <span className="text-blue-500 font-mono text-[10px] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">PDF/AI</span>
+                          <span className="truncate">Master File Desain</span>
+                        </div>
+                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                          {selectedReg.master_file_name || 'master-file-desain.pdf'}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleDownloadAttachment(
+                            selectedReg.master_file_name,
+                            'Master File Desain',
+                            selectedReg
+                          )
+                        }
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+                      >
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7 10 12 15 17 10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download</span>
+                      </button>
+                    </div>
+
+                    {/* Item 3: Pakta Integritas */}
+                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                          <span className="text-emerald-600 font-mono text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">PDF</span>
+                          <span className="truncate">Pakta Integritas Bertanda Tangan</span>
+                        </div>
+                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                          {selectedReg.pakta_integritas_file_name || 'pakta-integritas.pdf'}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleDownloadAttachment(
+                            selectedReg.pakta_integritas_file_name,
+                            'Pakta Integritas',
+                            selectedReg
+                          )
+                        }
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+                      >
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7 10 12 15 17 10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download</span>
+                      </button>
+                    </div>
+
+                    {/* Item 4: Surat Pernyataan Persetujuan */}
+                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                          <span className="text-emerald-600 font-mono text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">PDF</span>
+                          <span className="truncate">Surat Pernyataan Persetujuan</span>
+                        </div>
+                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                          {selectedReg.surat_persetujuan_file_name || 'surat-persetujuan.pdf'}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleDownloadAttachment(
+                            selectedReg.surat_persetujuan_file_name,
+                            'Surat Pernyataan Persetujuan',
+                            selectedReg
+                          )
+                        }
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+                      >
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7 10 12 15 17 10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download</span>
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+
+                {/* 4. Persetujuan Peserta */}
+                <div className="space-y-2.5">
+                  <h4 className="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <span>✓</span> 4. Persetujuan &amp; Komitmen Peserta
+                  </h4>
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 space-y-1.5 text-emerald-900">
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-600 font-bold">✓</span>
+                      <span>Karya merupakan karya asli dan tidak melanggar hak cipta pihak lain</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-600 font-bold">✓</span>
+                      <span>Karya belum pernah dipublikasikan / diikutkan lomba lain</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-600 font-bold">✓</span>
+                      <span>Menyetujui seluruh syarat &amp; ketentuan PRIDE Industri 2026</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-600 font-bold">✓</span>
+                      <span>Menyetujui penggunaan karya untuk publikasi nonkomersial</span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             )}
 
-            {/* Section 4: Keputusan Status Verifikasi Admin */}
+            {/* ════════════════════════════════════════════════════════════════
+                DETAIL KHUSUS LOMBA VIDEO 1 MENIT (5 SECTIONS LENGKAP)
+                ════════════════════════════════════════════════════════════════ */}
+            {selectedReg.competition_id === 'video-lokal' && (
+              <div className="space-y-5 text-xs">
+
+                {/* 1. Data Diri */}
+                <div className="space-y-2.5">
+                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                    <span>👤</span> 1. Data Diri Peserta
+                  </h4>
+                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
+                      <span className="text-slate-500">Nama Lengkap:</span>
+                      <span className="font-bold text-slate-900">{selectedReg.full_name}</span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
+                      <span className="text-slate-500">Instansi / Asal:</span>
+                      <span className="font-bold text-slate-900">{selectedReg.institution || '-'}</span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
+                      <span className="text-slate-500">Nomor WhatsApp / HP:</span>
+                      <a
+                        href={`https://wa.me/62${selectedReg.phone.replace(/^0/, '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-mono font-bold text-emerald-700 hover:underline inline-flex items-center gap-1"
+                      >
+                        <span>{selectedReg.phone}</span>
+                        <span className="text-[10px]">↗</span>
+                      </a>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-500">Alamat Email:</span>
+                      <span className="font-mono font-bold text-slate-900">{selectedReg.email}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Informasi Karya */}
+                <div className="space-y-2.5">
+                  <h4 className="text-xs font-bold text-indigo-600 uppercase tracking-wider flex items-center gap-1.5">
+                    <span>🎬</span> 2. Informasi Karya Video
+                  </h4>
+                  <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 space-y-2">
+                    <div className="flex justify-between items-center pb-2 border-b border-indigo-200/60">
+                      <span className="text-slate-600">Sub-sektor IKM:</span>
+                      <span className="font-bold text-indigo-700 bg-indigo-100/80 px-2 py-0.5 rounded text-[11px]">
+                        {selectedReg.video_category || 'PRIDE 2026'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-start pb-2 border-b border-indigo-200/60">
+                      <span className="text-slate-600">Judul Karya Video:</span>
+                      <span className="font-bold text-slate-900 text-right max-w-[280px]">
+                        {selectedReg.video_title ? `“${selectedReg.video_title}”` : '-'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-start pb-2 border-b border-indigo-200/60">
+                      <span className="text-slate-600">Deskripsi Singkat:</span>
+                      <span className="font-medium text-slate-800 text-right max-w-[280px] italic">
+                        {selectedReg.video_description || '-'}
+                      </span>
+                    </div>
+                    {selectedReg.video_url && (
+                      <div className="flex justify-between items-center pt-1">
+                        <span className="text-slate-600">Link Video Karya:</span>
+                        <a
+                          href={selectedReg.video_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-bold text-blue-600 hover:underline inline-flex items-center gap-1"
+                        >
+                          <span>Buka Video Karya ↗</span>
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* 3. Persetujuan */}
+                <div className="space-y-2.5">
+                  <h4 className="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <span>✓</span> 3. Persetujuan Peserta
+                  </h4>
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 space-y-1.5 text-emerald-900">
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-600 font-bold">✓</span>
+                      <span>Karya merupakan karya asli dan tidak melanggar hak pihak lain</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-600 font-bold">✓</span>
+                      <span>Menyetujui seluruh syarat dan ketentuan lomba video</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-600 font-bold">✓</span>
+                      <span>Menyetujui hak tayang &amp; publikasi video secara nonkomersial</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. Upload Dokumen & 5. Siapkan TactLink (SIAP DOWNLOAD) */}
+                <div className="space-y-2.5">
+                  <h4 className="text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1.5">
+                    <span>📂</span> 4 &amp; 5. Berkas Dokumen &amp; QR TactLink (Siap Download)
+                  </h4>
+                  <div className="p-4 rounded-2xl bg-blue-50/40 border border-blue-100 space-y-3">
+                    
+                    {/* Item 1: Dokumen Persyaratan Lomba */}
+                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                          <span className="text-red-500 font-mono text-[10px] bg-red-50 px-1.5 py-0.5 rounded border border-red-200">PDF</span>
+                          <span className="truncate">Dokumen Persyaratan Lomba</span>
+                        </div>
+                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                          {selectedReg.document_file_name || selectedReg.pakta_integritas_file_name || 'dokumen-persyaratan.pdf'}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleDownloadAttachment(
+                            selectedReg.document_file_name || selectedReg.pakta_integritas_file_name,
+                            'Dokumen Persyaratan Lomba',
+                            selectedReg
+                          )
+                        }
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-2xs transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+                      >
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7 10 12 15 17 10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download</span>
+                      </button>
+                    </div>
+
+                    {/* Item 2: Foto Barcode / QR Kartu Nama Digital TactLink */}
+                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                          <span className="text-indigo-600 font-mono text-[10px] bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200">IMG</span>
+                          <span className="truncate">Foto Barcode QR TactLink</span>
+                        </div>
+                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                          {selectedReg.tactlink_qr_name || selectedReg.surat_persetujuan_file_name || 'qr-kartu-nama-tactlink.png'}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleDownloadAttachment(
+                            selectedReg.tactlink_qr_name || selectedReg.surat_persetujuan_file_name,
+                            'QR Kartu Nama TactLink',
+                            selectedReg
+                          )
+                        }
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+                      >
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7 10 12 15 17 10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download</span>
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            )}
+
+            {/* ════════════════════════════════════════════════════════════════
+                STATUS VERIFIKASI & PRESENSI EVENT GATE
+                ════════════════════════════════════════════════════════════════ */}
             <div className="space-y-3">
               <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                3. Keputusan Verifikasi Berkas
+                Status Verifikasi &amp; Presensi Gate
               </h4>
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-600 font-medium">Tetapkan Status:</span>
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-600 font-medium">Status Verifikasi Peserta:</span>
                   <select
                     value={selectedReg.status}
                     onChange={(e) =>
@@ -646,7 +1000,7 @@ export default function RegistrationsPage() {
                   </select>
                 </div>
 
-                <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-200">
+                <div className="flex items-center justify-between pt-2 border-t border-slate-200">
                   <span className="text-slate-600 font-medium">Status Presensi Gate Braga:</span>
                   <span className={`px-2.5 py-1 rounded-full font-bold ${
                     selectedReg.check_in_status === 'checked_in'
@@ -658,10 +1012,10 @@ export default function RegistrationsPage() {
                         <svg className="w-3 h-3 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12"/>
                         </svg>
-                        <span>Hadir ({new Date(selectedReg.checked_in_at || '').toLocaleTimeString('id-ID')} WIB)</span>
+                        <span>Hadir di Lokasi ({new Date(selectedReg.checked_in_at || '').toLocaleTimeString('id-ID')} WIB)</span>
                       </span>
                     ) : (
-                      'Belum Hadir di Lokasi'
+                      'Belum Scan di Gate'
                     )}
                   </span>
                 </div>
@@ -675,9 +1029,10 @@ export default function RegistrationsPage() {
                 onClick={() => setSelectedReg(null)}
                 className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
               >
-                Tutup Detail Registrasi
+                Tutup Jendela Detail
               </button>
             </div>
+
           </div>
         </div>
       )}

@@ -25,6 +25,10 @@ export interface PrideRegistration {
   brand_name?: string;
   address?: string;
   local_ingredients?: string;
+  design_concept?: string;
+  design_file_name?: string;
+  packaging_file_name?: string;
+  master_file_name?: string;
   ai_used?: boolean;
   // Video Lokal specific
   institution?: string;
@@ -36,9 +40,12 @@ export interface PrideRegistration {
   video_url?: string;
   instagram_video_url?: string;
   tiktok_video_url?: string;
+  document_file_name?: string;
+  tactlink_qr_name?: string;
   pakta_integritas_file_name?: string;
   surat_persetujuan_file_name?: string;
   declaration_original?: boolean;
+  declaration_unpublished?: boolean;
   declaration_secondary?: boolean;
   declaration_terms?: boolean;
   declaration_usage_rights?: boolean;
