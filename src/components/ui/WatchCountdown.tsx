@@ -44,22 +44,29 @@ export default function WatchCountdown() {
     time: { days: 0, hours: 0, minutes: 0, seconds: 0 },
     state: 'upcoming',
   });
-
-  const tick = useCallback(() => {
-    setData(getCountdown());
-  }, []);
+  const [cumulativeTick, setCumulativeTick] = useState(0);
 
   useEffect(() => {
     setMounted(true);
-    setData(getCountdown());
-    const interval = setInterval(tick, 1000);
+    const initial = getCountdown();
+    setData(initial);
+    // Align starting tick clockwise so it advances forward to the right (searah jarum jam)
+    const startSec = (60 - (initial.time.seconds % 60)) % 60;
+    setCumulativeTick(startSec);
+
+    const interval = setInterval(() => {
+      setData(getCountdown());
+      setCumulativeTick((prev) => prev + 1);
+    }, 1000);
+
     return () => clearInterval(interval);
-  }, [tick]);
+  }, []);
 
   const { time } = data;
 
-  // Real-time ticking watch hand angles (in degrees)
-  const secondDeg = time.seconds * 6;
+  // Real-time ticking watch hand angles (in degrees, strictly rotating clockwise / KEKANAN)
+  // +40deg offset counterbalances the -40deg assembly tilt, aligning 0s to 12 o'clock top center
+  const secondDeg = 40 + (cumulativeTick * 6);
   const minuteDeg = (time.minutes * 6) + (time.seconds * 0.1);
   const hourDeg = ((time.hours % 12) * 30) + (time.minutes * 0.5);
 

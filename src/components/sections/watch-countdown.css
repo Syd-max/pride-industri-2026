@@ -451,17 +451,29 @@
 
 .watch-orbital-pip {
   position: absolute;
-  top: 10px;
+  top: 9px;
   left: 50%;
   transform: translateX(-50%);
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%, #ff4d6d 0%, #e11d48 60%, #9f1239 100%);
   box-shadow: 
-    0 0 10px #f43f5e,
+    0 0 12px #f43f5e,
     0 0 4px #ffffff,
     0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.watch-orbital-pip::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 4px;
+  background: linear-gradient(180deg, #e11d48 0%, #fbbf24 100%);
+  border-radius: 1px;
 }
 
 /* Center Luxury Horology Jewel Pivot (Seated in the crossroad gap between 4 pods) */
