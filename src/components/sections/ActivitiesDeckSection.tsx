@@ -1,207 +1,16 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import './activities-deck.css';
-
-interface ProgramAgendaDetail {
-  id: string;
-  title: string;
-  badge: string;
-  timeVenue: string;
-  categoryTags: string[];
-  summary: string;
-  agendaPoints: string[];
-  agendaItems: {
-    title: string;
-    description: string;
-  }[];
-  audienceNote: string;
-}
-
-const PROGRAM_DETAILS: Record<string, ProgramAgendaDetail> = {
-  fashion: {
-    id: 'fashion',
-    title: 'Fashion Show Runway Desainer Binaan',
-    badge: 'Fesyen & Wastra',
-    timeVenue: 'Jum’at, 27 November 2026 · 15:30 – 17:30 WIB · Main Runway Braga City Walk',
-    categoryTags: ['Desainer Binaan', 'Ready-to-Wear', 'Wastra Bandung'],
-    summary: 'Peragaan busana siap pakai kontemporer yang memadukan kekayaan wastra lokal khas Bandung dengan garis rancang modern oleh 20+ desainer fesyen binaan Disdagin Kota Bandung.',
-    agendaPoints: [
-      'Parade Runway 20+ Desainer Fesyen Binaan Disdagin',
-      'Eksplorasi Wastra & Motif Khas Nusantara Berstandar Global',
-      'Business Matching & Temu Jejaring Buyer Potensial'
-    ],
-    agendaItems: [
-      {
-        title: 'Parade Runway 20+ Desainer Binaan',
-        description: 'Peragaan koleksi busana siap pakai (ready-to-wear) karya desainer fesyen lokal di atas panggung runway berstandar internasional.'
-      },
-      {
-        title: 'Eksplorasi Wastra & Motif Khas Bandung',
-        description: 'Kurasi busana berbahan dasar kain tenun, bordir, dan motif batik khas Bandung dengan siluet editorial kontemporer.'
-      },
-      {
-        title: 'Sesi Temu Bisnis (Buyer-Designer Networking)',
-        description: 'Ruang interaksi langsung antara desainer lokal dengan kurator, retailer, dan pembeli potensial untuk memperluas pasar komersial.'
-      },
-      {
-        title: 'Photo Session & Media Coverage',
-        description: 'Sesi dokumentasi editorial di koridor ikonik Braga bersama jajaran model profesional untuk publikasi media nasional.'
-      }
-    ],
-    audienceNote: 'Terbuka gratis untuk umum dan pengunjung kawasan Braga City Walk.'
-  },
-  packaging: {
-    id: 'packaging',
-    title: 'Showcase & Penjurian Terbuka Desain Kemasan',
-    badge: 'Inovasi Kemasan IKM',
-    timeVenue: 'Sabtu, 28 November 2026 · 10:00 – 16:30 WIB · Area Expo Braga City Walk',
-    categoryTags: ['Eco-Packaging', 'Pangan Lokal', 'Kesiapan Ekspor'],
-    summary: 'Eksplorasi inovasi desain kemasan ramah lingkungan produk kuliner dan olahan pangan lokal binaan Kota Bandung untuk meningkatkan daya saing di ritel modern dan pasar ekspor.',
-    agendaPoints: [
-      'Pameran Fisik Mockup 3D Kemasan Ramah Lingkungan',
-      'Live Pitching Finalis di Hadapan Dewan Juri Ahli',
-      'Klinik Konsultasi & Kurasi Standar Ekspor Rumah Kemasan'
-    ],
-    agendaItems: [
-      {
-        title: 'Pameran Fisik Mockup 3D Kemasan',
-        description: 'Showcase display prototipe kemasan inovatif produk olahan pangan lokal (umbi-umbian, tahu, tempe, dan penganan khas Bandung).'
-      },
-      {
-        title: 'Live Pitching Finalis di Hadapan Juri',
-        description: 'Presentasi konsep kreatif, pemilihan material ramah lingkungan (biodegradable), dan efisiensi biaya produksi oleh para finalis terpilih.'
-      },
-      {
-        title: 'Klinik Kurasi & Konsultasi Rumah Kemasan',
-        description: 'Sesi bimbingan langsung bersama tim ahli Rumah Kemasan Disdagin mengenai teknik cetak, labeling nutrisi, dan standar edar BPOM.'
-      },
-      {
-        title: 'Kurasi Kesiapan Ritel Modern & Ekspor',
-        description: 'Evaluasi kelayakan kemasan untuk penetrasi pasar swalayan modern dan rantai pasok ekspor produk olahan Jawa Barat.'
-      }
-    ],
-    audienceNote: 'Pengunjung dapat melihat display pameran karya mockup kemasan secara langsung sepanjang hari.'
-  },
-  video: {
-    id: 'video',
-    title: 'Hunting Konten & Screening Lomba Video 1 Menit',
-    badge: 'Kreativitas Visual',
-    timeVenue: '27–28 November 2026 · Batas Upload 28 Nov 14:00 WIB · Screening 16:00 WIB',
-    categoryTags: ['Video Vertikal', 'Cerita Lokal', 'Kreatif Braga'],
-    summary: 'Kompetisi video vertikal 60 detik menangkap denyut produk IKM, kearifan lokal, dan atmosfer festival di koridor bersejarah Jalan Braga bertema “Karya Lokal, Cerita Lokal”.',
-    agendaPoints: [
-      'Hunting On-The-Spot Video 60 Detik di Seluruh Sudut Braga',
-      'Kurasi 4 Kategori (Fesyen, Kuliner, Kriya, Suasana PRIDE)',
-      'Screening Publik di Layar Videotron & Sesi Berbagi Kreator'
-    ],
-    agendaItems: [
-      {
-        title: 'On-the-Spot Video Hunting di Braga',
-        description: 'Ratusan konten kreator berburu footage sinematik di berbagai sudut Braga City Walk dan booth pameran produk IKM.'
-      },
-      {
-        title: 'Kurasi Karya 4 Kategori Kreatif',
-        description: 'Penilaian karya video vertikal Reels/TikTok oleh dewan juri pada kategori Fesyen, Kuliner, Kriya, dan Atmosfer PRIDE 2026.'
-      },
-      {
-        title: 'Screening Publik di Layar Videotron',
-        description: 'Penayangan kurasi kompilasi video-video kreatif terbaik di layar LED videotron utama panggung Braga City Walk.'
-      },
-      {
-        title: 'Mini Talkshow Konten Kreator',
-        description: 'Diskusi singkat strategi pembuatan video vertikal bercerita (storytelling) yang efektif mengangkat nilai komersial produk lokal.'
-      }
-    ],
-    audienceNote: 'Terbuka bagi seluruh pengunjung dan penonton festival di sepanjang koridor Braga.'
-  },
-  awards: {
-    id: 'awards',
-    title: 'Malam Gala Apresiasi Industri & Kepatuhan SIINAS',
-    badge: 'Malam Penganugerahan',
-    timeVenue: 'Sabtu, 28 November 2026 · 19:00 – 21:00 WIB · Ballroom Hotel Papandayan',
-    categoryTags: ['Malam Anugerah', 'Kepatuhan SIINAS', '200 IKM Binaan'],
-    summary: 'Malam anugerah kehormatan bagi pelaku industri besar, menengah, dan IKM yang tertib dan patuh dalam pelaporan Sistem Informasi Industri Nasional (SIINAS) Kota Bandung.',
-    agendaPoints: [
-      'Penganugerahan Kepatuhan Lapor SIINAS bagi 200 IKM Binaan',
-      'Gala Dinner & Networking Eksekutif bersama Walikota Bandung',
-      'Awarding Juara Lomba Desain Kemasan & Lomba Video 1 Menit'
-    ],
-    agendaItems: [
-      {
-        title: 'Penganugerahan Kepatuhan SIINAS 2026',
-        description: 'Penyerahan trofi dan piagam penghargaan kehormatan kepada 200 pelaku industri dan IKM yang taat pelaporan data industri.'
-      },
-      {
-        title: 'Gala Dinner & Networking Eksekutif',
-        description: 'Perjamuan malam formal bersama Walikota Bandung, pimpinan Disdagin, Forkopimda, asosiasi bisnis, dan pimpinan industri.'
-      },
-      {
-        title: 'Pemaparan Rapor Indeks Industri Kota Bandung',
-        description: 'Presentasi capaian pertumbuhan sektor industri kreatif, realisasi investasi, dan peta jalan hilirisasi IKM Kota Bandung.'
-      },
-      {
-        title: 'Awarding Juara Lomba Desain Kemasan & Video',
-        description: 'Pengumuman resmi dan serah terima hadiah pemenang kompetisi festival PRIDE Industri 2026.'
-      }
-    ],
-    audienceNote: 'Khusus undangan resmi, pelaku IKM binaan penerima penghargaan, dewan juri, dan perwakilan dinas.'
-  },
-  music: {
-    id: 'music',
-    title: 'Seremonial Mutu 100 Halal & Live Art Festival',
-    badge: 'Standarisasi & Panggung Seni',
-    timeVenue: '27–28 November 2026 · Penyerahan 28 Nov 14:00 WIB · Live Art 19:00 WIB',
-    categoryTags: ['100 Halal & 3 SNI', 'Konsultasi Mutu', 'Panggung Perkusi & DJ'],
-    summary: 'Seremonial penyerahan simbolis 100 Sertifikat Halal, 3 SNI, dan 100 fasilitasi Uji Mutu gratis dari Disdagin, dipadu panggung kolaborasi seni perkusi dan DJ kontemporer.',
-    agendaPoints: [
-      'Penyerahan Simbolis 100 Halal, 3 SNI & 100 Uji Mutu Gratis',
-      'Pojok Meja Bantuan NIB, Legalitas Merek & Standar Mutu',
-      'Live Percussion Beat, DJ Performance & Interactive Live Art'
-    ],
-    agendaItems: [
-      {
-        title: 'Penyerahan Simbolis 100 Sertifikat Halal & 3 SNI',
-        description: 'Penyerahan dokumen jaminan mutu legalitas produk secara cuma-cuma (gratis) kepada perwakilan IKM binaan Kota Bandung.'
-      },
-      {
-        title: 'Pojok Konsultasi Legalitas & Uji Mutu IKM',
-        description: 'Layanan konsultasi meja bantuan (helpdesk) gratis untuk pendaftaran NIB, HKI Merek, uji laboratorium, dan sertifikasi Halal lanjutan.'
-      },
-      {
-        title: 'Live Percussion & Electronic DJ Performance',
-        description: 'Pertunjukan atraktif tabuhan ritme perkusi dipadu beat musik elektronik kontemporer menyemarakkan malam di Braga.'
-      },
-      {
-        title: 'Live Interactive Art / Mural Exhibition',
-        description: 'Aksi melukis langsung oleh perupa lokal Bandung yang memvisualisasikan semangat ragam inovasi industri kreatif Jawa Barat.'
-      }
-    ],
-    audienceNote: 'Layanan konsultasi terbuka untuk seluruh pelaku usaha; panggung seni terbuka untuk umum.'
-  }
-};
 
 export default function ActivitiesDeckSection() {
   const scrollDriverRef = useRef<HTMLDivElement>(null);
   const deckContainerRef = useRef<HTMLDivElement>(null);
   const heroNameRef = useRef<HTMLHeadingElement>(null);
-  const [selectedProgram, setSelectedProgram] = useState<ProgramAgendaDetail | null>(null);
-
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    if (selectedProgram) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [selectedProgram]);
 
   useEffect(() => {
     /* ==========================================================
-       1. CHARACTER SCRAMBLE INTERACTION (MATCHING ILIA DELIN CIPHER)
+       1. CHARACTER SCRAMBLE INTERACTION (MATCHING CIPHER EFFECT)
        ========================================================== */
     const heroNameEl = heroNameRef.current;
     const words = ['6', 'PROGRAM', 'UNGGULAN'];
@@ -611,8 +420,6 @@ export default function ActivitiesDeckSection() {
     }
 
     function updateDeck(scrollProgress: number) {
-      // Maps scrollProgress across card peel stages:
-      // Cards 0..4 peel down. Card 5 is the final resting showcase card!
       const peelableCards = totalCards - 1;
       const stageProgress = scrollProgress * peelableCards;
       const isMobile = window.innerWidth <= 768;
@@ -700,50 +507,37 @@ export default function ActivitiesDeckSection() {
               <div className="deck-project-header">
                 <div className="deck-info-pill">
                   <span className="deck-project-title">SERTIFIKASI &amp; LIVE ART</span>
-                  <span className="deck-project-subtitle">100 HALAL · 3 SNI · LIVE PERCUSSION &amp; DJ</span>
+                  <span className="deck-project-subtitle">27–28 NOV 2026 · BRAGA CITY WALK</span>
                 </div>
                 <div className="deck-project-tags">
-                  <span className="deck-tag-pill">FASILITASI GRATIS</span>
+                  <span className="deck-tag-pill">100 HALAL &amp; 3 SNI</span>
                   <span className="deck-tag-pill">STANDAR MUTU</span>
                   <span className="deck-tag-pill">PANGGUNG SENI</span>
                 </div>
               </div>
 
-              {/* Center Action: Opens Agenda Details (NO direct register CTA) */}
-              <button
-                type="button"
-                onClick={() => setSelectedProgram(PROGRAM_DETAILS.music)}
-                className="deck-view-btn"
-                aria-label="Lihat Rincian Agenda Sertifikasi & Live Art"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="16" x2="12" y2="12" />
-                  <line x1="12" y1="8" x2="12.01" y2="8" />
-                </svg>
-                <span>LIHAT DETAIL AGENDA</span>
-              </button>
-
-              {/* Bottom Structured Agenda Bar */}
-              <div className="deck-agenda-bar">
-                <div className="deck-agenda-top">
-                  <div className="deck-agenda-badge">
-                    <span className="deck-agenda-pulse" />
-                    <span>AGENDA KEGIATAN UTAMA</span>
-                  </div>
-                  <span className="deck-agenda-time">27–28 NOV 2026 · BRAGA CITY WALK</span>
+              {/* Center Description Box (Apple Style - No Button / No Bullet Clutter) */}
+              <div className="deck-center-box">
+                <div className="deck-center-badge">
+                  <span>STANDARISASI &amp; SENI BUDAYA</span>
                 </div>
-                <div className="deck-agenda-items">
-                  {PROGRAM_DETAILS.music.agendaPoints.map((pt, pIdx) => (
-                    <div key={pIdx} className="deck-agenda-item">
-                      <span className="deck-agenda-bullet">✦</span>
-                      <span>{pt}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="deck-agenda-summary">
-                  {PROGRAM_DETAILS.music.summary}
+                <h3 className="deck-center-title">
+                  Penyerahan 100 Halal, SNI &amp; Panggung Seni Budaya
+                </h3>
+                <p className="deck-center-desc">
+                  Seremonial penyerahan simbolis 100 Sertifikat Halal gratis, 3 SNI, dan 100 fasilitasi uji laboratorium mutu IKM dari Disdagin Kota Bandung. Disemarakkan layanan konsultasi legalitas usaha langsung serta atraksi perkusi etnik dan musik elektronik kontemporer.
                 </p>
+                <div className="deck-center-meta">
+                  <svg className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  <span>14:00 — 21:00 WIB</span>
+                  <span className="text-slate-500">•</span>
+                  <span>Main Stage Braga City Walk</span>
+                  <span className="text-slate-500">•</span>
+                  <span className="text-emerald-400 font-semibold">Terbuka untuk Umum</span>
+                </div>
               </div>
             </div>
           </article>
@@ -755,7 +549,7 @@ export default function ActivitiesDeckSection() {
               <div className="deck-project-header">
                 <div className="deck-info-pill">
                   <span className="deck-project-title">APRESIASI INDUSTRI SIINAS</span>
-                  <span className="deck-project-subtitle">28 NOV 2026 · BALLROOM HOTEL PAPANDAYAN</span>
+                  <span className="deck-project-subtitle">28 NOV 2026 · HOTEL PAPANDAYAN</span>
                 </div>
                 <div className="deck-project-tags">
                   <span className="deck-tag-pill">MALAM ANUGERAH</span>
@@ -764,41 +558,28 @@ export default function ActivitiesDeckSection() {
                 </div>
               </div>
 
-              {/* Center Action: Opens Agenda Details */}
-              <button
-                type="button"
-                onClick={() => setSelectedProgram(PROGRAM_DETAILS.awards)}
-                className="deck-view-btn"
-                aria-label="Lihat Rincian Agenda Malam Gala SIINAS"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="16" x2="12" y2="12" />
-                  <line x1="12" y1="8" x2="12.01" y2="8" />
-                </svg>
-                <span>LIHAT DETAIL AGENDA</span>
-              </button>
-
-              {/* Bottom Structured Agenda Bar */}
-              <div className="deck-agenda-bar">
-                <div className="deck-agenda-top">
-                  <div className="deck-agenda-badge">
-                    <span className="deck-agenda-pulse" />
-                    <span>AGENDA KEGIATAN UTAMA</span>
-                  </div>
-                  <span className="deck-agenda-time">28 NOV 2026 · THE PAPANDAYAN</span>
+              {/* Center Description Box (Apple Style - No Button / No Bullet Clutter) */}
+              <div className="deck-center-box">
+                <div className="deck-center-badge">
+                  <span>MALAM PENGANUGERAHAN</span>
                 </div>
-                <div className="deck-agenda-items">
-                  {PROGRAM_DETAILS.awards.agendaPoints.map((pt, pIdx) => (
-                    <div key={pIdx} className="deck-agenda-item">
-                      <span className="deck-agenda-bullet">✦</span>
-                      <span>{pt}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="deck-agenda-summary">
-                  {PROGRAM_DETAILS.awards.summary}
+                <h3 className="deck-center-title">
+                  Malam Anugerah &amp; Temu Kemitraan SIINAS
+                </h3>
+                <p className="deck-center-desc">
+                  Malam gala kehormatan penganugerahan penghargaan bagi 200 pelaku industri dan IKM Kota Bandung yang tertib dan patuh dalam pelaporan Sistem Informasi Industri Nasional (SIINAS), dirangkai gala dinner formal bersama Walikota Bandung dan pimpinan industri.
                 </p>
+                <div className="deck-center-meta">
+                  <svg className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  <span>19:00 — 21:00 WIB</span>
+                  <span className="text-slate-500">•</span>
+                  <span>Grand Ballroom The Papandayan</span>
+                  <span className="text-slate-500">•</span>
+                  <span className="text-amber-300 font-semibold">Khusus Undangan Resmi</span>
+                </div>
               </div>
             </div>
           </article>
@@ -810,50 +591,37 @@ export default function ActivitiesDeckSection() {
               <div className="deck-project-header">
                 <div className="deck-info-pill">
                   <span className="deck-project-title">LOMBA VIDEO 1 MENIT</span>
-                  <span className="deck-project-subtitle">REELS &amp; TIKTOK · TOTAL HADIAH PULUHAN JUTA</span>
+                  <span className="deck-project-subtitle">27–28 NOV 2026 · BRAGA CITY WALK</span>
                 </div>
                 <div className="deck-project-tags">
                   <span className="deck-tag-pill">VIDEO VERTIKAL</span>
                   <span className="deck-tag-pill">CERITA LOKAL</span>
-                  <span className="deck-tag-pill">KREATIF BRAGA</span>
+                  <span className="deck-tag-pill">REELS &amp; TIKTOK</span>
                 </div>
               </div>
 
-              {/* Center Action: Opens Agenda Details (NO direct register CTA) */}
-              <button
-                type="button"
-                onClick={() => setSelectedProgram(PROGRAM_DETAILS.video)}
-                className="deck-view-btn"
-                aria-label="Lihat Rincian Agenda Lomba Video 1 Menit"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="16" x2="12" y2="12" />
-                  <line x1="12" y1="8" x2="12.01" y2="8" />
-                </svg>
-                <span>LIHAT DETAIL AGENDA</span>
-              </button>
-
-              {/* Bottom Structured Agenda Bar */}
-              <div className="deck-agenda-bar">
-                <div className="deck-agenda-top">
-                  <div className="deck-agenda-badge">
-                    <span className="deck-agenda-pulse" />
-                    <span>AGENDA KEGIATAN UTAMA</span>
-                  </div>
-                  <span className="deck-agenda-time">27–28 NOV 2026 · BRAGA CITY WALK</span>
+              {/* Center Description Box (Apple Style - No Button / No Bullet Clutter) */}
+              <div className="deck-center-box">
+                <div className="deck-center-badge">
+                  <span>KREATIVITAS VISUAL</span>
                 </div>
-                <div className="deck-agenda-items">
-                  {PROGRAM_DETAILS.video.agendaPoints.map((pt, pIdx) => (
-                    <div key={pIdx} className="deck-agenda-item">
-                      <span className="deck-agenda-bullet">✦</span>
-                      <span>{pt}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="deck-agenda-summary">
-                  {PROGRAM_DETAILS.video.summary}
+                <h3 className="deck-center-title">
+                  Hunting Konten &amp; Screening Video 1 Menit
+                </h3>
+                <p className="deck-center-desc">
+                  Ratusan kreator visual mengabadikan dinamika produk IKM, kearifan lokal, dan atmosfer festival di koridor bersejarah Jalan Braga dalam format video vertikal 60 detik. Karya-karya kurasi terbaik ditayangkan langsung di videotron panggung utama festival.
                 </p>
+                <div className="deck-center-meta">
+                  <svg className="w-3.5 h-3.5 text-rose-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  <span>Screening 28 Nov 16:00 WIB</span>
+                  <span className="text-slate-500">•</span>
+                  <span>Layar Videotron Braga City Walk</span>
+                  <span className="text-slate-500">•</span>
+                  <span className="text-emerald-400 font-semibold">Terbuka untuk Umum</span>
+                </div>
               </div>
             </div>
           </article>
@@ -865,7 +633,7 @@ export default function ActivitiesDeckSection() {
               <div className="deck-project-header">
                 <div className="deck-info-pill">
                   <span className="deck-project-title">LOMBA DESAIN KEMASAN</span>
-                  <span className="deck-project-subtitle">SHOWCASE &amp; PENJURIAN TERBUKA · ECO-PACKAGING</span>
+                  <span className="deck-project-subtitle">28 NOV 2026 · EXPO BRAGA CITY WALK</span>
                 </div>
                 <div className="deck-project-tags">
                   <span className="deck-tag-pill">ECO-PACKAGING</span>
@@ -874,41 +642,28 @@ export default function ActivitiesDeckSection() {
                 </div>
               </div>
 
-              {/* Center Action: Opens Agenda Details (NO direct register CTA) */}
-              <button
-                type="button"
-                onClick={() => setSelectedProgram(PROGRAM_DETAILS.packaging)}
-                className="deck-view-btn"
-                aria-label="Lihat Rincian Agenda Lomba Desain Kemasan"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="16" x2="12" y2="12" />
-                  <line x1="12" y1="8" x2="12.01" y2="8" />
-                </svg>
-                <span>LIHAT DETAIL AGENDA</span>
-              </button>
-
-              {/* Bottom Structured Agenda Bar */}
-              <div className="deck-agenda-bar">
-                <div className="deck-agenda-top">
-                  <div className="deck-agenda-badge">
-                    <span className="deck-agenda-pulse" />
-                    <span>AGENDA KEGIATAN UTAMA</span>
-                  </div>
-                  <span className="deck-agenda-time">28 NOV 2026 · BRAGA CITY WALK</span>
+              {/* Center Description Box (Apple Style - No Button / No Bullet Clutter) */}
+              <div className="deck-center-box">
+                <div className="deck-center-badge">
+                  <span>INOVASI KEMASAN IKM</span>
                 </div>
-                <div className="deck-agenda-items">
-                  {PROGRAM_DETAILS.packaging.agendaPoints.map((pt, pIdx) => (
-                    <div key={pIdx} className="deck-agenda-item">
-                      <span className="deck-agenda-bullet">✦</span>
-                      <span>{pt}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="deck-agenda-summary">
-                  {PROGRAM_DETAILS.packaging.summary}
+                <h3 className="deck-center-title">
+                  Showcase &amp; Penjurian Terbuka Desain Kemasan
+                </h3>
+                <p className="deck-center-desc">
+                  Pameran fisik dan presentasi langsung karya mockup 3D kemasan ramah lingkungan produk kuliner olahan pangan lokal binaan Bandung. Finalis memaparkan konsep di hadapan dewan juri ahli serta kurator Rumah Kemasan untuk kesiapan pasar ritel modern dan ekspor.
                 </p>
+                <div className="deck-center-meta">
+                  <svg className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  <span>10:00 — 16:30 WIB</span>
+                  <span className="text-slate-500">•</span>
+                  <span>Area Pameran Braga City Walk</span>
+                  <span className="text-slate-500">•</span>
+                  <span className="text-emerald-400 font-semibold">Display Terbuka</span>
+                </div>
               </div>
             </div>
           </article>
@@ -920,7 +675,7 @@ export default function ActivitiesDeckSection() {
               <div className="deck-project-header">
                 <div className="deck-info-pill">
                   <span className="deck-project-title">FASHION SHOW RUNWAY</span>
-                  <span className="deck-project-subtitle">27 NOV 2026 · MAIN STAGE BRAGA CITY WALK</span>
+                  <span className="deck-project-subtitle">27 NOV 2026 · MAIN STAGE BRAGA</span>
                 </div>
                 <div className="deck-project-tags">
                   <span className="deck-tag-pill">DESAINER BINAAN</span>
@@ -929,41 +684,28 @@ export default function ActivitiesDeckSection() {
                 </div>
               </div>
 
-              {/* Center Action: Opens Agenda Details */}
-              <button
-                type="button"
-                onClick={() => setSelectedProgram(PROGRAM_DETAILS.fashion)}
-                className="deck-view-btn"
-                aria-label="Lihat Rincian Agenda Fashion Show Runway"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="16" x2="12" y2="12" />
-                  <line x1="12" y1="8" x2="12.01" y2="8" />
-                </svg>
-                <span>LIHAT DETAIL AGENDA</span>
-              </button>
-
-              {/* Bottom Structured Agenda Bar */}
-              <div className="deck-agenda-bar">
-                <div className="deck-agenda-top">
-                  <div className="deck-agenda-badge">
-                    <span className="deck-agenda-pulse" />
-                    <span>AGENDA KEGIATAN UTAMA</span>
-                  </div>
-                  <span className="deck-agenda-time">27 NOV 2026 · 15:30–17:30 WIB</span>
+              {/* Center Description Box (Apple Style - No Button / No Bullet Clutter) */}
+              <div className="deck-center-box">
+                <div className="deck-center-badge">
+                  <span>FESYEN &amp; WASTRA</span>
                 </div>
-                <div className="deck-agenda-items">
-                  {PROGRAM_DETAILS.fashion.agendaPoints.map((pt, pIdx) => (
-                    <div key={pIdx} className="deck-agenda-item">
-                      <span className="deck-agenda-bullet">✦</span>
-                      <span>{pt}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="deck-agenda-summary">
-                  {PROGRAM_DETAILS.fashion.summary}
+                <h3 className="deck-center-title">
+                  Peragaan Busana Wastra Kontemporer
+                </h3>
+                <p className="deck-center-desc">
+                  Peragaan busana siap pakai (ready-to-wear) karya 20+ desainer fesyen binaan Disdagin Kota Bandung. Menampilkan eksplorasi motif khas dan kain nusantara berstandar internasional, dilengkapi sesi temu bisnis langsung bersama kurator dan pembeli potensial.
                 </p>
+                <div className="deck-center-meta">
+                  <svg className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  <span>15:30 — 17:30 WIB</span>
+                  <span className="text-slate-500">•</span>
+                  <span>Main Runway Stage Braga</span>
+                  <span className="text-slate-500">•</span>
+                  <span className="text-emerald-400 font-semibold">Terbuka untuk Umum</span>
+                </div>
               </div>
             </div>
           </article>
@@ -1009,105 +751,6 @@ export default function ActivitiesDeckSection() {
         </div>
 
       </section>
-
-      {/* ─── INTERACTIVE AGENDA DETAIL MODAL (NO REGISTER CTA) ─── */}
-      {selectedProgram && (
-        <div
-          className="deck-modal-backdrop"
-          onClick={() => setSelectedProgram(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-title"
-        >
-          <div
-            className="deck-modal-container"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="deck-modal-header">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-blue-500/15 text-blue-400 border border-blue-500/30 mb-2">
-                  <span>{selectedProgram.badge}</span>
-                </div>
-                <h3 id="modal-title" className="text-xl sm:text-2xl font-black text-white leading-tight">
-                  {selectedProgram.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-400 font-medium mt-1">
-                  📍 {selectedProgram.timeVenue}
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setSelectedProgram(null)}
-                className="deck-modal-close"
-                aria-label="Tutup jendela informasi"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="deck-modal-body">
-              {/* Ringkasan Program */}
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-xs sm:text-sm text-slate-300 leading-relaxed">
-                {selectedProgram.summary}
-              </div>
-
-              {/* Rangkaian Agenda (Ngapain Aja) */}
-              <div>
-                <div className="text-xs font-mono font-bold uppercase tracking-wider text-amber-400 mb-3 flex items-center gap-2">
-                  <span>✦</span>
-                  <span>Rangkaian Agenda Kegiatan (Ngapain Aja):</span>
-                </div>
-                <div className="deck-modal-agenda-list">
-                  {selectedProgram.agendaItems.map((item, idx) => (
-                    <div key={idx} className="deck-modal-agenda-row">
-                      <span className="deck-modal-step-badge">{idx + 1}</span>
-                      <div className="space-y-1">
-                        <div className="font-bold text-slate-100 text-xs sm:text-sm">
-                          {item.title}
-                        </div>
-                        <div className="text-xs text-slate-400 leading-relaxed">
-                          {item.description}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Sasaran & Akses Pengunjung */}
-              <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-400 flex items-center gap-2.5">
-                <span className="text-blue-400 font-bold">ℹ Akses Kegiatan:</span>
-                <span>{selectedProgram.audienceNote}</span>
-              </div>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="deck-modal-footer">
-              <a
-                href="#agenda"
-                onClick={() => setSelectedProgram(null)}
-                className="text-xs font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1.5 transition-colors"
-              >
-                <span>Lihat Seluruh Rundown Festival di Bawah ↓</span>
-              </a>
-
-              <button
-                type="button"
-                onClick={() => setSelectedProgram(null)}
-                className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-900 bg-white hover:bg-slate-200 transition-all cursor-pointer"
-              >
-                Tutup Informasi
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
