@@ -536,3 +536,24 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
+
+@keyframes scanner-laser {
+  0% {
+    top: 6%;
+    opacity: 0.3;
+  }
+  20% {
+    opacity: 0.95;
+  }
+  80% {
+    opacity: 0.95;
+  }
+  100% {
+    top: 94%;
+    opacity: 0.3;
+  }
+}
+
+.animate-scanner-laser {
+  animation: scanner-laser 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}

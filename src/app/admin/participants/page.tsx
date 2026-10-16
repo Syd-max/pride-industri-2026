@@ -147,7 +147,7 @@ export default function ParticipantsPage() {
   };
 
   const currentHost = typeof window !== 'undefined' ? window.location.origin : 'https://pride-industri-2026.vercel.app';
-  const gateCheckInUrl = `${currentHost}/check-in`;
+  const gateCheckInUrl = `${currentHost}/check-in?gate=braga-city-walk&scanned=true`;
   const qrCodeImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=${encodeURIComponent(
     gateCheckInUrl
   )}`;

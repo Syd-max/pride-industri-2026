@@ -17,9 +17,17 @@ export default function CompetitionsAdminPage() {
     window.print();
   };
 
+  const currentHost =
+    typeof window !== 'undefined'
+      ? window.location.origin
+      : 'https://pride-industri-2026.vercel.app';
+  const gateCheckInUrl = `${currentHost}/check-in?gate=braga-city-walk&token=${encodeURIComponent(
+    gateToken
+  )}&scanned=true`;
+
   // Generate an online QR Code API URL for instant high-res printable poster
   const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=${encodeURIComponent(
-    gateToken
+    gateCheckInUrl
   )}&bgcolor=ffffff&color=000000&margin=10`;
 
   return (
