@@ -7,8 +7,8 @@ import Link from 'next/link';
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@prideindustri.id');
+  const [password, setPassword] = useState('pride2026admin');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,8 +32,7 @@ export default function AdminLoginPage() {
         return;
       }
 
-      router.push('/admin');
-      router.refresh();
+      window.location.href = '/admin';
     } catch {
       setError('Koneksi ke server gagal.');
       setLoading(false);
@@ -117,11 +116,19 @@ export default function AdminLoginPage() {
             {loading ? 'Memverifikasi...' : 'Masuk ke Dashboard Operasional →'}
           </button>
 
-          <div className="p-3 rounded-lg bg-[#161616] border border-[#222222] text-[11px] text-[#8A8A8A] text-center">
-            Default akun panitia: <br />
+          <button
+            type="button"
+            onClick={() => {
+              setEmail('admin@prideindustri.id');
+              setPassword('pride2026admin');
+            }}
+            className="w-full p-3 rounded-lg bg-[#161616] hover:bg-[#1a1a1a] border border-[#222222] text-[11px] text-[#8A8A8A] hover:text-[#E4C584] text-center transition-all cursor-pointer select-none"
+            title="Klik untuk mengisi otomatis akun default panitia"
+          >
+            Default akun panitia (Klik untuk autofill): <br />
             <span className="font-mono text-[#E4C584]">admin@prideindustri.id</span>{' '}
             / <span className="font-mono text-[#E4C584]">pride2026admin</span>
-          </div>
+          </button>
         </form>
 
         <div className="text-center text-xs">
