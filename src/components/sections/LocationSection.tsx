@@ -151,9 +151,6 @@ export default function LocationSection() {
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
               </div>
-              <span className="text-xs font-bold tracking-wider uppercase text-slate-300 pl-1.5 border-l border-slate-700">
-                Apple Maps Explorer
-              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -388,23 +385,6 @@ export default function LocationSection() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* Transit & Arrival Notes */}
-            <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100/80 space-y-2">
-              <div className="text-xs font-bold text-blue-950 flex items-center gap-1.5">
-                <svg className="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="16" x2="12" y2="12" />
-                  <line x1="12" y1="8" x2="12.01" y2="8" />
-                </svg>
-                <span>Catatan Kedatangan &amp; Fasilitas Parkir:</span>
-              </div>
-              <ul className="space-y-1.5 pl-5 text-xs text-slate-600 list-disc leading-relaxed">
-                {currentVenue.transitNotes.map((note, idx) => (
-                  <li key={idx}>{note}</li>
-                ))}
-              </ul>
             </div>
 
           </div>
