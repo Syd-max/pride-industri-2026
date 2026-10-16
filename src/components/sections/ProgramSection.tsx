@@ -315,14 +315,15 @@ export default function ProgramSection() {
             </button>
           </div>
 
-          {/* Quick Filter by Venue & Calendar Action */}
-          <div className="flex flex-wrap items-center justify-between gap-3 mt-6 pt-5 border-t border-slate-200/70 text-xs">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-slate-400 font-medium mr-1 hidden sm:inline">Lokasi:</span>
+          {/* Quick Filter by Venue & Calendar Action (Rapi & Rata di Semua Layar) */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mt-6 pt-5 border-t border-slate-200/70 text-xs">
+            {/* Left: Venue Filter Pills on One Clean Horizon Line */}
+            <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1.5 sm:pb-0 scrollbar-none w-full sm:w-auto -mx-1 px-1 sm:mx-0 sm:px-0">
+              <span className="text-slate-400 font-medium mr-0.5 shrink-0 hidden md:inline">Lokasi:</span>
               <button
                 type="button"
                 onClick={() => setVenueFilter('all')}
-                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   venueFilter === 'all'
                     ? 'bg-slate-900 text-white shadow-2xs'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
@@ -334,7 +335,7 @@ export default function ProgramSection() {
               <button
                 type="button"
                 onClick={() => setVenueFilter('braga')}
-                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   venueFilter === 'braga'
                     ? 'bg-slate-900 text-white shadow-2xs'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
@@ -347,7 +348,7 @@ export default function ProgramSection() {
                 <button
                   type="button"
                   onClick={() => setVenueFilter('papandayan')}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     venueFilter === 'papandayan'
                       ? 'bg-slate-900 text-white shadow-2xs'
                       : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
@@ -358,13 +359,14 @@ export default function ProgramSection() {
               )}
             </div>
 
+            {/* Right: Clean Matching Calendar Action Button */}
             <a
               href={activeDay === 'day1' ? googleCalUrlDay1 : googleCalUrlDay2}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-700 font-bold hover:underline transition-colors ml-auto"
+              className="inline-flex items-center justify-center sm:justify-start gap-1.5 text-blue-600 hover:text-blue-700 bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200/60 px-3.5 py-1.5 rounded-lg font-bold text-xs transition-colors shrink-0 w-full sm:w-auto"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
                 <line x1="16" y1="2" x2="16" y2="6"/>
                 <line x1="8" y1="2" x2="8" y2="6"/>
