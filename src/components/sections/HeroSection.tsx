@@ -358,10 +358,13 @@ export default function HeroSection() {
             {/* Top Specular Shimmer Line */}
             <div className="headline-glow-ambient" />
 
-            {/* Event Category Tag Pill */}
+            {/* Event Category Tag Pill — Sleek, Responsive, Single-Line Capsule */}
             <div className="headline-tag-pill">
-              <SparkleIcon className="w-3.5 h-3.5 text-amber-400" />
-              <span className="tag-text">Festival Industri Kreatif &amp; Seni Kota Bandung</span>
+              <SparkleIcon className="tag-sparkle-icon" />
+              <span className="tag-text">
+                <span className="hidden sm:inline">Festival Industri Kreatif &amp; Seni Kota Bandung</span>
+                <span className="sm:hidden">Festival Industri Kreatif</span>
+              </span>
               <span className="tag-dot">•</span>
               <span className="tag-location">27–28 Nov 2026</span>
             </div>

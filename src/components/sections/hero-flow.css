@@ -239,6 +239,10 @@
 /* Clean, High-Contrast Headline Block (Refined & Compact Glassmorphic Capsule) */
 .headline-block {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   margin: 2px auto 8px;
   max-width: 660px;
   padding: 8px 18px 10px;
@@ -277,42 +281,57 @@
   pointer-events: none;
 }
 
-/* Headline Micro-Badge Tagline */
+/* Headline Micro-Badge Tagline (Clean Apple-Style Event Status Capsule) */
 .headline-tag-pill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 3px 12px;
-  border-radius: 999px;
+  padding: 3.5px 12px;
+  border-radius: 9999px;
   background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #fde68a;
-  margin-bottom: 6px;
+  margin: 0 auto 8px;
+  max-width: 100%;
+  white-space: nowrap;
+  user-select: none;
 }
 
-.tag-sparkle {
-  display: inline-block;
-  font-size: 12px;
-  animation: sparklePulse 2.4s ease-in-out infinite;
+.headline-tag-pill .tag-sparkle-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  color: #fbbf24;
 }
 
-@keyframes sparklePulse {
-  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.9; }
-  50% { transform: scale(1.25) rotate(15deg); opacity: 1; }
+.headline-tag-pill .tag-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #fef08a;
+  font-weight: 700;
 }
 
-.tag-dot {
-  color: rgba(255, 255, 255, 0.4);
+.headline-tag-pill .tag-dot {
+  color: rgba(255, 255, 255, 0.38);
+  flex-shrink: 0;
+  font-size: 8px;
+  line-height: 1;
 }
 
-.tag-location {
+.headline-tag-pill .tag-location {
   color: #93c5fd;
   font-weight: 800;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .hero-title-clean {
@@ -520,20 +539,33 @@
     width: 100%;
     max-width: min(92vw, 390px);
     margin: 0 auto;
-    padding: clamp(10px, 1.8vh, 14px) clamp(14px, 3.5vw, 20px);
+    padding: clamp(10px, 1.8vh, 14px) clamp(12px, 3vw, 18px);
     border-radius: 18px;
     background: linear-gradient(135deg, rgba(7, 10, 19, 0.88) 0%, rgba(20, 28, 45, 0.75) 50%, rgba(7, 10, 19, 0.85) 100%);
     box-shadow: 
       0 12px 30px -8px rgba(0, 0, 0, 0.75),
       0 0 0 1px rgba(255, 255, 255, 0.12) inset;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .headline-tag-pill {
-    font-size: clamp(8px, 2.1vw, 9.5px);
-    padding: 2.5px 8px;
-    gap: 4px;
-    margin-bottom: 5px;
+    font-size: clamp(8px, 2.3vw, 9.5px);
+    padding: 3px 10px;
+    gap: 5px;
+    margin: 0 auto 6px;
+    max-width: 100%;
+    white-space: nowrap;
+    border-radius: 9999px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  }
+
+  .headline-tag-pill .tag-sparkle-icon {
+    width: 11px;
+    height: 11px;
   }
 
   .hero-title-clean {
