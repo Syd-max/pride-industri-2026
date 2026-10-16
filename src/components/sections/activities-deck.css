@@ -542,17 +542,17 @@
 
 /* Top-left Frosted Glass Info Box */
 .deck-info-pill {
-  background: var(--deck-glass-bg);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--deck-glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   padding: 13px 20px;
   border-radius: 18px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   pointer-events: auto;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
 }
 
 .deck-project-title {
@@ -583,10 +583,10 @@
 }
 
 .deck-tag-pill {
-  background: var(--deck-glass-bg);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--deck-glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   padding: 8px 16px;
   border-radius: 999px;
   font-family: 'JetBrains Mono', monospace;
@@ -595,7 +595,7 @@
   color: #0f172a;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
 /* ─── Elegant Center Description Card (Apple Editorial Style) ─── */
@@ -606,13 +606,13 @@
   transform: translate(-50%, -50%);
   width: calc(100% - 56px);
   max-width: 680px;
-  background: rgba(11, 17, 32, 0.84);
+  background: rgba(11, 17, 32, 0.96);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 26px;
   padding: clamp(20px, 3.2vw, 32px) clamp(24px, 3.8vw, 36px);
-  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.14);
   display: flex;
   flex-direction: column;
   gap: 12px;

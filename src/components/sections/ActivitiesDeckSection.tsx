@@ -77,14 +77,16 @@ export default function ActivitiesDeckSection() {
     const totalScroll = driver.offsetHeight - window.innerHeight;
     if (totalScroll <= 0) return;
 
-    // Progress mapping: Card 0 sits at 0.0, Cards 1-5 spaced evenly between 0.12 and 0.90
+    // Progress mapping matching updateDeck calibration:
+    // t = clamp((scrollProgress - 0.05) / 0.90, 0, 1) * 5
+    // For cardIdx (0..5), scrollProgress = 0.05 + (cardIdx / 5) * 0.90
     let targetProgress = 0;
-    if (cardIdx === 0) {
-      targetProgress = 0;
-    } else if (cardIdx === 5) {
-      targetProgress = 0.92;
+    if (cardIdx <= 0) {
+      targetProgress = 0.02;
+    } else if (cardIdx >= 5) {
+      targetProgress = 0.96;
     } else {
-      targetProgress = 0.08 + ((cardIdx - 0.5) / 5) * 0.84;
+      targetProgress = 0.05 + (cardIdx / 5) * 0.90;
     }
 
     const targetY = driverTop + targetProgress * totalScroll;
@@ -440,16 +442,19 @@ export default function ActivitiesDeckSection() {
         const depth = isFinalCard ? Math.max(0, i - t) : (i - t);
 
         if (depth < 0) {
-          // Card has peeled off: slide UPWARD with gentle scale down & fade
+          // Card has peeled off: slide UPWARD cleanly out of the stack
           const peelAmount = clamp(-depth, 0, 1);
-          const easedPeel = easeInOutCubic(peelAmount);
-          const translateYPercent = -easedPeel * 108; // Natural UPWARD peel
-          const scale = 1 - easedPeel * 0.05;
-          const opacity = Math.max(0, 1 - Math.pow(peelAmount, 1.4));
+          // Natural responsive easing: moves immediately as user scrolls
+          const easedPeel = peelAmount * (1.6 - 0.6 * peelAmount);
+          const translateYPercent = -easedPeel * 112; // Slide fully up and off screen
+          const scale = 1 - easedPeel * 0.04;
+          // Card remains 100% solid & opaque while peeling!
+          // Only fade in the very final 12% as it exits the top boundary.
+          const opacity = peelAmount >= 0.88 ? Math.max(0, 1 - (peelAmount - 0.88) / 0.12) : 1;
 
-          card.style.transform = `translate3d(0, ${translateYPercent}%, 0) scale(${scale.toFixed(4)})`;
+          card.style.transform = `translate3d(0, ${translateYPercent.toFixed(2)}%, 0) scale(${scale.toFixed(4)})`;
           card.style.opacity = opacity.toFixed(3);
-          card.style.pointerEvents = peelAmount > 0.15 ? 'none' : 'auto';
+          card.style.pointerEvents = peelAmount > 0.1 ? 'none' : 'auto';
           card.style.visibility = peelAmount >= 0.99 ? 'hidden' : 'visible';
         } else {
           // Card is active or waiting behind in the stack
@@ -457,10 +462,10 @@ export default function ActivitiesDeckSection() {
           const yOffset = effectiveDepth * PEEK_STEP_Y;
           const scale = 1 - effectiveDepth * SCALE_STEP;
 
-          card.style.transform = `translate3d(0, ${yOffset}px, 0) scale(${scale.toFixed(4)})`;
+          card.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
           card.style.opacity = '1';
           card.style.visibility = 'visible';
-          card.style.pointerEvents = depth < 0.4 ? 'auto' : 'none';
+          card.style.pointerEvents = depth < 0.3 ? 'auto' : 'none';
         }
       });
     }

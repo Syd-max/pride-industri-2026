@@ -74,6 +74,7 @@ html {
   width: 100%;
   margin: 0;
   padding: 0;
+  overflow: visible;
 }
 
 body {
@@ -85,9 +86,9 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: clip;
   margin: 0;
   padding: 0;
+  overflow: visible;
 }
 
 /* Responsive Media Constraint */
