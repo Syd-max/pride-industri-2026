@@ -74,24 +74,44 @@ export async function POST(
       const brandName = sanitizeString(body.brand_name);
       const address = sanitizeString(body.address);
       const localIngredients = sanitizeString(body.local_ingredients);
+      const designConcept = sanitizeString(body.design_concept || body.description || '');
+      const designFileName = sanitizeString(body.design_file_name || '');
+      const masterFileName = sanitizeString(body.master_file_name || '');
+      const paktaFileName = sanitizeString(body.pakta_integritas_file_name || '');
+      const persetujuanFileName = sanitizeString(body.surat_persetujuan_file_name || '');
 
       if (!productName || !brandName || !address) {
         return NextResponse.json(
           {
             success: false,
             error:
-              'Nama produk, nama merek, dan alamat domisili wajib dilengkapi.',
+              'Nama produk kuliner, nama merek produk, dan alamat domisili lengkap wajib diisi.',
           },
           { status: 400 }
         );
       }
 
-      if (!body.declaration_original || !body.declaration_terms) {
+      if (!localIngredients) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Bahan dasar lokal yang digunakan wajib diisi.',
+          },
+          { status: 400 }
+        );
+      }
+
+      if (
+        !body.declaration_original ||
+        !body.declaration_unpublished ||
+        !body.declaration_terms ||
+        !body.declaration_usage_rights
+      ) {
         return NextResponse.json(
           {
             success: false,
             error:
-              'Anda wajib menyetujui Pakta Integritas dan Surat Pernyataan Persetujuan.',
+              'Anda wajib mencentang seluruh persyaratan dan komitmen lomba desain kemasan.',
           },
           { status: 400 }
         );
@@ -102,7 +122,15 @@ export async function POST(
         brand_name: brandName,
         address,
         local_ingredients: localIngredients,
-        ai_used: Boolean(body.ai_used),
+        design_concept: designConcept,
+        design_file_name: designFileName,
+        master_file_name: masterFileName,
+        pakta_integritas_file_name: paktaFileName,
+        surat_persetujuan_file_name: persetujuanFileName,
+        declaration_original: Boolean(body.declaration_original),
+        declaration_unpublished: Boolean(body.declaration_unpublished),
+        declaration_terms: Boolean(body.declaration_terms),
+        declaration_usage_rights: Boolean(body.declaration_usage_rights),
       };
     } else if (competitionId === 'video-lokal') {
       // 1. Instansi / asal (wajib)

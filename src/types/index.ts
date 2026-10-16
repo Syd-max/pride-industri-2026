@@ -79,10 +79,15 @@ export interface DesainKemasanFormData {
   product_name: string;
   brand_name: string;
   local_ingredients: string;
-  ai_used: boolean;
+  design_concept?: string;
+  design_file_name?: string;
+  master_file_name?: string;
+  pakta_integritas_file_name?: string;
+  surat_persetujuan_file_name?: string;
   declaration_original: boolean;
   declaration_unpublished: boolean;
   declaration_terms: boolean;
+  declaration_usage_rights: boolean;
 }
 
 export interface VideoLokalFormData {
