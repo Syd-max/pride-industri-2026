@@ -214,17 +214,6 @@ export default function CompetitionSection() {
 
         {/* ─── 3 Ticket Cards Grid ─── */}
         <div className="tickets-grid">
-          {/* Handwritten "peel for benefits" annotation */}
-          <div
-            className={`handwritten-note note-peel ${viewMode === 'benefit' ? 'hidden' : ''}`}
-          >
-            <span>kelupas untuk lihat benefit!</span>
-            <svg viewBox="0 0 42 36" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 12 C18 8, 28 14, 35 28" />
-              <path d="M27 26 L36 29 L38 20" />
-            </svg>
-          </div>
-
           {/* CARD 1: LOMBA DESAIN KEMASAN */}
           <article className="ticket-card">
             <div className="ticket-top">
@@ -374,7 +363,7 @@ export default function CompetitionSection() {
                 >
                   <div className="sticker-top-row">
                     <span>TOTAL HADIAH</span>
-                    <span>RESMI DISDAGIN</span>
+                    <span className="save-badge">KLIK / KELUPAS BENEFIT ↗</span>
                   </div>
                   <div className="sticker-main-row">
                     <span className="sticker-price">Rp 2,25 Jt</span>
