@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import type { PrideRegistration } from '@/types';
 
 export default function AdminOverviewPage() {
@@ -280,102 +279,6 @@ export default function AdminOverviewPage() {
               <span className="font-bold text-amber-900 font-mono">{pendingCount}</span>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Quick Navigation Cards (Akses Cepat Modul) */}
-      <div className="pt-2">
-        <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
-          Akses Cepat Modul Operasional
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Link
-            href="/admin/participants"
-            className="p-4 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group"
-          >
-            <div className="flex items-center justify-between text-slate-400 group-hover:text-blue-600 mb-2">
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-              </svg>
-              <span className="text-xs font-bold group-hover:translate-x-0.5 transition-transform">→</span>
-            </div>
-            <div className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-              Daftar Peserta Lengkap
-            </div>
-            <p className="text-[11px] text-slate-500 mt-1">
-              Tabel data seluruh peserta ({total} pendaftar)
-            </p>
-          </Link>
-
-          <Link
-            href="/admin/check-ins"
-            className="p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-400 hover:shadow-md transition-all group"
-          >
-            <div className="flex items-center justify-between text-slate-400 group-hover:text-emerald-600 mb-2">
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="6" height="6" x="3" y="3" rx="1" />
-                <rect width="6" height="6" x="15" y="3" rx="1" />
-                <rect width="6" height="6" x="3" y="15" rx="1" />
-                <path d="M15 15h2v2h-2z" />
-                <path d="M21 15v6h-6" />
-                <path d="M21 21h-2v-2" />
-              </svg>
-              <span className="text-xs font-bold group-hover:translate-x-0.5 transition-transform">→</span>
-            </div>
-            <div className="text-sm font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">
-              Presensi Gate Real-Time
-            </div>
-            <p className="text-[11px] text-slate-500 mt-1">
-              Log pemindaian QR gate ({checkedInCount} hadir)
-            </p>
-          </Link>
-
-          <Link
-            href="/admin/registrations"
-            className="p-4 rounded-2xl bg-white border border-slate-200 hover:border-purple-400 hover:shadow-md transition-all group"
-          >
-            <div className="flex items-center justify-between text-slate-400 group-hover:text-purple-600 mb-2">
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-              </svg>
-              <span className="text-xs font-bold group-hover:translate-x-0.5 transition-transform">→</span>
-            </div>
-            <div className="text-sm font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
-              Verifikasi Registrasi
-            </div>
-            <p className="text-[11px] text-slate-500 mt-1">
-              Validasi status &amp; berkas pendaftaran
-            </p>
-          </Link>
-
-          <Link
-            href="/admin/competitions"
-            className="p-4 rounded-2xl bg-white border border-slate-200 hover:border-amber-400 hover:shadow-md transition-all group"
-          >
-            <div className="flex items-center justify-between text-slate-400 group-hover:text-amber-600 mb-2">
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-                <path d="M4 22h16" />
-                <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-                <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-                <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
-              </svg>
-              <span className="text-xs font-bold group-hover:translate-x-0.5 transition-transform">→</span>
-            </div>
-            <div className="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition-colors">
-              QR Gate &amp; Kompetisi
-            </div>
-            <p className="text-[11px] text-slate-500 mt-1">
-              Manajemen token QR gate &amp; informasi lomba
-            </p>
-          </Link>
         </div>
       </div>
     </div>
