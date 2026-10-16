@@ -159,6 +159,78 @@ export default function Footer() {
 
         </div>
 
+        {/* ─── Supported By Section ─── */}
+        <div className="py-6 sm:py-7 border-b border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-slate-300">
+                SUPPORT BY:
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+              {/* Tactlink Partner Badge Card */}
+              <a
+                href="https://www.tactlink.com/id"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 shadow-xs transition-all hover:scale-[1.02] group cursor-pointer"
+                title="Tactlink - Official Digital Directory Partner"
+              >
+                <div className="relative w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0">
+                  <Image
+                    src="/LOGO_TACTLINK_CROPPED.png"
+                    alt="Logo Tactlink"
+                    fill
+                    sizes="32px"
+                    className="object-contain"
+                  />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="text-xs font-black text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
+                    Tactlink
+                  </span>
+                  <span className="text-[10px] font-semibold text-slate-500">
+                    Digital Directory Partner
+                  </span>
+                </div>
+              </a>
+
+              {/* Braga Citywalk Partner Badge Card */}
+              <a
+                href="https://maps.google.com/?q=Braga+City+Walk+Bandung"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 shadow-xs transition-all hover:scale-[1.02] group cursor-pointer"
+                title="Braga Citywalk - Official Venue Partner"
+              >
+                <div className="relative w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0">
+                  <Image
+                    src="/LOGO_BRAGA_CITYWALK.png"
+                    alt="Logo Braga Citywalk"
+                    fill
+                    sizes="32px"
+                    className="object-contain"
+                  />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="text-xs font-black text-slate-900 group-hover:text-amber-600 transition-colors leading-tight">
+                    Braga Citywalk
+                  </span>
+                  <span className="text-[10px] font-semibold text-slate-500">
+                    Official Venue Partner
+                  </span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div className="text-xs text-slate-500 hidden lg:block">
+            Sinergi digital directory cerdas &amp; venue heritage festival PRIDE Industri 2026.
+          </div>
+        </div>
+
         {/* Bottom Bar: Copyright & Developer / Powered By Attribution */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           
