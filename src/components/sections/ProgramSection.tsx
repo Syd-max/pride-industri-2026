@@ -99,6 +99,7 @@ export default function ProgramSection() {
       className="relative py-20 sm:py-28 bg-slate-50/70 border-t border-slate-200/80"
       aria-label="Rangkaian Program PRIDE Industri 2026"
     >
+      <div id="agenda" className="absolute -top-16" />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}

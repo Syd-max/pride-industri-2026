@@ -365,34 +365,43 @@ export default function ActivitiesDeckSection() {
     }
 
     function updateDeck(scrollProgress: number) {
-      // Maps scrollProgress across card peel stages
-      const stageProgress = scrollProgress * (totalCards - 0.4);
+      // Maps scrollProgress across card peel stages:
+      // We peel Cards 0, 1, 2, 3, 4. Card 5 is the final resting showcase card!
+      const peelableCards = totalCards - 1; // 5 cards to peel
+      const stageProgress = scrollProgress * peelableCards;
       const isMobile = window.innerWidth <= 768;
       const PEEK_STEP_Y = isMobile ? 8 : 12;
       const SCALE_STEP = isMobile ? 0.016 : 0.022;
 
       cards.forEach((card, i) => {
-        // Set z-index: Card 0 is top (60), Card 5 is back (10)
+        // Set z-index: Card 0 is top (60), Card 5 is bottom (10)
         card.style.zIndex = String((totalCards - i) * 10);
-        const depth = i - stageProgress;
+        
+        // Final card (Card 5) NEVER peels down; it remains the resting showcase card
+        const isFinalCard = i === totalCards - 1;
+        const depth = isFinalCard ? Math.max(0, i - stageProgress) : (i - stageProgress);
 
         if (depth < 0) {
           // Card peeling down
           const peelAmount = clamp(-depth, 0, 1);
           const easedPeel = easeInOutCubic(peelAmount);
-          const translateYPercent = easedPeel * 115;
+          const translateYPercent = easedPeel * 120;
+          const opacity = Math.max(0, 1 - Math.pow(peelAmount, 1.8));
+
           card.style.transform = `translate3d(0, ${translateYPercent}%, 0) scale(1)`;
+          card.style.opacity = opacity.toFixed(3);
           card.style.pointerEvents = peelAmount > 0.15 ? 'none' : 'auto';
-          card.style.opacity = String(1 - peelAmount * 0.18);
+          card.style.visibility = peelAmount >= 1 ? 'hidden' : 'visible';
         } else {
-          // Card resting in stack: cap effectiveDepth at 3.8 to prevent excessive upward reach
+          // Card waiting or active in stack
           const effectiveDepth = Math.min(depth, 3.8);
           const yOffset = -effectiveDepth * PEEK_STEP_Y;
           const scale = 1 - effectiveDepth * SCALE_STEP;
 
           card.style.transform = `translate3d(0, ${yOffset}px, 0) scale(${scale.toFixed(4)})`;
-          card.style.pointerEvents = depth < 0.35 ? 'auto' : 'none';
           card.style.opacity = '1';
+          card.style.visibility = 'visible';
+          card.style.pointerEvents = depth < 0.35 ? 'auto' : 'none';
         }
       });
     }
@@ -438,23 +447,6 @@ export default function ActivitiesDeckSection() {
   return (
     <div className="activities-scroll-driver" id="programUnggulan" ref={scrollDriverRef}>
       <section className="activities-stage" aria-label="6 Program Unggulan PRIDE 2026">
-        
-        {/* Base Layer: Revealed when all 6 cards peel down */}
-        <div className="activities-end-screen">
-          <div className="end-screen-pill">
-            <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-            <span>Semua Program Ditampilkan</span>
-          </div>
-          <h3 className="end-screen-title">
-            Siap Menjadi Bagian Dari Kebangkitan Industri Bandung?
-          </h3>
-          <p className="end-screen-meta">
-            27–28 NOVEMBER 2026 · KORIDOR BRAGA &amp; HOTEL PAPANDAYAN
-          </p>
-          <a href="#agenda" className="end-screen-cta">
-            <span>Lihat Jadwal &amp; Rangkaian Acara Lengkap ↓</span>
-          </a>
-        </div>
 
         {/* 6-Card Stack Deck Container */}
         <div className="activities-deck-container" ref={deckContainerRef}>
