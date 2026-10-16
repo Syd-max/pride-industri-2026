@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import TactlinkBanner from '@/components/ui/TactlinkBanner';
 
 type VisitorTab = 'umum' | 'peserta';
 
@@ -936,10 +935,7 @@ export default function CheckInPage() {
       </main>
 
       {/* ─── Footer ─── */}
-      <footer className="py-5 px-4 border-t border-slate-800 bg-slate-900/90 space-y-3">
-        <div className="max-w-md mx-auto">
-          <TactlinkBanner variant="light" />
-        </div>
+      <footer className="py-5 px-4 border-t border-slate-800 bg-slate-900/90">
         <p className="text-center text-[10px] text-slate-500">
           Dinas Perdagangan dan Perindustrian Kota Bandung · PRIDE 2026
         </p>
