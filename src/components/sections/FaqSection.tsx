@@ -100,11 +100,11 @@ export default function FaqSection() {
   ];
 
   const categories = [
-    { key: 'all', label: 'Semua Topik', count: faqs.length },
-    { key: 'pendaftaran', label: 'Pendaftaran & Biaya', count: faqs.filter(f => f.category === 'pendaftaran').length },
-    { key: 'karya', label: 'Aturan Karya & AI', count: faqs.filter(f => f.category === 'karya').length },
-    { key: 'video', label: 'Video 1 Menit & Tagar', count: faqs.filter(f => f.category === 'video').length },
-    { key: 'kehadiran', label: 'Presensi & Lokasi', count: faqs.filter(f => f.category === 'kehadiran').length },
+    { key: 'all', label: 'Semua' },
+    { key: 'pendaftaran', label: 'Pendaftaran' },
+    { key: 'karya', label: 'Desain Kemasan' },
+    { key: 'video', label: 'Lomba Video' },
+    { key: 'kehadiran', label: 'Presensi & Lokasi' },
   ];
 
   const filteredFaqs = useMemo(() => {
@@ -139,27 +139,26 @@ export default function FaqSection() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-7 sm:mb-8">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200 mb-3 shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
-            Bantuan &amp; FAQ
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white text-slate-700 border border-slate-200/90 shadow-2xs mb-3">
+            <span className="w-2 h-2 rounded-full bg-blue-600" />
+            <span>Pusat Bantuan &amp; FAQ</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
             Pertanyaan yang Sering Diajukan
           </h2>
-          <p className="mt-3 text-base text-slate-600 leading-relaxed">
-            Informasi penting seputar pendaftaran, teknis karya, dan kehadiran di
-            PRIDE Industri 2026.
+          <p className="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed max-w-xl mx-auto">
+            Informasi lengkap seputar pendaftaran, teknis karya, dan kehadiran di PRIDE Industri 2026.
           </p>
         </div>
 
         {/* Search & Category Filter Toolbar */}
-        <div className="mb-6 space-y-3.5">
+        <div className="mb-6 sm:mb-8 space-y-4">
           
-          {/* Quick Search Input */}
-          <div className="relative max-w-lg mx-auto">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+          {/* Quick Search Input (Apple-style clean pill) */}
+          <div className="relative max-w-md mx-auto">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
@@ -168,14 +167,14 @@ export default function FaqSection() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari pertanyaan... (contoh: biaya, AI, video, check-in)"
-              className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-2xl outline-none transition-all placeholder:text-slate-400 shadow-xs"
+              placeholder="Cari pertanyaan atau kata kunci..."
+              className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-full outline-none transition-all placeholder:text-slate-400 shadow-2xs"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
                 aria-label="Bersihkan pencarian"
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -186,8 +185,8 @@ export default function FaqSection() {
             )}
           </div>
 
-          {/* Category Filter Chips */}
-          <div className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
+          {/* Category Filter Pills (Rapi, Simetris & Scrollable di Mobile) */}
+          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1.5 sm:pb-0 scrollbar-none justify-start sm:justify-center -mx-4 px-4 sm:mx-0 sm:px-0">
             {categories.map((cat) => {
               const isActive = activeCategory === cat.key;
               return (
@@ -195,20 +194,13 @@ export default function FaqSection() {
                   key={cat.key}
                   type="button"
                   onClick={() => setActiveCategory(cat.key as FaqCategory)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     isActive
-                      ? 'bg-slate-900 text-white shadow-xs'
-                      : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900'
+                      ? 'bg-slate-900 text-white shadow-2xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900'
                   }`}
                 >
-                  <span>{cat.label}</span>
-                  <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
-                      isActive ? 'bg-white/20 text-white' : 'bg-slate-200/90 text-slate-600'
-                    }`}
-                  >
-                    {cat.count}
-                  </span>
+                  {cat.label}
                 </button>
               );
             })}
