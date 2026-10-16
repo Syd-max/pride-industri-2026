@@ -71,7 +71,7 @@ export default function FaqSection() {
       q: 'Apa saja tagar dan akun resmi yang wajib ditandai pada video lomba?',
       a: 'Peserta wajib menyertakan tagar resmi: #disdaginkotabandung #kemilau #prideindustri2026 #bdg #eventbandung #bandung, serta menandai akun Instagram resmi @bdg.perdaganganindustri atau akun TikTok @disdagin.bandung dengan status akun publik (tidak di-private).',
       action: {
-        label: 'Salin Semua Tagar Resmi 📋',
+        label: 'Salin Semua Tagar Resmi',
         type: 'copy',
         copyText: '#disdaginkotabandung #kemilau #prideindustri2026 #bdg #eventbandung #bandung',
       },
@@ -175,10 +175,13 @@ export default function FaqSection() {
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 text-xs font-bold"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
                 aria-label="Bersihkan pencarian"
               >
-                ✕
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
               </button>
             )}
           </div>
@@ -324,7 +327,22 @@ export default function FaqSection() {
                                 : 'text-slate-700 bg-slate-100 hover:bg-slate-200 border-slate-200'
                             }`}
                           >
-                            <span>{copiedHashtags ? '✓ Berhasil Disalin ke Clipboard!' : faq.action.label}</span>
+                            {copiedHashtags ? (
+                              <>
+                                <svg className="w-3.5 h-3.5 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                <span>Berhasil Disalin ke Clipboard!</span>
+                              </>
+                            ) : (
+                              <>
+                                <svg className="w-3.5 h-3.5 text-slate-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                                  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                                </svg>
+                                <span>{faq.action.label}</span>
+                              </>
+                            )}
                           </button>
                         )}
                       </div>
@@ -341,7 +359,9 @@ export default function FaqSection() {
           <div className="space-y-1 text-center sm:text-left">
             <h4 className="text-sm font-extrabold text-white flex items-center justify-center sm:justify-start gap-2">
               <span>Masih punya pertanyaan seputar kompetisi?</span>
-              <span className="inline-block animate-bounce">💬</span>
+              <svg className="w-4 h-4 text-blue-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+              </svg>
             </h4>
             <p className="text-xs text-slate-300">
               Tim panitia Rumah Kemasan Disdagin Kota Bandung siap membantu Anda.

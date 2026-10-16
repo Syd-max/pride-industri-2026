@@ -217,9 +217,12 @@ export default function RegistrationsPage() {
               <button
                 type="button"
                 onClick={() => setSearch('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 font-bold"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
               >
-                ✕
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
               </button>
             )}
           </div>
@@ -258,7 +261,11 @@ export default function RegistrationsPage() {
       {search.trim() && (
         <div className="flex items-center justify-between px-4 py-2 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
           <div className="flex items-center gap-2 font-medium">
-            <span>🔍 Hasil pencarian untuk:</span>
+            <svg className="w-3.5 h-3.5 text-amber-700 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <span>Hasil pencarian untuk:</span>
             <mark className="bg-amber-300 text-amber-950 px-2 py-0.5 rounded font-extrabold">
               &quot;{search}&quot;
             </mark>
@@ -646,9 +653,16 @@ export default function RegistrationsPage() {
                       ? 'bg-emerald-100 text-emerald-800'
                       : 'bg-slate-200 text-slate-700'
                   }`}>
-                    {selectedReg.check_in_status === 'checked_in'
-                      ? `✓ Hadir (${new Date(selectedReg.checked_in_at || '').toLocaleTimeString('id-ID')} WIB)`
-                      : 'Belum Hadir di Lokasi'}
+                    {selectedReg.check_in_status === 'checked_in' ? (
+                      <span className="inline-flex items-center gap-1">
+                        <svg className="w-3 h-3 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span>Hadir ({new Date(selectedReg.checked_in_at || '').toLocaleTimeString('id-ID')} WIB)</span>
+                      </span>
+                    ) : (
+                      'Belum Hadir di Lokasi'
+                    )}
                   </span>
                 </div>
               </div>

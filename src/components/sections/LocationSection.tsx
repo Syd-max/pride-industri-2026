@@ -263,11 +263,36 @@ export default function LocationSection() {
 
                 {/* Quick ETA Badges */}
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500 font-semibold">
-                  <span>🚆 Stasiun KA: 5 mnt</span>
+                  <span className="inline-flex items-center gap-1">
+                    <svg className="w-3 h-3 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect width="16" height="16" x="4" y="3" rx="2"/>
+                      <path d="M4 11h16"/>
+                      <path d="M12 3v8"/>
+                      <path d="m8 19-2 3"/>
+                      <path d="m18 22-2-3"/>
+                      <circle cx="8" cy="15" r="1"/>
+                      <circle cx="16" cy="15" r="1"/>
+                    </svg>
+                    <span>Stasiun KA: 5 mnt</span>
+                  </span>
                   <span>·</span>
-                  <span>🚗 Braga: 27–28 Nov</span>
+                  <span className="inline-flex items-center gap-1">
+                    <svg className="w-3 h-3 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
+                      <circle cx="7" cy="17" r="2"/>
+                      <path d="M9 17h6"/>
+                      <circle cx="17" cy="17" r="2"/>
+                    </svg>
+                    <span>Braga: 27–28 Nov</span>
+                  </span>
                   <span>·</span>
-                  <span>🅿️ Parkir Resmi</span>
+                  <span className="inline-flex items-center gap-1">
+                    <svg className="w-3 h-3 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect width="18" height="18" x="3" y="3" rx="2"/>
+                      <path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>
+                    </svg>
+                    <span>Parkir Resmi</span>
+                  </span>
                 </div>
 
               </div>
@@ -344,14 +369,29 @@ export default function LocationSection() {
                 <button
                   type="button"
                   onClick={handleCopyAddress}
-                  className={`w-full sm:w-auto py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all border cursor-pointer flex items-center justify-center ${
+                  className={`w-full sm:w-auto py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all border cursor-pointer flex items-center justify-center gap-2 ${
                     copied
                       ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
                       : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
                   }`}
                   title="Salin Alamat Lengkap"
                 >
-                  {copied ? '✓ Alamat Disalin!' : 'Salin Alamat 📋'}
+                  {copied ? (
+                    <>
+                      <svg className="w-3.5 h-3.5 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                      <span>Alamat Disalin!</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3.5 h-3.5 text-slate-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                      </svg>
+                      <span>Salin Alamat</span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>
@@ -367,7 +407,35 @@ export default function LocationSection() {
                     key={i}
                     className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs"
                   >
-                    <span className="text-slate-600 font-medium">{eta.label}</span>
+                    <span className="inline-flex items-center gap-2 text-slate-700 font-medium">
+                      {eta.type === 'train' && (
+                        <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect width="16" height="16" x="4" y="3" rx="2"/>
+                          <path d="M4 11h16"/>
+                          <path d="M12 3v8"/>
+                          <path d="m8 19-2 3"/>
+                          <path d="m18 22-2-3"/>
+                          <circle cx="8" cy="15" r="1"/>
+                          <circle cx="16" cy="15" r="1"/>
+                        </svg>
+                      )}
+                      {eta.type === 'car' && (
+                        <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
+                          <circle cx="7" cy="17" r="2"/>
+                          <path d="M9 17h6"/>
+                          <circle cx="17" cy="17" r="2"/>
+                        </svg>
+                      )}
+                      {eta.type === 'walk' && (
+                        <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="13" cy="4" r="2"/>
+                          <path d="M14.5 9h-3.2l-2 5 2.5 1 1.2-3 2 4 3-1"/>
+                          <path d="m9.5 9-2 4"/>
+                        </svg>
+                      )}
+                      <span>{eta.label}</span>
+                    </span>
                     <span className="font-extrabold text-blue-700 font-mono bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
                       {eta.time}
                     </span>

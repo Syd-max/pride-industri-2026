@@ -745,7 +745,11 @@ export default function CheckInPage() {
 
                 {/* Non-Delegable & Strict Code Warning Banner */}
                 <div className="p-3 rounded-xl bg-amber-500/15 border border-amber-500/35 text-amber-200 text-xs leading-relaxed flex items-start gap-2.5">
-                  <span className="text-amber-400 font-black text-sm flex-shrink-0">⚠️</span>
+                  <svg className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
                   <div>
                     <strong className="text-amber-100 font-bold block mb-0.5">Wajib Kode Resmi &amp; Tidak Bisa Diwakilkan!</strong>
                     Presensi ini hanya untuk diri sendiri. Pastikan kode registrasi sesuai dengan bukti pendaftaran Anda. Jika kode tidak terdaftar atau salah, presensi akan gagal.
@@ -889,12 +893,23 @@ export default function CheckInPage() {
             {/* Instruction Notice */}
             <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-700/80 text-xs text-slate-300 leading-relaxed text-left">
               {successResult.visitor_type === 'peserta' ? (
-                <p>
-                  🏆 <strong>Informasi Peserta:</strong> Tunjukkan E-Badge ini ke Meja Registrasi Utama di dekat panggung untuk pengambilan <strong>ID Card &amp; Kit Peserta Resmi</strong>.
+                <p className="flex items-start gap-2">
+                  <svg className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+                    <path d="M4 22h16"/>
+                    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+                    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+                    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                  </svg>
+                  <span><strong>Informasi Peserta:</strong> Tunjukkan E-Badge ini ke Meja Registrasi Utama di dekat panggung untuk pengambilan <strong>ID Card &amp; Kit Peserta Resmi</strong>.</span>
                 </p>
               ) : (
-                <p>
-                  🎉 <strong>Selamat Menikmati Acara:</strong> Kunjungi booth pameran IKM unggulan, bazar kuliner lokal, dan panggung pertunjukan di sepanjang selasar Braga City Walk!
+                <p className="flex items-start gap-2">
+                  <svg className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                  </svg>
+                  <span><strong>Selamat Menikmati Acara:</strong> Kunjungi booth pameran IKM unggulan, bazar kuliner lokal, dan panggung pertunjukan di sepanjang selasar Braga City Walk!</span>
                 </p>
               )}
             </div>

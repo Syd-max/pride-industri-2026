@@ -228,10 +228,13 @@ export default function ParticipantsPage() {
               <button
                 type="button"
                 onClick={() => setSearch('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-0.5 rounded cursor-pointer"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-0.5 rounded cursor-pointer transition-colors"
                 title="Hapus pencarian"
               >
-                ✕
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
               </button>
             )}
           </div>
@@ -524,9 +527,16 @@ export default function ParticipantsPage() {
                       ? 'bg-emerald-100 text-emerald-800'
                       : 'bg-slate-200 text-slate-700'
                   }`}>
-                    {selectedParticipant.check_in_status === 'checked_in'
-                      ? '✓ Hadir di Braga'
-                      : 'Belum Hadir'}
+                    {selectedParticipant.check_in_status === 'checked_in' ? (
+                      <span className="inline-flex items-center gap-1">
+                        <svg className="w-3 h-3 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span>Hadir di Braga</span>
+                      </span>
+                    ) : (
+                      'Belum Hadir'
+                    )}
                   </span>
                   <button
                     type="button"

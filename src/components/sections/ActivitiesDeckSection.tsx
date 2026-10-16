@@ -8,7 +8,7 @@ interface ProgramPreview {
   title: string;
   category: string;
   venue: string;
-  icon: string;
+  iconType: 'fashion' | 'packaging' | 'video' | 'gala' | 'cert' | 'music';
   accent: string;
 }
 
@@ -18,7 +18,7 @@ const PROGRAMS: ProgramPreview[] = [
     title: 'Fashion Show Runway',
     category: 'Fesyen & Wastra',
     venue: '27 Nov · Main Stage Braga',
-    icon: '👗',
+    iconType: 'fashion',
     accent: '#ec4899',
   },
   {
@@ -26,7 +26,7 @@ const PROGRAMS: ProgramPreview[] = [
     title: 'Lomba Desain Kemasan',
     category: 'Eco-Packaging IKM',
     venue: '28 Nov · Expo Braga City Walk',
-    icon: '📦',
+    iconType: 'packaging',
     accent: '#10b981',
   },
   {
@@ -34,7 +34,7 @@ const PROGRAMS: ProgramPreview[] = [
     title: 'Lomba Video 1 Menit',
     category: 'Kreativitas Visual',
     venue: '27–28 Nov · Braga City Walk',
-    icon: '🎬',
+    iconType: 'video',
     accent: '#f59e0b',
   },
   {
@@ -42,7 +42,7 @@ const PROGRAMS: ProgramPreview[] = [
     title: 'Malam Gala SIINAS',
     category: 'Apresiasi Industri',
     venue: '28 Nov · Hotel Papandayan',
-    icon: '🏆',
+    iconType: 'gala',
     accent: '#eab308',
   },
   {
@@ -50,7 +50,7 @@ const PROGRAMS: ProgramPreview[] = [
     title: 'Sertifikasi Halal & SNI',
     category: 'Standarisasi Mutu',
     venue: '27–28 Nov · Main Stage Braga',
-    icon: '🎖️',
+    iconType: 'cert',
     accent: '#06b6d4',
   },
   {
@@ -58,7 +58,7 @@ const PROGRAMS: ProgramPreview[] = [
     title: 'Panggung Seni Budaya',
     category: 'Perkusi & Musik Etnik',
     venue: '27–28 Nov · Area Braga',
-    icon: '🎭',
+    iconType: 'music',
     accent: '#8b5cf6',
   },
 ];
@@ -740,7 +740,12 @@ export default function ActivitiesDeckSection() {
                 </h2>
               </div>
               <div className="hidden sm:flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-full text-xs font-mono font-bold text-slate-700 shadow-xs">
-                <span>📍 Braga City Walk</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <svg className="w-3.5 h-3.5 text-rose-500 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                  </svg>
+                  <span>Braga City Walk</span>
+                </span>
                 <span className="text-slate-300">•</span>
                 <span className="text-rose-600">27–28 Nov 2026</span>
               </div>
@@ -767,7 +772,50 @@ export default function ActivitiesDeckSection() {
                   >
                     <div className="deck-program-item-top">
                       <span className="deck-prog-idx font-mono font-bold">{`0${prog.id}`}</span>
-                      <span className="deck-prog-icon text-lg sm:text-xl">{prog.icon}</span>
+                      <span className="deck-prog-icon flex items-center justify-center">
+                        {prog.iconType === 'fashion' && (
+                          <svg className="w-5 h-5 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
+                          </svg>
+                        )}
+                        {prog.iconType === 'packaging' && (
+                          <svg className="w-5 h-5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="m7.5 4.27 9 5.15"/>
+                            <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                            <path d="m3.3 7 8.7 5 8.7-5"/>
+                            <path d="M12 22V12"/>
+                          </svg>
+                        )}
+                        {prog.iconType === 'video' && (
+                          <svg className="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/>
+                            <rect x="2" y="6" width="14" height="12" rx="2"/>
+                          </svg>
+                        )}
+                        {prog.iconType === 'gala' && (
+                          <svg className="w-5 h-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+                            <path d="M4 22h16"/>
+                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                          </svg>
+                        )}
+                        {prog.iconType === 'cert' && (
+                          <svg className="w-5 h-5 text-cyan-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                            <path d="m9 12 2 2 4-4"/>
+                          </svg>
+                        )}
+                        {prog.iconType === 'music' && (
+                          <svg className="w-5 h-5 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M9 18V5l12-2v13"/>
+                            <circle cx="6" cy="18" r="3"/>
+                            <circle cx="18" cy="16" r="3"/>
+                          </svg>
+                        )}
+                      </span>
                     </div>
                     <div className="deck-program-item-body">
                       <div className="deck-prog-title group-hover:text-rose-600 transition-colors">

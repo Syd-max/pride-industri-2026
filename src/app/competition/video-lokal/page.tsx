@@ -195,31 +195,31 @@ export default function VideoLokalPage() {
     id: VideoCategory;
     title: string;
     desc: string;
-    icon: string;
+    iconType: 'fashion' | 'culinary' | 'craft' | 'festival';
   }> = [
     {
       id: 'Fesyen',
       title: 'Fesyen',
       desc: 'Pesona karya apparel, tekstil & fashion lokal Bandung.',
-      icon: '👗',
+      iconType: 'fashion',
     },
     {
       id: 'Kuliner',
       title: 'Kuliner',
       desc: 'Eksplorasi cita rasa, kemasan & keunikan santapan khas.',
-      icon: '🍜',
+      iconType: 'culinary',
     },
     {
       id: 'Kriya',
       title: 'Kriya',
       desc: 'Kreativitas seni, kerajinan tangan & kriya lokal unggulan.',
-      icon: '🏺',
+      iconType: 'craft',
     },
     {
       id: 'PRIDE Industri 2026',
       title: 'PRIDE Industri 2026',
       desc: 'Keseruan, kemeriahan & pengalaman festival di Braga City Walk.',
-      icon: '🎬',
+      iconType: 'festival',
     },
   ];
 
@@ -321,7 +321,11 @@ export default function VideoLokalPage() {
             {/* Next Steps Instructions */}
             <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/90 text-xs text-slate-600 text-left space-y-2.5 max-w-lg mx-auto leading-relaxed">
               <div className="font-extrabold text-slate-900 uppercase tracking-wider text-[11px] flex items-center gap-2">
-                <span>📌</span> Langkah Selanjutnya Bagi Peserta:
+                <svg className="w-3.5 h-3.5 text-rose-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 17v5"/>
+                  <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1z"/>
+                </svg>
+                <span>Langkah Selanjutnya Bagi Peserta:</span>
               </div>
               <ol className="list-decimal pl-4 space-y-1.5 text-slate-600">
                 <li>
@@ -388,7 +392,13 @@ export default function VideoLokalPage() {
             <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="space-y-1">
                 <div className="text-xs font-extrabold text-slate-900 flex items-center gap-2">
-                  <span>📄</span> Pedoman Teknis & Template Dokumen Lomba
+                  <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                  </svg>
+                  <span>Pedoman Teknis &amp; Template Dokumen Lomba</span>
                 </div>
                 <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed">
                   Unduh formulir template Pakta Integritas dan Surat Pernyataan Persetujuan Publikasi (format resmi Disdagin).
@@ -560,14 +570,45 @@ export default function VideoLokalPage() {
                                 : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'
                             }`}
                           >
-                            <span className="text-2xl mt-0.5 flex-shrink-0">{cat.icon}</span>
-                            <div className="space-y-0.5 min-w-0">
+                            <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+                              {cat.iconType === 'fashion' && (
+                                <svg className="w-5 h-5 text-pink-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
+                                </svg>
+                              )}
+                              {cat.iconType === 'culinary' && (
+                                <svg className="w-5 h-5 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/>
+                                  <path d="M15 2v19"/>
+                                  <path d="M5 2v19"/>
+                                  <path d="M8 2v6a3 3 0 0 1-3 3"/>
+                                </svg>
+                              )}
+                              {cat.iconType === 'craft' && (
+                                <svg className="w-5 h-5 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+                                  <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+                                  <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+                                  <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+                                  <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+                                </svg>
+                              )}
+                              {cat.iconType === 'festival' && (
+                                <svg className="w-5 h-5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <rect width="20" height="15" x="2" y="7" rx="2" ry="2"/>
+                                  <polyline points="17 2 12 7 7 2"/>
+                                </svg>
+                              )}
+                            </div>
+                            <div className="space-y-0.5 min-w-0 flex-1">
                               <div className="flex items-center justify-between">
                                 <span className={`text-xs font-extrabold ${isSelected ? 'text-rose-900' : 'text-slate-800'}`}>
                                   {cat.title}
                                 </span>
                                 {isSelected && (
-                                  <span className="text-rose-600 font-bold text-xs">✓</span>
+                                  <svg className="w-3.5 h-3.5 text-rose-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                  </svg>
                                 )}
                               </div>
                               <p className="text-[11px] text-slate-500 leading-snug">
@@ -654,8 +695,12 @@ export default function VideoLokalPage() {
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold shadow-xs">
-                            📸
+                          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shadow-xs shrink-0">
+                            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                            </svg>
                           </div>
                           <div>
                             <span className="text-xs font-extrabold text-slate-900 block">
@@ -685,8 +730,10 @@ export default function VideoLokalPage() {
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white text-lg font-bold shadow-xs">
-                            🎵
+                          <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-xs shrink-0">
+                            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743 2.895 2.895 0 0 1 2.31-4.643c.307 0 .603.048.882.138V9.324a6.34 6.34 0 0 0-.882-.061C6.012 9.263 3.2 12.075 3.2 15.547 3.2 19.02 6.012 21.83 9.484 21.83c3.473 0 6.285-2.811 6.285-6.284V8.756c1.373.985 3.056 1.572 4.88 1.624v-3.48a4.82 4.82 0 0 1-1.06-.214z"/>
+                            </svg>
                           </div>
                           <div>
                             <span className="text-xs font-extrabold text-slate-900 block">
@@ -820,8 +867,13 @@ export default function VideoLokalPage() {
                         />
                       </div>
                     </div>
-                    <p className="text-[11px] text-slate-500 leading-relaxed">
-                      💡 <strong>Catatan:</strong> Tautan dapat dikosongkan terlebih dahulu saat pendaftaran awal. Peserta dapat melengkapi tautan setelah proses shooting di Braga City Walk dan publikasi video paling lambat <strong>28 November 2026 pukul 14:00 WIB</strong>.
+                    <p className="text-[11px] text-slate-500 leading-relaxed flex items-start gap-1.5">
+                      <svg className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/>
+                        <path d="M9 18h6"/>
+                        <path d="M10 22h4"/>
+                      </svg>
+                      <span><strong>Catatan:</strong> Tautan dapat dikosongkan terlebih dahulu saat pendaftaran awal. Peserta dapat melengkapi tautan setelah proses shooting di Braga City Walk dan publikasi video paling lambat <strong>28 November 2026 pukul 14:00 WIB</strong>.</span>
                     </p>
                   </div>
                 </div>
@@ -951,8 +1003,10 @@ export default function VideoLokalPage() {
                     {paktaFile ? (
                       <div className="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200 flex items-center justify-between gap-3 animate-fadeIn">
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                            ✓
+                          <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"/>
+                            </svg>
                           </div>
                           <div className="min-w-0">
                             <span className="text-xs font-bold text-slate-800 block truncate">
@@ -1052,8 +1106,10 @@ export default function VideoLokalPage() {
                     {suratFile ? (
                       <div className="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200 flex items-center justify-between gap-3 animate-fadeIn">
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                            ✓
+                          <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"/>
+                            </svg>
                           </div>
                           <div className="min-w-0">
                             <span className="text-xs font-bold text-slate-800 block truncate">
