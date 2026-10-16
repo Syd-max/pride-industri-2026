@@ -9,9 +9,26 @@ export default function ParticipantsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [compFilter, setCompFilter] = useState('all');
-  const [attendanceFilter, setAttendanceFilter] = useState('all');
   const [selectedParticipant, setSelectedParticipant] = useState<PrideRegistration | null>(null);
   const [showGateQrModal, setShowGateQrModal] = useState(false);
+
+  // Helper for real-time yellow text highlighting on search match
+  const highlightMatch = (text: string, query: string) => {
+    if (!query || !text) return text;
+    const cleanQuery = query.trim();
+    if (!cleanQuery) return text;
+    const regex = new RegExp(`(${cleanQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const parts = text.split(regex);
+    return parts.map((part, i) =>
+      regex.test(part) ? (
+        <mark key={i} className="bg-amber-300 text-amber-950 font-extrabold px-0.5 rounded">
+          {part}
+        </mark>
+      ) : (
+        part
+      )
+    );
+  };
 
   const fetchData = async () => {
     try {
@@ -36,8 +53,9 @@ export default function ParticipantsPage() {
 
   // Filter participants
   const filtered = participants.filter((p) => {
-    const q = search.toLowerCase();
+    const q = search.toLowerCase().trim();
     const matchQuery =
+      !q ||
       p.full_name.toLowerCase().includes(q) ||
       p.email.toLowerCase().includes(q) ||
       p.registration_code.toLowerCase().includes(q) ||
@@ -45,17 +63,9 @@ export default function ParticipantsPage() {
 
     const matchComp =
       compFilter === 'all' || p.competition_id === compFilter;
-    const matchAttendance =
-      attendanceFilter === 'all' || p.check_in_status === attendanceFilter;
 
-    return matchQuery && matchComp && matchAttendance;
+    return matchQuery && matchComp;
   });
-
-  // Calculate live stats
-  const totalCount = participants.length;
-  const checkedInCount = participants.filter((p) => p.check_in_status === 'checked_in').length;
-  const notCheckedInCount = totalCount - checkedInCount;
-  const attendanceRate = totalCount > 0 ? Math.round((checkedInCount / totalCount) * 100) : 0;
 
   // Toggle Check-in status manually (Admin Manage Presensi)
   const handleToggleCheckIn = async (p: PrideRegistration) => {
@@ -198,94 +208,68 @@ export default function ParticipantsPage() {
         </div>
       </div>
 
-      {/* ─── Attendance Quick Stat Strip ─── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Peserta</div>
-          <div className="text-2xl font-black text-slate-900 mt-1">{loading ? '...' : totalCount}</div>
-          <div className="text-[10px] text-slate-400 mt-0.5">Seluruh Kategori Lomba</div>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-200 shadow-2xs">
-          <div className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Hadir di Lokasi</span>
-          </div>
-          <div className="text-2xl font-black text-emerald-600 mt-1">{loading ? '...' : checkedInCount}</div>
-          <div className="text-[10px] text-emerald-700 font-semibold mt-0.5">Tingkat Kehadiran: {attendanceRate}%</div>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-amber-50/40 border border-amber-200 shadow-2xs">
-          <div className="text-[11px] font-bold text-amber-800 uppercase tracking-wider">Belum Presensi</div>
-          <div className="text-2xl font-black text-amber-600 mt-1">{loading ? '...' : notCheckedInCount}</div>
-          <div className="text-[10px] text-amber-700 font-medium mt-0.5">Menunggu Kedatangan</div>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-blue-50/40 border border-blue-200 shadow-2xs">
-          <div className="text-[11px] font-bold text-blue-800 uppercase tracking-wider">Sistem Presensi</div>
-          <div className="text-sm font-extrabold text-blue-900 mt-2 flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-blue-500" />
-            <span>QR Scan &amp; Manual</span>
-          </div>
-          <div className="text-[10px] text-blue-600 font-medium mt-0.5">Sinkronisasi Real-Time</div>
-        </div>
-      </div>
-
-      {/* ─── Search & Filter Toolbar ─── */}
-      <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-wrap items-center gap-3 text-xs">
-        <div className="flex-1 min-w-[240px]">
+      {/* ─── Sticky Locked Search & Filter Toolbar ─── */}
+      <div className="sticky top-16 sm:top-20 z-20 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-3 sm:p-4 shadow-sm flex flex-wrap items-center gap-3 text-xs mb-4">
+        {/* Search Input */}
+        <div className="flex-1 min-w-[260px]">
           <div className="relative">
             <input
-              type="search"
+              type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari nama peserta, email, nomor HP, atau kode..."
-              className="form-input text-xs py-2.5 pl-9 pr-3.5 w-full rounded-xl"
+              className="form-input text-xs py-2.5 pl-9 pr-8 w-full rounded-xl bg-slate-50/70 focus:bg-white border-slate-200"
             />
-            <svg className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
             </svg>
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-0.5 rounded cursor-pointer"
+                title="Hapus pencarian"
+              >
+                ✕
+              </button>
+            )}
           </div>
         </div>
 
+        {/* Competition Filter Dropdown Only (2 Lomba) */}
         <div className="w-full sm:w-auto">
           <select
             value={compFilter}
             onChange={(e) => setCompFilter(e.target.value)}
-            className="form-input form-select text-xs py-2.5 px-3.5 w-full sm:w-auto rounded-xl"
+            className="form-input form-select text-xs py-2.5 px-3.5 w-full sm:w-auto rounded-xl bg-slate-50/70 font-semibold text-slate-700 border-slate-200"
           >
             <option value="all">Semua Kategori Lomba</option>
-            <option value="desain-kemasan">Desain Kemasan</option>
-            <option value="video-lokal">Video 1 Menit</option>
+            <option value="desain-kemasan">Lomba Desain Kemasan</option>
+            <option value="video-lokal">Lomba Video 1 Menit</option>
           </select>
         </div>
 
-        <div className="w-full sm:w-auto">
-          <select
-            value={attendanceFilter}
-            onChange={(e) => setAttendanceFilter(e.target.value)}
-            className="form-input form-select text-xs py-2.5 px-3.5 w-full sm:w-auto rounded-xl"
-          >
-            <option value="all">Semua Status Presensi</option>
-            <option value="checked_in">Sudah Hadir di Braga</option>
-            <option value="not_checked_in">Belum Presensi</option>
-          </select>
+        {/* Counter Badge */}
+        <div className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 border border-slate-200/80 text-[11px] font-bold text-slate-600 whitespace-nowrap ml-auto">
+          <span>Menampilkan:</span>
+          <span className="text-blue-600 font-extrabold">{filtered.length}</span>
+          <span>dari {participants.length} Peserta</span>
         </div>
       </div>
 
-      {/* ─── DIRECTORY TABLE (Clean, Spacious, No Overlapping!) ─── */}
-      <div className="admin-card overflow-hidden p-0 bg-white border border-slate-200 shadow-sm rounded-2xl">
-        <div className="overflow-x-auto w-full">
+      {/* ─── DIRECTORY TABLE (Clean, Spacious, Sticky Header, Scrollable Data) ─── */}
+      <div className="overflow-hidden bg-white border border-slate-200 shadow-sm rounded-2xl">
+        <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-270px)] w-full">
           <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
-                <th className="py-3.5 px-5 min-w-[240px]">Kode Registrasi</th>
-                <th className="py-3.5 px-5 min-w-[240px]">Nama &amp; Identitas Peserta</th>
-                <th className="py-3.5 px-5 min-w-[160px]">Kategori Lomba</th>
-                <th className="py-3.5 px-5 min-w-[150px]">Kontak WhatsApp</th>
-                <th className="py-3.5 px-5 min-w-[200px]">Status Presensi Gate (Manage)</th>
-                <th className="py-3.5 px-5 min-w-[130px] text-right pr-6">Aksi Detail</th>
+            <thead className="sticky top-0 z-10 bg-slate-50 border-b border-slate-200 shadow-2xs">
+              <tr className="text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+                <th className="py-3.5 px-5 min-w-[220px] whitespace-nowrap bg-slate-50">Kode Registrasi</th>
+                <th className="py-3.5 px-5 min-w-[240px] whitespace-nowrap bg-slate-50">Nama &amp; Identitas Peserta</th>
+                <th className="py-3.5 px-5 min-w-[150px] whitespace-nowrap bg-slate-50">Kategori Lomba</th>
+                <th className="py-3.5 px-5 min-w-[150px] whitespace-nowrap bg-slate-50">Kontak WhatsApp</th>
+                <th className="py-3.5 px-5 min-w-[220px] whitespace-nowrap bg-slate-50">Status Presensi Gate</th>
+                <th className="py-3.5 px-5 min-w-[110px] whitespace-nowrap bg-slate-50 text-right pr-6">Aksi Detail</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -310,24 +294,24 @@ export default function ParticipantsPage() {
                       className="hover:bg-slate-50/80 transition-colors"
                     >
                       {/* Column 1: Kode Registrasi */}
-                      <td className="py-3.5 px-5">
+                      <td className="py-3.5 px-5 whitespace-nowrap">
                         <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200/90 inline-flex items-center gap-1.5 whitespace-nowrap">
-                          <span>{p.registration_code}</span>
+                          {highlightMatch(p.registration_code, search)}
                         </span>
                       </td>
 
                       {/* Column 2: Nama & Identitas */}
-                      <td className="py-3.5 px-5">
+                      <td className="py-3.5 px-5 whitespace-nowrap">
                         <div className="font-extrabold text-slate-900 text-sm whitespace-nowrap">
-                          {p.full_name}
+                          {highlightMatch(p.full_name, search)}
                         </div>
                         <div className="text-[11px] text-slate-500 font-medium whitespace-nowrap">
-                          {p.email}
+                          {highlightMatch(p.email, search)}
                         </div>
                       </td>
 
                       {/* Column 3: Kategori Lomba */}
-                      <td className="py-3.5 px-5">
+                      <td className="py-3.5 px-5 whitespace-nowrap">
                         <span
                           className={`inline-block px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap ${
                             p.competition_id === 'desain-kemasan'
@@ -350,18 +334,18 @@ export default function ParticipantsPage() {
                           className="font-mono text-xs text-slate-700 hover:text-emerald-600 font-semibold inline-flex items-center gap-1.5 transition-colors"
                           title="Hubungi via WhatsApp"
                         >
-                          <span>{p.phone}</span>
+                          <span>{highlightMatch(p.phone, search)}</span>
                           <span className="text-[10px] text-emerald-600 font-bold">↗</span>
                         </a>
                       </td>
 
                       {/* Column 5: Status Presensi (Manage Live) */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
-                        <div className="flex flex-col gap-1 items-start">
+                        <div className="flex flex-col gap-1 items-start whitespace-nowrap">
                           <button
                             type="button"
                             onClick={() => handleToggleCheckIn(p)}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 border ${
+                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 border whitespace-nowrap ${
                               isCheckedIn
                                 ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
                                 : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900'
@@ -388,7 +372,7 @@ export default function ParticipantsPage() {
                           </button>
 
                           {isCheckedIn && p.checked_in_at && (
-                            <span className="text-[10px] font-mono text-slate-400 ml-1">
+                            <span className="text-[10px] font-mono text-slate-400 ml-1 whitespace-nowrap">
                               Waktu: {new Date(p.checked_in_at).toLocaleTimeString('id-ID')} WIB
                             </span>
                           )}
@@ -400,7 +384,7 @@ export default function ParticipantsPage() {
                         <button
                           type="button"
                           onClick={() => setSelectedParticipant(p)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-600 hover:bg-blue-50 border border-blue-200 transition-colors cursor-pointer inline-flex items-center gap-1"
+                          className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-600 hover:bg-blue-50 border border-blue-200 transition-colors cursor-pointer inline-flex items-center gap-1 whitespace-nowrap"
                         >
                           <span>Detail</span>
                           <span aria-hidden="true">→</span>
