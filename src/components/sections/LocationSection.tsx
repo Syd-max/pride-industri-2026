@@ -142,15 +142,14 @@ export default function LocationSection() {
           </div>
 
           {/* Interactive Map Viewport with Floating Apple Place Card */}
-          <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] bg-slate-100 overflow-hidden">
+          <div className="relative w-full h-[420px] sm:h-[480px] lg:h-[540px] bg-slate-100 overflow-hidden">
             {/* Embedded Interactive Google Map */}
             <iframe
               key={currentVenue.key}
               title={`Peta Lokasi ${currentVenue.name}`}
               src={currentVenue.embedUrl}
-              width="100%"
-              height="100%"
-              className="w-full h-full border-0 select-none"
+              style={{ width: '100%', height: '100%', minHeight: '100%', border: 0 }}
+              className="w-full h-full block border-0 select-none"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               allowFullScreen

@@ -20,44 +20,107 @@ export default function ActivitiesDeckSection() {
       return Math.max(min, Math.min(max, val));
     }
 
+    function easeInOutCubic(t: number) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
     function updateDeck(scrollProgress: number) {
       const isMobile = window.innerWidth <= 768;
-      const PEEK_STEP_Y = isMobile ? 10 : 16;
-      const SCALE_STEP = isMobile ? 0.024 : 0.032;
+      const PEEK_STEP_Y = isMobile ? 12 : 18;
+      const SCALE_STEP = isMobile ? 0.024 : 0.030;
 
-      // Calibration: 6 peel transitions for 7 cards across scroll window
-      const peelableCount = totalCards - 1; // 6 transitions
-      const t = clamp((scrollProgress - 0.04) / 0.92, 0, 1) * peelableCount;
+      const peelableCount = totalCards - 1; // 6 transitions (0 to 5), Card 6 is finale
+      // Total domain s from 0 to 6 across scroll range
+      const s = clamp((scrollProgress - 0.02) / 0.96, 0, 1) * peelableCount;
 
       cards.forEach((card, i) => {
-        // Z-Index order: Card 0 is 70, Card 1 is 60, ..., Card 6 is 10
+        // Base z-index: Card 0 is 70, Card 6 is 10
         card.style.zIndex = String((totalCards - i) * 10);
 
-        const isFinalCard = i === totalCards - 1;
-        const depth = isFinalCard ? Math.max(0, i - t) : (i - t);
+        if (i < peelableCount) {
+          // Cards 0 to 5
+          if (s < i) {
+            // Waiting behind in stack
+            const depth = i - s;
+            const effectiveDepth = Math.min(depth, 3);
+            const yOffset = -effectiveDepth * PEEK_STEP_Y;
+            const scale = 1 - effectiveDepth * SCALE_STEP;
 
-        if (depth < 0) {
-          // Card has peeled off: slide UPWARD cleanly out of the stack
-          const peelAmount = clamp(-depth, 0, 1);
-          const easedPeel = peelAmount * (1.6 - 0.6 * peelAmount);
-          const translateYPercent = -easedPeel * 112; // Slide fully up and off screen
-          const scale = 1 - easedPeel * 0.04;
-          const opacity = peelAmount >= 0.88 ? Math.max(0, 1 - (peelAmount - 0.88) / 0.12) : 1;
+            card.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+            card.style.opacity = '1';
+            card.style.visibility = 'visible';
+            card.style.pointerEvents = 'none';
+          } else if (s >= i && s < i + 1) {
+            // Currently active card stage
+            const stageT = s - i; // 0.0 to 1.0
 
-          card.style.transform = `translate3d(0, ${translateYPercent.toFixed(2)}%, 0) scale(${scale.toFixed(4)})`;
-          card.style.opacity = opacity.toFixed(3);
-          card.style.pointerEvents = peelAmount > 0.1 ? 'none' : 'auto';
-          card.style.visibility = peelAmount >= 0.99 ? 'hidden' : 'visible';
+            if (stageT < 0.42) {
+              // DWELL: Card is firmly centered and 100% visible for reading
+              card.style.transform = 'translate3d(0, 0px, 0) scale(1)';
+              card.style.opacity = '1';
+              card.style.visibility = 'visible';
+              card.style.pointerEvents = 'auto';
+            } else {
+              // PEEL: Card peels off cleanly upward out of the stack
+              const peelProgress = (stageT - 0.42) / 0.58;
+              const eased = easeInOutCubic(peelProgress);
+              const translateYPercent = -eased * 115;
+              const scale = 1 - eased * 0.04;
+              const opacity = peelProgress > 0.82 ? Math.max(0, 1 - (peelProgress - 0.82) / 0.18) : 1;
+
+              card.style.transform = `translate3d(0, ${translateYPercent.toFixed(2)}%, 0) scale(${scale.toFixed(4)})`;
+              card.style.opacity = opacity.toFixed(3);
+              card.style.visibility = peelProgress >= 0.99 ? 'hidden' : 'visible';
+              card.style.pointerEvents = peelProgress > 0.15 ? 'none' : 'auto';
+            }
+          } else {
+            // s >= i + 1: Card already peeled away
+            card.style.transform = 'translate3d(0, -115%, 0) scale(0.96)';
+            card.style.opacity = '0';
+            card.style.visibility = 'hidden';
+            card.style.pointerEvents = 'none';
+          }
         } else {
-          // Card is active or waiting behind in the stack
-          const effectiveDepth = Math.min(depth, 4);
-          const yOffset = effectiveDepth * PEEK_STEP_Y;
-          const scale = 1 - effectiveDepth * SCALE_STEP;
+          // Final Card 6 (Seni Budaya & Musik Etnik)
+          if (s < peelableCount - 1) {
+            // Waiting behind in stack
+            const depth = peelableCount - s;
+            const effectiveDepth = Math.min(depth, 3);
+            const yOffset = -effectiveDepth * PEEK_STEP_Y;
+            const scale = 1 - effectiveDepth * SCALE_STEP;
 
-          card.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
-          card.style.opacity = '1';
-          card.style.visibility = 'visible';
-          card.style.pointerEvents = depth < 0.3 ? 'auto' : 'none';
+            card.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+            card.style.opacity = '1';
+            card.style.visibility = 'visible';
+            card.style.pointerEvents = 'none';
+          } else if (s >= peelableCount - 1 && s < peelableCount) {
+            // Rising to active as Card 5 peels away
+            const stageT = s - (peelableCount - 1);
+            if (stageT < 0.42) {
+              const yOffset = -PEEK_STEP_Y;
+              const scale = 1 - SCALE_STEP;
+              card.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+              card.style.opacity = '1';
+              card.style.visibility = 'visible';
+              card.style.pointerEvents = 'none';
+            } else {
+              const peelProgress = (stageT - 0.42) / 0.58;
+              const eased = easeInOutCubic(peelProgress);
+              const yOffset = -PEEK_STEP_Y * (1 - eased);
+              const scale = (1 - SCALE_STEP) + SCALE_STEP * eased;
+
+              card.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+              card.style.opacity = '1';
+              card.style.visibility = 'visible';
+              card.style.pointerEvents = peelProgress > 0.5 ? 'auto' : 'none';
+            }
+          } else {
+            // Resting finale card at center
+            card.style.transform = 'translate3d(0, 0px, 0) scale(1)';
+            card.style.opacity = '1';
+            card.style.visibility = 'visible';
+            card.style.pointerEvents = 'auto';
+          }
         }
       });
     }

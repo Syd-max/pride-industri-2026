@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { EVENT_CONFIG } from '@/config/event';
-import TactlinkBanner from '@/components/ui/TactlinkBanner';
 import type { DesainKemasanFormData } from '@/types';
 
 export default function DesainKemasanPage() {
@@ -519,11 +518,6 @@ export default function DesainKemasanPage() {
             </form>
           </div>
         )}
-
-        {/* Tactlink Partner Banner */}
-        <div className="mt-8 sm:mt-10 max-w-2xl mx-auto">
-          <TactlinkBanner variant="light" />
-        </div>
 
       </div>
     </div>

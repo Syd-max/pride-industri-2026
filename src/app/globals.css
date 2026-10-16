@@ -95,9 +95,13 @@ body {
 }
 
 /* Responsive Media Constraint */
-img, video, canvas, iframe {
+img, video, canvas {
   max-width: 100%;
   height: auto;
+}
+
+iframe {
+  max-width: 100%;
 }
 
 /* Sticky Header Compensation for In-Page Anchor Navigation */

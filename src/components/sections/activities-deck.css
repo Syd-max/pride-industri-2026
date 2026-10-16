@@ -13,14 +13,14 @@
 
 /* Scroll Driver: Fast & responsive timeline for natural scrolling */
 .activities-scroll-driver {
-  height: 360vh;
+  height: 520vh;
   position: relative;
   width: 100%;
 }
 
 @media (max-width: 768px) {
   .activities-scroll-driver {
-    height: 240vh;
+    height: 440vh;
   }
 }
 
