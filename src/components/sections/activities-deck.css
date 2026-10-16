@@ -13,14 +13,14 @@
 
 /* Scroll Driver: Fast & responsive timeline for natural scrolling */
 .activities-scroll-driver {
-  height: 320vh;
+  height: 360vh;
   position: relative;
   width: 100%;
 }
 
 @media (max-width: 768px) {
   .activities-scroll-driver {
-    height: 200vh;
+    height: 240vh;
   }
 }
 
@@ -310,6 +310,12 @@
   border-color: #bfdbfe;
 }
 
+.chip-purple {
+  background: #faf5ff;
+  color: #7c3aed;
+  border-color: #e9d5ff;
+}
+
 /* Cover Card Footer */
 .deck-cover-footer {
   position: relative;
@@ -337,7 +343,7 @@
 }
 
 /* ==========================================================================
-   CARDS 1 TO 5: PLAYFUL & COLORFUL FESTIVAL CARDS
+   CARDS 1 TO 6: PLAYFUL & COLORFUL FESTIVAL CARDS
    ========================================================================== */
 .deck-festival-card {
   position: relative;
@@ -345,7 +351,7 @@
   flex-direction: column;
 }
 
-/* Playful Organic Background Shapes */
+/* Playful Organic Background Shapes with Dynamic Floating Motion */
 .deck-card-decorations {
   position: absolute;
   inset: 0;
@@ -359,6 +365,7 @@
   border-radius: 999px;
   filter: blur(48px);
   opacity: 0.35;
+  will-change: transform;
 }
 
 .decor-blob-1 {
@@ -366,6 +373,7 @@
   height: 320px;
   top: -80px;
   right: -50px;
+  animation: floatBlob1 12s ease-in-out infinite alternate;
 }
 
 .decor-blob-2 {
@@ -373,6 +381,7 @@
   height: 240px;
   bottom: -60px;
   left: -40px;
+  animation: floatBlob2 10s ease-in-out infinite alternate;
 }
 
 .decor-ring {
@@ -384,9 +393,28 @@
   border-radius: 999px;
   border: 1.5px dashed rgba(255, 255, 255, 0.6);
   opacity: 0.4;
+  animation: rotateRing 45s linear infinite;
+  will-change: transform;
 }
 
-/* ─── 5 Proposal Themes ─── */
+@keyframes floatBlob1 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-24px, 20px, 0) scale(1.08); }
+  100% { transform: translate3d(16px, -18px, 0) scale(0.94); }
+}
+
+@keyframes floatBlob2 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(20px, -18px, 0) scale(0.92); }
+  100% { transform: translate3d(-16px, 15px, 0) scale(1.06); }
+}
+
+@keyframes rotateRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ─── 6 Proposal Themes ─── */
 /* Theme 1: Vibrant Red (Fashion Show Runway) */
 .theme-red {
   background: linear-gradient(145deg, #ffffff 0%, #fff5f6 50%, #ffe4e6 100%);
@@ -439,7 +467,7 @@
 .theme-yellow .deck-kicker-tag { color: #a16207; }
 .theme-yellow .deck-tag-chip { background: #ffffff; color: #854d0e; border: 1px solid #fef08a; }
 
-/* Theme 5: Royal Blue (Sertifikasi Halal & Seni Budaya) */
+/* Theme 5: Royal Blue (Sertifikasi Halal & SNI) */
 .theme-blue {
   background: linear-gradient(145deg, #ffffff 0%, #eff6ff 50%, #dbeafe 100%);
   border: 1.5px solid #bfdbfe;
@@ -451,6 +479,19 @@
 .theme-blue .deck-icon-badge { background: #dbeafe; color: #1652f0; box-shadow: 0 8px 20px rgba(22, 82, 240, 0.15); }
 .theme-blue .deck-kicker-tag { color: #1d4ed8; }
 .theme-blue .deck-tag-chip { background: #ffffff; color: #1e40af; border: 1px solid #bfdbfe; }
+
+/* Theme 6: Creative Purple (Panggung Seni Budaya & Musik Etnik) */
+.theme-purple {
+  background: linear-gradient(145deg, #ffffff 0%, #faf5ff 50%, #f3e8ff 100%);
+  border: 1.5px solid #e9d5ff;
+}
+.theme-purple .decor-blob-1 { background: #8b5cf6; }
+.theme-purple .decor-blob-2 { background: #c4b5fd; }
+.theme-purple .deck-card-number { color: #7c3aed; }
+.theme-purple .deck-header-pill { background: #faf5ff; color: #6d28d9; border: 1px solid #e9d5ff; }
+.theme-purple .deck-icon-badge { background: #f3e8ff; color: #7c3aed; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.15); }
+.theme-purple .deck-kicker-tag { color: #6d28d9; }
+.theme-purple .deck-tag-chip { background: #ffffff; color: #5b21b6; border: 1px solid #e9d5ff; }
 
 /* ─── Card Inner Structure ─── */
 .deck-card-inner {

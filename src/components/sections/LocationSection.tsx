@@ -17,7 +17,6 @@ interface VenueInfo {
   googleMapsUrl: string;
   directionsUrl: string;
   embedUrl: string;
-  transitEtas: { label: string; time: string; type: 'car' | 'train' | 'walk' }[];
 }
 
 const VENUES: Record<VenueKey, VenueInfo> = {
@@ -33,12 +32,7 @@ const VENUES: Record<VenueKey, VenueInfo> = {
     coordinates: '6°55\'00.8"S 107°36\'34.3"E',
     googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Braga+City+Walk+Bandung',
     directionsUrl: 'https://www.google.com/maps/dir/?api=1&destination=Braga+City+Walk+Bandung',
-    embedUrl: 'https://maps.google.com/maps?q=Braga+City+Walk+Bandung&t=&z=16&ie=UTF8&iwloc=&output=embed',
-    transitEtas: [
-      { label: 'Stasiun KA Bandung', time: '5 mnt · 1.2 km', type: 'train' },
-      { label: 'Gedung Sate / Dago', time: '10 mnt · 2.8 km', type: 'car' },
-      { label: 'Alun-Alun Bandung', time: '8 mnt · 650 m', type: 'walk' },
-    ],
+    embedUrl: 'https://www.google.com/maps?q=-6.917464,107.609467&hl=id&z=17&output=embed',
   },
   papandayan: {
     key: 'papandayan',
@@ -52,12 +46,7 @@ const VENUES: Record<VenueKey, VenueInfo> = {
     coordinates: '6°55\'43.3"S 107°37\'30.4"E',
     googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=The+Papandayan+Hotel+Bandung',
     directionsUrl: 'https://www.google.com/maps/dir/?api=1&destination=The+Papandayan+Hotel+Bandung',
-    embedUrl: 'https://maps.google.com/maps?q=The+Papandayan+Hotel+Bandung&t=&z=16&ie=UTF8&iwloc=&output=embed',
-    transitEtas: [
-      { label: 'Simpang Lima Bandung', time: '4 mnt · 1.1 km', type: 'car' },
-      { label: 'Exit Tol Buah Batu', time: '18 mnt · 6.4 km', type: 'car' },
-      { label: 'Braga City Walk', time: '10 mnt · 2.5 km', type: 'car' },
-    ],
+    embedUrl: 'https://www.google.com/maps?q=-6.928731,107.625122&hl=id&z=17&output=embed',
   },
 };
 
@@ -261,40 +250,6 @@ export default function LocationSection() {
                   </a>
                 </div>
 
-                {/* Quick ETA Badges */}
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500 font-semibold">
-                  <span className="inline-flex items-center gap-1">
-                    <svg className="w-3 h-3 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect width="16" height="16" x="4" y="3" rx="2"/>
-                      <path d="M4 11h16"/>
-                      <path d="M12 3v8"/>
-                      <path d="m8 19-2 3"/>
-                      <path d="m18 22-2-3"/>
-                      <circle cx="8" cy="15" r="1"/>
-                      <circle cx="16" cy="15" r="1"/>
-                    </svg>
-                    <span>Stasiun KA: 5 mnt</span>
-                  </span>
-                  <span>·</span>
-                  <span className="inline-flex items-center gap-1">
-                    <svg className="w-3 h-3 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
-                      <circle cx="7" cy="17" r="2"/>
-                      <path d="M9 17h6"/>
-                      <circle cx="17" cy="17" r="2"/>
-                    </svg>
-                    <span>Braga: 27–28 Nov</span>
-                  </span>
-                  <span>·</span>
-                  <span className="inline-flex items-center gap-1">
-                    <svg className="w-3 h-3 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect width="18" height="18" x="3" y="3" rx="2"/>
-                      <path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>
-                    </svg>
-                    <span>Parkir Resmi</span>
-                  </span>
-                </div>
-
               </div>
             </div>
 
@@ -393,54 +348,6 @@ export default function LocationSection() {
                     </>
                   )}
                 </button>
-              </div>
-            </div>
-
-            {/* Apple Transit Route Pills */}
-            <div className="pt-2 border-t border-slate-100">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2.5">
-                Estimasi Waktu Tempuh &amp; Akses:
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                {currentVenue.transitEtas.map((eta, i) => (
-                  <div
-                    key={i}
-                    className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs"
-                  >
-                    <span className="inline-flex items-center gap-2 text-slate-700 font-medium">
-                      {eta.type === 'train' && (
-                        <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <rect width="16" height="16" x="4" y="3" rx="2"/>
-                          <path d="M4 11h16"/>
-                          <path d="M12 3v8"/>
-                          <path d="m8 19-2 3"/>
-                          <path d="m18 22-2-3"/>
-                          <circle cx="8" cy="15" r="1"/>
-                          <circle cx="16" cy="15" r="1"/>
-                        </svg>
-                      )}
-                      {eta.type === 'car' && (
-                        <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
-                          <circle cx="7" cy="17" r="2"/>
-                          <path d="M9 17h6"/>
-                          <circle cx="17" cy="17" r="2"/>
-                        </svg>
-                      )}
-                      {eta.type === 'walk' && (
-                        <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="13" cy="4" r="2"/>
-                          <path d="M14.5 9h-3.2l-2 5 2.5 1 1.2-3 2 4 3-1"/>
-                          <path d="m9.5 9-2 4"/>
-                        </svg>
-                      )}
-                      <span>{eta.label}</span>
-                    </span>
-                    <span className="font-extrabold text-blue-700 font-mono bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
-                      {eta.time}
-                    </span>
-                  </div>
-                ))}
               </div>
             </div>
 

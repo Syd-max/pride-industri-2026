@@ -216,19 +216,36 @@ export default function DesainKemasanPage() {
               </p>
             </div>
 
-            {/* Download Guidelines Notice */}
-            <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div className="text-slate-600">
-                Pastikan Anda telah membaca syarat teknis dan kriteria karya lomba.
+            {/* Download Guidelines & Template Notice */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="space-y-0.5">
+                <div className="font-bold text-slate-900">Format Template &amp; Panduan Lomba</div>
+                <div className="text-slate-600">
+                  Unduh template format resmi 5 halaman untuk penyusunan berkas karya desain Anda.
+                </div>
               </div>
-              <a
-                href={EVENT_CONFIG.competitions.desainKemasan.documentPath}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 rounded-full text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors"
-              >
-                Unduh Syarat & Ketentuan PDF ↗
-              </a>
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <a
+                  href="/template-desain-kemasan.pdf"
+                  download
+                  className="px-4 py-2 rounded-full text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                >
+                  <svg className="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  <span>Unduh Format Template (PDF)</span>
+                </a>
+                <a
+                  href={EVENT_CONFIG.competitions.desainKemasan.documentPath}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-full text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors cursor-pointer"
+                >
+                  Syarat &amp; Ketentuan PDF ↗
+                </a>
+              </div>
             </div>
 
             {/* Error Feedback */}

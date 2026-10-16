@@ -24,7 +24,6 @@ interface ScheduleItem {
 
 export default function ProgramSection() {
   const [activeDay, setActiveDay] = useState<'day1' | 'day2'>('day1');
-  const [venueFilter, setVenueFilter] = useState<'all' | 'braga' | 'papandayan'>('all');
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
 
   const scheduleDay1: ScheduleItem[] = [
@@ -224,26 +223,12 @@ export default function ProgramSection() {
   ];
 
   const currentSchedule = activeDay === 'day1' ? scheduleDay1 : scheduleDay2;
-  const filteredSchedule = currentSchedule.filter(
-    (item) => venueFilter === 'all' || item.venueKey === venueFilter
-  );
+  const filteredSchedule = currentSchedule;
 
   const toggleItem = (id: string) => {
     setExpandedIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
-  };
-
-  const allExpanded =
-    filteredSchedule.length > 0 &&
-    filteredSchedule.every((item) => expandedIds.includes(item.id));
-
-  const toggleAll = () => {
-    if (allExpanded) {
-      setExpandedIds([]);
-    } else {
-      setExpandedIds(filteredSchedule.map((s) => s.id));
-    }
   };
 
   const googleCalUrlDay1 =
@@ -286,7 +271,6 @@ export default function ProgramSection() {
               type="button"
               onClick={() => {
                 setActiveDay('day1');
-                setVenueFilter('all');
                 setExpandedIds([]);
               }}
               className={`px-5 py-3 rounded-xl sm:rounded-full text-left sm:text-center transition-all cursor-pointer flex items-center justify-between sm:justify-center gap-3 ${
@@ -313,7 +297,6 @@ export default function ProgramSection() {
               type="button"
               onClick={() => {
                 setActiveDay('day2');
-                setVenueFilter('all');
                 setExpandedIds([]);
               }}
               className={`px-5 py-3 rounded-xl sm:rounded-full text-left sm:text-center transition-all cursor-pointer flex items-center justify-between sm:justify-center gap-3 ${
@@ -334,88 +317,6 @@ export default function ProgramSection() {
                 <span className="sm:hidden w-2 h-2 rounded-full bg-blue-600" />
               )}
             </button>
-          </div>
-
-          {/* Quick Filter by Venue & Calendar Action (Rapi & Rata di Semua Layar) */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mt-6 pt-5 border-t border-slate-200/70 text-xs">
-            {/* Left: Venue Filter Pills on One Clean Horizon Line */}
-            <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1.5 sm:pb-0 scrollbar-none w-full sm:w-auto -mx-1 px-1 sm:mx-0 sm:px-0">
-              <span className="text-slate-400 font-medium mr-0.5 shrink-0 hidden md:inline">Lokasi:</span>
-              <button
-                type="button"
-                onClick={() => setVenueFilter('all')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                  venueFilter === 'all'
-                    ? 'bg-slate-900 text-white shadow-2xs'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                Semua Lokasi ({currentSchedule.length})
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setVenueFilter('braga')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                  venueFilter === 'braga'
-                    ? 'bg-slate-900 text-white shadow-2xs'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                Braga City Walk ({currentSchedule.filter((s) => s.venueKey === 'braga').length})
-              </button>
-
-              {activeDay === 'day2' && (
-                <button
-                  type="button"
-                  onClick={() => setVenueFilter('papandayan')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                    venueFilter === 'papandayan'
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                  }`}
-                >
-                  Hotel Papandayan ({currentSchedule.filter((s) => s.venueKey === 'papandayan').length})
-                </button>
-              )}
-            </div>
-
-            {/* Right: Actions - Buka/Tutup Semua & Simpan Jadwal ke Kalender */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto shrink-0">
-              <button
-                type="button"
-                onClick={toggleAll}
-                className="inline-flex items-center justify-center gap-1.5 text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200 px-3.5 py-1.5 rounded-lg font-bold text-xs transition-colors shrink-0 cursor-pointer shadow-2xs"
-              >
-                <svg
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${allExpanded ? 'rotate-180 text-blue-600' : 'text-slate-500'}`}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-                <span>{allExpanded ? 'Tutup Semua' : 'Buka Semua'}</span>
-              </button>
-
-              <a
-                href={activeDay === 'day1' ? googleCalUrlDay1 : googleCalUrlDay2}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-1.5 text-blue-600 hover:text-blue-700 bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200/60 px-3.5 py-1.5 rounded-lg font-bold text-xs transition-colors shrink-0"
-              >
-                <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
-                  <line x1="16" y1="2" x2="16" y2="6"/>
-                  <line x1="8" y1="2" x2="8" y2="6"/>
-                  <line x1="3" y1="10" x2="21" y2="10"/>
-                </svg>
-                <span>+ Simpan ke Kalender</span>
-              </a>
-            </div>
           </div>
         </div>
 

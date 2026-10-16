@@ -14,7 +14,7 @@ export default function ActivitiesDeckSection() {
     const cards = Array.from(container.querySelectorAll<HTMLElement>('.activities-card'));
     cards.sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index));
 
-    const totalCards = cards.length; // 6 cards (0..5)
+    const totalCards = cards.length; // 7 cards: Cover (0) + 6 Program Cards (1..6)
 
     function clamp(val: number, min: number, max: number) {
       return Math.max(min, Math.min(max, val));
@@ -25,12 +25,12 @@ export default function ActivitiesDeckSection() {
       const PEEK_STEP_Y = isMobile ? 10 : 16;
       const SCALE_STEP = isMobile ? 0.024 : 0.032;
 
-      // Calibration with entry dwell (0.0 to 0.05) & exit dwell (0.95 to 1.0)
-      const peelableCount = totalCards - 1; // 5 transitions
-      const t = clamp((scrollProgress - 0.05) / 0.90, 0, 1) * peelableCount;
+      // Calibration: 6 peel transitions for 7 cards across scroll window
+      const peelableCount = totalCards - 1; // 6 transitions
+      const t = clamp((scrollProgress - 0.04) / 0.92, 0, 1) * peelableCount;
 
       cards.forEach((card, i) => {
-        // Z-Index order: Card 0 is 60, Card 1 is 50, ..., Card 5 is 10
+        // Z-Index order: Card 0 is 70, Card 1 is 60, ..., Card 6 is 10
         card.style.zIndex = String((totalCards - i) * 10);
 
         const isFinalCard = i === totalCards - 1;
@@ -50,7 +50,7 @@ export default function ActivitiesDeckSection() {
           card.style.visibility = peelAmount >= 0.99 ? 'hidden' : 'visible';
         } else {
           // Card is active or waiting behind in the stack
-          const effectiveDepth = Math.min(depth, 3.5);
+          const effectiveDepth = Math.min(depth, 4);
           const yOffset = effectiveDepth * PEEK_STEP_Y;
           const scale = 1 - effectiveDepth * SCALE_STEP;
 
@@ -99,14 +99,14 @@ export default function ActivitiesDeckSection() {
     <div className="activities-scroll-driver" id="programUnggulan" ref={scrollDriverRef}>
       <section className="activities-stage" aria-label="6 Program Unggulan PRIDE 2026">
 
-        {/* 6-Card Stack Deck Container */}
+        {/* 7-Card Stack Deck Container: Cover (0) + 6 Programs (1..6) */}
         <div className="activities-deck-container" ref={deckContainerRef}>
 
           {/* ════════════════════════════════════════════════════════════════
-              LAYER 5 (Card 5): 100 HALAL, SNI & PANGGUNG SENI BUDAYA
-              Theme: Royal Bandung Blue (#1652F0)
+              LAYER 6 (Card 6): PANGGUNG SENI BUDAYA & MUSIK ETNIK
+              Theme: Creative Purple (#8B5CF6)
               ════════════════════════════════════════════════════════════════ */}
-          <article className="activities-card deck-festival-card theme-blue" data-index="5">
+          <article className="activities-card deck-festival-card theme-purple" data-index="6">
             <div className="deck-card-decorations" aria-hidden="true">
               <div className="decor-blob decor-blob-1" />
               <div className="decor-blob decor-blob-2" />
@@ -116,8 +116,8 @@ export default function ActivitiesDeckSection() {
             <div className="deck-card-inner">
               <header className="deck-card-header">
                 <div className="deck-header-left">
-                  <span className="deck-card-number">05 / 05</span>
-                  <span className="deck-header-pill">STANDARISASI &amp; SENI BUDAYA</span>
+                  <span className="deck-card-number">06 / 06</span>
+                  <span className="deck-header-pill">SENI BUDAYA &amp; MUSIK ETNIK</span>
                 </div>
                 <div className="deck-header-venue">
                   <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
@@ -131,25 +131,26 @@ export default function ActivitiesDeckSection() {
                 <div className="deck-hero-content">
                   <div className="deck-icon-badge">
                     <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
-                      <path d="m9 12 2 2 4-4"/>
+                      <path d="M9 18V5l12-2v13"/>
+                      <circle cx="6" cy="18" r="3"/>
+                      <circle cx="18" cy="16" r="3"/>
                     </svg>
                   </div>
                   <div>
-                    <span className="deck-kicker-tag">Fasilitasi Legalitas &amp; Panggung Apresiasi</span>
-                    <h3 className="deck-card-title">Penyerahan 100 Sertifikat Halal, SNI &amp; Panggung Seni Budaya</h3>
+                    <span className="deck-kicker-tag">Pesta Seni Budaya &amp; Harmoni Tradisi</span>
+                    <h3 className="deck-card-title">Panggung Seni Budaya &amp; Pertunjukan Musik Etnik</h3>
                   </div>
                 </div>
 
                 <div className="deck-feature-tags">
-                  <span className="deck-tag-chip">✦ 100 Halal Gratis</span>
-                  <span className="deck-tag-chip">✦ 3 Standar SNI</span>
-                  <span className="deck-tag-chip">✦ Fasilitasi Uji Mutu Lab</span>
-                  <span className="deck-tag-chip">✦ Perkusi Etnik &amp; Musik</span>
+                  <span className="deck-tag-chip">✦ Rampak Kendang Sunda</span>
+                  <span className="deck-tag-chip">✦ Perkusi Etnik Interaktif</span>
+                  <span className="deck-tag-chip">✦ Musik Tradisi Kontemporer</span>
+                  <span className="deck-tag-chip">✦ Apresiasi Talenta Bandung</span>
                 </div>
 
                 <p className="deck-card-desc">
-                  Seremonial penyerahan simbolis 100 Sertifikat Halal gratis, 3 SNI, dan 100 fasilitasi uji laboratorium mutu IKM dari Disdagin Kota Bandung. Disemarakkan layanan konsultasi legalitas usaha langsung di lokasi serta atraksi perkusi etnik dan musik budaya kontemporer.
+                  Perayaan puncak kebudayaan khas Sunda yang menyatukan harmoni musik tradisi perkusi etnik Jawa Barat, atraksi rampak kendang, serta kolaborasi talenta seni muda Kota Bandung. Mengiringi kemeriahan eksibisi industri kreatif dan belanja sepanjang koridor heritage Jalan Braga.
                 </p>
               </div>
 
@@ -160,7 +161,75 @@ export default function ActivitiesDeckSection() {
                       <circle cx="12" cy="12" r="10"/>
                       <polyline points="12 6 12 12 16 14"/>
                     </svg>
-                    <span>14:00 — 21:00 WIB</span>
+                    <span>18:30 — 21:00 WIB</span>
+                  </span>
+                  <span className="footer-meta-sep">•</span>
+                  <span>Main Stage Braga City Walk</span>
+                </div>
+                <span className="deck-status-badge status-public">Terbuka untuk Umum</span>
+              </footer>
+            </div>
+          </article>
+
+          {/* ════════════════════════════════════════════════════════════════
+              LAYER 5 (Card 5): PENYERAHAN 100 SERTIFIKAT HALAL & SNI
+              Theme: Royal Bandung Blue (#1652F0)
+              ════════════════════════════════════════════════════════════════ */}
+          <article className="activities-card deck-festival-card theme-blue" data-index="5">
+            <div className="deck-card-decorations" aria-hidden="true">
+              <div className="decor-blob decor-blob-1" />
+              <div className="decor-blob decor-blob-2" />
+              <div className="decor-ring" />
+            </div>
+
+            <div className="deck-card-inner">
+              <header className="deck-card-header">
+                <div className="deck-header-left">
+                  <span className="deck-card-number">05 / 06</span>
+                  <span className="deck-header-pill">STANDARISASI &amp; LEGALITAS</span>
+                </div>
+                <div className="deck-header-venue">
+                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                  </svg>
+                  <span>28 Nov · Main Stage Braga</span>
+                </div>
+              </header>
+
+              <div className="deck-card-body">
+                <div className="deck-hero-content">
+                  <div className="deck-icon-badge">
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                      <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="deck-kicker-tag">Fasilitasi Legalitas &amp; Jaminan Mutu Usaha</span>
+                    <h3 className="deck-card-title">Penyerahan 100 Sertifikat Halal &amp; 3 Standar Mutu SNI</h3>
+                  </div>
+                </div>
+
+                <div className="deck-feature-tags">
+                  <span className="deck-tag-chip">✦ 100 Sertifikat Halal Gratis</span>
+                  <span className="deck-tag-chip">✦ 3 Standar SNI IKM</span>
+                  <span className="deck-tag-chip">✦ 100 Uji Laboratorium Mutu</span>
+                  <span className="deck-tag-chip">✦ Konsultasi Legalitas Usaha</span>
+                </div>
+
+                <p className="deck-card-desc">
+                  Seremonial penyerahan simbolis 100 Sertifikat Halal gratis, 3 SNI, dan fasilitasi uji laboratorium mutu IKM dari Disdagin Kota Bandung. Peserta dan pengunjung juga dapat berkonsultasi langsung mengenai pengurusan NIB, izin edar BPOM, dan legalitas industri di booth pelayanan terpadu.
+                </p>
+              </div>
+
+              <footer className="deck-card-footer">
+                <div className="deck-footer-meta">
+                  <span className="inline-flex items-center gap-1.5 font-medium">
+                    <svg className="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span>14:00 — 17:30 WIB</span>
                   </span>
                   <span className="footer-meta-sep">•</span>
                   <span>Main Stage Braga City Walk</span>
@@ -184,7 +253,7 @@ export default function ActivitiesDeckSection() {
             <div className="deck-card-inner">
               <header className="deck-card-header">
                 <div className="deck-header-left">
-                  <span className="deck-card-number">04 / 05</span>
+                  <span className="deck-card-number">04 / 06</span>
                   <span className="deck-header-pill">MALAM PENGANUGERAHAN</span>
                 </div>
                 <div className="deck-header-venue">
@@ -256,7 +325,7 @@ export default function ActivitiesDeckSection() {
             <div className="deck-card-inner">
               <header className="deck-card-header">
                 <div className="deck-header-left">
-                  <span className="deck-card-number">03 / 05</span>
+                  <span className="deck-card-number">03 / 06</span>
                   <span className="deck-header-pill">KREATIVITAS VISUAL VERTIKAL</span>
                 </div>
                 <div className="deck-header-venue">
@@ -324,7 +393,7 @@ export default function ActivitiesDeckSection() {
             <div className="deck-card-inner">
               <header className="deck-card-header">
                 <div className="deck-header-left">
-                  <span className="deck-card-number">02 / 05</span>
+                  <span className="deck-card-number">02 / 06</span>
                   <span className="deck-header-pill">INOVASI ECO-PACKAGING IKM</span>
                 </div>
                 <div className="deck-header-venue">
@@ -394,7 +463,7 @@ export default function ActivitiesDeckSection() {
             <div className="deck-card-inner">
               <header className="deck-card-header">
                 <div className="deck-header-left">
-                  <span className="deck-card-number">01 / 05</span>
+                  <span className="deck-card-number">01 / 06</span>
                   <span className="deck-header-pill">FESYEN &amp; WASTRA NUSANTARA</span>
                 </div>
                 <div className="deck-header-venue">
@@ -494,12 +563,13 @@ export default function ActivitiesDeckSection() {
               </p>
 
               {/* Playful Proposal Palette Indicator Pills */}
-              <div className="deck-cover-palette-row" aria-label="5 Kategori Program Festival">
+              <div className="deck-cover-palette-row" aria-label="6 Kategori Program Festival">
                 <span className="palette-chip chip-red">✦ Fesyen</span>
                 <span className="palette-chip chip-green">✦ Kemasan</span>
                 <span className="palette-chip chip-orange">✦ Video 1 Menit</span>
                 <span className="palette-chip chip-yellow">✦ Gala SIINAS</span>
-                <span className="palette-chip chip-blue">✦ Halal &amp; Seni</span>
+                <span className="palette-chip chip-blue">✦ Halal &amp; SNI</span>
+                <span className="palette-chip chip-purple">✦ Seni Budaya</span>
               </div>
             </div>
 

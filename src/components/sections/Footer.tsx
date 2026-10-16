@@ -161,21 +161,22 @@ export default function Footer() {
 
         {/* ─── Supported By Section ─── */}
         <div className="py-6 sm:py-7 border-b border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 w-full md:w-auto">
+            <div className="flex items-center gap-2 shrink-0">
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-slate-300">
                 SUPPORT BY:
               </span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+            {/* Mobile: 2-column side by side with identical size. Desktop: inline flex */}
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
               {/* Tactlink Partner Badge Card */}
               <a
                 href="https://www.tactlink.com/id"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 shadow-xs transition-all hover:scale-[1.02] group cursor-pointer"
+                className="flex items-center gap-2.5 p-2.5 sm:px-4 sm:py-2.5 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 shadow-xs transition-all hover:scale-[1.02] group cursor-pointer w-full sm:w-auto min-w-0"
                 title="Tactlink - Official Digital Directory Partner"
               >
                 <div className="relative w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0">
@@ -187,12 +188,12 @@ export default function Footer() {
                     className="object-contain"
                   />
                 </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-xs font-black text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
+                <div className="flex flex-col text-left min-w-0">
+                  <span className="text-xs font-black text-slate-900 group-hover:text-blue-600 transition-colors leading-tight truncate">
                     Tactlink
                   </span>
-                  <span className="text-[10px] font-semibold text-slate-500">
-                    Digital Directory Partner
+                  <span className="text-[9px] sm:text-[10px] font-semibold text-slate-500 truncate">
+                    Digital Directory
                   </span>
                 </div>
               </a>
@@ -202,7 +203,7 @@ export default function Footer() {
                 href="https://maps.google.com/?q=Braga+City+Walk+Bandung"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 shadow-xs transition-all hover:scale-[1.02] group cursor-pointer"
+                className="flex items-center gap-2.5 p-2.5 sm:px-4 sm:py-2.5 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 shadow-xs transition-all hover:scale-[1.02] group cursor-pointer w-full sm:w-auto min-w-0"
                 title="Braga Citywalk - Official Venue Partner"
               >
                 <div className="relative w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0">
@@ -214,12 +215,12 @@ export default function Footer() {
                     className="object-contain"
                   />
                 </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-xs font-black text-slate-900 group-hover:text-amber-600 transition-colors leading-tight">
+                <div className="flex flex-col text-left min-w-0">
+                  <span className="text-xs font-black text-slate-900 group-hover:text-amber-600 transition-colors leading-tight truncate">
                     Braga Citywalk
                   </span>
-                  <span className="text-[10px] font-semibold text-slate-500">
-                    Official Venue Partner
+                  <span className="text-[9px] sm:text-[10px] font-semibold text-slate-500 truncate">
+                    Venue Partner
                   </span>
                 </div>
               </a>

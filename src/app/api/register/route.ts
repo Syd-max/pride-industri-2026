@@ -146,51 +146,15 @@ export async function POST(
       // 4. Deskripsi singkat karya (opsional)
       const videoDescription = sanitizeString(body.video_description);
 
-      // 5. Platform publikasi (wajib minimal salah satu: Instagram / TikTok)
+      // 5. Platform publikasi & Handle (opsional / didukung untuk fleksibilitas format)
       const platformInstagram = Boolean(body.platform_instagram);
       const platformTiktok = Boolean(body.platform_tiktok);
-      if (!platformInstagram && !platformTiktok) {
-        return NextResponse.json(
-          {
-            success: false,
-            error:
-              'Pilih minimal salah satu platform publikasi: Instagram atau TikTok.',
-          },
-          { status: 400 }
-        );
-      }
+      const igHandle = sanitizeString(body.instagram_handle || '').replace(/^@/, '');
+      const tiktokHandle = sanitizeString(body.tiktok_handle || '').replace(/^@/, '');
+      const igVideoUrl = sanitizeString(body.instagram_video_url || '');
+      const tiktokVideoUrl = sanitizeString(body.tiktok_video_url || '');
 
-      // 6. Username Instagram (wajib jika memilih Instagram)
-      const igHandle = sanitizeString(body.instagram_handle).replace(/^@/, '');
-      if (platformInstagram && (!igHandle || igHandle.length === 0)) {
-        return NextResponse.json(
-          {
-            success: false,
-            error:
-              'Username Instagram wajib diisi karena Anda memilih platform Instagram.',
-          },
-          { status: 400 }
-        );
-      }
-
-      // 7. Username TikTok (wajib jika memilih TikTok)
-      const tiktokHandle = sanitizeString(body.tiktok_handle).replace(/^@/, '');
-      if (platformTiktok && (!tiktokHandle || tiktokHandle.length === 0)) {
-        return NextResponse.json(
-          {
-            success: false,
-            error:
-              'Username TikTok wajib diisi karena Anda memilih platform TikTok.',
-          },
-          { status: 400 }
-        );
-      }
-
-      // 8. Tautan video Instagram & TikTok (dapat dilengkapi setelah publikasi)
-      const igVideoUrl = sanitizeString(body.instagram_video_url);
-      const tiktokVideoUrl = sanitizeString(body.tiktok_video_url);
-
-      // 9. Persetujuan dan Dokumen Pendukung (wajib semua)
+      // 6. Persetujuan (wajib)
       if (!body.declaration_original) {
         return NextResponse.json(
           {
@@ -213,41 +177,30 @@ export async function POST(
         );
       }
 
-      if (!body.declaration_usage_rights) {
+      // 7. Dokumen Persyaratan Lomba (maks 5 MB)
+      const documentFileName = sanitizeString(
+        body.document_file_name || body.pakta_integritas_name || body.pakta_integritas_file_name || ''
+      );
+      if (!documentFileName) {
         return NextResponse.json(
           {
             success: false,
-            error:
-              'Persetujuan penggunaan karya untuk publikasi, dokumentasi, dan promosi wajib dicentang.',
+            error: 'Upload dokumen persyaratan (maksimal 5 MB) wajib dilakukan.',
           },
           { status: 400 }
         );
       }
 
-      // 10. Dokumen Pakta Integritas & Surat Pernyataan (wajib diunggah)
-      const paktaIntegritasName = sanitizeString(
-        body.pakta_integritas_name || body.pakta_integritas_file_name
+      // 8. Foto QR / Barcode Kartu Nama Digital TactLink (maks 2 MB)
+      const tactlinkQrName = sanitizeString(
+        body.tactlink_qr_name || body.surat_persetujuan_name || body.surat_persetujuan_file_name || ''
       );
-      if (!paktaIntegritasName) {
+      if (!tactlinkQrName) {
         return NextResponse.json(
           {
             success: false,
             error:
-              'Upload dokumen Pakta Integritas yang telah diisi dan ditandatangani wajib dilakukan.',
-          },
-          { status: 400 }
-        );
-      }
-
-      const suratPersetujuanName = sanitizeString(
-        body.surat_persetujuan_name || body.surat_persetujuan_file_name
-      );
-      if (!suratPersetujuanName) {
-        return NextResponse.json(
-          {
-            success: false,
-            error:
-              'Upload Surat Pernyataan Persetujuan Rekaman dan Publikasi Materi Video wajib dilakukan.',
+              'Upload foto barcode / QR kartu nama digital TactLink (maksimal 2 MB) wajib dilakukan.',
           },
           { status: 400 }
         );
@@ -265,9 +218,11 @@ export async function POST(
         instagram_video_url: igVideoUrl,
         tiktok_video_url: tiktokVideoUrl,
         video_url: igVideoUrl || tiktokVideoUrl || '',
-        pakta_integritas_file_name: paktaIntegritasName,
-        surat_persetujuan_file_name: suratPersetujuanName,
-        declaration_usage_rights: true,
+        pakta_integritas_file_name: documentFileName,
+        surat_persetujuan_file_name: tactlinkQrName,
+        document_file_name: documentFileName,
+        tactlink_qr_name: tactlinkQrName,
+        declaration_usage_rights: Boolean(body.declaration_usage_rights ?? true),
       };
     }
 
