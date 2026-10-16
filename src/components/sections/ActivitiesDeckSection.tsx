@@ -16,20 +16,31 @@ export default function ActivitiesDeckSection() {
        1. CHARACTER SCRAMBLE INTERACTION (MATCHING ILIA DELIN CIPHER)
        ========================================================== */
     const heroNameEl = heroNameRef.current;
-    const targetText = '6 PROGRAM UNGGULAN';
+    const words = ['6', 'PROGRAM', 'UNGGULAN'];
     const cipherChars = '{[()]}/\\|<>?!#$%&*@+=~^0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const charSpans: HTMLSpanElement[] = [];
 
     if (heroNameEl) {
       heroNameEl.innerHTML = '';
-      targetText.split('').forEach((char, idx) => {
-        const span = document.createElement('span');
-        span.className = 'deck-hero-char';
-        span.textContent = char;
-        span.dataset.original = char;
-        span.dataset.index = String(idx);
-        heroNameEl.appendChild(span);
-        charSpans.push(span);
+      words.forEach((word, wordIdx) => {
+        const wordWrap = document.createElement('span');
+        wordWrap.className = 'deck-word';
+        word.split('').forEach((char) => {
+          const span = document.createElement('span');
+          span.className = 'deck-hero-char';
+          span.textContent = char;
+          span.dataset.original = char;
+          wordWrap.appendChild(span);
+          charSpans.push(span);
+        });
+        heroNameEl.appendChild(wordWrap);
+
+        if (wordIdx < words.length - 1) {
+          const spaceSpan = document.createElement('span');
+          spaceSpan.className = 'deck-word-space';
+          spaceSpan.innerHTML = '&nbsp;';
+          heroNameEl.appendChild(spaceSpan);
+        }
       });
     }
 
@@ -52,11 +63,13 @@ export default function ActivitiesDeckSection() {
     }
 
     charSpans.forEach((span, idx) => {
-      span.addEventListener('mouseenter', () => {
+      const triggerScramble = () => {
         scrambleCharacter(span, 380);
         if (charSpans[idx + 1]) scrambleCharacter(charSpans[idx + 1], 320);
         if (charSpans[idx - 1]) scrambleCharacter(charSpans[idx - 1], 260);
-      });
+      };
+      span.addEventListener('pointerenter', triggerScramble);
+      span.addEventListener('touchstart', triggerScramble, { passive: true });
     });
 
     /* ==========================================================
@@ -344,9 +357,6 @@ export default function ActivitiesDeckSection() {
     cards.sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index));
 
     const totalCards = cards.length; // 6 cards (0..5)
-    const isMobile = window.innerWidth <= 768;
-    const PEEK_STEP_Y = isMobile ? 12 : 18;
-    const SCALE_STEP = isMobile ? 0.02 : 0.024;
 
     function clamp(val: number, min: number, max: number) {
       return Math.max(min, Math.min(max, val));
@@ -359,6 +369,9 @@ export default function ActivitiesDeckSection() {
     function updateDeck(scrollProgress: number) {
       // Maps scrollProgress across card peel stages
       const stageProgress = scrollProgress * (totalCards - 0.4);
+      const isMobile = window.innerWidth <= 768;
+      const PEEK_STEP_Y = isMobile ? 10 : 16;
+      const SCALE_STEP = isMobile ? 0.018 : 0.024;
 
       cards.forEach((card, i) => {
         // Set z-index: Card 0 is top (60), Card 5 is back (10)
