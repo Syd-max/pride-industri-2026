@@ -51,8 +51,10 @@ export default function ParticipantsPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Filter participants
-  const filtered = participants.filter((p) => {
+  // In Data Presensi: ONLY participants who have scanned QR Code at the gate (check_in_status === 'checked_in')
+  const checkedInList = participants.filter((p) => p.check_in_status === 'checked_in');
+
+  const filtered = checkedInList.filter((p) => {
     const q = search.toLowerCase().trim();
     const matchQuery =
       !q ||
@@ -74,7 +76,7 @@ export default function ParticipantsPage() {
     const confirmMsg =
       nextStatus === 'checked_in'
         ? `Tandai "${p.full_name}" sebagai HADIR di Braga City Walk secara manual?`
-        : `Batalkan status presensi hadir untuk "${p.full_name}"?`;
+        : `Batalkan status presensi hadir untuk "${p.full_name}"? Peserta akan dihapus dari Data Presensi.`;
 
     if (!window.confirm(confirmMsg)) return;
 
@@ -122,9 +124,8 @@ export default function ParticipantsPage() {
       'Email',
       'Telepon',
       'Kompetisi',
-      'Status Pendaftaran',
-      'Presensi Gate',
-      'Waktu Presensi',
+      'Status Presensi Gate',
+      'Waktu Scan Gate',
       'Tanggal Daftar',
     ];
 
@@ -134,9 +135,8 @@ export default function ParticipantsPage() {
       p.email,
       `'${p.phone}`,
       p.competition_id,
-      p.status,
-      p.check_in_status,
-      p.checked_in_at ? new Date(p.checked_in_at).toLocaleString('id-ID') : '-',
+      'Sudah Scan QR Gate',
+      p.checked_in_at ? new Date(p.checked_in_at).toLocaleString('id-ID') : 'Terverifikasi',
       new Date(p.created_at).toLocaleString('id-ID'),
     ]);
 
@@ -149,7 +149,7 @@ export default function ParticipantsPage() {
     link.setAttribute('href', encodedUri);
     link.setAttribute(
       'download',
-      `PRIDE_2026_Presensi_Peserta_${new Date().toISOString().slice(0, 10)}.csv`
+      `PRIDE_2026_Data_Presensi_Gate_Braga_${new Date().toISOString().slice(0, 10)}.csv`
     );
     document.body.appendChild(link);
     link.click();
@@ -167,11 +167,12 @@ export default function ParticipantsPage() {
       {/* ─── Top Header & Primary Actions ─── */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Direktori &amp; Presensi Peserta
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            Data Presensi
           </h1>
           <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
-            Monitoring data pendaftar dan kelola status presensi gate Braga City Walk secara real-time.
+            Data kehadiran resmi seluruh peserta yang telah berhasil melakukan scan barcode / QR Code di gate event Braga City Walk.
           </p>
         </div>
 
@@ -254,10 +255,10 @@ export default function ParticipantsPage() {
         </div>
 
         {/* Counter Badge */}
-        <div className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 border border-slate-200/80 text-[11px] font-bold text-slate-600 whitespace-nowrap ml-auto">
+        <div className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50/80 border border-emerald-200/90 text-[11px] font-bold text-emerald-800 whitespace-nowrap ml-auto">
           <span>Menampilkan:</span>
-          <span className="text-blue-600 font-extrabold">{filtered.length}</span>
-          <span>dari {participants.length} Peserta</span>
+          <span className="text-emerald-700 font-extrabold">{filtered.length}</span>
+          <span>dari {checkedInList.length} Peserta (Sudah Scan QR Gate)</span>
         </div>
       </div>
 
@@ -279,18 +280,19 @@ export default function ParticipantsPage() {
               {loading ? (
                 <tr>
                   <td colSpan={6} className="text-center py-12 text-xs font-medium text-slate-400">
-                    Memuat data peserta festival...
+                    Memuat data presensi peserta...
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="text-center py-12 text-xs font-medium text-slate-400">
-                    Tidak ditemukan peserta yang sesuai dengan kriteria pencarian.
+                    {search || compFilter !== 'all'
+                      ? 'Tidak ditemukan data presensi yang sesuai dengan kriteria filter / pencarian.'
+                      : 'Belum ada data presensi. Peserta akan otomatis muncul di sini setelah melakukan scan barcode / QR code di Gate Event.'}
                   </td>
                 </tr>
               ) : (
                 filtered.map((p) => {
-                  const isCheckedIn = p.check_in_status === 'checked_in';
                   return (
                     <tr
                       key={p.id}
@@ -342,41 +344,28 @@ export default function ParticipantsPage() {
                         </a>
                       </td>
 
-                      {/* Column 5: Status Presensi (Manage Live) */}
+                      {/* Column 5: Status Presensi (Semua di sini sudah scan QR) */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
                         <div className="flex flex-col gap-1 items-start whitespace-nowrap">
                           <button
                             type="button"
                             onClick={() => handleToggleCheckIn(p)}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 border whitespace-nowrap ${
-                              isCheckedIn
-                                ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
-                                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900'
-                            }`}
-                            title={
-                              isCheckedIn
-                                ? 'Klik untuk membatalkan status hadir'
-                                : 'Klik untuk menandai hadir secara manual'
-                            }
+                            className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 border whitespace-nowrap bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100 shadow-2xs"
+                            title="Klik jika ingin membatalkan status presensi hadir"
                           >
-                            {isCheckedIn ? (
-                              <>
-                                <svg className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                  <polyline points="20 6 9 17 4 12" />
-                                </svg>
-                                <span>Hadir di Lokasi</span>
-                              </>
-                            ) : (
-                              <>
-                                <span className="w-2 h-2 rounded-full bg-slate-400 flex-shrink-0" />
-                                <span>Belum Hadir (+ Tandai)</span>
-                              </>
-                            )}
+                            <svg className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Sudah Scan QR Gate</span>
                           </button>
 
-                          {isCheckedIn && p.checked_in_at && (
-                            <span className="text-[10px] font-mono text-slate-400 ml-1 whitespace-nowrap">
+                          {p.checked_in_at ? (
+                            <span className="text-[10px] font-mono text-slate-500 ml-1 whitespace-nowrap">
                               Waktu: {new Date(p.checked_in_at).toLocaleTimeString('id-ID')} WIB
+                            </span>
+                          ) : (
+                            <span className="text-[10px] font-mono text-emerald-600 ml-1 whitespace-nowrap">
+                              Terverifikasi Hadir di Gate
                             </span>
                           )}
                         </div>
