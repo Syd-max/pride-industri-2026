@@ -148,13 +148,8 @@
   background: #cbd5e1;
 }
 
-/* Hover Peeking Cue */
-.folder-card-wrapper:hover .folder-document-sheet {
-  transform: translateY(-8px);
-  box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.14);
-}
-
-/* ACTIVE / OPEN STATE: Document Slides Smoothly Upward OUT of the Folder */
+/* ACTIVE HOVER OR OPEN STATE: Document Slides Smoothly Upward OUT of the Folder */
+.folder-card-wrapper:hover .folder-document-sheet,
 .folder-card-wrapper.is-open .folder-document-sheet {
   transform: translateY(-114px);
   box-shadow: 
@@ -435,6 +430,7 @@
   .folder-desc {
     font-size: 11px;
   }
+  .folder-card-wrapper:hover .folder-document-sheet,
   .folder-card-wrapper.is-open .folder-document-sheet {
     transform: translateY(-92px);
   }

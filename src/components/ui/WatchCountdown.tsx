@@ -94,91 +94,90 @@ export default function WatchCountdown() {
           {/* Stepped Bezel & Enamel Dial Container */}
           <div className="watch-dial-bezel">
             
-            {/* 3. Artistic Enamel Dial Painting (Swirling Koi & Aquatic Ripples) */}
+            {/* 3. Swiss Haute Horlogerie Sunburst & Azurage Lathe-Turned Dial */}
             <div className="watch-art-dial">
               <svg viewBox="0 0 400 400" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
                 <defs>
-                  {/* Swirling Water Radial Gradient */}
-                  <radialGradient id="waterFlow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.85" />
-                    <stop offset="35%" stopColor="#0284c7" stopOpacity="0.95" />
-                    <stop offset="70%" stopColor="#0369a1" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#082f49" stopOpacity="1" />
+                  {/* Deep Midnight Obsidian Radial Gradient */}
+                  <radialGradient id="dialSunburst" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#1e293b" stopOpacity="0.85" />
+                    <stop offset="45%" stopColor="#0f172a" stopOpacity="0.95" />
+                    <stop offset="85%" stopColor="#090d16" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#03050a" stopOpacity="1" />
                   </radialGradient>
 
-                  {/* Red/White Koi Fish Gradient */}
-                  <linearGradient id="koiRed" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#ffffff" />
-                    <stop offset="25%" stopColor="#f43f5e" />
-                    <stop offset="65%" stopColor="#e11d48" />
-                    <stop offset="100%" stopColor="#9f1239" />
-                  </linearGradient>
-
-                  {/* Golden Lotus Gradient */}
-                  <linearGradient id="goldLotus" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#fef08a" />
-                    <stop offset="50%" stopColor="#f59e0b" />
-                    <stop offset="100%" stopColor="#b45309" />
-                  </linearGradient>
+                  {/* Outer Bezel Inset Shadow */}
+                  <radialGradient id="bezelShadow" cx="50%" cy="50%" r="50%">
+                    <stop offset="88%" stopColor="#000000" stopOpacity="0" />
+                    <stop offset="100%" stopColor="#000000" stopOpacity="0.75" />
+                  </radialGradient>
                 </defs>
 
-                {/* Swirling Aquatic Background */}
-                <circle cx="200" cy="200" r="200" fill="url(#waterFlow)" />
+                {/* Base Sunburst Midnight Face */}
+                <circle cx="200" cy="200" r="200" fill="url(#dialSunburst)" />
 
-                {/* Water Swirl Current Lines */}
-                <path d="M 200 35 A 165 165 0 0 1 365 200 A 125 125 0 0 1 200 325 A 85 85 0 0 1 115 200 A 45 45 0 0 1 200 155" fill="none" stroke="#bae6fd" strokeWidth="4" strokeLinecap="round" opacity="0.4" />
-                <path d="M 170 55 A 145 145 0 0 1 345 200 A 105 105 0 0 1 200 305 A 65 65 0 0 1 135 200" fill="none" stroke="#7dd3fc" strokeWidth="2" strokeDasharray="6 8" opacity="0.45" />
-                <path d="M 235 355 A 155 155 0 0 1 45 200 A 115 115 0 0 1 200 85 A 75 75 0 0 1 275 200" fill="none" stroke="#e0f2fe" strokeWidth="3" opacity="0.35" />
+                {/* Precision Concentric Azurage Grooves (Lathe-Turned Horology Rings) */}
+                <circle cx="200" cy="200" r="192" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="0.75" />
+                <circle cx="200" cy="200" r="185" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+                <circle cx="200" cy="200" r="172" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" />
+                <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
+                <circle cx="200" cy="200" r="120" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
 
-                {/* Lotus Lily Pads (Emerald Leaves) */}
-                <ellipse cx="85" cy="105" rx="38" ry="22" fill="#047857" opacity="0.8" transform="rotate(-25 85 105)" />
-                <ellipse cx="325" cy="105" rx="36" ry="20" fill="#065f46" opacity="0.8" transform="rotate(35 325 105)" />
-                <ellipse cx="75" cy="295" rx="40" ry="23" fill="#047857" opacity="0.8" transform="rotate(30 75 295)" />
-                <ellipse cx="315" cy="305" rx="42" ry="24" fill="#065f46" opacity="0.8" transform="rotate(-30 315 305)" />
+                {/* 60 Precision Chapter Ring Hash Ticks */}
+                {Array.from({ length: 60 }).map((_, i) => {
+                  const deg = i * 6;
+                  const isMajor = deg % 30 === 0;
+                  const isQuarter = deg % 90 === 0;
+                  const rad = (deg * Math.PI) / 180;
+                  const r1 = isQuarter ? 176 : isMajor ? 179 : 182;
+                  const r2 = 186;
+                  const x1 = 200 + r1 * Math.sin(rad);
+                  const y1 = 200 - r1 * Math.cos(rad);
+                  const x2 = 200 + r2 * Math.sin(rad);
+                  const y2 = 200 - r2 * Math.cos(rad);
 
-                {/* Artistic Koi Fish 1 (Circling Right) */}
-                <path
-                  d="M 220 75 C 315 95 335 190 285 260 C 268 238 278 188 232 138 C 216 122 195 102 220 75 Z"
-                  fill="url(#koiRed)"
-                  opacity="0.9"
-                />
-                <path d="M 285 260 Q 315 290 295 322 Q 270 286 275 265 Z" fill="#fda4af" opacity="0.8" />
-                <circle cx="215" cy="90" r="3.5" fill="#ffffff" />
-                <circle cx="215" cy="90" r="1.8" fill="#0f172a" />
+                  return (
+                    <line
+                      key={deg}
+                      x1={x1}
+                      y1={y1}
+                      x2={x2}
+                      y2={y2}
+                      stroke={isQuarter ? "#fef08a" : isMajor ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.2)"}
+                      strokeWidth={isQuarter ? "2" : isMajor ? "1.5" : "0.75"}
+                      strokeLinecap="round"
+                    />
+                  );
+                })}
 
-                {/* Artistic Koi Fish 2 (Circling Left) */}
-                <path
-                  d="M 180 325 C 85 305 65 210 115 140 C 132 162 122 212 168 262 C 184 278 205 298 180 325 Z"
-                  fill="url(#koiRed)"
-                  opacity="0.9"
-                />
-                <path d="M 115 140 Q 85 110 105 78 Q 130 114 125 135 Z" fill="#fda4af" opacity="0.8" />
-                <circle cx="185" cy="310" r="3.5" fill="#ffffff" />
-                <circle cx="185" cy="310" r="1.8" fill="#0f172a" />
-
-                {/* Blooming Lotus Flowers */}
-                <circle cx="90" cy="110" r="11" fill="url(#goldLotus)" opacity="0.9" />
-                <circle cx="320" cy="298" r="12" fill="url(#goldLotus)" opacity="0.9" />
-                <circle cx="320" cy="110" r="9" fill="#f43f5e" opacity="0.85" />
-                <circle cx="80" cy="290" r="10" fill="#e11d48" opacity="0.85" />
-
-                {/* Perimeter Hour Markers (12 Swiss Applied Gold Pips) */}
+                {/* 12 Applied Swiss Hour Markers (Subtle Platinum/Gold Pips) */}
                 {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
                   <circle
                     key={deg}
-                    cx={200 + 185 * Math.sin((deg * Math.PI) / 180)}
-                    cy={200 - 185 * Math.cos((deg * Math.PI) / 180)}
-                    r={deg % 90 === 0 ? "4" : "2.5"}
-                    fill="#fef08a"
-                    stroke="#b45309"
-                    strokeWidth="1"
-                    opacity="0.85"
+                    cx={200 + 168 * Math.sin((deg * Math.PI) / 180)}
+                    cy={200 - 168 * Math.cos((deg * Math.PI) / 180)}
+                    r={deg % 90 === 0 ? "3" : "2"}
+                    fill={deg % 90 === 0 ? "#fbbf24" : "rgba(255,255,255,0.85)"}
+                    stroke="rgba(0,0,0,0.5)"
+                    strokeWidth="0.5"
                   />
                 ))}
+
+                {/* Outer Inset Shadow for Depth */}
+                <circle cx="200" cy="200" r="200" fill="url(#bezelShadow)" />
               </svg>
             </div>
 
-            {/* 4. Integrated Haute Horlogerie Chronometer Core (Counter-Rotated Upright!) */}
+            {/* 4. Orbital Sweeping Seconds Pip (Traversing outer chapter ring, ZERO overlap with numbers) */}
+            <div
+              className="watch-orbital-seconds-track"
+              style={{ transform: `rotate(${secondDeg}deg)` }}
+              aria-hidden="true"
+            >
+              <div className="watch-orbital-pip" />
+            </div>
+
+            {/* 5. Integrated Haute Horlogerie Chronometer Core (Counter-Rotated Upright!) */}
             <div className="watch-chronometer-core">
               
               {/* Brand Letterpress Header */}
@@ -213,32 +212,14 @@ export default function WatchCountdown() {
                   <span className="register-val">{String(time.seconds).padStart(2, '0')}</span>
                   <span className="register-lbl">DETIK</span>
                 </div>
+
+                {/* Center Luxury Horology Jewel Pivot (Seated in the crossroad gap, never overlaps numbers) */}
+                <div className="watch-center-pivot" aria-hidden="true" />
               </div>
 
               {/* Dial Bottom Location */}
               <div className="watch-dial-venue">
                 27–28 NOV · BRAGA BANDUNG
-              </div>
-
-              {/* 5. Precision Rotating Watch Hands (Integrated with Upright Dial) */}
-              <div className="watch-hands-center" aria-hidden="true">
-                {/* Hour Hand */}
-                <div
-                  className="watch-hand hand-hour"
-                  style={{ transform: `rotate(${hourDeg}deg)` }}
-                />
-                {/* Minute Hand */}
-                <div
-                  className="watch-hand hand-minute"
-                  style={{ transform: `rotate(${minuteDeg}deg)` }}
-                />
-                {/* Sweeping Seconds Hand */}
-                <div
-                  className="watch-hand hand-second"
-                  style={{ transform: `rotate(${secondDeg}deg)` }}
-                />
-                {/* Center Pivot Jewel */}
-                <div className="watch-center-pivot" />
               </div>
             </div>
 

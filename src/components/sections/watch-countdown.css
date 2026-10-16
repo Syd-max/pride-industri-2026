@@ -47,8 +47,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 72px auto 24px;
-  padding: 30px 20px 40px;
+  margin: 20px auto 28px;
+  padding: 24px 20px 36px;
   max-width: 100%;
   overflow: visible;
 }
@@ -73,18 +73,20 @@
 /* 4. Luxury Navy Alligator Leather Straps (Running Diagonally Across Stage) */
 .watch-strap-top {
   position: absolute;
-  top: -175px;
+  top: -65px;
   left: 50%;
   transform: translateX(-50%);
-  width: 130px;
-  height: 195px;
+  width: 120px;
+  height: 75px;
   background: linear-gradient(90deg, #070e1c 0%, #11223e 20%, #1c3660 50%, #11223e 80%, #070e1c 100%);
-  border-radius: 10px 10px 0 0;
+  border-radius: 6px 6px 0 0;
   box-shadow: 
-    inset 0 0 25px rgba(0, 0, 0, 0.85),
-    0 15px 35px rgba(0, 0, 0, 0.65);
+    inset 0 0 20px rgba(0, 0, 0, 0.8),
+    0 6px 16px rgba(0, 0, 0, 0.5);
   z-index: 1;
   overflow: hidden;
+  mask-image: linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
 }
 
 /* Saffiano/Alligator Scale Pattern & Contrast Stitching */
@@ -115,31 +117,33 @@
 
 .watch-strap-bottom {
   position: absolute;
-  bottom: -175px;
+  bottom: -65px;
   left: 50%;
   transform: translateX(-50%);
-  width: 130px;
-  height: 195px;
+  width: 120px;
+  height: 75px;
   background: linear-gradient(90deg, #070e1c 0%, #11223e 20%, #1c3660 50%, #11223e 80%, #070e1c 100%);
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 0 6px 6px;
   box-shadow: 
-    inset 0 0 25px rgba(0, 0, 0, 0.85),
-    0 -15px 35px rgba(0, 0, 0, 0.65);
+    inset 0 0 20px rgba(0, 0, 0, 0.8),
+    0 -6px 16px rgba(0, 0, 0, 0.5);
   z-index: 1;
   overflow: hidden;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
 }
 
 /* Bottom Strap Leather Keeper Loop */
 .watch-strap-bottom .strap-keeper {
   position: absolute;
-  bottom: 45px;
+  bottom: 16px;
   left: -2px;
   right: -2px;
-  height: 16px;
+  height: 12px;
   background: linear-gradient(90deg, #050b16 0%, #162a4d 50%, #050b16 100%);
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   border-bottom: 1px solid rgba(0, 0, 0, 0.6);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
   z-index: 3;
 }
 
@@ -173,11 +177,11 @@
 }
 
 .lug-bar-top {
-  top: -6px;
+  top: -5px;
 }
 
 .lug-bar-bottom {
-  bottom: -6px;
+  bottom: -5px;
 }
 
 /* 6. Hand-Polished Stainless Steel Case */
@@ -306,13 +310,13 @@
   width: 82%;
   height: 82%;
   border-radius: 50%;
-  background: radial-gradient(circle at center, rgba(6, 11, 24, 0.48) 0%, rgba(4, 7, 16, 0.68) 65%, rgba(2, 4, 10, 0.88) 100%);
+  background: radial-gradient(circle at center, rgba(6, 11, 24, 0.84) 0%, rgba(4, 7, 16, 0.90) 65%, rgba(2, 4, 10, 0.96) 100%);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   box-shadow: 
-    0 12px 35px rgba(0, 0, 0, 0.8),
-    inset 0 0 20px rgba(0, 0, 0, 0.85),
+    0 12px 35px rgba(0, 0, 0, 0.85),
+    inset 0 0 24px rgba(0, 0, 0, 0.9),
     0 0 0 1px rgba(245, 158, 11, 0.15);
   padding: 16px 14px;
   /* CRITICAL: Counter-rotate +40deg so all numbers & labels are perfectly horizontal/upright */
@@ -330,10 +334,10 @@
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 0.16em;
-  color: #fbbf24;
+  letter-spacing: 0.18em;
+  color: #f1f5f9;
   text-transform: uppercase;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
 }
 
 .watch-brand-sub {
@@ -347,6 +351,7 @@
 
 /* 4 Complication Pods: Pristine Apple Cleanliness, No Neon Box Backgrounds */
 .watch-registers-grid {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px 10px;
@@ -356,19 +361,20 @@
 
 .watch-register-pod {
   position: relative;
-  background: rgba(10, 16, 32, 0.68);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(10, 16, 32, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 12px;
-  padding: 6px 4px 7px;
+  padding: 7px 5px 8px;
   text-align: center;
   box-shadow: 
-    0 4px 14px rgba(0, 0, 0, 0.55),
-    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    0 4px 14px rgba(0, 0, 0, 0.65),
+    inset 0 1px 1px rgba(255, 255, 255, 0.18);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   transition: transform 0.2s ease, border-color 0.2s ease;
+  z-index: 10;
 }
 
 .watch-register-pod:hover {
@@ -433,66 +439,44 @@
   opacity: 0.85;
 }
 
-/* 10. Mechanical Watch Hands */
-.watch-hands-center {
+/* 10. Outer Orbital Seconds Indicator & Center Horology Jewel (Zero Overlap) */
+.watch-orbital-seconds-track {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  border-radius: 50%;
   pointer-events: none;
-  z-index: 25;
+  z-index: 22;
+  transition: transform 0.25s cubic-bezier(0.4, 2.08, 0.55, 0.44);
 }
 
-.watch-hand {
+.watch-orbital-pip {
   position: absolute;
-  bottom: 50%;
+  top: 10px;
   left: 50%;
-  transform-origin: bottom center;
-  border-radius: 3px 3px 0 0;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ff4d6d 0%, #e11d48 60%, #9f1239 100%);
+  box-shadow: 
+    0 0 10px #f43f5e,
+    0 0 4px #ffffff,
+    0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
-/* Hour Hand (Classic Diamond Needle) */
-.hand-hour {
-  width: 4px;
-  height: 56px;
-  margin-left: -2px;
-  background: linear-gradient(90deg, #94a3b8 0%, #ffffff 50%, #64748b 100%);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-  opacity: 0.6;
-}
-
-/* Minute Hand */
-.hand-minute {
-  width: 3px;
-  height: 78px;
-  margin-left: -1.5px;
-  background: linear-gradient(90deg, #cbd5e1 0%, #ffffff 50%, #94a3b8 100%);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
-  opacity: 0.7;
-}
-
-/* Sweeping Ticking Second Hand (Vibrant Red Needle with Counterbalance) */
-.hand-second {
-  width: 1.5px;
-  height: 100px;
-  margin-left: -0.75px;
-  background: #e51937;
-  box-shadow: 0 0 8px rgba(229, 25, 55, 0.7);
-  z-index: 28;
-}
-
-/* Center Pin / Ruby Cap */
+/* Center Luxury Horology Jewel Pivot (Seated in the crossroad gap between 4 pods) */
 .watch-center-pivot {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 11px;
-  height: 11px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%, #fde68a 0%, #f59e0b 50%, #78350f 100%);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
-  z-index: 29;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.25);
+  z-index: 25;
+  pointer-events: none;
 }
 
 .watch-center-pivot::after {
@@ -501,21 +485,22 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 4px;
-  height: 4px;
+  width: 4.5px;
+  height: 4.5px;
   border-radius: 50%;
   background: #e11d48;
+  box-shadow: 0 0 4px #e11d48;
 }
 
 /* 11. Responsive Mobile Polish (390px Viewport) */
 @media (max-width: 640px) {
   .watch-countdown-section {
-    padding: 36px 12px 48px;
+    padding: 32px 12px 44px;
   }
 
   .watch-tilt-wrapper {
-    margin: 48px auto 16px;
-    padding: 20px 0 28px;
+    margin: 16px auto 12px;
+    padding: 16px 0 20px;
   }
 
   .watch-timepiece-assembly {
@@ -523,32 +508,37 @@
   }
 
   .watch-case {
-    width: 295px;
-    height: 295px;
-    padding: 14px;
+    width: 290px;
+    height: 290px;
+    padding: 12px;
   }
 
   .watch-strap-top {
-    width: 90px;
-    height: 125px;
-    top: -115px;
+    width: 78px;
+    height: 48px;
+    top: -40px;
   }
 
   .watch-strap-bottom {
-    width: 90px;
-    height: 125px;
-    bottom: -115px;
+    width: 78px;
+    height: 48px;
+    bottom: -40px;
+  }
+
+  .watch-strap-bottom .strap-keeper {
+    bottom: 8px;
+    height: 8px;
   }
 
   .watch-lug-bar {
-    width: 100px;
-    height: 10px;
+    width: 95px;
+    height: 9px;
   }
 
   .watch-lug-bar::before,
   .watch-lug-bar::after {
-    width: 5px;
-    height: 5px;
+    width: 4.5px;
+    height: 4.5px;
   }
 
   .watch-crown {
@@ -604,7 +594,19 @@
     margin-top: 5px;
   }
 
-  .hand-hour { height: 40px; }
-  .hand-minute { height: 56px; }
-  .hand-second { height: 70px; }
+  .watch-orbital-pip {
+    top: 6px;
+    width: 5px;
+    height: 5px;
+  }
+
+  .watch-center-pivot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .watch-center-pivot::after {
+    width: 3.5px;
+    height: 3.5px;
+  }
 }

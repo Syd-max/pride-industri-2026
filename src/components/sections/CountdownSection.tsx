@@ -17,27 +17,22 @@ export default function CountdownSection() {
       {/* 2. Focused Radial Spotlight on Watch */}
       <div className="watch-stage-spotlight" />
 
-      {/* 3. Compact Header */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-        {/* Apple SF Style Status Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 text-amber-300 border border-amber-500/30 shadow-md shadow-amber-950/20 mb-3 backdrop-blur-md">
-          <svg className="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12 6 12 12 16 14" />
-          </svg>
-          <span>Chronometer Resmi Festival</span>
+      {/* 3. Header: Pure Apple Typography, Generous Clearance, Zero Clutter */}
+      <div className="relative z-10 max-w-3xl mx-auto px-4 text-center mb-16 sm:mb-24">
+        {/* Apple Keynote Style Minimal Pill Badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-semibold tracking-wider uppercase text-slate-300 bg-white/[0.06] border border-white/10 backdrop-blur-md mb-4 shadow-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span>Festival Countdown · Braga 2026</span>
         </div>
 
-        {/* Headline */}
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight uppercase mb-2">
-          Hitung Mundur Menuju{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-rose-400 to-sky-300">
-            Perhelatan Akbar
-          </span>
+        {/* Clean, Majestic Headline — Architectural Typography, No AI Rainbow Gradients */}
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight uppercase leading-tight mb-4">
+          Menuju PRIDE Industri 2026
         </h2>
 
-        <p className="text-xs sm:text-sm text-slate-300 max-w-sm sm:max-w-md mx-auto mb-2 font-normal leading-relaxed">
-          Mahakarya seni rupa dan presisi industri menyambut pembukaan resmi PRIDE Industri 2026 di koridor historis Jalan Braga Bandung.
+        {/* Authentic, Grounded Event Description */}
+        <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto font-normal leading-relaxed">
+          Menghitung hari menuju perhelatan akbar industri kreatif Kota Bandung: pameran produk binaan, malam penganugerahan SIINAS, dan runway fesyen di koridor Jalan Braga, 27–28 November 2026.
         </p>
       </div>
 

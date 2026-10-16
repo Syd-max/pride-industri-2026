@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 export interface StatFolderCardProps {
   number: string;
@@ -21,18 +21,22 @@ export default function StatFolderCard({
   docTitle,
   docItems,
 }: StatFolderCardProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isToggled, setIsToggled] = useState(false);
   const [displayNumber, setDisplayNumber] = useState(number);
   const animFrameRef = useRef<number | null>(null);
+  const scrambleIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const isOpen = isHovered || isToggled;
 
   // Mechanical Odometer / Rolling Number Animation
-  const triggerRoll = () => {
+  const triggerRoll = useCallback(() => {
     // If number has digits like "200+" or "100" or "2 HARI"
     const digitMatch = number.match(/^(\d+)(.*)$/);
     if (digitMatch) {
       const targetVal = parseInt(digitMatch[1], 10);
       const suffix = digitMatch[2] || '';
-      const duration = 650;
+      const duration = 600;
       const startTime = performance.now();
 
       const step = (now: number) => {
@@ -57,9 +61,10 @@ export default function StatFolderCard({
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       const original = number;
       let iterations = 0;
-      const maxIterations = 7;
+      const maxIterations = 6;
 
-      const scrambleInterval = setInterval(() => {
+      if (scrambleIntervalRef.current) clearInterval(scrambleIntervalRef.current);
+      scrambleIntervalRef.current = setInterval(() => {
         setDisplayNumber(
           original
             .split('')
@@ -71,16 +76,27 @@ export default function StatFolderCard({
         );
 
         if (iterations >= maxIterations) {
-          clearInterval(scrambleInterval);
+          if (scrambleIntervalRef.current) clearInterval(scrambleIntervalRef.current);
           setDisplayNumber(original);
         }
         iterations += 1;
-      }, 45);
+      }, 40);
     }
+  }, [number]);
+
+  // Trigger rolling animation automatically when hovered
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    triggerRoll();
   };
 
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  // Click/tap toggle support (especially for mobile/touch screens)
   const handleClick = () => {
-    setIsOpen((prev) => !prev);
+    setIsToggled((prev) => !prev);
     triggerRoll();
   };
 
@@ -94,6 +110,7 @@ export default function StatFolderCard({
   useEffect(() => {
     return () => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      if (scrambleIntervalRef.current) clearInterval(scrambleIntervalRef.current);
     };
   }, []);
 
@@ -102,8 +119,10 @@ export default function StatFolderCard({
       role="button"
       tabIndex={0}
       aria-expanded={isOpen}
-      aria-label={`Folder berkas ${label}: ${number}. Klik untuk ${isOpen ? 'menutup' : 'melihat'} rincian arsip.`}
+      aria-label={`Folder berkas ${label}: ${number}. Arahkan kursor atau ketuk untuk rincian arsip.`}
       className={`folder-card-wrapper folder-theme-${theme} ${isOpen ? 'is-open' : ''}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
@@ -114,7 +133,7 @@ export default function StatFolderCard({
           <div className="folder-tab-top" />
         </div>
 
-        {/* 2. Inner Document Sheet (Slides OUT when clicked) */}
+        {/* 2. Inner Document Sheet (Slides OUT automatically on hover) */}
         <div className="folder-document-sheet" aria-hidden={!isOpen}>
           <div className="doc-sheet-content">
             <div className="doc-sheet-badge">
@@ -147,17 +166,17 @@ export default function StatFolderCard({
             <p className="folder-desc">{desc}</p>
           </div>
 
-          {/* Bottom Action Pill */}
+          {/* Bottom Action Bar */}
           <div className="folder-action-bar">
             <span className="folder-action-pill">
-              <span>{isOpen ? 'Tutup Berkas' : 'Buka Berkas'}</span>
+              <span>{isOpen ? 'Tutup Rincian' : 'Rincian Arsip'}</span>
               <svg className="folder-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="6 9 12 15 18 9" />
               </svg>
             </span>
 
             <span className="text-[10px] opacity-75 font-mono tracking-wider">
-              {isOpen ? 'DOKUMEN TERBUKA' : 'KLIK BERKAS'}
+              {isOpen ? 'DOKUMEN TERBUKA' : 'SOROT KURSOR'}
             </span>
           </div>
         </div>
