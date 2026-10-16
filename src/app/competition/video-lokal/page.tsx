@@ -257,29 +257,30 @@ export default function VideoLokalPage() {
           >
             ← Kembali ke Beranda Festival
           </Link>
-          <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2 group cursor-pointer">
             <Image
-              src="/logo.png"
+              src="/LOGO_PRIDE_INDUSTRI.png"
               alt="PRIDE Industri 2026"
-              width={110}
-              height={32}
-              className="h-7 w-auto object-contain"
+              width={140}
+              height={42}
+              className="h-8 sm:h-9 w-auto object-contain transition-transform group-hover:scale-105"
+              priority
             />
-          </div>
+          </Link>
         </div>
 
         {/* Page Title & Context Header */}
-        <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+        <div className="pt-2 sm:pt-4 space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs">
             Formulir Pendaftaran Resmi
           </div>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug sm:leading-tight pt-1">
             Lomba Video 1 Menit PRIDE Industri 2026
           </h1>
           <p className="text-sm sm:text-base font-semibold text-slate-700 italic">
             &ldquo;Karya Lokal, Cerita Lokal: Mengangkat Dinamika &amp; Eksistensi IKM Kota Bandung&rdquo;
           </p>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
             Pendaftaran terbuka untuk umum WNI, 100% gratis tanpa dipungut biaya. Total hadiah Rp 2.250.000 dengan piala dan sertifikat Walikota Bandung.
           </p>
         </div>
