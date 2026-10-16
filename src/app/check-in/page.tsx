@@ -53,7 +53,6 @@ export default function CheckInPage() {
 
   // Camera & Scanner states
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const scannerControlsRef = useRef<{ stop: () => void; switchTorch?: (onOff: boolean) => Promise<void> } | null>(null);
   
   const [cameraStatus, setCameraStatus] = useState<'starting' | 'active' | 'permission_denied' | 'no_camera' | 'unsupported' | 'error'>('starting');
@@ -248,33 +247,6 @@ export default function CheckInPage() {
     setFacingMode((prev) => (prev === 'environment' ? 'user' : 'environment'));
   };
 
-  // Decode QR from uploaded image file
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const { BrowserQRCodeReader } = await import('@zxing/browser');
-      const reader = new BrowserQRCodeReader();
-      const objectUrl = URL.createObjectURL(file);
-      const result = await reader.decodeFromImageUrl(objectUrl);
-      URL.revokeObjectURL(objectUrl);
-
-      if (result) {
-        handleCodeDetected(result.getText());
-      } else {
-        setErrorMsg('Tidak menemukan Barcode/QR Code yang jelas pada foto tersebut.');
-      }
-    } catch {
-      setErrorMsg('Tidak dapat membaca QR code dari gambar tersebut. Pastikan foto jernih dan terfokus.');
-    }
-  };
-
-  // Quick simulation for development or test environments
-  const handleSimulateScan = () => {
-    handleCodeDetected(`${window.location.origin}/check-in?gate=braga-city-walk&scanned=true`);
-  };
-
   // Reset back to Camera Scanner mode
   const handleRescanCamera = () => {
     setHasScanned(false);
@@ -363,14 +335,6 @@ export default function CheckInPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const resetForm = () => {
-    setSuccessResult(null);
-    setErrorMsg(null);
-    setInfoMsg(null);
-    setPesertaCode('');
-    setUmumName('');
   };
 
   return (
@@ -572,7 +536,7 @@ export default function CheckInPage() {
                         Kamera Tidak Terdeteksi
                       </h3>
                       <p className="text-xs text-slate-400 leading-relaxed">
-                        Anda dapat mengunggah foto Barcode QR atau menggunakan simulasi gate di bawah ini.
+                        Pastikan izin akses kamera diaktifkan di browser Anda untuk memindai poster Barcode Gate di Braga City Walk.
                       </p>
                     </div>
                   )}
@@ -592,48 +556,14 @@ export default function CheckInPage() {
               </div>
             )}
 
-            {/* Bottom Actions: Upload Photo & Simulation Test */}
-            <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 space-y-3 shadow-lg">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-400 font-medium">Alternatif Pindai:</span>
-                <span className="text-emerald-400 text-[11px] font-bold">Gate Braga City Walk</span>
+            {/* Gate Instruction Card */}
+            <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 text-center space-y-1.5 shadow-md">
+              <div className="flex items-center justify-center gap-2 text-xs font-bold text-emerald-400">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <span>Arahkan Kamera ke Poster Barcode Gate</span>
               </div>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                {/* Upload Image Option */}
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="py-2.5 px-3 rounded-xl text-xs font-bold text-slate-200 bg-slate-700/80 hover:bg-slate-700 border border-slate-600 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
-                >
-                  <svg className="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                    <circle cx="9" cy="9" r="2" />
-                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                  </svg>
-                  <span>Unggah Foto QR</span>
-                </button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-
-                {/* Instant Simulation Test (for reviewers & developers) */}
-                <button
-                  type="button"
-                  onClick={handleSimulateScan}
-                  className="py-2.5 px-3 rounded-xl text-xs font-bold text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
-                >
-                  <span>Simulasi Scan Gate</span>
-                  <span>→</span>
-                </button>
-              </div>
-
-              <p className="text-[11px] text-slate-400 text-center pt-1 leading-normal">
-                Pindai poster barcode fisik yang terpasang di meja registrasi gate Braga City Walk.
+              <p className="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto">
+                Pindai poster barcode fisik resmi yang terpasang di Meja Registrasi Gate Braga City Walk untuk membuka menu presensi.
               </p>
             </div>
           </div>
@@ -808,13 +738,22 @@ export default function CheckInPage() {
                     Verifikasi Kode Peserta Lomba
                   </h2>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Masukkan kode pendaftaran resmi yang Anda terima saat mendaftar (contoh: PRIDE-DK-... atau PRIDE-VD-...).
+                    Masukkan kode pendaftaran resmi yang Anda terima saat mendaftar lomba.
                   </p>
+                </div>
+
+                {/* Non-Delegable & Strict Code Warning Banner */}
+                <div className="p-3 rounded-xl bg-amber-500/15 border border-amber-500/35 text-amber-200 text-xs leading-relaxed flex items-start gap-2.5">
+                  <span className="text-amber-400 font-black text-sm flex-shrink-0">⚠️</span>
+                  <div>
+                    <strong className="text-amber-100 font-bold block mb-0.5">Wajib Kode Resmi &amp; Tidak Bisa Diwakilkan!</strong>
+                    Presensi ini hanya untuk diri sendiri. Pastikan kode registrasi sesuai dengan bukti pendaftaran Anda. Jika kode tidak terdaftar atau salah, presensi akan gagal.
+                  </div>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                    Kode Registrasi Peserta (atau No. WhatsApp)
+                    Kode Registrasi Resmi Peserta (Wajib)
                   </label>
                   <input
                     type="text"
@@ -825,7 +764,7 @@ export default function CheckInPage() {
                     required
                   />
                   <p className="text-[11px] text-slate-400 mt-1.5">
-                    Kode ini tertera di email bukti pendaftaran atau dashboard pendaftar Anda.
+                    Kode berformat resmi (contoh: PRIDE-DK-... atau PRIDE-VD-...). Presensi ditolak jika kode tidak cocok.
                   </p>
                 </div>
 
@@ -960,21 +899,21 @@ export default function CheckInPage() {
             </div>
 
             {/* Actions */}
-            <div className="space-y-2.5 pt-2">
+            <div className="space-y-3 pt-2">
               <Link
                 href="/"
-                className="w-full py-3 px-4 rounded-xl text-xs font-black text-slate-950 bg-white hover:bg-slate-100 transition-colors block shadow-md"
+                className="w-full py-3.5 px-4 rounded-xl text-xs font-black text-slate-950 bg-white hover:bg-slate-100 transition-colors block shadow-md text-center"
               >
                 Buka Rundown Acara &amp; Denah Booth
               </Link>
 
-              <button
-                type="button"
-                onClick={resetForm}
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-slate-800 border border-slate-700 hover:bg-slate-700/70 transition-colors cursor-pointer"
-              >
-                Presensi untuk Orang Lain
-              </button>
+              <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400 font-medium">
+                <svg className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <span>Presensi terdaftar khusus untuk diri Anda dan tidak dapat diwakilkan</span>
+              </div>
             </div>
           </div>
         )}

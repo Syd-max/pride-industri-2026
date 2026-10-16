@@ -52,13 +52,13 @@ export async function POST(request: NextRequest) {
     }
 
     // ─── ALUR 2: VISITOR PESERTA (PESERTA LOMBA PRIDE 2026) ───
-    const inputQuery = sanitizeString(body.registration_code || body.phone || '').toUpperCase();
+    const inputCode = sanitizeString(body.registration_code || '').trim().toUpperCase();
 
-    if (!inputQuery) {
+    if (!inputCode) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Kode registrasi atau nomor telepon peserta wajib dimasukkan.',
+          error: 'Kode registrasi peserta wajib dimasukkan. Presensi hanya berlaku untuk diri sendiri dan tidak dapat diwakilkan.',
           code: 'MISSING_CREDENTIALS',
         },
         { status: 400 }
@@ -73,26 +73,24 @@ export async function POST(request: NextRequest) {
     if (hasSupabase) {
       const supabase = createAdminClient();
 
-      // Check by registration code or phone number
+      // Strict exact match on official registration code only
       const { data: registration, error: regError } = await supabase
         .from('pride_registrations')
         .select('*')
-        .or(`registration_code.ilike.%${inputQuery}%,phone.eq.${inputQuery}`)
+        .eq('registration_code', inputCode)
         .maybeSingle();
 
       if (regError || !registration) {
-        // Fallback to in-memory check
+        // Fallback to in-memory check with exact code match
         const memTarget = getSharedRegistrations().find(
-          (r) =>
-            r.registration_code.toUpperCase() === inputQuery ||
-            r.phone === inputQuery
+          (r) => r.registration_code.toUpperCase() === inputCode
         );
 
         if (!memTarget) {
           return NextResponse.json(
             {
               success: false,
-              error: `Kode "${inputQuery}" tidak ditemukan di daftar peserta resmi. Pastikan Anda telah terdaftar lomba.`,
+              error: `Kode registrasi "${inputCode}" tidak sesuai atau tidak terdaftar di database peserta resmi. Pastikan kode yang Anda masukkan sesuai persis dengan bukti pendaftaran Anda. Presensi hanya untuk diri sendiri dan tidak dapat diwakilkan.`,
               code: 'INVALID_REGISTRATION',
             },
             { status: 404 }
@@ -181,18 +179,16 @@ export async function POST(request: NextRequest) {
         },
       });
     } else {
-      // In-memory evaluation
+      // In-memory evaluation with exact code match
       const memTarget = getSharedRegistrations().find(
-        (r) =>
-          r.registration_code.toUpperCase() === inputQuery ||
-          r.phone === inputQuery
+        (r) => r.registration_code.toUpperCase() === inputCode
       );
 
       if (!memTarget) {
         return NextResponse.json(
           {
             success: false,
-            error: `Kode "${inputQuery}" tidak ditemukan di daftar peserta resmi. Periksa kembali atau tanyakan ke panitia registrasi.`,
+            error: `Kode registrasi "${inputCode}" tidak sesuai atau tidak terdaftar di database peserta resmi. Pastikan kode yang Anda masukkan sesuai persis dengan bukti pendaftaran Anda. Presensi hanya untuk diri sendiri dan tidak dapat diwakilkan.`,
             code: 'INVALID_REGISTRATION',
           },
           { status: 404 }
