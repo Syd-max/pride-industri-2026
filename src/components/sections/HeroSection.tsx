@@ -150,7 +150,7 @@ export default function HeroSection() {
 
     // 2. MASTER TIMELINE CHOREOGRAPHY (p = 0.0 to 1.0)
     function updateTimeline(p: number) {
-      const isMobile = typeof window !== 'undefined' && window.innerWidth <= 640;
+      const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
       let heroY = 0;
       let heroOpacity = 1;
       let browserY = 0;
@@ -163,22 +163,17 @@ export default function HeroSection() {
           const t = easeInOutCubic(mapRange(p, 0, 0.16, 0, 1));
           heroY = -300 * t;
           heroOpacity = Math.max(0, 1 - 1.25 * t);
-          browserY = -((window.innerHeight || 800) * 0.74) * t;
+          browserY = -((window.innerHeight || 800) * 0.82) * t;
           browserScale = 1;
           browserOpacity = mapRange(p, 0.01, 0.06, 0, 1);
-        } else if (p <= 0.88) {
+        } else {
+          // Page 2: Helpdesk Mockup stays PINNED & 100% VISIBLE throughout the rest of scroll!
+          // NEVER disappears or fades out into a black void!
           heroY = -360;
           heroOpacity = 0;
-          browserY = -((window.innerHeight || 800) * 0.74);
+          browserY = -((window.innerHeight || 800) * 0.82);
           browserScale = 1.0;
           browserOpacity = 1;
-        } else {
-          const t = easeInOutCubic(mapRange(p, 0.88, 1.0, 0, 1));
-          heroY = -360 - 60 * t;
-          heroOpacity = 0;
-          browserY = -((window.innerHeight || 800) * 0.74) - 60 * t;
-          browserScale = 1.0 - 0.02 * t;
-          browserOpacity = Math.max(0, 1 - 1.2 * t);
         }
 
         // Fade out mobile scroll cue as user scrolls
@@ -194,19 +189,13 @@ export default function HeroSection() {
           browserY = -560 * t;
           browserScale = 1;
           browserOpacity = 1;
-        } else if (p <= 0.88) {
+        } else {
+          // Helpdesk Mockup stays PINNED & 100% VISIBLE!
           heroY = -420;
           heroOpacity = 0;
           browserY = -560;
           browserScale = 1.0;
           browserOpacity = 1;
-        } else {
-          const t = easeInOutCubic(mapRange(p, 0.88, 1.0, 0, 1));
-          heroY = -420 - 60 * t;
-          heroOpacity = 0;
-          browserY = -560 - 60 * t;
-          browserScale = 1.0 - 0.03 * t;
-          browserOpacity = Math.max(0, 1 - 1.2 * t);
         }
       }
 

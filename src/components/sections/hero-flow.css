@@ -32,7 +32,7 @@
 
 @media (max-width: 768px) {
   .scroll-stage {
-    height: 220vh;
+    height: 280vh;
   }
 }
 
@@ -1397,11 +1397,10 @@
     pointer-events: none !important;
   }
 
-  /* Hide the white browser mockup peeking bar on mobile initial view — ZERO WHITE BLEED */
+  /* Ensure browser mockup stage is visible & interactive on mobile Page 2 */
   .browser-stage {
-    display: none !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
+    display: block !important;
+    visibility: visible !important;
   }
 }
 
