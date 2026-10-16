@@ -6,14 +6,12 @@ import './competition-tickets.css';
 
 export default function CompetitionSection() {
   const [viewMode, setViewMode] = useState<'hadiah' | 'benefit'>('hadiah');
-  const [demoPlaying, setDemoPlaying] = useState(false);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const stickerStageRef = useRef<HTMLDivElement | null>(null);
   const stickerTopRef = useRef<HTMLDivElement | null>(null);
   const peelFlapRef = useRef<HTMLDivElement | null>(null);
   const cornerCurlRef = useRef<HTMLDivElement | null>(null);
-  const simCursorRef = useRef<SVGSVGElement | null>(null);
   const btnHadiahRef = useRef<HTMLButtonElement | null>(null);
   const btnBenefitRef = useRef<HTMLButtonElement | null>(null);
 
@@ -24,7 +22,6 @@ export default function CompetitionSection() {
   const isDraggingRef = useRef<boolean>(false);
   const dragStartXRef = useRef<number>(0);
   const dragStartPeelRef = useRef<number>(0);
-  const demoTimersRef = useRef<NodeJS.Timeout[]>([]);
 
   const clamp = (val: number, min: number, max: number) => {
     return Math.max(min, Math.min(max, val));
@@ -112,7 +109,6 @@ export default function CompetitionSection() {
 
   /* ─── 4. INTERACTIVE DRAG & CLICK EVENTS ─── */
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    stopDemo();
     isDraggingRef.current = true;
     dragStartXRef.current = e.clientX;
     dragStartPeelRef.current = peelProgressRef.current;
@@ -145,7 +141,6 @@ export default function CompetitionSection() {
   };
 
   const handleToggle = (mode: 'hadiah' | 'benefit') => {
-    stopDemo();
     if (mode === 'hadiah') {
       animatePeelTo(0, 480);
     } else {
@@ -153,117 +148,9 @@ export default function CompetitionSection() {
     }
   };
 
-  /* ─── 5. SIMULATED AUTO-PLAY DEMO ─── */
-  const clearDemoTimers = () => {
-    demoTimersRef.current.forEach((id) => clearTimeout(id));
-    demoTimersRef.current = [];
-  };
-
-  const stopDemo = () => {
-    setDemoPlaying(false);
-    clearDemoTimers();
-    if (simCursorRef.current) {
-      simCursorRef.current.classList.remove('visible');
-    }
-  };
-
-  const moveSimCursorTo = (
-    el: HTMLElement | null,
-    offsetX = 0,
-    offsetY = 0,
-    duration = 600
-  ) => {
-    if (!el || !simCursorRef.current) return;
-    const rect = el.getBoundingClientRect();
-    const x = rect.left + offsetX;
-    const y = rect.top + offsetY;
-    simCursorRef.current.style.transition = `transform ${duration}ms cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease`;
-    simCursorRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-  };
-
-  const toggleAutoPlayDemo = () => {
-    if (demoPlaying) {
-      stopDemo();
-      return;
-    }
-
-    setDemoPlaying(true);
-    renderPeel(0);
-    applyViewMode(false);
-
-    if (simCursorRef.current) {
-      simCursorRef.current.classList.add('visible');
-    }
-
-    const stageEl = stickerStageRef.current;
-    if (!stageEl) return;
-    const sRect = stageEl.getBoundingClientRect();
-    moveSimCursorTo(stageEl, sRect.width * 0.5, sRect.height + 25, 0);
-
-    // Sequence reproduction
-    demoTimersRef.current.push(
-      setTimeout(() => {
-        moveSimCursorTo(stageEl, 26, 28, 700);
-      }, 300)
-    );
-
-    demoTimersRef.current.push(
-      setTimeout(() => {
-        const width = stageEl.offsetWidth;
-        moveSimCursorTo(stageEl, width - 22, 42, 1150);
-        animatePeelTo(1, 1150);
-      }, 1200)
-    );
-
-    demoTimersRef.current.push(
-      setTimeout(() => {
-        moveSimCursorTo(btnHadiahRef.current, 40, 20, 850);
-      }, 3300)
-    );
-
-    demoTimersRef.current.push(
-      setTimeout(() => {
-        animatePeelTo(0, 450);
-      }, 4300)
-    );
-
-    demoTimersRef.current.push(
-      setTimeout(() => {
-        moveSimCursorTo(btnBenefitRef.current, 40, 20, 500);
-      }, 5200)
-    );
-
-    demoTimersRef.current.push(
-      setTimeout(() => {
-        animatePeelTo(1, 450);
-      }, 5800)
-    );
-
-    demoTimersRef.current.push(
-      setTimeout(() => {
-        const width = stageEl.offsetWidth;
-        moveSimCursorTo(stageEl, width - 24, 42, 750);
-      }, 7000)
-    );
-
-    demoTimersRef.current.push(
-      setTimeout(() => {
-        moveSimCursorTo(stageEl, 18, 28, 1100);
-        animatePeelTo(0, 1100);
-      }, 7900)
-    );
-
-    demoTimersRef.current.push(
-      setTimeout(() => {
-        stopDemo();
-      }, 9400)
-    );
-  };
-
   useEffect(() => {
     renderPeel(0);
     return () => {
-      clearDemoTimers();
       if (animRafRef.current) cancelAnimationFrame(animRafRef.current);
     };
   }, [renderPeel]);
@@ -671,33 +558,6 @@ export default function CompetitionSection() {
               </div>
             </div>
           </article>
-        </div>
-
-        {/* ─── Simulated Cursor for Interactive Auto-Demo ─── */}
-        <svg
-          ref={simCursorRef}
-          className="sim-cursor"
-          viewBox="0 0 28 28"
-          fill="none"
-        >
-          <path
-            d="M10 4v11.5l-3.2-2.4a1.8 1.8 0 0 0-2.5 2.5l6.8 6.8c1.1 1.1 2.6 1.7 4.2 1.7h3.8c2.8 0 5-2.2 5-5v-5.5a1.8 1.8 0 0 0-3.6 0V12a1.8 1.8 0 0 0-3.6 0v-1a1.8 1.8 0 0 0-3.6 0V4A1.65 1.65 0 0 0 10 4Z"
-            fill="#ffffff"
-            stroke="#0f172a"
-            strokeWidth="2"
-            strokeLinejoin="round"
-          />
-        </svg>
-
-        {/* ─── Bottom Floating Demo Controls ─── */}
-        <div className="demo-hud">
-          <button
-            type="button"
-            onClick={toggleAutoPlayDemo}
-          >
-            {demoPlaying ? '⏸ Jeda Demo' : '▶ Putar Demo Interaktif'}
-          </button>
-          <span>atau tarik stiker emas di kartu tengah</span>
         </div>
       </div>
     </section>
