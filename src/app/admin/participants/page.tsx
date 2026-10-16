@@ -204,15 +204,15 @@ export default function ParticipantsPage() {
       {/* Data Table */}
       <div className="admin-card overflow-hidden p-0 bg-white border border-slate-200 shadow-sm rounded-2xl">
         <div className="overflow-x-auto w-full">
-          <table className="data-table">
+          <table className="data-table min-w-[850px] w-full">
             <thead>
               <tr>
-                <th>Kode</th>
-                <th>Nama Peserta</th>
-                <th>Kompetisi</th>
-                <th>Kontak</th>
-                <th>Presensi</th>
-                <th>Aksi</th>
+                <th className="w-[180px]">Kode</th>
+                <th className="min-w-[220px]">Nama Peserta</th>
+                <th className="w-[160px]">Kompetisi</th>
+                <th className="w-[160px]">Kontak</th>
+                <th className="w-[150px]">Presensi</th>
+                <th className="w-[140px] text-right pr-6">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -232,17 +232,17 @@ export default function ParticipantsPage() {
                 filtered.map((p) => (
                   <tr key={p.id}>
                     <td>
-                      <span className="font-mono text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/60 inline-block">
+                      <span className="font-mono text-xs font-bold text-amber-900 bg-amber-100/90 px-2.5 py-1 rounded-lg border border-amber-300/70 inline-block whitespace-nowrap">
                         {p.registration_code}
                       </span>
                     </td>
                     <td>
-                      <div className="font-bold text-slate-900 text-xs sm:text-sm">{p.full_name}</div>
-                      <div className="text-[11px] text-slate-500 font-medium">{p.email}</div>
+                      <div className="font-bold text-slate-900 text-xs sm:text-sm whitespace-nowrap">{p.full_name}</div>
+                      <div className="text-[11px] text-slate-500 font-medium whitespace-nowrap">{p.email}</div>
                     </td>
                     <td>
                       <span
-                        className={`badge ${
+                        className={`badge whitespace-nowrap ${
                           p.competition_id === 'desain-kemasan'
                             ? 'badge-desain-kemasan'
                             : 'badge-video-lokal'
@@ -250,14 +250,14 @@ export default function ParticipantsPage() {
                       >
                         {p.competition_id === 'desain-kemasan'
                           ? 'Desain Kemasan'
-                          : 'Video Lokal'}
+                          : 'Video 1 Menit'}
                       </span>
                     </td>
-                    <td className="font-mono text-xs text-slate-600 font-medium">{p.phone}</td>
+                    <td className="font-mono text-xs text-slate-700 font-medium whitespace-nowrap">{p.phone}</td>
                     <td>
                       <button
                         onClick={() => handleToggleCheckIn(p)}
-                        className={`badge cursor-pointer hover:opacity-80 transition-opacity ${
+                        className={`badge cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap ${
                           p.check_in_status === 'checked_in'
                             ? 'badge-checked-in'
                             : 'badge-not-checked-in'
@@ -266,25 +266,26 @@ export default function ParticipantsPage() {
                       >
                         {p.check_in_status === 'checked_in' ? (
                           <>
-                            <svg className="w-3 h-3 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <svg className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                               <polyline points="20 6 9 17 4 12" />
                             </svg>
                             <span>Hadir</span>
                           </>
                         ) : (
                           <>
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-slate-400 flex-shrink-0" />
                             <span>Belum Hadir</span>
                           </>
                         )}
                       </button>
                     </td>
-                    <td>
+                    <td className="text-right pr-6">
                       <button
                         onClick={() => setSelectedParticipant(p)}
-                        className="text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline cursor-pointer"
+                        className="text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline cursor-pointer whitespace-nowrap inline-flex items-center gap-1"
                       >
-                        Detail Lengkap →
+                        <span>Detail Lengkap</span>
+                        <span aria-hidden="true">→</span>
                       </button>
                     </td>
                   </tr>

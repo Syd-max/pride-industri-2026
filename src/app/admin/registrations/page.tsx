@@ -81,14 +81,14 @@ export default function RegistrationsPage() {
 
       <div className="admin-card overflow-hidden p-0 bg-white border border-slate-200 shadow-sm rounded-2xl">
         <div className="overflow-x-auto w-full">
-          <table className="data-table">
+          <table className="data-table min-w-[850px] w-full">
             <thead>
               <tr>
-                <th>Kode & Waktu</th>
-                <th>Nama Peserta</th>
-                <th>Kategori Lomba</th>
-                <th>Status Saat Ini</th>
-                <th>Ubah Status</th>
+                <th className="w-[190px]">Kode & Waktu</th>
+                <th className="min-w-[220px]">Nama Peserta</th>
+                <th className="w-[170px]">Kategori Lomba</th>
+                <th className="w-[160px]">Status Saat Ini</th>
+                <th className="w-[190px] text-right pr-6">Ubah Status</th>
               </tr>
             </thead>
             <tbody>
@@ -108,20 +108,20 @@ export default function RegistrationsPage() {
                 filtered.map((r) => (
                   <tr key={r.id}>
                     <td>
-                      <span className="font-mono text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/60 inline-block">
+                      <span className="font-mono text-xs font-bold text-amber-900 bg-amber-100/90 px-2.5 py-1 rounded-lg border border-amber-300/70 inline-block whitespace-nowrap">
                         {r.registration_code}
                       </span>
-                      <div className="text-[10px] text-slate-400 mt-1 font-medium">
+                      <div className="text-[11px] text-slate-500 mt-1 font-medium whitespace-nowrap">
                         {new Date(r.created_at).toLocaleDateString('id-ID')}
                       </div>
                     </td>
                     <td>
-                      <div className="font-bold text-slate-900 text-xs sm:text-sm">{r.full_name}</div>
-                      <div className="text-[11px] text-slate-500 font-medium">{r.email}</div>
+                      <div className="font-bold text-slate-900 text-xs sm:text-sm whitespace-nowrap">{r.full_name}</div>
+                      <div className="text-[11px] text-slate-500 font-medium whitespace-nowrap">{r.email}</div>
                     </td>
                     <td>
                       <span
-                        className={`badge ${
+                        className={`badge whitespace-nowrap ${
                           r.competition_id === 'desain-kemasan'
                             ? 'badge-desain-kemasan'
                             : 'badge-video-lokal'
@@ -134,7 +134,7 @@ export default function RegistrationsPage() {
                     </td>
                     <td>
                       <span
-                        className={`badge ${
+                        className={`badge whitespace-nowrap ${
                           r.status === 'confirmed'
                             ? 'badge-confirmed'
                             : r.status === 'finalist'
@@ -144,10 +144,15 @@ export default function RegistrationsPage() {
                             : 'badge-pending'
                         }`}
                       >
-                        {r.status}
+                        {r.status === 'confirmed' && 'Terkonfirmasi'}
+                        {r.status === 'finalist' && 'Finalis Lomba'}
+                        {r.status === 'pending' && 'Pending Review'}
+                        {r.status === 'disqualified' && 'Didiskualifikasi'}
+                        {r.status === 'cancelled' && 'Dibatalkan'}
+                        {!['confirmed', 'finalist', 'pending', 'disqualified', 'cancelled'].includes(r.status) && r.status}
                       </span>
                     </td>
-                    <td>
+                    <td className="text-right pr-6">
                       <select
                         value={r.status}
                         onChange={(e) =>
@@ -156,7 +161,7 @@ export default function RegistrationsPage() {
                             e.target.value as RegistrationStatus
                           )
                         }
-                        className="form-input form-select text-xs py-1.5 px-3 w-auto bg-white border border-slate-200 rounded-lg shadow-2xs font-semibold"
+                        className="form-input form-select text-xs py-1.5 px-3 w-auto bg-white border border-slate-200 rounded-lg shadow-2xs font-semibold cursor-pointer"
                       >
                         <option value="confirmed">Konfirmasi (Lolos)</option>
                         <option value="finalist">Finalis Lomba</option>
