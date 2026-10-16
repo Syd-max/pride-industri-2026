@@ -18,7 +18,6 @@ interface VenueInfo {
   directionsUrl: string;
   embedUrl: string;
   transitEtas: { label: string; time: string; type: 'car' | 'train' | 'walk' }[];
-  transitNotes: string[];
 }
 
 const VENUES: Record<VenueKey, VenueInfo> = {
@@ -40,11 +39,6 @@ const VENUES: Record<VenueKey, VenueInfo> = {
       { label: 'Gedung Sate / Dago', time: '10 mnt · 2.8 km', type: 'car' },
       { label: 'Alun-Alun Bandung', time: '8 mnt · 650 m', type: 'walk' },
     ],
-    transitNotes: [
-      '🚆 5 menit dari Stasiun KA Bandung (Pintu Selatan / Stasiun Hall)',
-      '🚶 Kawasan pedestrian ramah pejalan kaki di sepanjang koridor Jalan Braga',
-      '🅿️ Fasilitas gedung parkir resmi mobil & motor tersedia di Braga City Walk',
-    ],
   },
   papandayan: {
     key: 'papandayan',
@@ -63,11 +57,6 @@ const VENUES: Record<VenueKey, VenueInfo> = {
       { label: 'Simpang Lima Bandung', time: '4 mnt · 1.1 km', type: 'car' },
       { label: 'Exit Tol Buah Batu', time: '18 mnt · 6.4 km', type: 'car' },
       { label: 'Braga City Walk', time: '10 mnt · 2.5 km', type: 'car' },
-    ],
-    transitNotes: [
-      '🚗 Akses cepat via koridor utama Jl. Gatot Subroto / Jl. Asia Afrika',
-      '🏨 Layanan Valet Parking & area parkir khusus tamu Ballroom Hotel',
-      '🎟️ Meja registrasi undangan dibuka pukul 18:30 WIB di Foyer Ballroom',
     ],
   },
 };
