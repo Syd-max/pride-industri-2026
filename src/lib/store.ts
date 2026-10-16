@@ -121,6 +121,12 @@ export function getSharedRegistrations(): PrideRegistration[] {
   return globalThis.__PRIDE_REGISTRATIONS__ || initialSeedData;
 }
 
+export function addSharedRegistration(registration: PrideRegistration): PrideRegistration {
+  const list = getSharedRegistrations();
+  list.unshift(registration);
+  return registration;
+}
+
 export function updateSharedRegistration(
   idOrCode: string,
   updates: Partial<PrideRegistration>

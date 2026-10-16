@@ -545,31 +545,51 @@ export default function RegistrationsPage() {
             {/* Section 3: Data Formulir Khusus Video 1 Menit */}
             {selectedReg.competition_id === 'video-lokal' && (
               <div className="space-y-3">
-                <h4 className="text-xs font-bold text-indigo-600 uppercase tracking-wider">
-                  2. Isian Form Lomba Video 1 Menit
+                <h4 className="text-xs font-bold text-rose-600 uppercase tracking-wider">
+                  2. Isian Form Lomba Video 1 Menit (17 Poin Spesifikasi)
                 </h4>
-                <div className="p-4 rounded-2xl bg-indigo-50/40 border border-indigo-100 space-y-2.5 text-xs">
-                  <div className="flex justify-between items-center pb-2 border-b border-indigo-200/60">
-                    <span className="text-slate-600 font-medium">Kategori Video:</span>
-                    <span className="font-bold text-slate-900">{selectedReg.video_category || 'PRIDE 2026'}</span>
+                <div className="p-4 rounded-2xl bg-rose-50/40 border border-rose-100 space-y-2.5 text-xs">
+                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
+                    <span className="text-slate-600 font-medium">Instansi / Asal Peserta:</span>
+                    <span className="font-bold text-slate-900">{selectedReg.institution || '-'}</span>
                   </div>
-                  <div className="flex justify-between items-center pb-2 border-b border-indigo-200/60">
-                    <span className="text-slate-600 font-medium">Username Instagram:</span>
+                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
+                    <span className="text-slate-600 font-medium">Kategori Video:</span>
+                    <span className="font-bold text-rose-700 bg-rose-100/70 px-2 py-0.5 rounded text-[11px]">
+                      {selectedReg.video_category || 'PRIDE 2026'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-start pb-2 border-b border-rose-200/60">
+                    <span className="text-slate-600 font-medium">Judul Karya Video:</span>
+                    <span className="font-bold text-slate-900 text-right max-w-[260px]">
+                      {selectedReg.video_title ? `“${selectedReg.video_title}”` : '-'}
+                    </span>
+                  </div>
+                  {selectedReg.video_description && (
+                    <div className="flex justify-between items-start pb-2 border-b border-rose-200/60">
+                      <span className="text-slate-600 font-medium">Deskripsi Karya:</span>
+                      <span className="text-slate-700 text-right max-w-[260px] italic text-[11px]">
+                        {selectedReg.video_description}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
+                    <span className="text-slate-600 font-medium">Akun Instagram:</span>
                     <span className="font-mono font-bold text-slate-900">
                       {selectedReg.instagram_handle ? `@${selectedReg.instagram_handle}` : '-'}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center pb-2 border-b border-indigo-200/60">
-                    <span className="text-slate-600 font-medium">Username TikTok:</span>
+                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
+                    <span className="text-slate-600 font-medium">Akun TikTok:</span>
                     <span className="font-mono font-bold text-slate-900">
                       {selectedReg.tiktok_handle ? `@${selectedReg.tiktok_handle}` : '-'}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center pt-0.5">
-                    <span className="text-slate-600 font-medium">Tautan / Link Video Karya:</span>
-                    {selectedReg.video_url ? (
+                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
+                    <span className="text-slate-600 font-medium">Tautan Video:</span>
+                    {selectedReg.video_url || selectedReg.instagram_video_url || selectedReg.tiktok_video_url ? (
                       <a
-                        href={selectedReg.video_url}
+                        href={selectedReg.video_url || selectedReg.instagram_video_url || selectedReg.tiktok_video_url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="font-bold text-blue-600 hover:underline inline-flex items-center gap-1"
@@ -580,6 +600,18 @@ export default function RegistrationsPage() {
                     ) : (
                       <span className="text-slate-400 italic">Belum disubmit</span>
                     )}
+                  </div>
+                  <div className="flex justify-between items-center pb-2 border-b border-rose-200/60">
+                    <span className="text-slate-600 font-medium">Dokumen Pakta Integritas:</span>
+                    <span className="font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded text-[11px] font-semibold">
+                      {selectedReg.pakta_integritas_file_name || 'Tervalidasi (Formulir Resmi)'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center pt-0.5">
+                    <span className="text-slate-600 font-medium">Surat Pernyataan Publikasi:</span>
+                    <span className="font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded text-[11px] font-semibold">
+                      {selectedReg.surat_persetujuan_file_name || 'Tervalidasi (Formulir Resmi)'}
+                    </span>
                   </div>
                 </div>
               </div>

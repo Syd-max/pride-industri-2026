@@ -27,8 +27,21 @@ export interface PrideRegistration {
   local_ingredients?: string;
   ai_used?: boolean;
   // Video Lokal specific
+  institution?: string;
   video_category?: string;
+  video_title?: string;
+  video_description?: string;
+  platform_instagram?: boolean;
+  platform_tiktok?: boolean;
   video_url?: string;
+  instagram_video_url?: string;
+  tiktok_video_url?: string;
+  pakta_integritas_file_name?: string;
+  surat_persetujuan_file_name?: string;
+  declaration_original?: boolean;
+  declaration_secondary?: boolean;
+  declaration_terms?: boolean;
+  declaration_usage_rights?: boolean;
   // Common
   status: RegistrationStatus;
   check_in_status: CheckInStatus;
@@ -74,15 +87,25 @@ export interface DesainKemasanFormData {
 
 export interface VideoLokalFormData {
   full_name: string;
-  email: string;
+  institution: string;
   phone: string;
+  email: string;
+  video_category: string;
+  video_title: string;
+  video_description: string;
+  platform_instagram: boolean;
+  platform_tiktok: boolean;
   instagram_handle: string;
   tiktok_handle: string;
-  video_category: string;
+  instagram_video_url: string;
+  tiktok_video_url: string;
   video_url?: string;
   declaration_original: boolean;
-  declaration_public_account: boolean;
   declaration_terms: boolean;
+  declaration_usage_rights: boolean;
+  declaration_public_account?: boolean;
+  pakta_integritas_name?: string;
+  surat_persetujuan_name?: string;
 }
 
 // ─── API Response Types ───────────────────────────────────────────────────────
