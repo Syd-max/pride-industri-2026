@@ -159,33 +159,25 @@ export default function HeroSection() {
 
       if (isMobile) {
         // Mobile choreography: browser stays cleanly off-screen at p=0 (zero cut-off!)
-        if (p <= 0.20) {
-          const t = easeInOutCubic(mapRange(p, 0, 0.20, 0, 1));
+        if (p <= 0.16) {
+          const t = easeInOutCubic(mapRange(p, 0, 0.16, 0, 1));
           heroY = -300 * t;
           heroOpacity = Math.max(0, 1 - 1.25 * t);
-          browserY = -((window.innerHeight || 800) * 0.76) * t;
+          browserY = -((window.innerHeight || 800) * 0.74) * t;
           browserScale = 1;
-          browserOpacity = mapRange(p, 0.01, 0.08, 0, 1);
-        } else if (p <= 0.32) {
-          const t = easeInOutCubic(mapRange(p, 0.20, 0.32, 0, 1));
-          heroY = -300 - 60 * t;
-          heroOpacity = 0;
-          browserY = -((window.innerHeight || 800) * 0.76) + 10 * t;
-          browserScale = 1 + 0.02 * t;
-          browserOpacity = 1;
-        } else if (p <= 0.78) {
-          const drift = mapRange(p, 0.32, 0.78, 0, 1);
+          browserOpacity = mapRange(p, 0.01, 0.06, 0, 1);
+        } else if (p <= 0.88) {
           heroY = -360;
           heroOpacity = 0;
-          browserY = -((window.innerHeight || 800) * 0.76) - 10 * drift;
-          browserScale = 1.02;
+          browserY = -((window.innerHeight || 800) * 0.74);
+          browserScale = 1.0;
           browserOpacity = 1;
         } else {
-          const t = easeInOutCubic(mapRange(p, 0.78, 1.0, 0, 1));
+          const t = easeInOutCubic(mapRange(p, 0.88, 1.0, 0, 1));
           heroY = -360 - 60 * t;
           heroOpacity = 0;
-          browserY = -((window.innerHeight || 800) * 0.76) - 80 * t;
-          browserScale = 1.02 - 0.02 * t;
+          browserY = -((window.innerHeight || 800) * 0.74) - 60 * t;
+          browserScale = 1.0 - 0.02 * t;
           browserOpacity = Math.max(0, 1 - 1.2 * t);
         }
 
@@ -195,33 +187,25 @@ export default function HeroSection() {
         }
       } else {
         // Desktop choreography
-        if (p <= 0.18) {
-          const t = easeInOutCubic(mapRange(p, 0, 0.18, 0, 1));
+        if (p <= 0.16) {
+          const t = easeInOutCubic(mapRange(p, 0, 0.16, 0, 1));
           heroY = -340 * t;
           heroOpacity = 1 - 0.95 * t;
           browserY = -560 * t;
           browserScale = 1;
           browserOpacity = 1;
-        } else if (p <= 0.30) {
-          const t = easeInOutCubic(mapRange(p, 0.18, 0.30, 0, 1));
-          heroY = -340 - 80 * t;
-          heroOpacity = 0;
-          browserY = -560 + 10 * t;
-          browserScale = 1 + 0.04 * t;
-          browserOpacity = 1;
-        } else if (p <= 0.78) {
-          const drift = mapRange(p, 0.30, 0.78, 0, 1);
+        } else if (p <= 0.88) {
           heroY = -420;
           heroOpacity = 0;
-          browserY = -550 - 10 * drift;
-          browserScale = 1.04;
+          browserY = -560;
+          browserScale = 1.0;
           browserOpacity = 1;
         } else {
-          const t = easeInOutCubic(mapRange(p, 0.78, 1.0, 0, 1));
+          const t = easeInOutCubic(mapRange(p, 0.88, 1.0, 0, 1));
           heroY = -420 - 60 * t;
           heroOpacity = 0;
-          browserY = -560 - 80 * t;
-          browserScale = 1.04 - 0.04 * t;
+          browserY = -560 - 60 * t;
+          browserScale = 1.0 - 0.03 * t;
           browserOpacity = Math.max(0, 1 - 1.2 * t);
         }
       }
@@ -236,38 +220,41 @@ export default function HeroSection() {
         browserStageRef.current.style.opacity = String(browserOpacity);
       }
 
-      // Chat Sequence Thresholds
-      msg1Ref.current?.classList.toggle('shown', p >= 0.24);
-      msg2Ref.current?.classList.toggle('shown', p >= 0.33);
-      msg3Ref.current?.classList.toggle('shown', p >= 0.41);
-      msg4Ref.current?.classList.toggle('shown', p >= 0.47);
+      // Chat Sequence Thresholds (Always welcoming, never empty void)
+      msg1Ref.current?.classList.add('shown');
+      msg2Ref.current?.classList.toggle('shown', p >= 0.14);
+      msg3Ref.current?.classList.toggle('shown', p >= 0.24);
+      msg4Ref.current?.classList.toggle('shown', p >= 0.34);
 
       // Simulated cursor hover & click on "Buka Formulir Pendaftaran"
-      const showCursor = p >= 0.51 && p <= 0.58;
-      const isPressing = p >= 0.54 && p <= 0.57;
+      const showCursor = p >= 0.44 && p <= 0.52;
+      const isPressing = p >= 0.47 && p <= 0.51;
       simCursorRef.current?.classList.toggle('active', showCursor);
       simCursorRef.current?.classList.toggle('pressing', isPressing);
       btnRepRef.current?.classList.toggle('clicked', isPressing);
 
       // Handover & Panitia Message
-      msg5Ref.current?.classList.toggle('shown', p >= 0.57);
-      msg6Ref.current?.classList.toggle('shown', p >= 0.63);
-      msg7Ref.current?.classList.toggle('shown', p >= 0.69);
-      chatComposerRef.current?.classList.toggle('shown', p >= 0.74);
+      msg5Ref.current?.classList.toggle('shown', p >= 0.52);
+      msg6Ref.current?.classList.toggle('shown', p >= 0.60);
+      msg7Ref.current?.classList.toggle('shown', p >= 0.68);
+      chatComposerRef.current?.classList.toggle('shown', p >= 0.76);
 
-      // Automated smooth vertical follow inside chat stream (Zero manual scrollbar)
+      // Automated smooth vertical follow inside chat stream (Always reveals active message)
       if (chatMessagesRef.current) {
         const el = chatMessagesRef.current;
-        const maxScroll = Math.max(0, el.scrollHeight - el.clientHeight);
-        if (maxScroll > 0) {
-          if (p < 0.36) {
-            el.scrollTop = 0;
-          } else if (p < 0.72) {
-            const t = easeInOutCubic(mapRange(p, 0.36, 0.72, 0, 1));
-            el.scrollTop = t * maxScroll;
-          } else {
-            el.scrollTop = maxScroll;
-          }
+        let targetEl: HTMLElement | null = null;
+        if (p >= 0.68 && msg7Ref.current) targetEl = msg7Ref.current;
+        else if (p >= 0.60 && msg6Ref.current) targetEl = msg6Ref.current;
+        else if (p >= 0.52 && msg5Ref.current) targetEl = msg5Ref.current;
+        else if (p >= 0.34 && msg4Ref.current) targetEl = msg4Ref.current;
+        else if (p >= 0.24 && msg3Ref.current) targetEl = msg3Ref.current;
+        else if (p >= 0.14 && msg2Ref.current) targetEl = msg2Ref.current;
+
+        if (targetEl) {
+          const targetOffset = targetEl.offsetTop + targetEl.offsetHeight - el.clientHeight + 20;
+          el.scrollTop = Math.max(0, targetOffset);
+        } else {
+          el.scrollTop = 0;
         }
       }
     }
@@ -512,8 +499,8 @@ export default function HeroSection() {
                   {/* Animated Chat Messages (Automated scroll-driven stream) */}
                   <div className="chat-messages" ref={chatMessagesRef}>
                     
-                    {/* Msg 1: Bot Initial Prompt */}
-                    <div className="msg-item msg-right" ref={msg1Ref}>
+                    {/* Msg 1: Bot Initial Prompt (Always visible, never blank) */}
+                    <div className="msg-item msg-right shown" ref={msg1Ref}>
                       <div className="bubble-dark">
                         <span>Sampurasun! Selamat datang di Portal PRIDE Industri 2026. Ada yang bisa kami bantu seputar pendaftaran lomba atau jadwal pameran?</span>
                         <span className="bubble-time">10:00</span>

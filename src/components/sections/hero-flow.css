@@ -597,7 +597,7 @@
     margin-left: calc(min(92vw, 380px) / -2);
     top: 100dvh; /* Cleanly below screen on initial landing — ZERO CUT-OFF PEEK! */
     opacity: 0;
-    pointer-events: none;
+    pointer-events: auto;
   }
 
   .browser-frame {
@@ -1037,7 +1037,9 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  overflow: hidden; /* ELIMINATES MANUAL SCROLLBAR & ARROW BUTTONS */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
   scrollbar-width: none;
   -ms-overflow-style: none;
   position: relative;

@@ -1,79 +1,101 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import './activities-deck.css';
+
+interface ProgramPreview {
+  id: number;
+  title: string;
+  category: string;
+  venue: string;
+  icon: string;
+  accent: string;
+}
+
+const PROGRAMS: ProgramPreview[] = [
+  {
+    id: 1,
+    title: 'Fashion Show Runway',
+    category: 'Fesyen & Wastra',
+    venue: '27 Nov · Main Stage Braga',
+    icon: '👗',
+    accent: '#ec4899',
+  },
+  {
+    id: 2,
+    title: 'Lomba Desain Kemasan',
+    category: 'Eco-Packaging IKM',
+    venue: '28 Nov · Expo Braga City Walk',
+    icon: '📦',
+    accent: '#10b981',
+  },
+  {
+    id: 3,
+    title: 'Lomba Video 1 Menit',
+    category: 'Kreativitas Visual',
+    venue: '27–28 Nov · Braga City Walk',
+    icon: '🎬',
+    accent: '#f59e0b',
+  },
+  {
+    id: 4,
+    title: 'Malam Gala SIINAS',
+    category: 'Apresiasi Industri',
+    venue: '28 Nov · Hotel Papandayan',
+    icon: '🏆',
+    accent: '#eab308',
+  },
+  {
+    id: 5,
+    title: 'Sertifikasi Halal & SNI',
+    category: 'Standarisasi Mutu',
+    venue: '27–28 Nov · Main Stage Braga',
+    icon: '🎖️',
+    accent: '#06b6d4',
+  },
+  {
+    id: 6,
+    title: 'Panggung Seni Budaya',
+    category: 'Perkusi & Musik Etnik',
+    venue: '27–28 Nov · Area Braga',
+    icon: '🎭',
+    accent: '#8b5cf6',
+  },
+];
 
 export default function ActivitiesDeckSection() {
   const scrollDriverRef = useRef<HTMLDivElement>(null);
   const deckContainerRef = useRef<HTMLDivElement>(null);
-  const heroNameRef = useRef<HTMLHeadingElement>(null);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+
+  // Jump smoothly to a specific card index (0 to 5)
+  const scrollToCard = useCallback((cardIdx: number) => {
+    if (!scrollDriverRef.current) return;
+    const driver = scrollDriverRef.current;
+    const rect = driver.getBoundingClientRect();
+    const driverTop = window.scrollY + rect.top;
+    const totalScroll = driver.offsetHeight - window.innerHeight;
+    if (totalScroll <= 0) return;
+
+    // Progress mapping: Card 0 sits at 0.0, Cards 1-5 spaced evenly between 0.12 and 0.90
+    let targetProgress = 0;
+    if (cardIdx === 0) {
+      targetProgress = 0;
+    } else if (cardIdx === 5) {
+      targetProgress = 0.92;
+    } else {
+      targetProgress = 0.08 + ((cardIdx - 0.5) / 5) * 0.84;
+    }
+
+    const targetY = driverTop + targetProgress * totalScroll;
+    window.scrollTo({ top: targetY, behavior: 'smooth' });
+  }, []);
 
   useEffect(() => {
     /* ==========================================================
-       1. CHARACTER SCRAMBLE INTERACTION (MATCHING CIPHER EFFECT)
-       ========================================================== */
-    const heroNameEl = heroNameRef.current;
-    const words = ['6', 'PROGRAM', 'UNGGULAN'];
-    const cipherChars = '{[()]}/\\|<>?!#$%&*@+=~^0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const charSpans: HTMLSpanElement[] = [];
-
-    if (heroNameEl) {
-      heroNameEl.innerHTML = '';
-      words.forEach((word, wordIdx) => {
-        const wordWrap = document.createElement('span');
-        wordWrap.className = 'deck-word';
-        word.split('').forEach((char) => {
-          const span = document.createElement('span');
-          span.className = 'deck-hero-char';
-          span.textContent = char;
-          span.dataset.original = char;
-          wordWrap.appendChild(span);
-          charSpans.push(span);
-        });
-        heroNameEl.appendChild(wordWrap);
-
-        if (wordIdx < words.length - 1) {
-          const spaceSpan = document.createElement('span');
-          spaceSpan.className = 'deck-word-space';
-          spaceSpan.innerHTML = '&nbsp;';
-          heroNameEl.appendChild(spaceSpan);
-        }
-      });
-    }
-
-    function scrambleCharacter(span: HTMLSpanElement, duration = 360) {
-      if (span.dataset.original === ' ') return;
-      const anySpan = span as unknown as { scrambleTimer?: NodeJS.Timeout };
-      if (anySpan.scrambleTimer) clearInterval(anySpan.scrambleTimer);
-
-      const start = performance.now();
-      anySpan.scrambleTimer = setInterval(() => {
-        const elapsed = performance.now() - start;
-        if (elapsed >= duration) {
-          span.textContent = span.dataset.original || '';
-          clearInterval(anySpan.scrambleTimer);
-          anySpan.scrambleTimer = undefined;
-        } else {
-          span.textContent = cipherChars[Math.floor(Math.random() * cipherChars.length)];
-        }
-      }, 45);
-    }
-
-    charSpans.forEach((span, idx) => {
-      const triggerScramble = () => {
-        scrambleCharacter(span, 380);
-        if (charSpans[idx + 1]) scrambleCharacter(charSpans[idx + 1], 320);
-        if (charSpans[idx - 1]) scrambleCharacter(charSpans[idx - 1], 260);
-      };
-      span.addEventListener('pointerenter', triggerScramble);
-      span.addEventListener('touchstart', triggerScramble, { passive: true });
-    });
-
-    /* ==========================================================
-       2. PROCEDURAL 3D CANVAS ARTWORK RENDERERS (UNIFIED & HARMONIOUS)
+       1. PROCEDURAL 3D CANVAS ARTWORK RENDERERS
        ========================================================== */
     function drawUnifiedCanvasBase(ctx: CanvasRenderingContext2D, w: number, h: number) {
-      // 1. Unified Deep Midnight Obsidian Gradient
       const baseGrad = ctx.createLinearGradient(0, 0, w, h);
       baseGrad.addColorStop(0, '#070b14');
       baseGrad.addColorStop(0.5, '#0c1220');
@@ -81,7 +103,6 @@ export default function ActivitiesDeckSection() {
       ctx.fillStyle = baseGrad;
       ctx.fillRect(0, 0, w, h);
 
-      // 2. Blueprint Architectural Perspective Grid
       ctx.save();
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
       ctx.lineWidth = 1;
@@ -99,7 +120,6 @@ export default function ActivitiesDeckSection() {
         ctx.stroke();
       }
 
-      // 3. Coordinate intersection markers
       ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
       for (let x = 0; x < w; x += step * 2) {
         for (let y = 0; y < h; y += step * 2) {
@@ -111,7 +131,7 @@ export default function ActivitiesDeckSection() {
       ctx.restore();
     }
 
-    // Canvas 1: FASHION SHOW RUNWAY (Royal Violet & Rose Couture Waves)
+    // Canvas 1: Fashion Show Runway
     function drawFashionArt() {
       const canvas = document.getElementById('canvasFashion') as HTMLCanvasElement;
       if (!canvas) return;
@@ -121,7 +141,6 @@ export default function ActivitiesDeckSection() {
 
       drawUnifiedCanvasBase(ctx, w, h);
 
-      // Luminous couture ambient light orbs
       const wavePositions = [
         { x: 920, y: 460, r: 420, c1: 'rgba(124, 58, 237, 0.45)', c2: 'rgba(99, 102, 241, 0.25)', c3: 'rgba(7, 11, 20, 0)' },
         { x: 740, y: 220, r: 300, c1: 'rgba(236, 72, 153, 0.35)', c2: 'rgba(129, 140, 248, 0.18)', c3: 'rgba(7, 11, 20, 0)' },
@@ -138,7 +157,6 @@ export default function ActivitiesDeckSection() {
         ctx.fill();
       });
 
-      // Runway silhouette fabric lines
       ctx.strokeStyle = 'rgba(236, 72, 153, 0.18)';
       ctx.lineWidth = 2;
       for (let i = 0; i < 24; i++) {
@@ -148,7 +166,6 @@ export default function ActivitiesDeckSection() {
         ctx.stroke();
       }
 
-      // Suspended fashion spheres
       const spheres = [
         { x: 420, y: 240, r: 85, color: '#ec4899' },
         { x: 540, y: 380, r: 110, color: '#8b5cf6' },
@@ -167,7 +184,7 @@ export default function ActivitiesDeckSection() {
       });
     }
 
-    // Canvas 2: LOMBA DESAIN KEMASAN (Emerald & Mint Eco-Blueprint Matrix)
+    // Canvas 2: Lomba Desain Kemasan
     function drawPackagingArt() {
       const canvas = document.getElementById('canvasPackaging') as HTMLCanvasElement;
       if (!canvas) return;
@@ -177,7 +194,6 @@ export default function ActivitiesDeckSection() {
 
       drawUnifiedCanvasBase(ctx, w, h);
 
-      // Emerald & mint ambient light orbs
       const ecoGlows = [
         { x: 920, y: 380, r: 380, c1: 'rgba(16, 185, 129, 0.35)', c2: 'rgba(5, 150, 105, 0.18)', c3: 'rgba(7, 11, 20, 0)' },
         { x: 400, y: 540, r: 320, c1: 'rgba(52, 211, 153, 0.25)', c2: 'rgba(4, 120, 87, 0.12)', c3: 'rgba(7, 11, 20, 0)' }
@@ -193,7 +209,6 @@ export default function ActivitiesDeckSection() {
         ctx.fill();
       });
 
-      // 3D Isometric packaging wireframe boxes
       ctx.save();
       ctx.strokeStyle = 'rgba(52, 211, 153, 0.32)';
       ctx.lineWidth = 1.6;
@@ -203,7 +218,6 @@ export default function ActivitiesDeckSection() {
       ];
       boxes.forEach((b) => {
         const s = b.size;
-        // Top Face
         ctx.beginPath();
         ctx.moveTo(b.cx, b.cy - s * 0.6);
         ctx.lineTo(b.cx + s * 0.9, b.cy - s * 0.1);
@@ -213,13 +227,13 @@ export default function ActivitiesDeckSection() {
         ctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
         ctx.fill();
         ctx.stroke();
-        // Verticals
+
         ctx.beginPath();
         ctx.moveTo(b.cx - s * 0.9, b.cy - s * 0.1); ctx.lineTo(b.cx - s * 0.9, b.cy + s * 0.6);
         ctx.moveTo(b.cx, b.cy + s * 0.4); ctx.lineTo(b.cx, b.cy + s * 1.1);
         ctx.moveTo(b.cx + s * 0.9, b.cy - s * 0.1); ctx.lineTo(b.cx + s * 0.9, b.cy + s * 0.6);
         ctx.stroke();
-        // Bottom Face
+
         ctx.beginPath();
         ctx.moveTo(b.cx - s * 0.9, b.cy + s * 0.6);
         ctx.lineTo(b.cx, b.cy + s * 1.1);
@@ -228,14 +242,13 @@ export default function ActivitiesDeckSection() {
       });
       ctx.restore();
 
-      // Technical blueprint dimension annotations
       ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
       ctx.font = '11px "JetBrains Mono", monospace';
       ctx.fillText('ECO-BOX · 300g · BIODEGRADABLE', 820, 240);
       ctx.fillText('STANDAR EKSPOR IKM · 100%', 820, 520);
     }
 
-    // Canvas 3: LOMBA VIDEO 1 MENIT (Sunset Amber & Cinema Reel Light Ribbons)
+    // Canvas 3: Lomba Video 1 Menit
     function drawVideoArt() {
       const canvas = document.getElementById('canvasVideo') as HTMLCanvasElement;
       if (!canvas) return;
@@ -245,7 +258,6 @@ export default function ActivitiesDeckSection() {
 
       drawUnifiedCanvasBase(ctx, w, h);
 
-      // Sunset Amber & Warm Gold ambient light orbs
       const videoGlows = [
         { x: 880, y: 440, r: 400, c1: 'rgba(245, 158, 11, 0.35)', c2: 'rgba(234, 88, 12, 0.2)', c3: 'rgba(7, 11, 20, 0)' },
         { x: 420, y: 260, r: 280, c1: 'rgba(239, 68, 68, 0.25)', c2: 'rgba(180, 83, 9, 0.15)', c3: 'rgba(7, 11, 20, 0)' }
@@ -261,7 +273,6 @@ export default function ActivitiesDeckSection() {
         ctx.fill();
       });
 
-      // Flowing 60fps golden cinematic light ribbons
       const palette = ['rgba(245, 158, 11, 0.32)', 'rgba(234, 88, 12, 0.28)', 'rgba(220, 38, 38, 0.22)', 'rgba(251, 191, 36, 0.3)'];
       for (let i = 0; i < 42; i++) {
         ctx.strokeStyle = palette[i % palette.length];
@@ -273,21 +284,15 @@ export default function ActivitiesDeckSection() {
         ctx.stroke();
       }
 
-      // Vertical 9:16 Viewfinder reticle brackets
       ctx.save();
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.32)';
       ctx.lineWidth = 1.8;
       const vx = 860, vy = 280, vw = 200, vh = 280;
-      // Top-left
       ctx.beginPath(); ctx.moveTo(vx, vy + 24); ctx.lineTo(vx, vy); ctx.lineTo(vx + 24, vy); ctx.stroke();
-      // Top-right
       ctx.beginPath(); ctx.moveTo(vx + vw - 24, vy); ctx.lineTo(vx + vw, vy); ctx.lineTo(vx + vw, vy + 24); ctx.stroke();
-      // Bottom-left
       ctx.beginPath(); ctx.moveTo(vx, vy + vh - 24); ctx.lineTo(vx, vy + vh); ctx.lineTo(vx + 24, vy + vh); ctx.stroke();
-      // Bottom-right
       ctx.beginPath(); ctx.moveTo(vx + vw - 24, vy + vh); ctx.lineTo(vx + vw, vy + vh); ctx.lineTo(vx + vw, vy + vh - 24); ctx.stroke();
 
-      // Rec Indicator
       ctx.fillStyle = '#ef4444';
       ctx.beginPath(); ctx.arc(vx + 18, vy + 20, 4, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
@@ -296,7 +301,7 @@ export default function ActivitiesDeckSection() {
       ctx.restore();
     }
 
-    // Canvas 4: APRESIASI INDUSTRI SIINAS (Royal Champagne Gold & Bronze Architecture)
+    // Canvas 4: Apresiasi Industri SIINAS
     function drawAwardsArt() {
       const canvas = document.getElementById('canvasAwards') as HTMLCanvasElement;
       if (!canvas) return;
@@ -306,7 +311,6 @@ export default function ActivitiesDeckSection() {
 
       drawUnifiedCanvasBase(ctx, w, h);
 
-      // Royal Champagne Gold ambient light cone
       const tg = ctx.createRadialGradient(960, 420, 10, 960, 420, 380);
       tg.addColorStop(0, 'rgba(254, 240, 138, 0.35)');
       tg.addColorStop(0.4, 'rgba(217, 119, 6, 0.18)');
@@ -314,7 +318,6 @@ export default function ActivitiesDeckSection() {
       ctx.fillStyle = tg;
       ctx.beginPath(); ctx.arc(960, 420, 380, 0, Math.PI * 2); ctx.fill();
 
-      // Architectural fluted column beams
       const colCount = 18;
       for (let i = 0; i < colCount; i++) {
         const x = 520 + i * 44;
@@ -330,7 +333,6 @@ export default function ActivitiesDeckSection() {
         ctx.fill();
       }
 
-      // Laurel concentric rings
       for (let r = 40; r <= 200; r += 40) {
         ctx.strokeStyle = 'rgba(254, 240, 138, 0.18)';
         ctx.lineWidth = 1.2;
@@ -342,7 +344,7 @@ export default function ActivitiesDeckSection() {
       ctx.fillText('MALAM GALA ANUGERAH SIINAS · 200 IKM BINAAN', 780, 210);
     }
 
-    // Canvas 5: SERTIFIKASI & LIVE ART (Electric Cyan & Neon Teal Acoustics)
+    // Canvas 5: Sertifikasi & Live Art
     function drawMusicArt() {
       const canvas = document.getElementById('canvasMusic') as HTMLCanvasElement;
       if (!canvas) return;
@@ -352,7 +354,6 @@ export default function ActivitiesDeckSection() {
 
       drawUnifiedCanvasBase(ctx, w, h);
 
-      // Cyan & teal ambient glow
       const acousticGlows = [
         { x: 380, y: 440, r: 380, c1: 'rgba(6, 182, 212, 0.32)', c2: 'rgba(13, 148, 136, 0.18)', c3: 'rgba(7, 11, 20, 0)' },
         { x: 960, y: 360, r: 360, c1: 'rgba(56, 189, 248, 0.3)', c2: 'rgba(59, 130, 246, 0.15)', c3: 'rgba(7, 11, 20, 0)' }
@@ -368,14 +369,12 @@ export default function ActivitiesDeckSection() {
         ctx.fill();
       });
 
-      // Concentric acoustic sound wave ripples
       for (let r = 30; r < 360; r += 32) {
         ctx.strokeStyle = 'rgba(6, 182, 212, 0.22)';
         ctx.lineWidth = 1.8;
         ctx.beginPath(); ctx.arc(380, 440, r, 0, Math.PI * 2); ctx.stroke();
       }
 
-      // Live Equalizer frequency spectrum bars
       const barCount = 42;
       const startX = w * 0.18;
       const barWidth = (w * 0.64) / barCount;
@@ -396,7 +395,6 @@ export default function ActivitiesDeckSection() {
       ctx.fillText('100 HALAL · 3 SNI · LIVE PERCUSSION BEAT', 820, 230);
     }
 
-    // Render all canvases once mounted
     drawFashionArt();
     drawPackagingArt();
     drawVideoArt();
@@ -404,9 +402,12 @@ export default function ActivitiesDeckSection() {
     drawMusicArt();
 
     /* ==========================================================
-       3. STACKED DECK SCROLL CHOREOGRAPHY (PEEL-DOWN ON SCROLL)
+       2. REFINED STACKED DECK SCROLL CHOREOGRAPHY (UPWARD PEEL)
        ========================================================== */
-    const cards = Array.from(document.querySelectorAll<HTMLElement>('.activities-card'));
+    const container = deckContainerRef.current;
+    if (!container) return;
+
+    const cards = Array.from(container.querySelectorAll<HTMLElement>('.activities-card'));
     cards.sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index));
 
     const totalCards = cards.length; // 6 cards (0..5)
@@ -420,37 +421,46 @@ export default function ActivitiesDeckSection() {
     }
 
     function updateDeck(scrollProgress: number) {
-      const peelableCards = totalCards - 1;
-      const stageProgress = scrollProgress * peelableCards;
       const isMobile = window.innerWidth <= 768;
-      const PEEK_STEP_Y = isMobile ? 8 : 12;
-      const SCALE_STEP = isMobile ? 0.016 : 0.022;
+      const PEEK_STEP_Y = isMobile ? 10 : 16;
+      const SCALE_STEP = isMobile ? 0.024 : 0.032;
+
+      // Calibration with entry dwell (0.0 to 0.05) & exit dwell (0.95 to 1.0)
+      const peelableCount = totalCards - 1; // 5 transitions
+      const t = clamp((scrollProgress - 0.05) / 0.90, 0, 1) * peelableCount;
+
+      const currentIdx = clamp(Math.round(t), 0, totalCards - 1);
+      setActiveCardIndex(currentIdx);
 
       cards.forEach((card, i) => {
+        // Z-Index order: Card 0 is 60, Card 1 is 50, ..., Card 5 is 10
         card.style.zIndex = String((totalCards - i) * 10);
-        
+
         const isFinalCard = i === totalCards - 1;
-        const depth = isFinalCard ? Math.max(0, i - stageProgress) : (i - stageProgress);
+        const depth = isFinalCard ? Math.max(0, i - t) : (i - t);
 
         if (depth < 0) {
+          // Card has peeled off: slide UPWARD with gentle scale down & fade
           const peelAmount = clamp(-depth, 0, 1);
           const easedPeel = easeInOutCubic(peelAmount);
-          const translateYPercent = easedPeel * 120;
-          const opacity = Math.max(0, 1 - Math.pow(peelAmount, 1.8));
+          const translateYPercent = -easedPeel * 108; // Natural UPWARD peel
+          const scale = 1 - easedPeel * 0.05;
+          const opacity = Math.max(0, 1 - Math.pow(peelAmount, 1.4));
 
-          card.style.transform = `translate3d(0, ${translateYPercent}%, 0) scale(1)`;
+          card.style.transform = `translate3d(0, ${translateYPercent}%, 0) scale(${scale.toFixed(4)})`;
           card.style.opacity = opacity.toFixed(3);
           card.style.pointerEvents = peelAmount > 0.15 ? 'none' : 'auto';
-          card.style.visibility = peelAmount >= 1 ? 'hidden' : 'visible';
+          card.style.visibility = peelAmount >= 0.99 ? 'hidden' : 'visible';
         } else {
-          const effectiveDepth = Math.min(depth, 3.8);
-          const yOffset = -effectiveDepth * PEEK_STEP_Y;
+          // Card is active or waiting behind in the stack
+          const effectiveDepth = Math.min(depth, 3.5);
+          const yOffset = effectiveDepth * PEEK_STEP_Y;
           const scale = 1 - effectiveDepth * SCALE_STEP;
 
           card.style.transform = `translate3d(0, ${yOffset}px, 0) scale(${scale.toFixed(4)})`;
           card.style.opacity = '1';
           card.style.visibility = 'visible';
-          card.style.pointerEvents = depth < 0.35 ? 'auto' : 'none';
+          card.style.pointerEvents = depth < 0.4 ? 'auto' : 'none';
         }
       });
     }
@@ -486,6 +496,7 @@ export default function ActivitiesDeckSection() {
       handleScroll();
     }, { passive: true });
 
+    // Initial render call
     updateDeck(getScrollProgress());
 
     return () => {
@@ -500,7 +511,7 @@ export default function ActivitiesDeckSection() {
         {/* 6-Card Stack Deck Container */}
         <div className="activities-deck-container" ref={deckContainerRef}>
 
-          {/* LAYER 5: SERTIFIKASI & LIVE ART (Backmost Card) */}
+          {/* LAYER 5: SERTIFIKASI & LIVE ART (Card 5) */}
           <article className="activities-card deck-project-card" data-index="5">
             <canvas className="deck-project-canvas" id="canvasMusic" width="1400" height="900" />
             <div className="deck-project-overlay">
@@ -516,7 +527,7 @@ export default function ActivitiesDeckSection() {
                 </div>
               </div>
 
-              {/* Center Description Box (Apple Style - No Button / No Bullet Clutter) */}
+              {/* Center Description Box */}
               <div className="deck-center-box">
                 <div className="deck-center-badge">
                   <span>STANDARISASI &amp; SENI BUDAYA</span>
@@ -542,7 +553,7 @@ export default function ActivitiesDeckSection() {
             </div>
           </article>
 
-          {/* LAYER 4: MALAM GALA APRESIASI INDUSTRI (SIINAS) */}
+          {/* LAYER 4: MALAM GALA APRESIASI INDUSTRI (Card 4) */}
           <article className="activities-card deck-project-card" data-index="4">
             <canvas className="deck-project-canvas" id="canvasAwards" width="1400" height="900" />
             <div className="deck-project-overlay">
@@ -558,7 +569,7 @@ export default function ActivitiesDeckSection() {
                 </div>
               </div>
 
-              {/* Center Description Box (Apple Style - No Button / No Bullet Clutter) */}
+              {/* Center Description Box */}
               <div className="deck-center-box">
                 <div className="deck-center-badge">
                   <span>MALAM PENGANUGERAHAN</span>
@@ -584,7 +595,7 @@ export default function ActivitiesDeckSection() {
             </div>
           </article>
 
-          {/* LAYER 3: LOMBA VIDEO 1 MENIT BRAGA */}
+          {/* LAYER 3: LOMBA VIDEO 1 MENIT BRAGA (Card 3) */}
           <article className="activities-card deck-project-card" data-index="3">
             <canvas className="deck-project-canvas" id="canvasVideo" width="1400" height="900" />
             <div className="deck-project-overlay">
@@ -600,7 +611,7 @@ export default function ActivitiesDeckSection() {
                 </div>
               </div>
 
-              {/* Center Description Box (Apple Style - No Button / No Bullet Clutter) */}
+              {/* Center Description Box */}
               <div className="deck-center-box">
                 <div className="deck-center-badge">
                   <span>KREATIVITAS VISUAL</span>
@@ -626,7 +637,7 @@ export default function ActivitiesDeckSection() {
             </div>
           </article>
 
-          {/* LAYER 2: LOMBA DESAIN KEMASAN IKM */}
+          {/* LAYER 2: LOMBA DESAIN KEMASAN IKM (Card 2) */}
           <article className="activities-card deck-project-card" data-index="2">
             <canvas className="deck-project-canvas" id="canvasPackaging" width="1400" height="900" />
             <div className="deck-project-overlay">
@@ -642,7 +653,7 @@ export default function ActivitiesDeckSection() {
                 </div>
               </div>
 
-              {/* Center Description Box (Apple Style - No Button / No Bullet Clutter) */}
+              {/* Center Description Box */}
               <div className="deck-center-box">
                 <div className="deck-center-badge">
                   <span>INOVASI KEMASAN IKM</span>
@@ -668,7 +679,7 @@ export default function ActivitiesDeckSection() {
             </div>
           </article>
 
-          {/* LAYER 1: FASHION SHOW RUNWAY */}
+          {/* LAYER 1: FASHION SHOW RUNWAY (Card 1) */}
           <article className="activities-card deck-project-card" data-index="1">
             <canvas className="deck-project-canvas" id="canvasFashion" width="1400" height="900" />
             <div className="deck-project-overlay">
@@ -684,7 +695,7 @@ export default function ActivitiesDeckSection() {
                 </div>
               </div>
 
-              {/* Center Description Box (Apple Style - No Button / No Bullet Clutter) */}
+              {/* Center Description Box */}
               <div className="deck-center-box">
                 <div className="deck-center-badge">
                   <span>FESYEN &amp; WASTRA</span>
@@ -710,20 +721,66 @@ export default function ActivitiesDeckSection() {
             </div>
           </article>
 
-          {/* LAYER 0 (Frontmost): WHITE INTRO COVER CARD */}
+          {/* LAYER 0 (Frontmost): RICH INTRO COVER CARD (No Empty Void) */}
           <section className="activities-card deck-intro-card" data-index="0">
+            {/* Top Bar */}
             <div className="deck-intro-top">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200 mb-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200 mb-2 sm:mb-3">
                   <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
                   <span>Rangkaian Acara Festival</span>
                 </div>
-                <h2 className="deck-hero-name" id="heroName" ref={heroNameRef} aria-label="6 PROGRAM UNGGULAN">
+                <h2 className="deck-hero-name" aria-label="6 PROGRAM UNGGULAN">
                   6 PROGRAM UNGGULAN
                 </h2>
               </div>
+              <div className="hidden sm:flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-full text-xs font-mono font-bold text-slate-700 shadow-xs">
+                <span>📍 Braga City Walk</span>
+                <span className="text-slate-300">•</span>
+                <span className="text-rose-600">27–28 Nov 2026</span>
+              </div>
             </div>
 
+            {/* ─── 6 PROGRAM SHOWCASE GRID (Fills Card 0 Center Richly) ─── */}
+            <div className="deck-intro-showcase">
+              <div className="deck-showcase-header">
+                <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
+                  Sorotan Program Resmi (Klik Kartu Untuk Membuka Detail)
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-mono font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                  6 Program Terpadu
+                </span>
+              </div>
+
+              <div className="deck-program-grid">
+                {PROGRAMS.map((prog) => (
+                  <button
+                    key={prog.id}
+                    type="button"
+                    onClick={() => scrollToCard(prog.id)}
+                    className="deck-program-item group"
+                  >
+                    <div className="deck-program-item-top">
+                      <span className="deck-prog-idx font-mono font-bold">{`0${prog.id}`}</span>
+                      <span className="deck-prog-icon text-lg sm:text-xl">{prog.icon}</span>
+                    </div>
+                    <div className="deck-program-item-body">
+                      <div className="deck-prog-title group-hover:text-rose-600 transition-colors">
+                        {prog.title}
+                      </div>
+                      <div className="deck-prog-meta">
+                        {prog.venue}
+                      </div>
+                    </div>
+                    <div className="deck-program-arrow">
+                      →
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom Meta & Bio */}
             <div className="deck-intro-bottom">
               <nav className="deck-meta-tags" aria-label="Detail Penyelenggaraan">
                 <span>27–28 NOVEMBER 2026</span>
@@ -740,14 +797,55 @@ export default function ActivitiesDeckSection() {
               </p>
 
               <div className="deck-scroll-hint">
-                <svg className="w-4 h-4 animate-bounce text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <svg className="w-4 h-4 animate-bounce text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M12 5v14M19 12l-7 7-7-7"/>
                 </svg>
-                <span>Scroll ke bawah untuk membuka tumpukan kartu program (1 per 1)</span>
+                <span className="font-semibold text-slate-700">
+                  Scroll ke bawah untuk membuka tumpukan kartu program satu per satu ↓
+                </span>
               </div>
             </div>
           </section>
 
+        </div>
+
+        {/* ─── FLOATING DECK NAVIGATION HUD (Click & Scroll Synchronization) ─── */}
+        <div className="deck-nav-hud" aria-label="Navigasi Kartu Program">
+          <button
+            type="button"
+            onClick={() => scrollToCard(Math.max(0, activeCardIndex - 1))}
+            disabled={activeCardIndex === 0}
+            className="deck-hud-btn"
+            title="Kartu Sebelumnya"
+          >
+            ← Prev
+          </button>
+          
+          <div className="deck-hud-dots">
+            {[0, 1, 2, 3, 4, 5].map((idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => scrollToCard(idx)}
+                className={`deck-hud-dot ${activeCardIndex === idx ? 'active' : ''}`}
+                title={`Buka Kartu ${idx === 0 ? 'Sampul' : idx}`}
+              />
+            ))}
+          </div>
+
+          <span className="deck-hud-label font-mono">
+            {activeCardIndex === 0 ? '01 / 06' : `0${activeCardIndex + 1} / 06`}
+          </span>
+
+          <button
+            type="button"
+            onClick={() => scrollToCard(Math.min(5, activeCardIndex + 1))}
+            disabled={activeCardIndex === 5}
+            className="deck-hud-btn"
+            title="Kartu Selanjutnya"
+          >
+            Next →
+          </button>
         </div>
 
       </section>
