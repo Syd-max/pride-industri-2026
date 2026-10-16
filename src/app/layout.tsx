@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Playfair_Display, Inter } from 'next/font/google';
+import { Playfair_Display, Inter, Caveat, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 
 const playfair = Playfair_Display({
@@ -14,6 +14,20 @@ const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
+});
+
+const caveat = Caveat({
+  subsets: ['latin'],
+  variable: '--font-caveat',
+  display: 'swap',
+  weight: ['600', '700'],
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-plus-jakarta',
+  display: 'swap',
+  weight: ['600', '700', '800'],
 });
 
 export const metadata: Metadata = {
@@ -72,7 +86,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={`${playfair.variable} ${inter.variable}`}>
+    <html lang="id" className={`${playfair.variable} ${inter.variable} ${caveat.variable} ${plusJakarta.variable}`}>
       <body>
         {children}
       </body>
