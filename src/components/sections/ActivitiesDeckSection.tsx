@@ -6,8 +6,9 @@ import './activities-deck.css';
 export default function ActivitiesDeckSection() {
   const scrollDriverRef = useRef<HTMLDivElement>(null);
   const deckContainerRef = useRef<HTMLDivElement>(null);
+  const stepperTextRef = useRef<HTMLSpanElement>(null);
+  const activeCardIndexRef = useRef(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
   const autoPlayRafRef = useRef<number | null>(null);
 
   function easeInOutCubic(t: number) {
@@ -111,7 +112,12 @@ export default function ActivitiesDeckSection() {
       const stageProgress = Math.min(peelCount, scrollProgress * (peelCount + 0.45));
 
       const activeIdx = Math.min(peelCount, Math.floor(stageProgress + 0.15));
-      setActiveCardIndex(activeIdx);
+      if (activeCardIndexRef.current !== activeIdx) {
+        activeCardIndexRef.current = activeIdx;
+        if (stepperTextRef.current) {
+          stepperTextRef.current.textContent = activeIdx === 0 ? 'Cover' : `0${activeIdx} / 06`;
+        }
+      }
 
       cards.forEach((card, i) => {
         // Card 0 is highest z-index (70), Card 6 is lowest (10)
@@ -842,7 +848,7 @@ export default function ActivitiesDeckSection() {
           {isPlaying ? '⏸ Jeda Animasi' : '▶ Putar Animasi Kartu'}
         </button>
         <div className="demo-hud-stepper">
-          <span>{activeCardIndex === 0 ? 'Cover' : `0${activeCardIndex} / 06`}</span>
+          <span ref={stepperTextRef}>Cover</span>
         </div>
       </div>
     </div>

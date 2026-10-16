@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { EVENT_CONFIG } from '@/config/event';
 import type { CountdownTime, EventState } from '@/types';
 
@@ -40,6 +40,7 @@ function getCountdown(): { time: CountdownTime; state: EventState } {
 
 export default function WatchCountdown() {
   const [mounted, setMounted] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<{ time: CountdownTime; state: EventState }>({
     time: { days: 0, hours: 0, minutes: 0, seconds: 0 },
     state: 'upcoming',
@@ -54,12 +55,53 @@ export default function WatchCountdown() {
     const startSec = (60 - (initial.time.seconds % 60)) % 60;
     setCumulativeTick(startSec);
 
-    const interval = setInterval(() => {
-      setData(getCountdown());
-      setCumulativeTick((prev) => prev + 1);
-    }, 1000);
+    let intervalId: NodeJS.Timeout | null = null;
 
-    return () => clearInterval(interval);
+    const startTimer = () => {
+      if (!intervalId) {
+        const current = getCountdown();
+        setData(current);
+        const curSec = (60 - (current.time.seconds % 60)) % 60;
+        setCumulativeTick(curSec);
+
+        intervalId = setInterval(() => {
+          setData(getCountdown());
+          setCumulativeTick((prev) => prev + 1);
+        }, 1000);
+      }
+    };
+
+    const stopTimer = () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    };
+
+    // Pause timer when off-screen to preserve battery and CPU
+    let observer: IntersectionObserver | null = null;
+    const el = containerRef.current;
+    if (typeof IntersectionObserver !== 'undefined' && el) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          if (entry.isIntersecting) {
+            startTimer();
+          } else {
+            stopTimer();
+          }
+        },
+        { threshold: 0.05 }
+      );
+      observer.observe(el);
+    } else {
+      startTimer();
+    }
+
+    return () => {
+      stopTimer();
+      if (observer) observer.disconnect();
+    };
   }, []);
 
   const { time } = data;
@@ -79,7 +121,7 @@ export default function WatchCountdown() {
   }
 
   return (
-    <div className="watch-tilt-wrapper">
+    <div className="watch-tilt-wrapper" ref={containerRef}>
       <div className="watch-timepiece-assembly" role="region" aria-label="Jam Hitung Mundur PRIDE Industri 2026">
         
         {/* 1. Diagonal Alligator Straps (Top-Left to Bottom-Right) */}

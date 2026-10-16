@@ -228,7 +228,7 @@ export default function HeroSection() {
       msg7Ref.current?.classList.toggle('shown', p >= 0.68);
       chatComposerRef.current?.classList.toggle('shown', p >= 0.80);
 
-      // Automated vertical follow inside chat stream (Synchronous tracking without lag)
+      // Automated vertical follow inside chat stream (Synchronous tracking without layout thrashing)
       if (chatMessagesRef.current) {
         const el = chatMessagesRef.current;
         let targetEl: HTMLElement | null = null;
@@ -240,17 +240,21 @@ export default function HeroSection() {
         else if (p >= 0.18 && msg3Ref.current) targetEl = msg3Ref.current;
         else if (p >= 0.08 && msg2Ref.current) targetEl = msg2Ref.current;
 
-        if (targetEl) {
-          const targetOffset = targetEl.offsetTop + targetEl.offsetHeight - el.clientHeight + 16;
-          el.scrollTop = Math.max(0, targetOffset);
-        } else {
-          el.scrollTop = 0;
+        if (targetEl !== lastFollowTarget) {
+          lastFollowTarget = targetEl;
+          if (targetEl) {
+            const targetOffset = targetEl.offsetTop + targetEl.offsetHeight - el.clientHeight + 16;
+            el.scrollTop = Math.max(0, targetOffset);
+          } else {
+            el.scrollTop = 0;
+          }
         }
       }
     }
 
     // Scroll listener
     let ticking = false;
+    let lastFollowTarget: HTMLElement | null = null;
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
@@ -261,8 +265,13 @@ export default function HeroSection() {
       }
     };
 
+    const handleResize = () => {
+      lastFollowTarget = null;
+      handleScroll();
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
 
     return () => {
       clearTimeout(t0);
