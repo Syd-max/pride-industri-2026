@@ -45,10 +45,10 @@
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Layout Spacing Tokens */
-  --section-padding: clamp(3rem, 6vw, 5.5rem);
+  --section-padding: clamp(3.5rem, 6vw, 6rem);
   --page-padding: clamp(1rem, 4vw, 2.5rem);
-  --section-spacing: clamp(3rem, 6vw, 5.5rem);
-  --section-spacing-sm: clamp(2rem, 4vw, 3.5rem);
+  --section-spacing: clamp(3.5rem, 6vw, 6rem);
+  --section-spacing-sm: clamp(2.25rem, 4.5vw, 3.75rem);
   --content-gap: clamp(1rem, 2.5vw, 2rem);
   --card-gap: clamp(1rem, 2vw, 1.5rem);
   --container-max-w: 1280px;
@@ -72,15 +72,12 @@ html {
   scroll-behavior: smooth;
   color-scheme: light;
   width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
   margin: 0;
   padding: 0;
 }
 
 body {
   width: 100%;
-  max-width: 100vw;
   background: var(--bg-main);
   color: var(--text-body);
   font-family: var(--font-body);
@@ -88,14 +85,15 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
   margin: 0;
   padding: 0;
 }
 
 /* Responsive Media Constraint */
-img, svg, video, canvas, iframe {
+img, video, canvas, iframe {
   max-width: 100%;
+  height: auto;
 }
 
 /* Sticky Header Compensation for In-Page Anchor Navigation */

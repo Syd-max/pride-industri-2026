@@ -115,7 +115,7 @@
 .flow-hero-section {
   position: relative;
   z-index: 10;
-  margin-top: clamp(76px, 9.5vh, 110px);
+  margin-top: clamp(120px, 14.5vh, 156px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -130,8 +130,8 @@
 .hero-logo-wrap {
   position: relative;
   width: 100%;
-  max-width: clamp(420px, 48vw, 580px);
-  height: clamp(230px, 28vh, 310px);
+  max-width: clamp(520px, 56vw, 610px);
+  height: clamp(280px, 33vh, 330px);
   margin: 0 auto 8px;
   filter: drop-shadow(0 20px 48px rgba(0, 0, 0, 0.85));
   animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;

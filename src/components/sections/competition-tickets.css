@@ -221,7 +221,7 @@
 
 .ticket-title-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
@@ -735,6 +735,9 @@
   }
   .ticket-header {
     margin-bottom: 28px;
+  }
+  .ticket-title-row {
+    flex-wrap: wrap;
   }
   .ticket-top {
     padding: 22px 20px 18px;

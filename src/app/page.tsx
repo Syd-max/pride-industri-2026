@@ -11,9 +11,9 @@ import Footer from '@/components/sections/Footer';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-[#070a13] text-slate-900 selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen bg-[#070a13] text-slate-900 selection:bg-blue-100 selection:text-blue-900">
       <Navbar />
-      <main id="main-content" className="w-full overflow-x-hidden">
+      <main id="main-content">
         <HeroSection />
         <CountdownSection />
         <AboutSection />
