@@ -2,6 +2,7 @@ import Navbar from '@/components/ui/Navbar';
 import HeroSection from '@/components/sections/HeroSection';
 import CountdownSection from '@/components/sections/CountdownSection';
 import AboutSection from '@/components/sections/AboutSection';
+import ActivitiesDeckSection from '@/components/sections/ActivitiesDeckSection';
 import ProgramSection from '@/components/sections/ProgramSection';
 import CompetitionSection from '@/components/sections/CompetitionSection';
 import LocationSection from '@/components/sections/LocationSection';
@@ -16,6 +17,7 @@ export default function HomePage() {
           <HeroSection />
           <CountdownSection />
           <AboutSection />
+          <ActivitiesDeckSection />
           <ProgramSection />
           <CompetitionSection />
           <LocationSection />
