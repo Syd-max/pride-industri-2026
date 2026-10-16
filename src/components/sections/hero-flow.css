@@ -532,25 +532,52 @@
 
   .browser-stage {
     width: 94vw;
-    height: 520px;
+    height: clamp(440px, 72vh, 540px);
     margin-left: -47vw;
-    top: calc(100dvh - 36px);
+    top: 100dvh; /* Cleanly below screen on initial landing — ZERO CUT-OFF PEEK! */
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .mobile-scroll-cue {
+    margin-top: clamp(6px, 1.6vh, 14px);
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+  }
+
+  .scroll-cue-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   }
 
   .safari-bar {
     padding: 0 10px;
-    height: 36px;
+    height: 38px;
+  }
+
+  .safari-icons {
+    display: none !important;
   }
 
   .safari-address {
     width: auto;
     flex: 1;
-    max-width: 220px;
-    font-size: 9.5px;
-  }
-
-  .safari-actions {
-    display: none;
+    max-width: 260px;
+    font-size: 10px;
   }
 }
 

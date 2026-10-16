@@ -85,6 +85,7 @@ export default function HeroSection() {
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
   const headlineBlockRef = useRef<HTMLDivElement>(null);
   const heroLogosRef = useRef<HTMLDivElement>(null);
+  const scrollCueRef = useRef<HTMLDivElement>(null);
 
   // Chat message refs
   const chatMessagesRef = useRef<HTMLDivElement>(null);
@@ -149,44 +150,80 @@ export default function HeroSection() {
 
     // 2. MASTER TIMELINE CHOREOGRAPHY (p = 0.0 to 1.0)
     function updateTimeline(p: number) {
+      const isMobile = typeof window !== 'undefined' && window.innerWidth <= 640;
       let heroY = 0;
       let heroOpacity = 1;
       let browserY = 0;
       let browserScale = 1;
       let browserOpacity = 1;
 
-      if (p <= 0.18) {
-        // Rising from bottom peek to center stage
-        const t = easeInOutCubic(mapRange(p, 0, 0.18, 0, 1));
-        heroY = -340 * t;
-        heroOpacity = 1 - 0.95 * t;
-        browserY = -560 * t;
-        browserScale = 1;
-        browserOpacity = 1;
-      } else if (p <= 0.30) {
-        // Subtle focus zoom into chat conversation
-        const t = easeInOutCubic(mapRange(p, 0.18, 0.30, 0, 1));
-        heroY = -340 - 80 * t;
-        heroOpacity = 0;
-        browserY = -560 + 10 * t;
-        browserScale = 1 + 0.04 * t;
-        browserOpacity = 1;
-      } else if (p <= 0.78) {
-        // Holding focus while chat animation sequence plays
-        const drift = mapRange(p, 0.30, 0.78, 0, 1);
-        heroY = -420;
-        heroOpacity = 0;
-        browserY = -550 - 10 * drift;
-        browserScale = 1.04;
-        browserOpacity = 1;
+      if (isMobile) {
+        // Mobile choreography: browser stays cleanly off-screen at p=0 (zero cut-off!)
+        if (p <= 0.20) {
+          const t = easeInOutCubic(mapRange(p, 0, 0.20, 0, 1));
+          heroY = -300 * t;
+          heroOpacity = Math.max(0, 1 - 1.25 * t);
+          browserY = -((window.innerHeight || 800) * 0.76) * t;
+          browserScale = 1;
+          browserOpacity = mapRange(p, 0.01, 0.08, 0, 1);
+        } else if (p <= 0.32) {
+          const t = easeInOutCubic(mapRange(p, 0.20, 0.32, 0, 1));
+          heroY = -300 - 60 * t;
+          heroOpacity = 0;
+          browserY = -((window.innerHeight || 800) * 0.76) + 10 * t;
+          browserScale = 1 + 0.02 * t;
+          browserOpacity = 1;
+        } else if (p <= 0.78) {
+          const drift = mapRange(p, 0.32, 0.78, 0, 1);
+          heroY = -360;
+          heroOpacity = 0;
+          browserY = -((window.innerHeight || 800) * 0.76) - 10 * drift;
+          browserScale = 1.02;
+          browserOpacity = 1;
+        } else {
+          const t = easeInOutCubic(mapRange(p, 0.78, 1.0, 0, 1));
+          heroY = -360 - 60 * t;
+          heroOpacity = 0;
+          browserY = -((window.innerHeight || 800) * 0.76) - 80 * t;
+          browserScale = 1.02 - 0.02 * t;
+          browserOpacity = Math.max(0, 1 - 1.2 * t);
+        }
+
+        // Fade out mobile scroll cue as user scrolls
+        if (scrollCueRef.current) {
+          scrollCueRef.current.style.opacity = String(Math.max(0, 1 - p * 15));
+        }
       } else {
-        // Smoothly fading and lifting as countdown enters
-        const t = easeInOutCubic(mapRange(p, 0.78, 1.0, 0, 1));
-        heroY = -420 - 60 * t;
-        heroOpacity = 0;
-        browserY = -560 - 80 * t;
-        browserScale = 1.04 - 0.04 * t;
-        browserOpacity = Math.max(0, 1 - 1.2 * t);
+        // Desktop choreography
+        if (p <= 0.18) {
+          const t = easeInOutCubic(mapRange(p, 0, 0.18, 0, 1));
+          heroY = -340 * t;
+          heroOpacity = 1 - 0.95 * t;
+          browserY = -560 * t;
+          browserScale = 1;
+          browserOpacity = 1;
+        } else if (p <= 0.30) {
+          const t = easeInOutCubic(mapRange(p, 0.18, 0.30, 0, 1));
+          heroY = -340 - 80 * t;
+          heroOpacity = 0;
+          browserY = -560 + 10 * t;
+          browserScale = 1 + 0.04 * t;
+          browserOpacity = 1;
+        } else if (p <= 0.78) {
+          const drift = mapRange(p, 0.30, 0.78, 0, 1);
+          heroY = -420;
+          heroOpacity = 0;
+          browserY = -550 - 10 * drift;
+          browserScale = 1.04;
+          browserOpacity = 1;
+        } else {
+          const t = easeInOutCubic(mapRange(p, 0.78, 1.0, 0, 1));
+          heroY = -420 - 60 * t;
+          heroOpacity = 0;
+          browserY = -560 - 80 * t;
+          browserScale = 1.04 - 0.04 * t;
+          browserOpacity = Math.max(0, 1 - 1.2 * t);
+        }
       }
 
       if (heroSectionRef.current) {
@@ -368,6 +405,16 @@ export default function HeroSection() {
               </div>
             </div>
           </div>
+
+          {/* Clean Mobile Scroll Indicator (Replaces sliced cut-off browser bar with clean iOS-style cue) */}
+          <div className="mobile-scroll-cue sm:hidden" ref={scrollCueRef}>
+            <div className="scroll-cue-pill">
+              <span>Scroll untuk eksplorasi</span>
+              <svg className="w-3.5 h-3.5 animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+          </div>
         </section>
 
         {/* macOS Browser Window Showcase: PEEKS AT BOTTOM, NEVER COVERS PAGE AWAL */}
@@ -394,7 +441,8 @@ export default function HeroSection() {
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                   <div className="safari-address-center">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    <span>prideindustri.bandung.go.id/agenda</span>
+                    <span className="hidden sm:inline">prideindustri.bandung.go.id/agenda</span>
+                    <span className="sm:hidden">prideindustri.bandung.go.id</span>
                   </div>
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
                 </div>
