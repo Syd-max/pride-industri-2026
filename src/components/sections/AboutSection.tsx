@@ -156,21 +156,13 @@ export default function AboutSection() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Header with Refined Editorial Accents */}
+        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 relative">
           
-          {/* Subtle Drafting Precision Crosshairs on Desktop */}
-          <div className="hidden sm:flex items-center justify-between absolute -top-4 inset-x-0 pointer-events-none text-slate-300 font-mono text-[10px] select-none opacity-60">
-            <span>+ 01 / ARCHIVE</span>
-            <span>+ DISDAGIN BDG</span>
-          </div>
-
           {/* Apple Style Frosted Status Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-50 text-slate-700 border border-slate-200/90 shadow-2xs mb-4">
             <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
             <span>Tentang Acara</span>
-            <span className="w-1 h-1 rounded-full bg-slate-300" />
-            <span className="text-[10px] text-slate-400 font-mono tracking-normal font-semibold">DISDAGIN KOTA BANDUNG</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
