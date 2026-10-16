@@ -1,6 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+import StatFolderCard from '@/components/ui/StatFolderCard';
+import './about-folders.css';
 
 export default function AboutSection() {
   const highlights = [
@@ -8,25 +10,53 @@ export default function AboutSection() {
       number: '200+',
       label: 'Pelaku IKM Binaan',
       desc: 'Pelaku Industri Kecil & Menengah sektor Fesyen, Kriya, dan Kuliner binaan Disdagin Kota Bandung.',
-      accent: 'border-t-4 border-t-blue-600 bg-blue-50/30 text-blue-700',
+      theme: 'blue' as const,
+      docBadge: 'ARSIP DISDAGIN KOTA BANDUNG',
+      docTitle: 'Distribusi Sektor Unggulan IKM',
+      docItems: [
+        '85 IKM Sektor Fesyen & Tekstil',
+        '75 IKM Kuliner & Olahan Pangan',
+        '40+ IKM Kriya & Kerajinan Seni',
+      ],
     },
     {
       number: '100',
       label: 'Sertifikasi Halal & SNI',
       desc: 'Penyerahan simbolis 100 sertifikat Halal, 3 SNI, dan 100 fasilitasi Uji Mutu produk IKM.',
-      accent: 'border-t-4 border-t-emerald-600 bg-emerald-50/30 text-emerald-700',
+      theme: 'green' as const,
+      docBadge: 'LEGALITAS & STANDAR MUTU',
+      docTitle: 'Penyerahan Fasilitasi Sertifikasi',
+      docItems: [
+        '100 Sertifikat Halal MUI / BPJPH',
+        '3 Sertifikat Standar Nasional SNI',
+        '100 Fasilitasi Uji Mutu Laboratorium',
+      ],
     },
     {
       number: 'SIINAS',
       label: 'Apresiasi Industri',
       desc: 'Penganugerahan apresiasi pelaku industri berbasis kepatuhan pelaporan SIINAS di Ballroom Papandayan.',
-      accent: 'border-t-4 border-t-amber-500 bg-amber-50/30 text-amber-700',
+      theme: 'amber' as const,
+      docBadge: 'MALAM ANUGERAH PRESTASI',
+      docTitle: 'Kepatuhan Pelaporan SIINAS',
+      docItems: [
+        '100% Kepatuhan Industri Binaan',
+        '5 Kategori Penghargaan Terbaik',
+        'Malam Penganugerahan Hotel Papandayan',
+      ],
     },
     {
       number: '2 HARI',
       label: 'Kurasi & Festival',
       desc: 'Runway fesyen desainer binaan, live percussion dinamis, DJ, serta pameran produk unggulan.',
-      accent: 'border-t-4 border-t-rose-600 bg-rose-50/30 text-rose-700',
+      theme: 'red' as const,
+      docBadge: 'AGENDA FESTIVAL BRAGA',
+      docTitle: 'Jadwal Panggung Utama Braga',
+      docItems: [
+        'Jumat 27 Nov: Runway & Kurasi Busana',
+        'Sabtu 28 Nov: Awarding & Expo Akbar',
+        '10.00 – 22.00 WIB · Braga City Walk',
+      ],
     },
   ];
 
@@ -128,25 +158,19 @@ export default function AboutSection() {
           </p>
         </div>
 
-        {/* 4 Key Pillars Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        {/* 4 Key Pillars Interactive Archive Folders (Apple-Style Dossier Folders) */}
+        <div className="about-folders-grid">
           {highlights.map((item, idx) => (
-            <div
+            <StatFolderCard
               key={idx}
-              className={`p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-xs flex flex-col justify-between ${item.accent} transition-transform hover:-translate-y-1`}
-            >
-              <div>
-                <span className="text-3xl sm:text-4xl font-black tracking-tight block mb-2 font-mono">
-                  {item.number}
-                </span>
-                <h3 className="text-base font-extrabold text-slate-900 mb-2">
-                  {item.label}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {item.desc}
-                </p>
-              </div>
-            </div>
+              number={item.number}
+              label={item.label}
+              desc={item.desc}
+              theme={item.theme}
+              docBadge={item.docBadge}
+              docTitle={item.docTitle}
+              docItems={item.docItems}
+            />
           ))}
         </div>
 

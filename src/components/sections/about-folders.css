@@ -1,0 +1,441 @@
+/* ─── PRIDE Industri 2026 — Apple-Inspired Interactive Dossier Folders ────────
+   Interactive Tabbed Archive Folders with Tactile Slide-Out Document Sheets
+   and Rolling Number Odometers. Anti-AI-Slop: Crafted with Swiss/Apple Precision.
+─────────────────────────────────────────────────────────────────────────────── */
+
+/* 1. Folders Grid Container */
+.about-folders-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 48px 24px;
+  margin-top: 28px;
+  margin-bottom: 64px;
+  overflow: visible;
+}
+
+@media (min-width: 640px) {
+  .about-folders-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 44px 22px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-folders-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 36px 20px;
+  }
+}
+
+/* 2. Folder Card Container (Interactive Button / Wrapper) */
+.folder-card-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 64px; /* Generous clearance for sliding document sheet */
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: visible;
+}
+
+.folder-card-wrapper:hover {
+  transform: translateY(-4px);
+}
+
+.folder-card-wrapper:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 20px;
+}
+
+/* 3. The Folder Assembly */
+.folder-assembly {
+  position: relative;
+  width: 100%;
+  min-height: 255px;
+  border-radius: 18px 26px 20px 20px;
+  overflow: visible;
+}
+
+/* 4. Folder Back Body with Asymmetrical Tab */
+.folder-back-body {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px 24px 18px 18px;
+  z-index: 1;
+  box-shadow: 
+    0 12px 28px -6px rgba(0, 0, 0, 0.22),
+    0 4px 10px -2px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.3s ease;
+}
+
+.folder-card-wrapper:hover .folder-back-body {
+  box-shadow: 
+    0 20px 36px -8px rgba(0, 0, 0, 0.28),
+    0 8px 16px -4px rgba(0, 0, 0, 0.16);
+}
+
+/* Asymmetrical Folder Top Tab (Right-aligned, matching user reference image) */
+.folder-tab-top {
+  position: absolute;
+  top: -14px;
+  right: 14px;
+  width: 58%;
+  height: 22px;
+  border-radius: 10px 10px 0 0;
+  z-index: 1;
+}
+
+.folder-tab-top::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  bottom: 0;
+  width: 12px;
+  height: 14px;
+  border-bottom-right-radius: 10px;
+  background: inherit;
+}
+
+/* 5. Inner Document / Dossier Sheet (Slides OUT when clicked) */
+.folder-document-sheet {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 4px;
+  min-height: 160px;
+  background: #ffffff;
+  border-radius: 14px 14px 8px 8px;
+  border: 1px solid #e2e8f0;
+  border-bottom: none;
+  box-shadow: 
+    0 -3px 12px rgba(0, 0, 0, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.04);
+  z-index: 5;
+  padding: 10px 14px 14px;
+  transform: translateY(0);
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+/* Cream paper top peek line (matches reference image cream paper lip) */
+.folder-document-sheet::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: #fffdf5;
+  border-radius: 13px 13px 0 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.folder-document-sheet::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 3px;
+  border-radius: 2px;
+  background: #cbd5e1;
+}
+
+/* Hover Peeking Cue */
+.folder-card-wrapper:hover .folder-document-sheet {
+  transform: translateY(-8px);
+  box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.14);
+}
+
+/* ACTIVE / OPEN STATE: Document Slides Smoothly Upward OUT of the Folder */
+.folder-card-wrapper.is-open .folder-document-sheet {
+  transform: translateY(-114px);
+  box-shadow: 
+    0 -16px 32px rgba(0, 0, 0, 0.24),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.doc-sheet-content {
+  position: relative;
+  z-index: 2;
+  margin-top: 6px;
+}
+
+.doc-sheet-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.doc-sheet-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+
+.doc-sheet-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.doc-sheet-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.35;
+}
+
+.doc-sheet-bullet {
+  width: 4.5px;
+  height: 4.5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 6. Front Pocket (The Outer Colored Folder Face) */
+.folder-front-pocket {
+  position: relative;
+  z-index: 10;
+  min-height: 242px;
+  border-radius: 12px 12px 18px 18px;
+  padding: 20px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #ffffff;
+  box-shadow: 
+    0 10px 24px -4px rgba(0, 0, 0, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.35);
+  overflow: hidden;
+}
+
+/* Front Pocket Top Subtle Curve / Highlight */
+.folder-front-pocket::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+/* Bottom Tonal Band (Matching User Reference Image Darker Base) */
+.folder-front-pocket::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: rgba(0, 0, 0, 0.12);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+}
+
+/* 7. Typography & Odometer Rolling Numbers */
+.folder-number-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.folder-number-val {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+}
+
+/* Rolling Animation Cue on Number */
+.folder-card-wrapper.is-open .folder-number-val {
+  animation: numberPulse 0.45s ease-out;
+}
+
+@keyframes numberPulse {
+  0% { transform: scale(0.92); opacity: 0.7; }
+  50% { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.folder-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin-bottom: 6px;
+  line-height: 1.25;
+}
+
+.folder-desc {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 500;
+}
+
+/* 8. Bottom Interactive Action Bar */
+.folder-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+  z-index: 2;
+}
+
+.folder-action-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.14);
+  padding: 3px 9px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  transition: all 0.2s ease;
+}
+
+.folder-card-wrapper:hover .folder-action-pill {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.folder-action-icon {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.3s ease;
+}
+
+.folder-card-wrapper.is-open .folder-action-icon {
+  transform: rotate(180deg);
+}
+
+/* 9. 4 Official Color Palettes (Rich, Crisp, Elegant) */
+
+/* 1. BLUE FOLDER (Pelaku IKM Binaan) */
+.folder-theme-blue .folder-back-body,
+.folder-theme-blue .folder-tab-top {
+  background: #1d4ed8;
+}
+.folder-theme-blue .folder-front-pocket {
+  background: linear-gradient(175deg, #2563eb 0%, #1d4ed8 70%, #1e40af 100%);
+}
+.folder-theme-blue .doc-sheet-badge {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.folder-theme-blue .doc-sheet-bullet {
+  background: #2563eb;
+}
+
+/* 2. GREEN FOLDER (Sertifikasi Halal & SNI) */
+.folder-theme-green .folder-back-body,
+.folder-theme-green .folder-tab-top {
+  background: #047857;
+}
+.folder-theme-green .folder-front-pocket {
+  background: linear-gradient(175deg, #059669 0%, #047857 70%, #065f46 100%);
+}
+.folder-theme-green .doc-sheet-badge {
+  background: #d1fae5;
+  color: #065f46;
+}
+.folder-theme-green .doc-sheet-bullet {
+  background: #059669;
+}
+
+/* 3. AMBER/GOLD FOLDER (Apresiasi Industri SIINAS) */
+.folder-theme-amber .folder-back-body,
+.folder-theme-amber .folder-tab-top {
+  background: #b45309;
+}
+.folder-theme-amber .folder-front-pocket {
+  background: linear-gradient(175deg, #d97706 0%, #b45309 70%, #92400e 100%);
+}
+.folder-theme-amber .doc-sheet-badge {
+  background: #fef3c7;
+  color: #92400e;
+}
+.folder-theme-amber .doc-sheet-bullet {
+  background: #d97706;
+}
+
+/* 4. RED FOLDER (Kurasi & Festival 2 Hari - Matches User Reference!) */
+.folder-theme-red .folder-back-body,
+.folder-theme-red .folder-tab-top {
+  background: #be123c;
+}
+.folder-theme-red .folder-front-pocket {
+  background: linear-gradient(175deg, #e11d48 0%, #be123c 70%, #9f1239 100%);
+}
+.folder-theme-red .doc-sheet-badge {
+  background: #ffe4e6;
+  color: #9f1239;
+}
+.folder-theme-red .doc-sheet-bullet {
+  background: #e11d48;
+}
+
+/* Responsive Mobile Adjustments */
+@media (max-width: 640px) {
+  .about-folders-grid {
+    gap: 52px 20px;
+  }
+  .folder-card-wrapper {
+    padding-top: 56px;
+  }
+  .folder-assembly {
+    min-height: 220px;
+  }
+  .folder-front-pocket {
+    min-height: 215px;
+    padding: 16px 14px 14px;
+  }
+  .folder-number-val {
+    font-size: 28px;
+  }
+  .folder-label {
+    font-size: 14px;
+  }
+  .folder-desc {
+    font-size: 11px;
+  }
+  .folder-card-wrapper.is-open .folder-document-sheet {
+    transform: translateY(-92px);
+  }
+}
