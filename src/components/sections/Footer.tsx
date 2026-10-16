@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { EVENT_CONFIG } from '@/config/event';
+import TactlinkBanner from '@/components/ui/TactlinkBanner';
 
 export default function Footer() {
   return (
@@ -12,6 +13,11 @@ export default function Footer() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
+        {/* Tactlink Official Partner Banner */}
+        <div className="mb-14">
+          <TactlinkBanner variant="light" />
+        </div>
+
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-slate-800">
           

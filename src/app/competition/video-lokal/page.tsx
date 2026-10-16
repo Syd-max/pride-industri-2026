@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { EVENT_CONFIG } from '@/config/event';
+import TactlinkBanner from '@/components/ui/TactlinkBanner';
 import type { VideoLokalFormData } from '@/types';
 
 export default function VideoLokalPage() {
@@ -515,6 +516,11 @@ export default function VideoLokalPage() {
             </form>
           </div>
         )}
+
+        {/* Tactlink Partner Banner */}
+        <div className="mt-14 max-w-2xl mx-auto">
+          <TactlinkBanner variant="light" />
+        </div>
 
       </div>
     </div>

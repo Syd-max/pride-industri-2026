@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { EVENT_CONFIG } from '@/config/event';
+import TactlinkBanner from '@/components/ui/TactlinkBanner';
 
 export const metadata = {
   title: 'Kebijakan Privasi & Perlindungan Data Peserta',
@@ -129,6 +130,11 @@ export default function PrivacyPage() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Tactlink Partner Banner */}
+        <div className="pt-2">
+          <TactlinkBanner variant="dark" />
         </div>
 
         <div className="text-center pt-4">
