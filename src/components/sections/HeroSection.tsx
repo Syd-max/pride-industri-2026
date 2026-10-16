@@ -149,6 +149,7 @@ export default function HeroSection() {
     }
 
     // 2. MASTER TIMELINE CHOREOGRAPHY (p = 0.0 to 1.0)
+    // Zero dead-zones: Every scroll movement immediately triggers progressive feedback
     function updateTimeline(p: number) {
       const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
       let heroY = 0;
@@ -158,18 +159,17 @@ export default function HeroSection() {
       let browserOpacity = 1;
 
       if (isMobile) {
-        // Mobile choreography: browser stays cleanly off-screen at p=0 (zero cut-off!)
-        if (p <= 0.16) {
-          const t = easeInOutCubic(mapRange(p, 0, 0.16, 0, 1));
-          heroY = -300 * t;
+        // Mobile choreography: Snappy entrance completed by p=0.10
+        if (p <= 0.10) {
+          const t = easeInOutCubic(mapRange(p, 0, 0.10, 0, 1));
+          heroY = -280 * t;
           heroOpacity = Math.max(0, 1 - 1.25 * t);
           browserY = -((window.innerHeight || 800) * 0.82) * t;
           browserScale = 1;
-          browserOpacity = mapRange(p, 0.01, 0.06, 0, 1);
+          browserOpacity = mapRange(p, 0.01, 0.05, 0, 1);
         } else {
-          // Page 2: Helpdesk Mockup stays PINNED & 100% VISIBLE throughout the rest of scroll!
-          // NEVER disappears or fades out into a black void!
-          heroY = -360;
+          // Page 2: Helpdesk Mockup stays PINNED & 100% VISIBLE throughout the rest of scroll
+          heroY = -340;
           heroOpacity = 0;
           browserY = -((window.innerHeight || 800) * 0.82);
           browserScale = 1.0;
@@ -178,12 +178,12 @@ export default function HeroSection() {
 
         // Fade out mobile scroll cue as user scrolls
         if (scrollCueRef.current) {
-          scrollCueRef.current.style.opacity = String(Math.max(0, 1 - p * 15));
+          scrollCueRef.current.style.opacity = String(Math.max(0, 1 - p * 20));
         }
       } else {
         // Desktop choreography
-        if (p <= 0.16) {
-          const t = easeInOutCubic(mapRange(p, 0, 0.16, 0, 1));
+        if (p <= 0.10) {
+          const t = easeInOutCubic(mapRange(p, 0, 0.10, 0, 1));
           heroY = -340 * t;
           heroOpacity = 1 - 0.95 * t;
           browserY = -560 * t;
@@ -209,38 +209,39 @@ export default function HeroSection() {
         browserStageRef.current.style.opacity = String(browserOpacity);
       }
 
-      // Chat Sequence Thresholds (Always welcoming, never empty void)
+      // Continuous Chat Sequence (Tightly paced: Every single scroll tick triggers the next state)
       msg1Ref.current?.classList.add('shown');
-      msg2Ref.current?.classList.toggle('shown', p >= 0.14);
-      msg3Ref.current?.classList.toggle('shown', p >= 0.24);
-      msg4Ref.current?.classList.toggle('shown', p >= 0.34);
+      msg2Ref.current?.classList.toggle('shown', p >= 0.08);
+      msg3Ref.current?.classList.toggle('shown', p >= 0.18);
+      msg4Ref.current?.classList.toggle('shown', p >= 0.28);
 
       // Simulated cursor hover & click on "Buka Formulir Pendaftaran"
-      const showCursor = p >= 0.44 && p <= 0.52;
-      const isPressing = p >= 0.47 && p <= 0.51;
+      const showCursor = p >= 0.35 && p <= 0.44;
+      const isPressing = p >= 0.39 && p <= 0.44;
       simCursorRef.current?.classList.toggle('active', showCursor);
       simCursorRef.current?.classList.toggle('pressing', isPressing);
       btnRepRef.current?.classList.toggle('clicked', isPressing);
 
-      // Handover & Panitia Message
-      msg5Ref.current?.classList.toggle('shown', p >= 0.52);
-      msg6Ref.current?.classList.toggle('shown', p >= 0.60);
+      // Immediate follow-up: Zero dead gap after click
+      msg5Ref.current?.classList.toggle('shown', p >= 0.44);
+      msg6Ref.current?.classList.toggle('shown', p >= 0.56);
       msg7Ref.current?.classList.toggle('shown', p >= 0.68);
-      chatComposerRef.current?.classList.toggle('shown', p >= 0.76);
+      chatComposerRef.current?.classList.toggle('shown', p >= 0.80);
 
-      // Automated smooth vertical follow inside chat stream (Always reveals active message)
+      // Automated vertical follow inside chat stream (Synchronous tracking without lag)
       if (chatMessagesRef.current) {
         const el = chatMessagesRef.current;
         let targetEl: HTMLElement | null = null;
-        if (p >= 0.68 && msg7Ref.current) targetEl = msg7Ref.current;
-        else if (p >= 0.60 && msg6Ref.current) targetEl = msg6Ref.current;
-        else if (p >= 0.52 && msg5Ref.current) targetEl = msg5Ref.current;
-        else if (p >= 0.34 && msg4Ref.current) targetEl = msg4Ref.current;
-        else if (p >= 0.24 && msg3Ref.current) targetEl = msg3Ref.current;
-        else if (p >= 0.14 && msg2Ref.current) targetEl = msg2Ref.current;
+        if (p >= 0.80 && msg7Ref.current) targetEl = msg7Ref.current;
+        else if (p >= 0.68 && msg7Ref.current) targetEl = msg7Ref.current;
+        else if (p >= 0.56 && msg6Ref.current) targetEl = msg6Ref.current;
+        else if (p >= 0.44 && msg5Ref.current) targetEl = msg5Ref.current;
+        else if (p >= 0.28 && msg4Ref.current) targetEl = msg4Ref.current;
+        else if (p >= 0.18 && msg3Ref.current) targetEl = msg3Ref.current;
+        else if (p >= 0.08 && msg2Ref.current) targetEl = msg2Ref.current;
 
         if (targetEl) {
-          const targetOffset = targetEl.offsetTop + targetEl.offsetHeight - el.clientHeight + 20;
+          const targetOffset = targetEl.offsetTop + targetEl.offsetHeight - el.clientHeight + 16;
           el.scrollTop = Math.max(0, targetOffset);
         } else {
           el.scrollTop = 0;
