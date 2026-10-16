@@ -11,16 +11,16 @@
   --deck-card-radius-sm: 20px;
 }
 
-/* Scroll Driver: Extended timeline for 7 cards (6 peel stages + resting dwell) */
+/* Scroll Driver: Responsive timeline for 7 cards (6 peel stages) */
 .activities-scroll-driver {
-  height: 600vh;
+  height: 380vh;
   position: relative;
   width: 100%;
 }
 
 @media (max-width: 768px) {
   .activities-scroll-driver {
-    height: 480vh;
+    height: 300vh;
   }
 }
 
@@ -88,9 +88,29 @@
   overflow: hidden;
   transform-origin: top center;
   will-change: transform;
-  box-shadow: 0 -6px 32px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.08);
   user-select: none;
 }
+
+/* Distinct Colored Top Accent Strip on every card so stacked cards behind are clearly visible */
+.activities-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  z-index: 25;
+}
+.deck-cover-card::before {
+  background: linear-gradient(90deg, #e51937 0%, #009e49 20%, #f69321 40%, #ffb800 60%, #1652f0 80%, #8b5cf6 100%);
+}
+.theme-red::before { background: #e51937; }
+.theme-green::before { background: #009e49; }
+.theme-orange::before { background: #f69321; }
+.theme-yellow::before { background: #ffb800; }
+.theme-blue::before { background: #1652f0; }
+.theme-purple::before { background: #8b5cf6; }
 
 /* Default Stacking Order */
 .activities-card[data-index="0"] { z-index: 70; }
@@ -831,9 +851,124 @@
   }
 }
 
+/* ─── Card Stepper & Navigation Buttons ─── */
+.deck-nav-btn {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 13px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.deck-nav-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.deck-nav-btn:active {
+  transform: scale(0.96);
+}
+
+.deck-nav-primary {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
+}
+
+.deck-nav-primary:hover {
+  background: #1e293b;
+  color: #ffffff;
+  border-color: #1e293b;
+}
+
+/* ─── Floating Interactive Demo Controls (Matching Ilia Delin Reference) ─── */
+.demo-hud {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 45;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  padding: 6px 14px 6px 6px;
+  border-radius: 999px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+  user-select: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.demo-hud-btn {
+  background: #ffffff;
+  color: #0f172a;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s ease, background-color 0.18s ease;
+  white-space: nowrap;
+}
+
+.demo-hud-btn:hover {
+  background: #f1f5f9;
+  transform: scale(1.04);
+}
+
+.demo-hud-btn:active {
+  transform: scale(0.96);
+}
+
+.demo-hud-stepper {
+  font-size: 11.5px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  padding-right: 4px;
+}
+
+@media (max-width: 768px) {
+  .demo-hud {
+    bottom: 16px;
+    right: 14px;
+    padding: 5px 12px 5px 5px;
+    font-size: 11px;
+  }
+  .demo-hud-btn {
+    padding: 5px 11px;
+    font-size: 10.5px;
+  }
+  .deck-nav-btn {
+    padding: 4px 10px;
+    font-size: 10.5px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
 }
+

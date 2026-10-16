@@ -1,11 +1,96 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './activities-deck.css';
 
 export default function ActivitiesDeckSection() {
   const scrollDriverRef = useRef<HTMLDivElement>(null);
   const deckContainerRef = useRef<HTMLDivElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const autoPlayRafRef = useRef<number | null>(null);
+
+  function easeInOutCubic(t: number) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function clamp(val: number, min: number, max: number) {
+    return Math.max(min, Math.min(max, val));
+  }
+
+  const stopAutoPlay = () => {
+    setIsPlaying(false);
+    if (autoPlayRafRef.current) {
+      cancelAnimationFrame(autoPlayRafRef.current);
+      autoPlayRafRef.current = null;
+    }
+  };
+
+  const toggleAutoPlay = () => {
+    const driver = scrollDriverRef.current;
+    if (!driver) return;
+
+    if (isPlaying) {
+      stopAutoPlay();
+      return;
+    }
+
+    setIsPlaying(true);
+    const rect = driver.getBoundingClientRect();
+    const driverTop = window.scrollY + rect.top;
+    const totalDist = driver.offsetHeight - window.innerHeight;
+    const startTime = performance.now();
+    const totalDuration = 12000; // 12s full tour through all 6 cards
+
+    function tick(now: number) {
+      const elapsed = now - startTime;
+      const t = clamp(elapsed / totalDuration, 0, 1);
+
+      let targetP = 0;
+      if (t < 0.44) {
+        // 00:00 -> 00:05: Peel all cards down one by one
+        targetP = easeInOutCubic(t / 0.44);
+      } else if (t < 0.58) {
+        // Pause and hold on Card 6 / Final view
+        targetP = 1;
+      } else if (t < 0.94) {
+        // Unpeel back up
+        targetP = 1 - easeInOutCubic((t - 0.58) / 0.36);
+      } else {
+        targetP = 0;
+      }
+
+      window.scrollTo(0, driverTop + targetP * totalDist);
+
+      if (t < 1) {
+        autoPlayRafRef.current = requestAnimationFrame(tick);
+      } else {
+        stopAutoPlay();
+      }
+    }
+
+    autoPlayRafRef.current = requestAnimationFrame(tick);
+  };
+
+  const goToCard = (targetIndex: number) => {
+    const driver = scrollDriverRef.current;
+    if (!driver) return;
+
+    stopAutoPlay();
+    const rect = driver.getBoundingClientRect();
+    const driverTop = window.scrollY + rect.top;
+    const totalScroll = driver.offsetHeight - window.innerHeight;
+    if (totalScroll <= 0) return;
+
+    const peelCount = 6; // 6 peel stages (Card 0 to Card 5 peel down)
+    const targetProgress = clamp(targetIndex / (peelCount + 0.3), 0, 1);
+    const targetScrollY = driverTop + targetProgress * totalScroll;
+
+    window.scrollTo({
+      top: targetScrollY,
+      behavior: 'smooth',
+    });
+  };
 
   useEffect(() => {
     const container = deckContainerRef.current;
@@ -16,45 +101,36 @@ export default function ActivitiesDeckSection() {
 
     const totalCards = cards.length; // 7 cards: Cover (0) + 6 Program Cards (1..6)
 
-    function clamp(val: number, min: number, max: number) {
-      return Math.max(min, Math.min(max, val));
-    }
-
-    function easeInOutCubic(t: number) {
-      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    }
-
     function updateDeck(scrollProgress: number) {
       const isMobile = window.innerWidth <= 768;
-      const PEEK_STEP_Y = isMobile ? 12 : 18;
+      const PEEK_STEP_Y = isMobile ? 14 : 20;
       const SCALE_STEP = isMobile ? 0.022 : 0.026;
 
-      // 7 cards total (0..6). There are 6 peel transitions (Cards 0 to 5 peel down).
-      // Card 6 is the final resting card that stays on stage.
-      // We map scrollProgress (0..1) so that the 6 peels happen across 0..0.86,
-      // and Card 6 rests prominently on stage for the remaining 0.86..1.0.
+      // 7 cards total (0..6). 6 peel transitions (Cards 0 to 5 peel down).
       const peelCount = totalCards - 1; // 6
-      const stageProgress = Math.min(peelCount, scrollProgress * (peelCount + 0.85));
+      const stageProgress = Math.min(peelCount, scrollProgress * (peelCount + 0.45));
+
+      const activeIdx = Math.min(peelCount, Math.floor(stageProgress + 0.15));
+      setActiveCardIndex(activeIdx);
 
       cards.forEach((card, i) => {
-        // Set z-index so card 0 is on top (70), card 6 is at bottom (10)
+        // Card 0 is highest z-index (70), Card 6 is lowest (10)
         card.style.zIndex = String((totalCards - i) * 10);
 
-        // Final card (Card 6) never peels down; its depth stops at 0
+        // Final card (Card 6) rests on stage and never peels off
         const isFinalCard = i === totalCards - 1;
         const depth = isFinalCard ? Math.max(0, i - stageProgress) : (i - stageProgress);
 
         if (depth < 0) {
-          // This card is currently peeling down or has already peeled off the bottom of the screen
+          // Card peeling down off the stage
           const peelAmount = clamp(-depth, 0, 1);
           const easedPeel = easeInOutCubic(peelAmount);
-          const translateYPercent = easedPeel * 112; // Slides smoothly past bottom viewport edge
+          const translateYPercent = easedPeel * 115;
           card.style.transform = `translate3d(0, ${translateYPercent.toFixed(2)}%, 0) scale(1)`;
           card.style.pointerEvents = peelAmount > 0.15 ? 'none' : 'auto';
         } else {
-          // This card is waiting in the stack (or is currently the active front card at depth == 0)
-          // Cap visible stack depth offset so all background rims are neatly visible at the top
-          const effectiveDepth = Math.min(depth, 4);
+          // Card waiting in the stack or active at front
+          const effectiveDepth = Math.min(depth, 5);
           const yOffset = -effectiveDepth * PEEK_STEP_Y;
           const scale = 1 - effectiveDepth * SCALE_STEP;
 
@@ -101,7 +177,7 @@ export default function ActivitiesDeckSection() {
     <div className="activities-scroll-driver" id="programUnggulan" ref={scrollDriverRef}>
       <section className="activities-stage" aria-label="6 Program Unggulan PRIDE 2026">
 
-        {/* 7-Card Stack Deck Container: Cover (0) + 6 Programs (1..6) in natural order */}
+        {/* 7-Card Stack Deck Container: Cover (0) + 6 Programs (1..6) */}
         <div className="activities-deck-container" ref={deckContainerRef}>
 
           {/* ════════════════════════════════════════════════════════════════
@@ -147,22 +223,64 @@ export default function ActivitiesDeckSection() {
               </div>
 
               <p className="deck-cover-subtitle">
-                Eksplorasi panggung fesyen wastra, kompetisi kreatif, apresiasi kepatuhan industri, hingga fasilitasi legalitas halal dan pesta seni budaya.
+                Eksplorasi panggung fesyen wastra, kompetisi kreatif, apresiasi kepatuhan industri, hingga fasilitasi legalitas halal dan pesta seni budaya. Klik kategori untuk langsung membuka kartu program.
               </p>
 
-              {/* Playful Proposal Palette Indicator Pills */}
+              {/* Interactive Clickable Program Chips: Direct Jump to Card */}
               <div className="deck-cover-palette-row" aria-label="6 Kategori Program Festival">
-                <span className="palette-chip chip-red">✦ Fesyen</span>
-                <span className="palette-chip chip-green">✦ Kemasan</span>
-                <span className="palette-chip chip-orange">✦ Video 1 Menit</span>
-                <span className="palette-chip chip-yellow">✦ Gala SIINAS</span>
-                <span className="palette-chip chip-blue">✦ Halal &amp; SNI</span>
-                <span className="palette-chip chip-purple">✦ Seni Budaya</span>
+                <button
+                  type="button"
+                  onClick={() => goToCard(1)}
+                  className="palette-chip chip-red cursor-pointer"
+                  title="Buka Kartu 01: Fesyen & Wastra"
+                >
+                  ✦ Fesyen
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goToCard(2)}
+                  className="palette-chip chip-green cursor-pointer"
+                  title="Buka Kartu 02: Desain Kemasan"
+                >
+                  ✦ Kemasan
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goToCard(3)}
+                  className="palette-chip chip-orange cursor-pointer"
+                  title="Buka Kartu 03: Video 1 Menit"
+                >
+                  ✦ Video 1 Menit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goToCard(4)}
+                  className="palette-chip chip-yellow cursor-pointer"
+                  title="Buka Kartu 04: Gala SIINAS"
+                >
+                  ✦ Gala SIINAS
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goToCard(5)}
+                  className="palette-chip chip-blue cursor-pointer"
+                  title="Buka Kartu 05: Halal & SNI"
+                >
+                  ✦ Halal &amp; SNI
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goToCard(6)}
+                  className="palette-chip chip-purple cursor-pointer"
+                  title="Buka Kartu 06: Seni Budaya"
+                >
+                  ✦ Seni Budaya
+                </button>
               </div>
             </div>
 
-            {/* Footer Bar: Sleek Scroll Prompt */}
-            <div className="deck-cover-footer">
+            {/* Footer Bar: Scroll Prompt & Quick Tour Button */}
+            <div className="deck-cover-footer flex flex-wrap items-center justify-between gap-3">
               <div className="deck-cover-scroll-indicator">
                 <span className="scroll-arrow-box">
                   <svg className="w-4 h-4 animate-bounce text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -170,8 +288,25 @@ export default function ActivitiesDeckSection() {
                   </svg>
                 </span>
                 <span className="font-semibold text-slate-700 text-xs sm:text-sm">
-                  Scroll ke bawah untuk membuka tumpukan kartu program ↓
+                  Scroll ke bawah untuk membuka kartu program ↓
                 </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={toggleAutoPlay}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 transition-transform active:scale-95 shadow-sm cursor-pointer"
+                >
+                  <span>{isPlaying ? '⏸ Jeda' : '▶ Putar Animasi'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goToCard(1)}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold bg-rose-600 text-white hover:bg-rose-700 transition-transform active:scale-95 shadow-sm cursor-pointer"
+                >
+                  <span>Buka Program →</span>
+                </button>
               </div>
             </div>
           </section>
@@ -238,7 +373,24 @@ export default function ActivitiesDeckSection() {
                   <span className="footer-meta-sep">•</span>
                   <span>Main Runway Stage Braga</span>
                 </div>
-                <span className="deck-status-badge status-public">Terbuka untuk Umum</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => goToCard(0)}
+                    className="deck-nav-btn"
+                    title="Kembali ke Cover"
+                  >
+                    ← Cover
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => goToCard(2)}
+                    className="deck-nav-btn deck-nav-primary"
+                    title="Lanjut ke Program 02"
+                  >
+                    02 Kemasan →
+                  </button>
+                </div>
               </footer>
             </div>
           </article>
@@ -308,7 +460,24 @@ export default function ActivitiesDeckSection() {
                   <span className="footer-meta-sep">•</span>
                   <span>Area Pameran Braga City Walk</span>
                 </div>
-                <span className="deck-status-badge status-public">Display Terbuka</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => goToCard(1)}
+                    className="deck-nav-btn"
+                    title="Kembali ke 01 Fesyen"
+                  >
+                    ← 01 Fesyen
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => goToCard(3)}
+                    className="deck-nav-btn deck-nav-primary"
+                    title="Lanjut ke Program 03"
+                  >
+                    03 Video →
+                  </button>
+                </div>
               </footer>
             </div>
           </article>
@@ -376,7 +545,24 @@ export default function ActivitiesDeckSection() {
                   <span className="footer-meta-sep">•</span>
                   <span>Videotron Braga City Walk</span>
                 </div>
-                <span className="deck-status-badge status-public">Terbuka untuk Umum</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => goToCard(2)}
+                    className="deck-nav-btn"
+                    title="Kembali ke 02 Kemasan"
+                  >
+                    ← 02 Kemasan
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => goToCard(4)}
+                    className="deck-nav-btn deck-nav-primary"
+                    title="Lanjut ke Program 04"
+                  >
+                    04 SIINAS →
+                  </button>
+                </div>
               </footer>
             </div>
           </article>
@@ -448,7 +634,24 @@ export default function ActivitiesDeckSection() {
                   <span className="footer-meta-sep">•</span>
                   <span>Grand Ballroom Hotel Papandayan</span>
                 </div>
-                <span className="deck-status-badge status-vip">Khusus Undangan Resmi</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => goToCard(3)}
+                    className="deck-nav-btn"
+                    title="Kembali ke 03 Video"
+                  >
+                    ← 03 Video
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => goToCard(5)}
+                    className="deck-nav-btn deck-nav-primary"
+                    title="Lanjut ke Program 05"
+                  >
+                    05 Halal →
+                  </button>
+                </div>
               </footer>
             </div>
           </article>
@@ -516,7 +719,24 @@ export default function ActivitiesDeckSection() {
                   <span className="footer-meta-sep">•</span>
                   <span>Main Stage Braga City Walk</span>
                 </div>
-                <span className="deck-status-badge status-public">Terbuka untuk Umum</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => goToCard(4)}
+                    className="deck-nav-btn"
+                    title="Kembali ke 04 SIINAS"
+                  >
+                    ← 04 SIINAS
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => goToCard(6)}
+                    className="deck-nav-btn deck-nav-primary"
+                    title="Lanjut ke Program 06"
+                  >
+                    06 Seni →
+                  </button>
+                </div>
               </footer>
             </div>
           </article>
@@ -585,7 +805,24 @@ export default function ActivitiesDeckSection() {
                   <span className="footer-meta-sep">•</span>
                   <span>Main Stage Braga City Walk</span>
                 </div>
-                <span className="deck-status-badge status-public">Terbuka untuk Umum</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => goToCard(5)}
+                    className="deck-nav-btn"
+                    title="Kembali ke 05 Halal"
+                  >
+                    ← 05 Halal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => goToCard(0)}
+                    className="deck-nav-btn deck-nav-primary"
+                    title="Kembali ke Awal (Cover)"
+                  >
+                    ↺ Ulang ke Cover
+                  </button>
+                </div>
               </footer>
             </div>
           </article>
@@ -593,6 +830,21 @@ export default function ActivitiesDeckSection() {
         </div>
 
       </section>
+
+      {/* Floating Interactive Controls (Bottom Right - Matching Ilia Delin reference) */}
+      <div className="demo-hud" role="region" aria-label="Kontrol Animasi Rangkaian">
+        <button
+          type="button"
+          onClick={toggleAutoPlay}
+          className="demo-hud-btn"
+          aria-label={isPlaying ? 'Jeda sequence animasi' : 'Putar sequence animasi kartu'}
+        >
+          {isPlaying ? '⏸ Jeda Animasi' : '▶ Putar Animasi Kartu'}
+        </button>
+        <div className="demo-hud-stepper">
+          <span>{activeCardIndex === 0 ? 'Cover' : `0${activeCardIndex} / 06`}</span>
+        </div>
+      </div>
     </div>
   );
 }
