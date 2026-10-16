@@ -331,12 +331,12 @@ export default function LocationSection() {
               </div>
 
               {/* Action Buttons: Direct to Google Maps & Copy Address */}
-              <div className="flex flex-wrap items-center gap-2.5 flex-shrink-0">
+              <div className="flex flex-wrap items-center gap-2.5 flex-shrink-0 w-full md:w-auto">
                 <a
                   href={currentVenue.directionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-[#0071e3] hover:bg-[#0077ed] transition-all flex items-center gap-2 shadow-sm hover:scale-[1.02] cursor-pointer"
+                  className="w-full sm:w-auto py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-[#0071e3] hover:bg-[#0077ed] transition-all flex items-center justify-center gap-2 shadow-sm hover:scale-[1.02] cursor-pointer"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polygon points="3 11 22 2 13 21 11 13 3 11" />
@@ -349,7 +349,7 @@ export default function LocationSection() {
                   href={currentVenue.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-2.5 px-4 rounded-xl text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="w-full sm:w-auto py-2.5 px-4 rounded-xl text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span>Buka di Google Maps</span>
                   <span className="text-blue-600 font-bold">↗</span>
@@ -358,7 +358,7 @@ export default function LocationSection() {
                 <button
                   type="button"
                   onClick={handleCopyAddress}
-                  className={`py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                  className={`w-full sm:w-auto py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all border cursor-pointer flex items-center justify-center ${
                     copied
                       ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
                       : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'

@@ -504,7 +504,7 @@ export default function VideoLokalPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 px-6 rounded-full text-sm font-extrabold text-white bg-rose-600 hover:bg-rose-700 shadow-md shadow-rose-500/25 transition-all hover:-translate-y-0.5 cursor-pointer disabled:opacity-50"
+                  className="w-full py-4 px-4 sm:px-6 rounded-full text-xs sm:text-sm font-extrabold text-white bg-rose-600 hover:bg-rose-700 shadow-md shadow-rose-500/25 transition-all hover:-translate-y-0.5 cursor-pointer disabled:opacity-50 text-center flex items-center justify-center leading-normal"
                 >
                   {loading ? 'Memproses Pendaftaran...' : 'Kirim Formulir Pendaftaran Lomba Video →'}
                 </button>

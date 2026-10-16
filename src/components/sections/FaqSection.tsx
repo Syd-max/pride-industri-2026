@@ -36,7 +36,7 @@ export default function FaqSection() {
       highlight: '100% Bebas Biaya Pendaftaran',
       action: {
         label: 'Daftar Kompetisi Sekarang →',
-        href: '/#competition',
+        href: '/#competitions',
         type: 'link',
       },
     },
@@ -292,12 +292,12 @@ export default function FaqSection() {
                   {/* Accordion Content Body */}
                   {isOpen && (
                     <div className="px-5 sm:px-6 pb-5 pt-1 border-t border-slate-100 space-y-3.5 animate-in fade-in-50 duration-200">
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pl-7 sm:pl-7">
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pl-0 sm:pl-7">
                         {faq.a}
                       </p>
 
                       {/* Highlights & Actions */}
-                      <div className="pl-7 sm:pl-7 flex flex-wrap items-center gap-2.5 pt-1">
+                      <div className="pl-0 sm:pl-7 flex flex-wrap items-center gap-2.5 pt-1">
                         {faq.highlight && (
                           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />

@@ -390,14 +390,14 @@ export default function ProgramSection() {
               className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-8 group"
             >
               {/* Left Column: Prominent Large Time Anchor (Instant visual scan) */}
-              <div className="w-full sm:w-[130px] flex-shrink-0 pt-1 flex sm:flex-col justify-between sm:justify-start items-baseline sm:items-end gap-1 border-b sm:border-b-0 pb-2 sm:pb-0 border-slate-200/60">
+              <div className="w-full sm:w-[130px] flex-shrink-0 pt-1 flex flex-wrap sm:flex-col justify-between sm:justify-start items-baseline sm:items-end gap-1.5 border-b sm:border-b-0 pb-2 sm:pb-0 border-slate-200/60">
                 <div className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900 leading-none group-hover:text-blue-600 transition-colors">
                   {item.startTime}
                 </div>
-                <div className="text-[11px] font-mono font-medium text-slate-500">
+                <div className="text-[11px] font-mono font-medium text-slate-500 whitespace-nowrap">
                   s/d {item.endTime}
                 </div>
-                <div className="inline-flex items-center gap-1 font-mono text-[10px] font-bold text-slate-600 bg-slate-100/90 px-2 py-0.5 rounded-md mt-0.5">
+                <div className="inline-flex items-center gap-1 font-mono text-[10px] font-bold text-slate-600 bg-slate-100/90 px-2 py-0.5 rounded-md mt-0.5 whitespace-nowrap">
                   <svg className="w-2.5 h-2.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <circle cx="12" cy="12" r="10"/>
                     <polyline points="12 6 12 12 16 14"/>

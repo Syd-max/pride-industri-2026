@@ -253,6 +253,7 @@
 
 .ticket-title-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
@@ -757,5 +758,54 @@
   }
   .note-peel {
     display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .competition-section-wrapper {
+    padding: 32px 14px 44px;
+  }
+  .ticket-header {
+    margin-bottom: 28px;
+  }
+  .ticket-top {
+    padding: 22px 20px 18px;
+  }
+  .ticket-bottom {
+    padding: 16px 20px 20px;
+  }
+  .ticket-plan-name {
+    font-size: 19px;
+  }
+  .price-amount-wrap {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 420px) {
+  .competition-section-wrapper {
+    padding: 28px 10px 40px;
+  }
+  .ticket-top {
+    padding: 18px 14px 16px;
+  }
+  .ticket-bottom {
+    padding: 14px 14px 18px;
+  }
+  .ticket-plan-name {
+    font-size: 17.5px;
+  }
+  .price-amount-wrap {
+    font-size: 28px;
+  }
+  .benefit-toggle {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .toggle-btn {
+    min-width: 0;
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 11.5px;
   }
 }

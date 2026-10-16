@@ -47,8 +47,11 @@ export default function Navbar() {
   const handleNavClick = (href: string) => {
     setMenuOpen(false);
     if (href.startsWith('#')) {
-      const el = document.querySelector(href);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Small timeout to allow mobile menu closing transition and body overflow unlock
+      setTimeout(() => {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 60);
     }
   };
 
@@ -188,19 +191,19 @@ export default function Navbar() {
         id="mobile-menu"
         ref={menuRef}
         aria-hidden={!menuOpen}
-        className={`fixed inset-x-0 top-[65px] bottom-0 z-40 bg-white/98 backdrop-blur-xl transition-all duration-300 md:hidden flex flex-col justify-between p-6 overflow-y-auto ${
+        className={`fixed inset-x-0 top-[60px] sm:top-[68px] bottom-0 z-40 bg-white/98 backdrop-blur-xl transition-all duration-300 md:hidden flex flex-col justify-between p-5 sm:p-6 overflow-y-auto overscroll-contain max-h-[calc(100dvh-60px)] ${
           menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
-        <div className="space-y-3">
-          <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+        <div className="space-y-2">
+          <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 px-1">
             Menu Festival
           </div>
           {NAV_LINKS.map((link) => (
             <button
               key={link.href}
               onClick={() => handleNavClick(link.href)}
-              className="w-full text-left py-3 px-4 rounded-xl text-lg font-bold text-slate-800 hover:bg-slate-50 hover:text-blue-600 transition-colors flex items-center justify-between border-b border-slate-100"
+              className="w-full text-left min-h-[48px] py-3 px-4 rounded-xl text-base sm:text-lg font-bold text-slate-800 hover:bg-slate-50 hover:text-blue-600 active:bg-slate-100 transition-colors flex items-center justify-between border-b border-slate-100 cursor-pointer"
             >
               <span>{link.label}</span>
               <span className="text-slate-400 text-sm">→</span>
@@ -208,11 +211,11 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="space-y-3 pt-6 border-t border-slate-100">
+        <div className="space-y-3 pt-5 border-t border-slate-100">
           <Link
             href="/check-in"
             onClick={() => setMenuOpen(false)}
-            className="w-full py-3.5 px-4 text-center text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl flex items-center justify-center gap-2 shadow-sm"
+            className="w-full min-h-[48px] py-3.5 px-4 text-center text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 active:scale-[0.98] rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all"
           >
             <svg
               className="w-4 h-4 text-emerald-400"
@@ -230,7 +233,7 @@ export default function Navbar() {
             <span>Scan Barcode Check-In</span>
           </Link>
 
-          <div className="text-center text-xs text-slate-400 pt-4">
+          <div className="text-center text-xs text-slate-400 pt-2">
             {EVENT_CONFIG.venue.name} · {EVENT_CONFIG.venue.city}
           </div>
         </div>

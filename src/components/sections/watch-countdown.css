@@ -622,3 +622,28 @@
     height: 3.5px;
   }
 }
+
+@media (max-width: 420px) {
+  .watch-timepiece-assembly {
+    transform: rotate(-30deg) scale(0.86);
+  }
+  .watch-timepiece-assembly:hover {
+    transform: rotate(-28deg) scale(0.88);
+  }
+}
+
+@media (max-width: 360px) {
+  .watch-timepiece-assembly {
+    transform: rotate(-26deg) scale(0.76);
+  }
+  .watch-timepiece-assembly:hover {
+    transform: rotate(-24deg) scale(0.78);
+  }
+  .watch-registers-grid {
+    gap: 3px 4px;
+    max-width: 165px;
+  }
+  .register-val {
+    font-size: 17px;
+  }
+}
