@@ -61,20 +61,19 @@ export default function AdminOverviewPage() {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Top Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-[#222222]">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#F5F0E8]">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Dashboard Operasional Panitia
           </h1>
-          <p className="text-xs text-[#8A8A8A] mt-1">
-            Monitoring registrasi peserta, kategori lomba, dan presensi gate
-            Braga City Walk.
+          <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
+            Monitoring registrasi peserta, kategori lomba, dan presensi gate Braga City Walk.
           </p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={fetchData}
-            className="btn btn-ghost text-xs py-2 px-3 flex items-center gap-2 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 shadow-sm transition-all flex items-center gap-2 cursor-pointer"
           >
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -84,8 +83,8 @@ export default function AdminOverviewPage() {
             </svg>
             <span>Segarkan Data</span>
           </button>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#052E16] text-[#34D399] border border-[#166534] text-[11px] font-mono">
-            <span className="w-2 h-2 rounded-full bg-[#34D399] animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             Live Sync
           </span>
         </div>
@@ -96,21 +95,21 @@ export default function AdminOverviewPage() {
         {/* Metric 1 */}
         <div className="admin-card">
           <div className="admin-stat-label">Total Peserta Terdaftar</div>
-          <div className="admin-stat-value mt-2 text-[#E4C584]">
+          <div className="admin-stat-value mt-2 text-blue-600">
             {loading ? '...' : total}
           </div>
-          <div className="text-[11px] text-[#8A8A8A] mt-2 flex items-center gap-1">
-            <span className="text-[#34D399]">↑ Aktif</span> seluruh kategori
+          <div className="text-[11px] text-slate-500 mt-2 flex items-center gap-1 font-medium">
+            <span className="text-emerald-600 font-bold">↑ Aktif</span> seluruh kategori
           </div>
         </div>
 
         {/* Metric 2 */}
         <div className="admin-card">
           <div className="admin-stat-label">Lomba Desain Kemasan</div>
-          <div className="admin-stat-value mt-2 text-[#E85B26]">
+          <div className="admin-stat-value mt-2 text-orange-600">
             {loading ? '...' : desainKemasanCount}
           </div>
-          <div className="text-[11px] text-[#8A8A8A] mt-2">
+          <div className="text-[11px] text-slate-500 mt-2 font-medium">
             Kategori pangan olahan lokal
           </div>
         </div>
@@ -118,23 +117,23 @@ export default function AdminOverviewPage() {
         {/* Metric 3 */}
         <div className="admin-card">
           <div className="admin-stat-label">Lomba Video 1 Menit</div>
-          <div className="admin-stat-value mt-2 text-[#C8A96E]">
+          <div className="admin-stat-value mt-2 text-indigo-600">
             {loading ? '...' : videoLokalCount}
           </div>
-          <div className="text-[11px] text-[#8A8A8A] mt-2">
+          <div className="text-[11px] text-slate-500 mt-2 font-medium">
             Reels / TikTok vertikal
           </div>
         </div>
 
         {/* Metric 4 */}
-        <div className="admin-card border-[#166534]/50">
-          <div className="admin-stat-label">Presensi Hadir di Braga</div>
-          <div className="admin-stat-value mt-2 text-[#34D399]">
+        <div className="admin-card border-emerald-200/80 bg-emerald-50/20">
+          <div className="admin-stat-label text-emerald-800">Presensi Hadir di Braga</div>
+          <div className="admin-stat-value mt-2 text-emerald-600">
             {loading ? '...' : checkedInCount}
           </div>
-          <div className="text-[11px] text-[#8A8A8A] mt-2">
-            Tingkat kehadiran:{' '}
-            <strong className="text-[#34D399]">{attendanceRate}%</strong> ({notCheckedInCount} belum hadir)
+          <div className="text-[11px] text-slate-500 mt-2 font-medium">
+            Kehadiran:{' '}
+            <strong className="text-emerald-700">{attendanceRate}%</strong> ({notCheckedInCount} belum hadir)
           </div>
         </div>
       </div>
@@ -143,34 +142,34 @@ export default function AdminOverviewPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left Column: Recent Registrations */}
         <div className="admin-card space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-[#222222]">
-            <h2 className="font-display text-base font-semibold text-[#F5F0E8]">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h2 className="text-base font-bold text-slate-900">
               Registrasi Terbaru
             </h2>
             <Link
               href="/admin/participants"
-              className="text-xs text-[#C8A96E] hover:underline"
+              className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors"
             >
               Lihat Semua →
             </Link>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {recentRegistrations.length === 0 ? (
-              <p className="text-xs text-[#8A8A8A] py-6 text-center">
+              <p className="text-xs font-medium text-slate-400 py-6 text-center">
                 Belum ada pendaftaran masuk.
               </p>
             ) : (
               recentRegistrations.map((reg) => (
                 <div
                   key={reg.id}
-                  className="p-3 rounded-lg bg-[#141414] border border-[#222222] flex items-center justify-between gap-3 text-xs"
+                  className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between gap-3 text-xs hover:border-slate-200 transition-colors"
                 >
                   <div>
-                    <div className="font-medium text-[#F5F0E8]">
+                    <div className="font-bold text-slate-900">
                       {reg.full_name}
                     </div>
-                    <div className="font-mono text-[11px] text-[#8A8A8A] mt-0.5">
+                    <div className="font-mono text-[11px] text-slate-500 mt-0.5">
                       {reg.registration_code}
                     </div>
                   </div>
@@ -186,7 +185,7 @@ export default function AdminOverviewPage() {
                         ? 'Desain Kemasan'
                         : 'Video Lokal'}
                     </span>
-                    <div className="text-[10px] text-[#6B6560] mt-1">
+                    <div className="text-[10px] text-slate-400 mt-1 font-medium">
                       {new Date(reg.created_at).toLocaleDateString('id-ID')}
                     </div>
                   </div>
@@ -198,48 +197,48 @@ export default function AdminOverviewPage() {
 
         {/* Right Column: Live Gate Check-In Stream */}
         <div className="admin-card space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-[#222222]">
-            <h2 className="font-display text-base font-semibold text-[#F5F0E8] flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#34D399] animate-pulse" />
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
               Presensi Gate Masuk Terkini
             </h2>
             <Link
               href="/admin/check-ins"
-              className="text-xs text-[#C8A96E] hover:underline"
+              className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors"
             >
               Log Presensi →
             </Link>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {recentCheckIns.length === 0 ? (
-              <p className="text-xs text-[#8A8A8A] py-6 text-center">
+              <p className="text-xs font-medium text-slate-400 py-6 text-center">
                 Belum ada peserta yang memindai QR gate.
               </p>
             ) : (
               recentCheckIns.map((item) => (
                 <div
                   key={item.id}
-                  className="p-3 rounded-lg bg-[#141414] border border-[#166534]/30 flex items-center justify-between gap-3 text-xs"
+                  className="p-3.5 rounded-xl bg-emerald-50/40 border border-emerald-100 flex items-center justify-between gap-3 text-xs hover:border-emerald-200 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full bg-[#052E16] text-[#34D399] flex items-center justify-center">
-                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     </div>
                     <div>
-                      <div className="font-medium text-[#F5F0E8]">
+                      <div className="font-bold text-slate-900">
                         {item.full_name}
                       </div>
-                      <div className="font-mono text-[11px] text-[#8A8A8A]">
+                      <div className="font-mono text-[11px] text-slate-500">
                         {item.registration_code}
                       </div>
                     </div>
                   </div>
                   <div className="text-right">
                     <span className="badge badge-checked-in">Hadir di Lokasi</span>
-                    <div className="text-[10px] text-[#8A8A8A] font-mono mt-1">
+                    <div className="text-[10px] text-slate-500 font-mono mt-1 font-medium">
                       {new Date(item.checked_in_at || '').toLocaleTimeString(
                         'id-ID'
                       )}{' '}

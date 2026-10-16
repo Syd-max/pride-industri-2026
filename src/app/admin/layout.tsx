@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -11,6 +12,7 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // If on login page, render without admin chrome
   if (pathname === '/admin/login') {
@@ -79,7 +81,7 @@ export default function AdminLayout({
       href: '/admin/competitions',
       icon: (
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-1 1.73l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
           <circle cx="12" cy="12" r="3" />
         </svg>
       ),
@@ -87,9 +89,109 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col md:flex-row">
-      {/* ─── Desktop Sidebar ─── */}
-      <aside className="w-full md:w-64 bg-white border-r border-slate-200 flex flex-col justify-between p-6 flex-shrink-0">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col md:flex-row antialiased">
+      {/* ─── Mobile Sticky Top Header ─── */}
+      <header className="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="relative w-8 h-8">
+            <Image
+              src="/LOGO_PRIDE_INDUSTRI.png"
+              alt="PRIDE 2026"
+              fill
+              sizes="32px"
+              className="object-contain"
+            />
+          </div>
+          <div>
+            <div className="font-extrabold text-xs text-slate-900 leading-tight">
+              PRIDE 2026
+            </div>
+            <div className="text-[9px] text-blue-600 uppercase tracking-widest font-black">
+              Admin Portal
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen((prev) => !prev)}
+          className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors cursor-pointer"
+          aria-label={mobileMenuOpen ? 'Tutup menu' : 'Buka menu admin'}
+        >
+          {mobileMenuOpen ? (
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="4" y1="6" x2="20" y2="6" />
+              <line x1="4" y1="12" x2="20" y2="12" />
+              <line x1="4" y1="18" x2="20" y2="18" />
+            </svg>
+          )}
+        </button>
+      </header>
+
+      {/* ─── Mobile Slide-Down Dropdown Menu ─── */}
+      {mobileMenuOpen && (
+        <div className="md:hidden sticky top-[57px] z-30 bg-white border-b border-slate-200 px-4 py-4 space-y-4 shadow-lg animate-in slide-in-from-top-2">
+          <nav className="space-y-1" aria-label="Menu Mobile Admin">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold tracking-wide transition-all ${
+                    isActive
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
+                  }`}
+                >
+                  <span className="flex-shrink-0">{item.icon}</span>
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
+            <Link
+              href="/"
+              target="_blank"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors"
+            >
+              <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
+              <span>Buka Website Publik ↗</span>
+            </Link>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLogout();
+              }}
+              className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 border border-rose-200 transition-colors cursor-pointer"
+            >
+              <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              <span>Keluar (Sign Out)</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Desktop Persistent Sidebar ─── */}
+      <aside className="hidden md:flex w-64 bg-white border-r border-slate-200 flex-col justify-between p-6 flex-shrink-0 sticky top-0 h-screen overflow-y-auto">
         <div className="space-y-8">
           {/* Logo & Brand */}
           <div className="flex items-center gap-3 pb-6 border-b border-slate-100">
@@ -164,7 +266,7 @@ export default function AdminLayout({
       </aside>
 
       {/* ─── Main Content Area ─── */}
-      <main className="flex-1 min-w-0 bg-slate-50 p-6 sm:p-10 overflow-y-auto">
+      <main className="flex-1 min-w-0 bg-slate-50 p-4 sm:p-6 md:p-10 overflow-y-auto">
         {children}
       </main>
     </div>

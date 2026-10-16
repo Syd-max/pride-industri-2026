@@ -54,21 +54,21 @@ export default function RegistrationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-[#222222]">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
-          <h1 className="font-display text-2xl font-bold text-[#F5F0E8]">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Verifikasi & Manajemen Registrasi
           </h1>
-          <p className="text-xs text-[#8A8A8A] mt-1">
+          <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
             Validasi berkas peserta, seleksi finalis, dan kelayakan karya.
           </p>
         </div>
 
-        <div>
+        <div className="flex items-center gap-3">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="form-input form-select text-xs py-2"
+            className="form-input form-select text-xs py-2 px-3 bg-white border border-slate-200 shadow-sm"
           >
             <option value="all">Semua Status Registrasi</option>
             <option value="confirmed">Terkonfirmasi</option>
@@ -79,8 +79,8 @@ export default function RegistrationsPage() {
         </div>
       </div>
 
-      <div className="admin-card overflow-hidden p-0">
-        <div className="overflow-x-auto">
+      <div className="admin-card overflow-hidden p-0 bg-white border border-slate-200 shadow-sm rounded-2xl">
+        <div className="overflow-x-auto w-full">
           <table className="data-table">
             <thead>
               <tr>
@@ -94,13 +94,13 @@ export default function RegistrationsPage() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-10 text-xs">
+                  <td colSpan={5} className="text-center py-12 text-xs font-medium text-slate-400">
                     Memuat data registrasi...
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-10 text-xs text-[#8A8A8A]">
+                  <td colSpan={5} className="text-center py-12 text-xs font-medium text-slate-400">
                     Tidak ada data registrasi pada filter ini.
                   </td>
                 </tr>
@@ -108,16 +108,16 @@ export default function RegistrationsPage() {
                 filtered.map((r) => (
                   <tr key={r.id}>
                     <td>
-                      <div className="font-mono text-xs font-bold text-[#E4C584]">
+                      <span className="font-mono text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/60 inline-block">
                         {r.registration_code}
-                      </div>
-                      <div className="text-[10px] text-[#8A8A8A]">
+                      </span>
+                      <div className="text-[10px] text-slate-400 mt-1 font-medium">
                         {new Date(r.created_at).toLocaleDateString('id-ID')}
                       </div>
                     </td>
                     <td>
-                      <div className="font-medium text-[#F5F0E8]">{r.full_name}</div>
-                      <div className="text-[11px] text-[#8A8A8A]">{r.email}</div>
+                      <div className="font-bold text-slate-900 text-xs sm:text-sm">{r.full_name}</div>
+                      <div className="text-[11px] text-slate-500 font-medium">{r.email}</div>
                     </td>
                     <td>
                       <span
@@ -156,7 +156,7 @@ export default function RegistrationsPage() {
                             e.target.value as RegistrationStatus
                           )
                         }
-                        className="form-input form-select text-xs py-1 px-2 w-auto"
+                        className="form-input form-select text-xs py-1.5 px-3 w-auto bg-white border border-slate-200 rounded-lg shadow-2xs font-semibold"
                       >
                         <option value="confirmed">Konfirmasi (Lolos)</option>
                         <option value="finalist">Finalis Lomba</option>

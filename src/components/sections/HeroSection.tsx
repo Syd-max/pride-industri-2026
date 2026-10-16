@@ -328,37 +328,37 @@ export default function HeroSection() {
               className="object-contain"
             />
 
-            {/* Floating Cursor Tag: Fesyen Binaan (Top-Left) — Desktop/Tablet Only */}
-            <div className="cursor-badge badge-fesyen hidden sm:inline-flex" ref={badgeFesyenRef}>
+            {/* Floating Cursor Tag: Fesyen Binaan (Top-Left) — Desktop Only (md and up) */}
+            <div className="cursor-badge badge-fesyen hidden md:inline-flex" ref={badgeFesyenRef}>
               <FesyenIcon className="w-3.5 h-3.5 text-blue-200" />
               <span>Fesyen Binaan</span>
               <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
             </div>
 
-            {/* Floating Cursor Tag: Kuliner Lokal (Top-Right) — Desktop/Tablet Only */}
-            <div className="cursor-badge badge-kuliner hidden sm:inline-flex" ref={badgeKulinerRef}>
+            {/* Floating Cursor Tag: Kuliner Lokal (Top-Right) — Desktop Only (md and up) */}
+            <div className="cursor-badge badge-kuliner hidden md:inline-flex" ref={badgeKulinerRef}>
               <KulinerIcon className="w-3.5 h-3.5 text-orange-200" />
               <span>Kuliner Lokal</span>
               <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
             </div>
 
-            {/* Floating Cursor Tag: Video 1 Menit (Bottom-Left) — Desktop/Tablet Only */}
-            <div className="cursor-badge badge-video hidden sm:inline-flex" ref={badgeVideoRef}>
+            {/* Floating Cursor Tag: Video 1 Menit (Bottom-Left) — Desktop Only (md and up) */}
+            <div className="cursor-badge badge-video hidden md:inline-flex" ref={badgeVideoRef}>
               <VideoIcon className="w-3.5 h-3.5 text-purple-200" />
               <span>Lomba Video 1 Menit</span>
               <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
             </div>
 
-            {/* Floating Cursor Tag: Desain Kemasan (Bottom-Right) — Desktop/Tablet Only */}
-            <div className="cursor-badge badge-kemasan hidden sm:inline-flex" ref={badgeKemasanRef}>
+            {/* Floating Cursor Tag: Desain Kemasan (Bottom-Right) — Desktop Only (md and up) */}
+            <div className="cursor-badge badge-kemasan hidden md:inline-flex" ref={badgeKemasanRef}>
               <KemasanIcon className="w-3.5 h-3.5 text-emerald-200" />
               <span>Lomba Desain Kemasan</span>
               <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
             </div>
           </div>
 
-          {/* Clean Dedicated Mobile Category Chips Row (sm:hidden) */}
-          <div className="hero-mobile-categories-row sm:hidden">
+          {/* Clean Dedicated Mobile Category Chips Row (md:hidden) */}
+          <div className="hero-mobile-categories-row md:hidden">
             <span className="mob-chip mob-chip-fesyen">
               <FesyenIcon className="w-3 h-3 text-blue-300" />
               <span>Fesyen Binaan</span>
