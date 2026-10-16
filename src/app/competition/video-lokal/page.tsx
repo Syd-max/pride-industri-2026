@@ -518,7 +518,7 @@ export default function VideoLokalPage() {
         )}
 
         {/* Tactlink Partner Banner */}
-        <div className="mt-14 max-w-2xl mx-auto">
+        <div className="mt-8 sm:mt-10 max-w-2xl mx-auto">
           <TactlinkBanner variant="light" />
         </div>
 

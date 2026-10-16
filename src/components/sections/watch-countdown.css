@@ -12,7 +12,7 @@
   color: #ffffff;
   overflow: visible; /* CRITICAL: Never clips the diagonal watch or straps */
   border-top: 1px solid rgba(255, 184, 0, 0.2);
-  padding: clamp(48px, 7vh, 68px) 16px clamp(64px, 8vh, 88px);
+  padding: clamp(32px, 5vh, 48px) 16px clamp(36px, 6vh, 56px);
 }
 
 /* Ambient Top Horizon Glow */

@@ -133,13 +133,13 @@ export default function FaqSection() {
   return (
     <section
       id="faq"
-      className="relative py-20 sm:py-28 bg-white border-t border-slate-200/80"
+      className="relative py-10 sm:py-14 lg:py-16 bg-white border-t border-slate-200/80"
       aria-label="Pertanyaan yang Sering Diajukan"
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
+        <div className="text-center max-w-2xl mx-auto mb-7 sm:mb-8">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200 mb-3 shadow-xs">
             <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
             Bantuan &amp; FAQ
@@ -154,7 +154,7 @@ export default function FaqSection() {
         </div>
 
         {/* Search & Category Filter Toolbar */}
-        <div className="mb-8 space-y-4">
+        <div className="mb-6 space-y-3.5">
           
           {/* Quick Search Input */}
           <div className="relative max-w-lg mx-auto">
@@ -337,7 +337,7 @@ export default function FaqSection() {
         </div>
 
         {/* Creative Bottom Support / Contact Banner */}
-        <div className="mt-12 p-6 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-5">
+        <div className="mt-8 sm:mt-10 p-6 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-5">
           <div className="space-y-1 text-center sm:text-left">
             <h4 className="text-sm font-extrabold text-white flex items-center justify-center sm:justify-start gap-2">
               <span>Masih punya pertanyaan seputar kompetisi?</span>

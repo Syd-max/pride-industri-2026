@@ -18,7 +18,7 @@ export default function CountdownSection() {
       <div className="watch-stage-spotlight" />
 
       {/* 3. Header: Pure Apple Typography, Generous Clearance, Zero Clutter */}
-      <div className="relative z-10 max-w-3xl mx-auto px-4 text-center mb-16 sm:mb-24">
+      <div className="relative z-10 max-w-3xl mx-auto px-4 text-center mb-6 sm:mb-8">
         {/* Apple Keynote Style Minimal Pill Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-semibold tracking-wider uppercase text-slate-300 bg-white/[0.06] border border-white/10 backdrop-blur-md mb-4 shadow-sm">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />

@@ -8,18 +8,18 @@ import TactlinkBanner from '@/components/ui/TactlinkBanner';
 export default function Footer() {
   return (
     <footer
-      className="relative bg-slate-900 border-t border-slate-800 pt-16 pb-12 text-slate-400"
+      className="relative bg-slate-900 border-t border-slate-800 pt-10 sm:pt-12 pb-8 sm:pb-10 text-slate-400"
       role="contentinfo"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Tactlink Official Partner Banner */}
-        <div className="mb-14">
+        <div className="mb-8 sm:mb-10">
           <TactlinkBanner variant="light" />
         </div>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-slate-800">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-8 sm:pb-10 border-b border-slate-800">
           
           {/* Col 1: Brand & Organizer */}
           <div className="md:col-span-5 space-y-4">
@@ -182,7 +182,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Copyright & Disclaimer */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div>
             © 2026 PRIDE Industri Kota Bandung. Hak cipta dilindungi.
           </div>

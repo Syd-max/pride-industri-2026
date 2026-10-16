@@ -60,7 +60,7 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="relative py-20 sm:py-28 bg-white overflow-hidden"
+      className="relative py-10 sm:py-14 lg:py-16 bg-white overflow-hidden"
       aria-label="Tentang PRIDE Industri 2026"
     >
       {/* Background Architectural Accent: Subtle Blueprint Dot Grid & Ambient Warm Mesh */}
@@ -80,7 +80,7 @@ export default function AboutSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 relative">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 relative">
           
           {/* Apple Style Frosted Status Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-50 text-slate-700 border border-slate-200/90 shadow-2xs mb-4">

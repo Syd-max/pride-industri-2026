@@ -22,12 +22,18 @@
   --flow-system-blue-text: #2563eb;
 }
 
-/* Scroll container creates the choreographed timeline */
+/* Scroll container creates the choreographed timeline — calibrated to eliminate dead scroll */
 .scroll-stage {
-  height: 400vh;
+  height: 280vh;
   position: relative;
   width: 100%;
   background-color: #070a13;
+}
+
+@media (max-width: 768px) {
+  .scroll-stage {
+    height: 220vh;
+  }
 }
 
 /* Sticky Viewport Container that stays fixed while scrubbing timeline */

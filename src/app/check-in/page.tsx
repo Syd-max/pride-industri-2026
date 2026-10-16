@@ -921,7 +921,7 @@ export default function CheckInPage() {
       </main>
 
       {/* ─── Footer ─── */}
-      <footer className="py-8 px-4 border-t border-slate-800 bg-slate-900/90 space-y-4">
+      <footer className="py-5 px-4 border-t border-slate-800 bg-slate-900/90 space-y-3">
         <div className="max-w-md mx-auto">
           <TactlinkBanner variant="light" />
         </div>

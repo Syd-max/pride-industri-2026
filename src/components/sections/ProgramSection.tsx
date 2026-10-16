@@ -235,7 +235,7 @@ export default function ProgramSection() {
   return (
     <section
       id="program"
-      className="relative py-20 sm:py-28 bg-[#f8fafc] border-t border-slate-200/80 overflow-hidden"
+      className="relative py-10 sm:py-14 lg:py-16 bg-[#f8fafc] border-t border-slate-200/80 overflow-hidden"
       aria-label="Rangkaian Program PRIDE Industri 2026"
     >
       <div id="agenda" className="absolute -top-20" />
@@ -247,7 +247,7 @@ export default function ProgramSection() {
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header: Minimalist & Display Typography */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white text-slate-700 border border-slate-200/90 shadow-2xs mb-4">
             <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
             <span>Rundown Resmi Festival</span>

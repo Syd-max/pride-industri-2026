@@ -16,11 +16,17 @@
 }
 
 /* Scroll Driver: Creates the timeline distance for peeling cards */
-/* Scroll Driver: Creates the timeline distance for peeling cards */
+/* Scroll Driver: Creates the timeline distance for peeling cards — tightly calibrated */
 .activities-scroll-driver {
-  height: 440vh;
+  height: 290vh;
   position: relative;
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  .activities-scroll-driver {
+    height: 220vh;
+  }
 }
 
 /* Sticky Stage holding the Stacked Card Deck */
@@ -35,10 +41,10 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding-top: calc(76px + env(safe-area-inset-top, 0px));
-  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  padding-left: clamp(16px, 3.5vw, 40px);
-  padding-right: clamp(16px, 3.5vw, 40px);
+  padding-top: calc(64px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  padding-left: clamp(14px, 3vw, 36px);
+  padding-right: clamp(14px, 3vw, 36px);
   background-color: var(--deck-bg-page);
   z-index: 15;
   box-sizing: border-box;
