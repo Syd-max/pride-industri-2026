@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import './activities-deck.css';
 
@@ -8,8 +8,6 @@ export default function ActivitiesDeckSection() {
   const scrollDriverRef = useRef<HTMLDivElement>(null);
   const deckContainerRef = useRef<HTMLDivElement>(null);
   const heroNameRef = useRef<HTMLHeadingElement>(null);
-  const autoPlayBtnRef = useRef<HTMLButtonElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     /* ==========================================================
@@ -437,54 +435,6 @@ export default function ActivitiesDeckSection() {
     };
   }, []);
 
-  // 4. AUTO-PLAY VIDEO SEQUENCE (Tour feature from Ilia Delin reference)
-  const toggleAutoPlay = () => {
-    const driver = scrollDriverRef.current;
-    if (!driver) return;
-
-    if (isPlaying) {
-      setIsPlaying(false);
-      return;
-    }
-
-    setIsPlaying(true);
-    const startY = window.scrollY;
-    const rect = driver.getBoundingClientRect();
-    const targetTop = window.scrollY + rect.top;
-    const totalDist = driver.offsetHeight - window.innerHeight;
-    const startTime = performance.now();
-    const duration = 12000; // 12 seconds full tour
-
-    function step(now: number) {
-      const elapsed = now - startTime;
-      const t = Math.min(1, elapsed / duration);
-
-      let p = 0;
-      if (t < 0.4) {
-        // Peel all down
-        p = t / 0.4;
-      } else if (t < 0.55) {
-        // Hold on end screen
-        p = 1;
-      } else if (t < 0.95) {
-        // Unpeel back up
-        p = 1 - (t - 0.55) / 0.4;
-      } else {
-        p = 0;
-      }
-
-      window.scrollTo(0, targetTop + p * totalDist);
-
-      if (t < 1) {
-        requestAnimationFrame(step);
-      } else {
-        setIsPlaying(false);
-      }
-    }
-
-    requestAnimationFrame(step);
-  };
-
   return (
     <div className="activities-scroll-driver" id="programUnggulan" ref={scrollDriverRef}>
       <section className="activities-stage" aria-label="6 Program Unggulan PRIDE 2026">
@@ -668,16 +618,6 @@ export default function ActivitiesDeckSection() {
                   6 PROGRAM UNGGULAN
                 </h2>
               </div>
-              <div className="deck-intro-actions">
-                <Link href="/competition/desain-kemasan" className="deck-btn-pill deck-btn-dark">
-                  <span>DAFTAR LOMBA</span>
-                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                </Link>
-                <a href="/syarat-desain-kemasan.pdf" download className="deck-btn-pill deck-btn-gray">
-                  <span>PANDUAN PDF</span>
-                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                </a>
-              </div>
             </div>
 
             <div className="deck-intro-bottom">
@@ -704,14 +644,6 @@ export default function ActivitiesDeckSection() {
             </div>
           </section>
 
-        </div>
-
-        {/* Floating Auto-Play HUD Controller */}
-        <div className="deck-hud">
-          <button ref={autoPlayBtnRef} onClick={toggleAutoPlay}>
-            {isPlaying ? '⏸ Jeda Tur' : '▶ Putar Tur Rangkaian'}
-          </button>
-          <span className="hidden sm:inline">atau scroll naik / turun</span>
         </div>
 
       </section>
