@@ -370,8 +370,8 @@ export default function ActivitiesDeckSection() {
       // Maps scrollProgress across card peel stages
       const stageProgress = scrollProgress * (totalCards - 0.4);
       const isMobile = window.innerWidth <= 768;
-      const PEEK_STEP_Y = isMobile ? 10 : 16;
-      const SCALE_STEP = isMobile ? 0.018 : 0.024;
+      const PEEK_STEP_Y = isMobile ? 8 : 12;
+      const SCALE_STEP = isMobile ? 0.016 : 0.022;
 
       cards.forEach((card, i) => {
         // Set z-index: Card 0 is top (60), Card 5 is back (10)
@@ -387,8 +387,8 @@ export default function ActivitiesDeckSection() {
           card.style.pointerEvents = peelAmount > 0.15 ? 'none' : 'auto';
           card.style.opacity = String(1 - peelAmount * 0.18);
         } else {
-          // Card resting in stack
-          const effectiveDepth = Math.min(depth, 5);
+          // Card resting in stack: cap effectiveDepth at 3.8 to prevent excessive upward reach
+          const effectiveDepth = Math.min(depth, 3.8);
           const yOffset = -effectiveDepth * PEEK_STEP_Y;
           const scale = 1 - effectiveDepth * SCALE_STEP;
 

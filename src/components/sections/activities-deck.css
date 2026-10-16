@@ -30,12 +30,17 @@
   height: 100vh;
   height: 100dvh;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
   overflow: hidden;
-  padding: 0 clamp(16px, 3.5vw, 40px) calc(18px + env(safe-area-inset-bottom, 0px));
+  padding-top: calc(84px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  padding-left: clamp(16px, 3.5vw, 40px);
+  padding-right: clamp(16px, 3.5vw, 40px);
   background-color: var(--deck-bg-page);
   z-index: 15;
+  box-sizing: border-box;
 }
 
 /* Blueprint dot matrix backdrop */
@@ -59,7 +64,7 @@
   justify-content: center;
   gap: 14px;
   text-align: center;
-  padding: 24px;
+  padding: calc(84px + env(safe-area-inset-top, 0px)) 24px calc(24px + env(safe-area-inset-bottom, 0px));
   z-index: 1;
   user-select: none;
 }
@@ -125,9 +130,9 @@
   position: relative;
   width: 100%;
   max-width: 1220px;
-  height: calc(100vh - 96px);
-  height: calc(100dvh - 86px);
-  max-height: 720px;
+  height: calc(100% - 54px);
+  max-height: 640px;
+  margin: 0 auto;
   z-index: 10;
 }
 
@@ -503,12 +508,16 @@
 
 @media (max-width: 768px) {
   .activities-stage {
-    padding: 0 10px calc(14px + env(safe-area-inset-bottom, 0px));
-    align-items: flex-end;
+    padding-top: calc(76px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    padding-left: 12px;
+    padding-right: 12px;
+    justify-content: flex-end;
   }
   .activities-deck-container {
-    height: calc(100dvh - 74px);
-    max-height: 570px;
+    height: calc(100% - 36px);
+    max-height: 540px;
+    margin: 0 auto;
   }
   .deck-intro-card {
     padding: 18px 16px 20px;
@@ -598,11 +607,16 @@
 
 @media (max-width: 480px) {
   .activities-stage {
-    padding: 0 8px calc(10px + env(safe-area-inset-bottom, 0px));
+    padding-top: calc(72px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    padding-left: 10px;
+    padding-right: 10px;
+    justify-content: flex-end;
   }
   .activities-deck-container {
-    height: calc(100dvh - 68px);
-    max-height: 530px;
+    height: calc(100% - 30px);
+    max-height: 500px;
+    margin: 0 auto;
   }
   .deck-intro-card {
     padding: 14px 12px 16px;
