@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { PrideRegistration, RegistrationStatus } from '@/types';
 
-// Helper to highlight matching search text with yellow background
+// Helper to highlight matching search text (Apple clean styling)
 function highlightMatch(text: string | undefined | null, query: string) {
   if (!text) return '-';
   if (!query.trim()) return text;
@@ -18,7 +18,7 @@ function highlightMatch(text: string | undefined | null, query: string) {
         regex.test(part) ? (
           <mark
             key={i}
-            className="bg-amber-300 text-amber-950 px-1 py-0.5 rounded font-extrabold"
+            className="bg-neutral-200 text-neutral-900 px-1 py-0.5 rounded font-medium"
           >
             {part}
           </mark>
@@ -249,14 +249,14 @@ export default function RegistrationsPage() {
 
   return (
     <div className="space-y-6 animate-fade-in max-w-6xl mx-auto pb-12">
-      {/* ─── Top Header ─── */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      {/* ─── Top Header (Apple Minimal Style) ─── */}
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-neutral-200/80">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-[#1d1d1f] tracking-tight">
             Data Daftar Lomba
           </h1>
-          <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
-            Monitoring peserta kompetisi Desain Kemasan IKM dan Video 1 Menit PRIDE Industri 2026.
+          <p className="text-xs sm:text-sm font-normal text-neutral-500 mt-1">
+            Data pendaftar kompetisi Desain Kemasan IKM dan Video 1 Menit PRIDE Industri 2026.
           </p>
         </div>
 
@@ -264,9 +264,9 @@ export default function RegistrationsPage() {
           <button
             type="button"
             onClick={exportToSpreadsheet}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-2xs transition-all flex items-center gap-2 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl text-xs font-medium text-neutral-700 bg-white border border-neutral-200/80 hover:bg-neutral-50 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors flex items-center gap-2 cursor-pointer"
           >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <polyline points="14 2 14 8 20 8" />
               <line x1="8" y1="13" x2="16" y2="13" />
@@ -278,12 +278,12 @@ export default function RegistrationsPage() {
         </div>
       </div>
 
-      {/* ─── Search & Dropdown Filter Toolbar ─── */}
-      <div className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-wrap items-center gap-3 text-xs">
-        {/* Real-time Search Input */}
+      {/* ─── Search & Dropdown Filter Toolbar (Apple Toolbar Style) ─── */}
+      <div className="p-3 sm:p-3.5 rounded-2xl bg-white border border-neutral-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-wrap items-center gap-3 text-xs">
+        {/* Search Input */}
         <div className="flex-1 min-w-[240px]">
           <div className="relative flex items-center">
-            <svg className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-4 h-4 text-neutral-400 absolute left-3.5 pointer-events-none z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
             </svg>
@@ -292,17 +292,17 @@ export default function RegistrationsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari nama peserta, email, HP, kode pendaftaran, atau brand..."
-              className="w-full text-xs py-2.5 rounded-xl bg-slate-50/70 focus:bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
-              style={{ paddingLeft: '2.6rem', paddingRight: '2.25rem' }}
+              className="w-full text-xs py-2 rounded-xl bg-neutral-100/70 focus:bg-white border border-neutral-200/80 text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/10 transition-all"
+              style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
             />
             {search && (
               <button
                 type="button"
                 onClick={() => setSearch('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-0.5 rounded cursor-pointer transition-colors"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 p-0.5 rounded cursor-pointer transition-colors"
                 title="Hapus pencarian"
               >
-                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"/>
                   <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
@@ -318,7 +318,7 @@ export default function RegistrationsPage() {
             onChange={(e) =>
               setCompFilter(e.target.value as 'all' | 'desain-kemasan' | 'video-lokal')
             }
-            className="w-full sm:w-auto text-xs py-2.5 px-3.5 rounded-xl bg-slate-50/70 border border-slate-200 text-slate-700 font-bold focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+            className="w-full sm:w-auto text-xs py-2 px-3.5 rounded-xl bg-neutral-100/70 border border-neutral-200/80 text-neutral-700 font-medium focus:bg-white focus:outline-none focus:border-[#0071e3] transition-all cursor-pointer"
           >
             <option value="all">Semua Kategori Lomba</option>
             <option value="desain-kemasan">Lomba Desain Kemasan</option>
@@ -331,7 +331,7 @@ export default function RegistrationsPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full sm:w-auto text-xs py-2.5 px-3.5 rounded-xl bg-slate-50/70 border border-slate-200 text-slate-700 font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+            className="w-full sm:w-auto text-xs py-2 px-3.5 rounded-xl bg-neutral-100/70 border border-neutral-200/80 text-neutral-700 font-medium focus:bg-white focus:outline-none focus:border-[#0071e3] transition-all cursor-pointer"
           >
             <option value="all">Semua Status</option>
             <option value="confirmed">Terkonfirmasi</option>
@@ -343,46 +343,35 @@ export default function RegistrationsPage() {
       </div>
 
       {/* ════════════════════════════════════════════════════════════════
-          MOBILE VIEW: VERTICAL CARD LIST (MANDATORY: NO HORIZONTAL SWIPING)
-          Nama jelas terlihat + tombol Detail dan Hapus berdampingan
+          MOBILE VIEW: VERTICAL CARD LIST (NO HORIZONTAL SWIPING)
           ════════════════════════════════════════════════════════════════ */}
       <div className="md:hidden space-y-3">
         {loading ? (
-          <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-xs text-slate-400">
+          <div className="p-8 text-center bg-white rounded-2xl border border-neutral-200/80 text-xs text-neutral-400">
             Memuat data pendaftar lomba...
           </div>
         ) : filtered.length === 0 ? (
-          <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-xs text-slate-400">
+          <div className="p-8 text-center bg-white rounded-2xl border border-neutral-200/80 text-xs text-neutral-400">
             Tidak ditemukan pendaftar yang cocok dengan filter yang dipilih.
           </div>
         ) : (
           filtered.map((r) => (
             <div
               key={r.id}
-              className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-3 hover:border-slate-300 transition-colors"
+              className="p-4 rounded-2xl bg-white border border-neutral-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] space-y-3"
             >
               {/* Header: Name & Code */}
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
-                  <div className="font-extrabold text-slate-900 text-sm truncate">
+                  <div className="font-semibold text-neutral-900 text-sm truncate">
                     {highlightMatch(r.full_name, search)}
                   </div>
-                  <div className="font-mono text-[11px] text-slate-500 font-semibold mt-0.5">
+                  <div className="font-mono text-[11px] text-neutral-500 font-medium mt-0.5">
                     {highlightMatch(r.registration_code, search)}
                   </div>
                 </div>
 
-                <span
-                  className={`text-[10px] font-bold px-2 py-0.5 rounded-md shrink-0 ${
-                    r.status === 'confirmed'
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                      : r.status === 'finalist'
-                      ? 'bg-purple-50 text-purple-700 border border-purple-200'
-                      : r.status === 'disqualified'
-                      ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                      : 'bg-amber-50 text-amber-700 border border-amber-200'
-                  }`}
-                >
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded-md shrink-0 bg-neutral-100 text-neutral-700 border border-neutral-200/70">
                   {r.status === 'confirmed' && 'Terkonfirmasi'}
                   {r.status === 'finalist' && 'Finalis'}
                   {r.status === 'pending' && 'Menunggu'}
@@ -391,19 +380,13 @@ export default function RegistrationsPage() {
               </div>
 
               {/* Sub-info: Category & Date */}
-              <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
-                <span
-                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                    r.competition_id === 'desain-kemasan'
-                      ? 'bg-orange-50 text-orange-700 border-orange-200'
-                      : 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                  }`}
-                >
+              <div className="flex items-center justify-between text-xs text-neutral-500 pt-2 border-t border-neutral-100">
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-neutral-100 text-neutral-700 border border-neutral-200/70">
                   {r.competition_id === 'desain-kemasan'
                     ? 'Desain Kemasan'
                     : 'Video 1 Menit'}
                 </span>
-                <span className="font-mono text-[11px] text-slate-400">
+                <span className="font-mono text-[11px] text-neutral-400">
                   {new Date(r.created_at).toLocaleDateString('id-ID', {
                     day: 'numeric',
                     month: 'short',
@@ -411,15 +394,17 @@ export default function RegistrationsPage() {
                 </span>
               </div>
 
-              {/* Action Buttons: Detail & Delete (Directly visible, no horizontal swiping!) */}
+              {/* Action Buttons: Detail & Delete */}
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <button
                   type="button"
                   onClick={() => setSelectedReg(r)}
-                  className="w-full py-2 px-3 rounded-xl text-xs font-bold text-blue-600 bg-blue-50/80 hover:bg-blue-100 border border-blue-200 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                  className="w-full py-1.5 px-3 rounded-xl text-xs font-medium text-neutral-700 bg-neutral-100/80 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span>Detail</span>
-                  <span aria-hidden="true">→</span>
+                  <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
                 </button>
 
                 <button
@@ -428,9 +413,9 @@ export default function RegistrationsPage() {
                     setRecordToDelete(r);
                     setDeleteError(null);
                   }}
-                  className="w-full py-2 px-3 rounded-xl text-xs font-bold text-rose-600 bg-rose-50/80 hover:bg-rose-100 border border-rose-200 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                  className="w-full py-1.5 px-3 rounded-xl text-xs font-medium text-rose-600 bg-rose-50/60 hover:bg-rose-100/70 border border-rose-200/60 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <svg className="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg className="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                   </svg>
                   <span>Hapus</span>
@@ -442,42 +427,42 @@ export default function RegistrationsPage() {
       </div>
 
       {/* ════════════════════════════════════════════════════════════════
-          DESKTOP VIEW: COMPACT TABLE (HIDDEN ON MOBILE)
+          DESKTOP VIEW: CLEAN APPLE-STYLE TABLE (HIDDEN ON MOBILE)
           ════════════════════════════════════════════════════════════════ */}
-      <div className="hidden md:block overflow-hidden bg-white border border-slate-200 shadow-2xs rounded-2xl">
+      <div className="hidden md:block overflow-hidden bg-white border border-neutral-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] rounded-2xl">
         <div className="overflow-x-auto w-full">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
-                <th className="py-3.5 px-5 min-w-[200px]">Kode &amp; Tanggal</th>
-                <th className="py-3.5 px-5 min-w-[220px]">Nama Peserta &amp; Kontak</th>
-                <th className="py-3.5 px-5 min-w-[150px]">Kategori Lomba</th>
-                <th className="py-3.5 px-5 min-w-[170px]">Status Verifikasi</th>
-                <th className="py-3.5 px-5 min-w-[180px] text-right pr-6">Aksi</th>
+              <tr className="bg-neutral-50/75 border-b border-neutral-200/80 text-neutral-500 font-medium text-[11px]">
+                <th className="py-3 px-5 min-w-[190px]">Kode &amp; Tanggal</th>
+                <th className="py-3 px-5 min-w-[220px]">Nama Peserta &amp; Kontak</th>
+                <th className="py-3 px-5 min-w-[150px]">Kategori Lomba</th>
+                <th className="py-3 px-5 min-w-[170px]">Status Verifikasi</th>
+                <th className="py-3 px-5 min-w-[170px] text-right pr-6">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-neutral-100">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-12 text-xs font-medium text-slate-400">
+                  <td colSpan={5} className="text-center py-12 text-xs font-normal text-neutral-400">
                     Memuat data pendaftar lomba...
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-12 text-xs font-medium text-slate-400">
+                  <td colSpan={5} className="text-center py-12 text-xs font-normal text-neutral-400">
                     Tidak ditemukan pendaftar yang sesuai kriteria pencarian.
                   </td>
                 </tr>
               ) : (
                 filtered.map((r) => (
-                  <tr key={r.id} className="hover:bg-slate-50/80 transition-colors">
+                  <tr key={r.id} className="hover:bg-neutral-50/60 transition-colors">
                     {/* Column 1: Kode & Tanggal */}
                     <td className="py-3.5 px-5 whitespace-nowrap">
-                      <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200 inline-block">
+                      <span className="font-mono text-xs font-medium text-neutral-800 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-200/60 inline-block">
                         {highlightMatch(r.registration_code, search)}
                       </span>
-                      <div className="text-[10px] text-slate-400 font-medium mt-1">
+                      <div className="text-[10px] text-neutral-400 font-normal mt-1">
                         {new Date(r.created_at).toLocaleDateString('id-ID', {
                           day: 'numeric',
                           month: 'short',
@@ -488,29 +473,23 @@ export default function RegistrationsPage() {
 
                     {/* Column 2: Nama & Kontak */}
                     <td className="py-3.5 px-5 whitespace-nowrap">
-                      <div className="font-extrabold text-slate-900 text-sm">
+                      <div className="font-medium text-neutral-900 text-sm">
                         {highlightMatch(r.full_name, search)}
                       </div>
-                      <div className="text-[11px] text-slate-500 font-medium mt-0.5">
+                      <div className="text-[11px] text-neutral-500 font-normal mt-0.5">
                         {highlightMatch(r.email, search)}
                       </div>
                     </td>
 
                     {/* Column 3: Kategori */}
                     <td className="py-3.5 px-5 whitespace-nowrap">
-                      <span
-                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${
-                          r.competition_id === 'desain-kemasan'
-                            ? 'bg-orange-50 text-orange-700 border-orange-200'
-                            : 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                        }`}
-                      >
+                      <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-neutral-100 text-neutral-700 border border-neutral-200/70">
                         {r.competition_id === 'desain-kemasan'
                           ? 'Desain Kemasan'
                           : 'Video 1 Menit'}
                       </span>
                       {r.video_category && (
-                        <div className="text-[10px] text-indigo-600 font-bold mt-1">
+                        <div className="text-[10px] text-neutral-500 font-medium mt-1">
                           {r.video_category}
                         </div>
                       )}
@@ -523,15 +502,7 @@ export default function RegistrationsPage() {
                         onChange={(e) =>
                           handleUpdateStatus(r.id, e.target.value as RegistrationStatus)
                         }
-                        className={`text-xs py-1 px-2.5 rounded-lg border font-bold cursor-pointer transition-colors ${
-                          r.status === 'confirmed'
-                            ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                            : r.status === 'finalist'
-                            ? 'bg-purple-50 text-purple-800 border-purple-200'
-                            : r.status === 'disqualified'
-                            ? 'bg-rose-50 text-rose-800 border-rose-200'
-                            : 'bg-amber-50 text-amber-800 border-amber-200'
-                        }`}
+                        className="text-xs py-1 px-2.5 rounded-lg border border-neutral-200/80 bg-neutral-50/70 text-neutral-800 font-medium cursor-pointer transition-colors focus:outline-none focus:border-[#0071e3]"
                       >
                         <option value="confirmed">Terkonfirmasi</option>
                         <option value="finalist">Lolos Finalis</option>
@@ -546,10 +517,12 @@ export default function RegistrationsPage() {
                         <button
                           type="button"
                           onClick={() => setSelectedReg(r)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors cursor-pointer inline-flex items-center gap-1"
+                          className="px-2.5 py-1 rounded-lg text-xs font-medium text-neutral-700 hover:text-neutral-900 bg-neutral-100/80 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors cursor-pointer inline-flex items-center gap-1"
                         >
                           <span>Detail</span>
-                          <span aria-hidden="true">→</span>
+                          <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="9 18 15 12 9 6" />
+                          </svg>
                         </button>
 
                         <button
@@ -558,10 +531,10 @@ export default function RegistrationsPage() {
                             setRecordToDelete(r);
                             setDeleteError(null);
                           }}
-                          className="px-2.5 py-1.5 rounded-lg text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors cursor-pointer inline-flex items-center gap-1"
+                          className="px-2.5 py-1 rounded-lg text-xs font-medium text-rose-600 hover:text-rose-700 bg-rose-50/60 hover:bg-rose-100/70 border border-rose-200/60 transition-colors cursor-pointer inline-flex items-center gap-1"
                           title="Hapus pendaftaran"
                         >
-                          <svg className="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <svg className="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                           </svg>
                           <span>Hapus</span>
@@ -607,10 +580,10 @@ export default function RegistrationsPage() {
                       : 'Lomba Video 1 Menit'}
                   </span>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
+                <h3 className="text-xl sm:text-2xl font-semibold text-[#1d1d1f]">
                   {selectedReg.full_name}
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-neutral-400 mt-0.5">
                   Terdaftar pada: {new Date(selectedReg.created_at).toLocaleString('id-ID')} WIB
                 </p>
               </div>
@@ -618,77 +591,81 @@ export default function RegistrationsPage() {
               <button
                 type="button"
                 onClick={() => setSelectedReg(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer shrink-0"
+                className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 cursor-pointer transition-colors shrink-0"
                 aria-label="Tutup jendela detail"
               >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
             </div>
 
-            {/* ─── Detail Form: Desain Kemasan (4 Sections Sesuai Form Asli) ─── */}
+            {/* ─── Detail Form: Desain Kemasan ─── */}
             {selectedReg.competition_id === 'desain-kemasan' && (
-              <div className="space-y-5 text-xs">
+              <div className="space-y-4 text-xs">
                 {/* 1. Data Diri */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                    <span>👤</span> 1. Data Diri Peserta
+                <div className="space-y-1.5">
+                  <h4 className="text-xs font-semibold text-neutral-700 tracking-tight">
+                    1. Data Diri Peserta
                   </h4>
-                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
-                      <span className="text-slate-500">Nama Lengkap:</span>
-                      <span className="font-bold text-slate-900">{selectedReg.full_name}</span>
+                  <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2">
+                    <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Nama Lengkap:</span>
+                      <span className="font-medium text-neutral-900">{selectedReg.full_name}</span>
                     </div>
-                    <div className="flex justify-between items-start pb-2 border-b border-slate-200/60">
-                      <span className="text-slate-500">Alamat Lengkap:</span>
-                      <span className="font-semibold text-slate-900 text-right max-w-[280px]">
+                    <div className="flex justify-between items-start pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Alamat Lengkap:</span>
+                      <span className="font-medium text-neutral-900 text-right max-w-[280px]">
                         {selectedReg.address || '-'}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
-                      <span className="text-slate-500">Nomor HP / WhatsApp:</span>
+                    <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Nomor HP / WhatsApp:</span>
                       <a
                         href={`https://wa.me/62${selectedReg.phone.replace(/^0/, '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-mono font-bold text-emerald-700 hover:underline inline-flex items-center gap-1"
+                        className="font-mono font-medium text-[#0071e3] hover:underline inline-flex items-center gap-1"
                       >
                         <span>{selectedReg.phone}</span>
-                        <span className="text-[10px]">↗</span>
+                        <svg className="w-3 h-3 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                          <polyline points="15 3 21 3 21 9" />
+                          <line x1="10" y1="14" x2="21" y2="3" />
+                        </svg>
                       </a>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-slate-500">Alamat Email:</span>
-                      <span className="font-mono font-bold text-slate-900">{selectedReg.email}</span>
+                      <span className="text-neutral-500 font-normal">Alamat Email:</span>
+                      <span className="font-mono font-medium text-neutral-900">{selectedReg.email}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* 2. Informasi Produk dan Desain */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-orange-600 uppercase tracking-wider flex items-center gap-1.5">
-                    <span>📦</span> 2. Informasi Produk dan Desain
+                <div className="space-y-1.5">
+                  <h4 className="text-xs font-semibold text-neutral-700 tracking-tight">
+                    2. Informasi Produk dan Desain
                   </h4>
-                  <div className="p-4 rounded-2xl bg-orange-50/50 border border-orange-100 space-y-2">
-                    <div className="flex justify-between items-center pb-2 border-b border-orange-200/60">
-                      <span className="text-slate-600">Nama Merek Produk:</span>
-                      <span className="font-bold text-slate-900">{selectedReg.brand_name || '-'}</span>
+                  <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2">
+                    <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Nama Merek Produk:</span>
+                      <span className="font-medium text-neutral-900">{selectedReg.brand_name || '-'}</span>
                     </div>
-                    <div className="flex justify-between items-center pb-2 border-b border-orange-200/60">
-                      <span className="text-slate-600">Nama Produk Kuliner:</span>
-                      <span className="font-bold text-slate-900">{selectedReg.product_name || '-'}</span>
+                    <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Nama Produk Kuliner:</span>
+                      <span className="font-medium text-neutral-900">{selectedReg.product_name || '-'}</span>
                     </div>
-                    <div className="flex justify-between items-start pb-2 border-b border-orange-200/60">
-                      <span className="text-slate-600">Bahan Dasar Lokal:</span>
-                      <span className="font-bold text-slate-900 text-right max-w-[280px]">
+                    <div className="flex justify-between items-start pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Bahan Dasar Lokal:</span>
+                      <span className="font-medium text-neutral-900 text-right max-w-[280px]">
                         {selectedReg.local_ingredients || '-'}
                       </span>
                     </div>
                     <div className="flex justify-between items-start pt-1">
-                      <span className="text-slate-600">Deskripsi Konsep Desain:</span>
-                      <span className="font-medium text-slate-800 text-right max-w-[280px] italic">
+                      <span className="text-neutral-500 font-normal">Deskripsi Konsep Desain:</span>
+                      <span className="font-normal text-neutral-800 text-right max-w-[280px]">
                         {selectedReg.design_concept || selectedReg.video_description || '-'}
                       </span>
                     </div>
@@ -696,18 +673,18 @@ export default function RegistrationsPage() {
                 </div>
 
                 {/* 3. Berkas & Dokumen Terlampir */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1.5">
-                    <span>📂</span> 3. File Karya &amp; Dokumen Pendukung
+                <div className="space-y-1.5">
+                  <h4 className="text-xs font-semibold text-neutral-700 tracking-tight">
+                    3. Berkas Karya &amp; Dokumen Pendukung
                   </h4>
-                  <div className="p-4 rounded-2xl bg-blue-50/40 border border-blue-100 space-y-2.5">
+                  <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2">
                     {/* Item 1: Karya Desain */}
-                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
                       <div className="min-w-0">
-                        <div className="font-bold text-slate-900 truncate">
+                        <div className="font-medium text-neutral-900 truncate">
                           File Karya Desain Kemasan
                         </div>
-                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
                           {selectedReg.design_file_name || selectedReg.packaging_file_name || 'karya-desain.pdf'}
                         </div>
                       </div>
@@ -720,19 +697,24 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-2xs transition-all shrink-0 cursor-pointer"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-[#0071e3] hover:bg-[#0077ed] transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        Download
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        <span>Unduh</span>
                       </button>
                     </div>
 
                     {/* Item 2: Master File */}
-                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
                       <div className="min-w-0">
-                        <div className="font-bold text-slate-900 truncate">
+                        <div className="font-medium text-neutral-900 truncate">
                           Master File Desain
                         </div>
-                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
                           {selectedReg.master_file_name || 'master-file.pdf'}
                         </div>
                       </div>
@@ -745,19 +727,24 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all shrink-0 cursor-pointer"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        Download
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        <span>Unduh</span>
                       </button>
                     </div>
 
                     {/* Item 3: Pakta Integritas */}
-                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
                       <div className="min-w-0">
-                        <div className="font-bold text-slate-900 truncate">
+                        <div className="font-medium text-neutral-900 truncate">
                           Pakta Integritas Bertanda Tangan
                         </div>
-                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
                           {selectedReg.pakta_integritas_file_name || 'pakta-integritas.pdf'}
                         </div>
                       </div>
@@ -770,19 +757,24 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all shrink-0 cursor-pointer"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        Download
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        <span>Unduh</span>
                       </button>
                     </div>
 
                     {/* Item 4: Surat Pernyataan */}
-                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
                       <div className="min-w-0">
-                        <div className="font-bold text-slate-900 truncate">
+                        <div className="font-medium text-neutral-900 truncate">
                           Surat Pernyataan Persetujuan
                         </div>
-                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
                           {selectedReg.surat_persetujuan_file_name || 'surat-persetujuan.pdf'}
                         </div>
                       </div>
@@ -795,34 +787,47 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all shrink-0 cursor-pointer"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        Download
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        <span>Unduh</span>
                       </button>
                     </div>
                   </div>
                 </div>
 
                 {/* 4. Persetujuan & Deklarasi */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
-                    <span>✓</span> 4. Persetujuan &amp; Komitmen Peserta
+                <div className="space-y-1.5">
+                  <h4 className="text-xs font-semibold text-neutral-700 tracking-tight">
+                    4. Persetujuan &amp; Komitmen Peserta
                   </h4>
-                  <div className="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 space-y-1.5 text-emerald-900">
+                  <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2 text-neutral-700">
                     <div className="flex items-center gap-2">
-                      <span className="text-emerald-600 font-bold">✓</span>
+                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
                       <span>Karya merupakan karya asli dan tidak melanggar hak cipta</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-emerald-600 font-bold">✓</span>
+                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
                       <span>Karya belum pernah dipublikasikan / diikutkan lomba lain</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-emerald-600 font-bold">✓</span>
+                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
                       <span>Menyetujui seluruh syarat &amp; ketentuan PRIDE Industri 2026</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-emerald-600 font-bold">✓</span>
+                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
                       <span>Menyetujui penggunaan karya untuk publikasi nonkomersial</span>
                     </div>
                   </div>
@@ -830,76 +835,85 @@ export default function RegistrationsPage() {
               </div>
             )}
 
-            {/* ─── Detail Form: Video 1 Menit (5 Sections Sesuai Form Asli) ─── */}
+            {/* ─── Detail Form: Video 1 Menit ─── */}
             {selectedReg.competition_id === 'video-lokal' && (
-              <div className="space-y-5 text-xs">
+              <div className="space-y-4 text-xs">
                 {/* 1. Data Diri */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                    <span>👤</span> 1. Data Diri Peserta
+                <div className="space-y-1.5">
+                  <h4 className="text-xs font-semibold text-neutral-700 tracking-tight">
+                    1. Data Diri Peserta
                   </h4>
-                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
-                      <span className="text-slate-500">Nama Lengkap:</span>
-                      <span className="font-bold text-slate-900">{selectedReg.full_name}</span>
+                  <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2">
+                    <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Nama Lengkap:</span>
+                      <span className="font-medium text-neutral-900">{selectedReg.full_name}</span>
                     </div>
-                    <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
-                      <span className="text-slate-500">Instansi / Asal:</span>
-                      <span className="font-bold text-slate-900">{selectedReg.institution || '-'}</span>
+                    <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Instansi / Asal:</span>
+                      <span className="font-medium text-neutral-900">{selectedReg.institution || '-'}</span>
                     </div>
-                    <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
-                      <span className="text-slate-500">Nomor WhatsApp:</span>
+                    <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Nomor WhatsApp:</span>
                       <a
                         href={`https://wa.me/62${selectedReg.phone.replace(/^0/, '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-mono font-bold text-emerald-700 hover:underline inline-flex items-center gap-1"
+                        className="font-mono font-medium text-[#0071e3] hover:underline inline-flex items-center gap-1"
                       >
                         <span>{selectedReg.phone}</span>
-                        <span className="text-[10px]">↗</span>
+                        <svg className="w-3 h-3 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                          <polyline points="15 3 21 3 21 9" />
+                          <line x1="10" y1="14" x2="21" y2="3" />
+                        </svg>
                       </a>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-slate-500">Alamat Email:</span>
-                      <span className="font-mono font-bold text-slate-900">{selectedReg.email}</span>
+                      <span className="text-neutral-500 font-normal">Alamat Email:</span>
+                      <span className="font-mono font-medium text-neutral-900">{selectedReg.email}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* 2. Informasi Karya Video */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-indigo-600 uppercase tracking-wider flex items-center gap-1.5">
-                    <span>🎬</span> 2. Informasi Karya Video
+                <div className="space-y-1.5">
+                  <h4 className="text-xs font-semibold text-neutral-700 tracking-tight">
+                    2. Informasi Karya Video
                   </h4>
-                  <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 space-y-2">
-                    <div className="flex justify-between items-center pb-2 border-b border-indigo-200/60">
-                      <span className="text-slate-600">Sub-sektor IKM:</span>
-                      <span className="font-bold text-indigo-700 bg-indigo-100/80 px-2 py-0.5 rounded text-[11px]">
+                  <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2">
+                    <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Sub-sektor IKM:</span>
+                      <span className="font-medium text-neutral-800 bg-neutral-100 px-2 py-0.5 rounded text-[11px] border border-neutral-200/60">
                         {selectedReg.video_category || 'PRIDE 2026'}
                       </span>
                     </div>
-                    <div className="flex justify-between items-start pb-2 border-b border-indigo-200/60">
-                      <span className="text-slate-600">Judul Karya Video:</span>
-                      <span className="font-bold text-slate-900 text-right max-w-[280px]">
+                    <div className="flex justify-between items-start pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Judul Karya Video:</span>
+                      <span className="font-medium text-neutral-900 text-right max-w-[280px]">
                         {selectedReg.video_title ? `“${selectedReg.video_title}”` : '-'}
                       </span>
                     </div>
-                    <div className="flex justify-between items-start pb-2 border-b border-indigo-200/60">
-                      <span className="text-slate-600">Deskripsi Singkat:</span>
-                      <span className="font-medium text-slate-800 text-right max-w-[280px] italic">
+                    <div className="flex justify-between items-start pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Deskripsi Singkat:</span>
+                      <span className="font-normal text-neutral-800 text-right max-w-[280px]">
                         {selectedReg.video_description || '-'}
                       </span>
                     </div>
                     {selectedReg.video_url && (
                       <div className="flex justify-between items-center pt-1">
-                        <span className="text-slate-600">Link Video Karya:</span>
+                        <span className="text-neutral-500 font-normal">Link Video Karya:</span>
                         <a
                           href={selectedReg.video_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-bold text-blue-600 hover:underline inline-flex items-center gap-1"
+                          className="font-medium text-[#0071e3] hover:underline inline-flex items-center gap-1"
                         >
-                          <span>Buka Video Karya ↗</span>
+                          <span>Buka Video Karya</span>
+                          <svg className="w-3 h-3 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                            <polyline points="15 3 21 3 21 9" />
+                            <line x1="10" y1="14" x2="21" y2="3" />
+                          </svg>
                         </a>
                       </div>
                     )}
@@ -907,18 +921,18 @@ export default function RegistrationsPage() {
                 </div>
 
                 {/* 3. Berkas & Barcode TactLink */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1.5">
-                    <span>📂</span> 3. Berkas Dokumen &amp; QR TactLink
+                <div className="space-y-1.5">
+                  <h4 className="text-xs font-semibold text-neutral-700 tracking-tight">
+                    3. Berkas Dokumen &amp; QR TactLink
                   </h4>
-                  <div className="p-4 rounded-2xl bg-blue-50/40 border border-blue-100 space-y-2.5">
+                  <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2">
                     {/* Item 1: Dokumen Persyaratan */}
-                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
                       <div className="min-w-0">
-                        <div className="font-bold text-slate-900 truncate">
+                        <div className="font-medium text-neutral-900 truncate">
                           Dokumen Persyaratan Lomba
                         </div>
-                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
                           {selectedReg.document_file_name || selectedReg.pakta_integritas_file_name || 'dokumen-persyaratan.pdf'}
                         </div>
                       </div>
@@ -931,19 +945,24 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-2xs transition-all shrink-0 cursor-pointer"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-[#0071e3] hover:bg-[#0077ed] transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        Download
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        <span>Unduh</span>
                       </button>
                     </div>
 
                     {/* Item 2: Barcode TactLink */}
-                    <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-blue-200/80 shadow-2xs">
+                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
                       <div className="min-w-0">
-                        <div className="font-bold text-slate-900 truncate">
+                        <div className="font-medium text-neutral-900 truncate">
                           Foto Barcode QR TactLink
                         </div>
-                        <div className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
+                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
                           {selectedReg.tactlink_qr_name || selectedReg.surat_persetujuan_file_name || 'qr-tactlink.png'}
                         </div>
                       </div>
@@ -956,30 +975,41 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all shrink-0 cursor-pointer"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        Download
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        <span>Unduh</span>
                       </button>
                     </div>
                   </div>
                 </div>
 
                 {/* 4. Persetujuan */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
-                    <span>✓</span> 4. Persetujuan Peserta
+                <div className="space-y-1.5">
+                  <h4 className="text-xs font-semibold text-neutral-700 tracking-tight">
+                    4. Persetujuan Peserta
                   </h4>
-                  <div className="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 space-y-1.5 text-emerald-900">
+                  <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2 text-neutral-700">
                     <div className="flex items-center gap-2">
-                      <span className="text-emerald-600 font-bold">✓</span>
+                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
                       <span>Karya merupakan karya asli dan tidak melanggar hak pihak lain</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-emerald-600 font-bold">✓</span>
+                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
                       <span>Menyetujui seluruh syarat &amp; ketentuan lomba video</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-emerald-600 font-bold">✓</span>
+                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
                       <span>Menyetujui hak tayang &amp; publikasi video nonkomersial</span>
                     </div>
                   </div>
@@ -988,15 +1018,15 @@ export default function RegistrationsPage() {
             )}
 
             {/* Status Verifikasi Selector */}
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 text-xs">
+            <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2.5 text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-slate-600 font-bold">Status Verifikasi:</span>
+                <span className="text-neutral-600 font-medium">Status Verifikasi:</span>
                 <select
                   value={selectedReg.status}
                   onChange={(e) =>
                     handleUpdateStatus(selectedReg.id, e.target.value as RegistrationStatus)
                   }
-                  className="text-xs py-1.5 px-3 bg-white border border-slate-300 rounded-xl font-bold text-slate-800 focus:outline-none focus:border-blue-500"
+                  className="text-xs py-1.5 px-3 bg-white border border-neutral-200/80 rounded-xl font-medium text-neutral-800 focus:outline-none focus:border-[#0071e3] cursor-pointer"
                 >
                   <option value="confirmed">Terkonfirmasi (Lengkap)</option>
                   <option value="finalist">Lolos Finalis Lomba</option>
@@ -1005,17 +1035,12 @@ export default function RegistrationsPage() {
                 </select>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-slate-200">
-                <span className="text-slate-600 font-medium">Status Presensi Gate:</span>
-                <span
-                  className={`px-2.5 py-0.5 rounded-full font-bold ${
-                    selectedReg.check_in_status === 'checked_in'
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-slate-200 text-slate-700'
-                  }`}
-                >
+              <div className="flex items-center justify-between pt-2 border-t border-neutral-200/60">
+                <span className="text-neutral-500 font-normal">Status Kehadiran Gate:</span>
+                <span className="px-2.5 py-0.5 rounded-full font-medium text-xs bg-neutral-100 text-neutral-700 border border-neutral-200/60 inline-flex items-center gap-1.5">
+                  <span className={`w-1.5 h-1.5 rounded-full ${selectedReg.check_in_status === 'checked_in' ? 'bg-emerald-600' : 'bg-neutral-400'}`} />
                   {selectedReg.check_in_status === 'checked_in'
-                    ? 'Sudah Hadir di Lokasi'
+                    ? 'Hadir di Lokasi'
                     : 'Belum Hadir'}
                 </span>
               </div>
@@ -1029,9 +1054,9 @@ export default function RegistrationsPage() {
                   setRecordToDelete(selectedReg);
                   setDeleteError(null);
                 }}
-                className="py-2.5 px-4 rounded-xl text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors cursor-pointer inline-flex items-center gap-1.5"
+                className="py-2 px-3.5 rounded-xl text-xs font-medium text-rose-600 hover:text-rose-700 bg-rose-50/60 hover:bg-rose-100/70 border border-rose-200/60 transition-colors cursor-pointer inline-flex items-center gap-1.5"
               >
-                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
                   <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                 </svg>
                 <span>Hapus Pendaftaran</span>
@@ -1040,9 +1065,9 @@ export default function RegistrationsPage() {
               <button
                 type="button"
                 onClick={() => setSelectedReg(null)}
-                className="flex-1 py-2.5 px-4 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer text-center"
+                className="flex-1 py-2 px-4 rounded-xl text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 transition-colors cursor-pointer text-center"
               >
-                Tutup Jendela Detail
+                Tutup
               </button>
             </div>
           </div>
@@ -1054,47 +1079,47 @@ export default function RegistrationsPage() {
           ════════════════════════════════════════════════════════════════ */}
       {recordToDelete && (
         <div
-          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in-50 duration-200"
+          className="fixed inset-0 z-50 bg-black/30 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in-50 duration-200"
           onClick={() => !isDeleting && setRecordToDelete(null)}
         >
           <div
-            className="bg-white rounded-3xl border border-slate-200 p-6 max-w-md w-full shadow-2xl space-y-5 animate-in zoom-in-95 duration-200"
+            className="bg-white rounded-2xl border border-neutral-200/80 p-6 max-w-md w-full shadow-2xl space-y-4 animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 shrink-0">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <div className="w-9 h-9 rounded-xl bg-rose-50 border border-rose-200/60 flex items-center justify-center text-rose-600 shrink-0">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
                   <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                 </svg>
               </div>
               <div className="space-y-1">
-                <h3 className="text-base font-extrabold text-slate-900">
+                <h3 className="text-base font-semibold text-[#1d1d1f]">
                   Hapus Pendaftaran Lomba?
                 </h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
+                <p className="text-xs text-neutral-500 leading-relaxed">
                   Apakah Anda yakin ingin menghapus data pendaftaran{' '}
-                  <strong className="text-slate-800">{recordToDelete.full_name}</strong> (
-                  <span className="font-mono text-slate-700">{recordToDelete.registration_code}</span>)?
+                  <strong className="text-neutral-800 font-medium">{recordToDelete.full_name}</strong> (
+                  <span className="font-mono text-neutral-700">{recordToDelete.registration_code}</span>)?
                 </p>
               </div>
             </div>
 
             {deleteError && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-semibold">
+              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-medium">
                 {deleteError}
               </div>
             )}
 
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-[11px] text-slate-500">
+            <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200/60 text-[11px] text-neutral-500">
               Tindakan ini permanen dan akan menghapus berkas serta data peserta dari database.
             </div>
 
-            <div className="flex items-center gap-3 pt-1">
+            <div className="flex items-center gap-2.5 pt-1">
               <button
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setRecordToDelete(null)}
-                className="flex-1 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors disabled:opacity-50 cursor-pointer"
+                className="flex-1 py-2 rounded-xl text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 Batal
               </button>
@@ -1102,7 +1127,7 @@ export default function RegistrationsPage() {
                 type="button"
                 disabled={isDeleting}
                 onClick={handleDeleteConfirm}
-                className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+                className="flex-1 py-2 rounded-xl text-xs font-medium text-white bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
               >
                 {isDeleting ? 'Menghapus...' : 'Ya, Hapus Pendaftaran'}
               </button>

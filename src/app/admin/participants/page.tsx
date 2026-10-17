@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { PrideRegistration } from '@/types';
 
-// Helper for real-time text highlight
+// Helper for real-time text highlight (Apple clean styling)
 function highlightMatch(text: string | undefined | null, query: string) {
   if (!text) return '-';
   if (!query.trim()) return text;
@@ -14,7 +14,7 @@ function highlightMatch(text: string | undefined | null, query: string) {
     <>
       {parts.map((part, i) =>
         regex.test(part) ? (
-          <mark key={i} className="bg-amber-300 text-amber-950 px-1 py-0.5 rounded font-extrabold">
+          <mark key={i} className="bg-neutral-200 text-neutral-900 px-1 py-0.5 rounded font-medium">
             {part}
           </mark>
         ) : (
@@ -191,15 +191,14 @@ export default function ParticipantsPage() {
 
   return (
     <div className="space-y-6 animate-fade-in max-w-6xl mx-auto pb-12">
-      {/* ─── Top Header ─── */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      {/* ─── Top Header (Apple Minimal Style) ─── */}
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-neutral-200/80">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+          <h1 className="text-2xl sm:text-3xl font-semibold text-[#1d1d1f] tracking-tight">
             Data Presensi
           </h1>
-          <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
-            Data kehadiran resmi seluruh pengunjung dan peserta lomba yang telah check-in di gate Braga City Walk.
+          <p className="text-xs sm:text-sm font-normal text-neutral-500 mt-1">
+            Data kehadiran resmi pengunjung dan peserta lomba yang telah check-in di gate Braga City Walk.
           </p>
         </div>
 
@@ -207,9 +206,9 @@ export default function ParticipantsPage() {
           <button
             type="button"
             onClick={exportToCSV}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 shadow-2xs transition-all flex items-center gap-2 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl text-xs font-medium text-neutral-700 bg-white border border-neutral-200/80 hover:bg-neutral-50 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors flex items-center gap-2 cursor-pointer"
           >
-            <svg className="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" y1="15" x2="12" y2="3" />
@@ -219,12 +218,12 @@ export default function ParticipantsPage() {
         </div>
       </div>
 
-      {/* ─── Search & Category Filter Toolbar ─── */}
-      <div className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-wrap items-center gap-3 text-xs">
-        {/* Real-time Search Input */}
+      {/* ─── Search & Category Filter Toolbar (Apple Toolbar Style) ─── */}
+      <div className="p-3 sm:p-3.5 rounded-2xl bg-white border border-neutral-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-wrap items-center gap-3 text-xs">
+        {/* Search Input */}
         <div className="flex-1 min-w-[240px]">
           <div className="relative flex items-center">
-            <svg className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-4 h-4 text-neutral-400 absolute left-3.5 pointer-events-none z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
             </svg>
@@ -233,17 +232,17 @@ export default function ParticipantsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari nama, kode registrasi, atau nomor HP..."
-              className="w-full text-xs py-2.5 rounded-xl bg-slate-50/70 focus:bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
-              style={{ paddingLeft: '2.6rem', paddingRight: '2.25rem' }}
+              className="w-full text-xs py-2 rounded-xl bg-neutral-100/70 focus:bg-white border border-neutral-200/80 text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/10 transition-all"
+              style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
             />
             {search && (
               <button
                 type="button"
                 onClick={() => setSearch('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-0.5 rounded cursor-pointer transition-colors"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 p-0.5 rounded cursor-pointer transition-colors"
                 title="Hapus pencarian"
               >
-                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"/>
                   <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
@@ -257,7 +256,7 @@ export default function ParticipantsPage() {
           <select
             value={compFilter}
             onChange={(e) => setCompFilter(e.target.value)}
-            className="w-full sm:w-auto text-xs py-2.5 px-3.5 rounded-xl bg-slate-50/70 border border-slate-200 text-slate-700 font-bold focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+            className="w-full sm:w-auto text-xs py-2 px-3.5 rounded-xl bg-neutral-100/70 border border-neutral-200/80 text-neutral-700 font-medium focus:bg-white focus:outline-none focus:border-[#0071e3] transition-all cursor-pointer"
           >
             <option value="all">Semua Kategori ({checkedInList.length})</option>
             <option value="desain-kemasan">Lomba Desain Kemasan</option>
@@ -267,24 +266,23 @@ export default function ParticipantsPage() {
         </div>
 
         {/* Counter Badge */}
-        <div className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-800 whitespace-nowrap ml-auto">
-          <span>Menampilkan:</span>
-          <span className="text-emerald-700 font-extrabold">{filtered.length}</span>
+        <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100/80 border border-neutral-200/60 text-[11px] font-medium text-neutral-600 whitespace-nowrap ml-auto">
+          <span>Menampilkan</span>
+          <span className="text-neutral-900 font-semibold">{filtered.length}</span>
           <span>dari {checkedInList.length} Kehadiran</span>
         </div>
       </div>
 
       {/* ════════════════════════════════════════════════════════════════
-          MOBILE VIEW: VERTICAL CARD LIST (MANDATORY: NO HORIZONTAL SWIPING)
-          Tampilan ramping, teks terbaca jelas, tombol Detail & Hapus langsung terlihat
+          MOBILE VIEW: VERTICAL CARD LIST (NO HORIZONTAL SWIPING)
           ════════════════════════════════════════════════════════════════ */}
       <div className="md:hidden space-y-3">
         {loading ? (
-          <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-xs text-slate-400">
+          <div className="p-8 text-center bg-white rounded-2xl border border-neutral-200/80 text-xs text-neutral-400">
             Memuat data presensi gate...
           </div>
         ) : filtered.length === 0 ? (
-          <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-xs text-slate-400">
+          <div className="p-8 text-center bg-white rounded-2xl border border-neutral-200/80 text-xs text-neutral-400">
             {search || compFilter !== 'all'
               ? 'Tidak ditemukan data presensi yang sesuai pencarian.'
               : 'Belum ada data presensi yang tercatat di gate.'}
@@ -294,27 +292,19 @@ export default function ParticipantsPage() {
             return (
               <div
                 key={p.id}
-                className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-3 hover:border-slate-300 transition-colors"
+                className="p-4 rounded-2xl bg-white border border-neutral-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] space-y-3"
               >
                 {/* Header: Nama & Kode */}
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
-                    <div className="font-extrabold text-slate-900 text-sm truncate">
+                    <div className="font-semibold text-neutral-900 text-sm truncate">
                       {highlightMatch(p.full_name, search)}
                     </div>
-                    <div className="font-mono text-[11px] text-slate-500 font-semibold mt-0.5">
+                    <div className="font-mono text-[11px] text-neutral-500 font-medium mt-0.5">
                       {highlightMatch(p.registration_code, search)}
                     </div>
                   </div>
-                  <span
-                    className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full shrink-0 border ${
-                      p.competition_id === 'desain-kemasan'
-                        ? 'bg-orange-50 text-orange-700 border-orange-200'
-                        : p.competition_id === 'video-lokal'
-                        ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                        : 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                    }`}
-                  >
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-md shrink-0 bg-neutral-100 text-neutral-700 border border-neutral-200/70">
                     {p.competition_id === 'desain-kemasan'
                       ? 'Desain Kemasan'
                       : p.competition_id === 'video-lokal'
@@ -324,27 +314,29 @@ export default function ParticipantsPage() {
                 </div>
 
                 {/* Sub-info: Waktu presensi & Status */}
-                <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
-                  <span className="flex items-center gap-1.5 font-semibold text-emerald-700">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <div className="flex items-center justify-between text-xs text-neutral-500 pt-2 border-t border-neutral-100">
+                  <span className="flex items-center gap-1.5 font-medium text-neutral-700">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
                     Hadir di Gate
                   </span>
-                  <span className="font-mono text-[11px] text-slate-500">
+                  <span className="font-mono text-[11px] text-neutral-500">
                     {p.checked_in_at
                       ? `${new Date(p.checked_in_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB`
                       : 'Terverifikasi'}
                   </span>
                 </div>
 
-                {/* Actions: Detail & Hapus (Directly visible, no swiping!) */}
+                {/* Actions: Detail & Hapus */}
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <button
                     type="button"
                     onClick={() => setSelectedParticipant(p)}
-                    className="w-full py-2 px-3 rounded-xl text-xs font-bold text-blue-600 bg-blue-50/80 hover:bg-blue-100 border border-blue-200 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                    className="w-full py-1.5 px-3 rounded-xl text-xs font-medium text-neutral-700 bg-neutral-100/80 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Detail</span>
-                    <span aria-hidden="true">→</span>
+                    <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
                   </button>
 
                   <button
@@ -353,9 +345,9 @@ export default function ParticipantsPage() {
                       setRecordToDelete(p);
                       setDeleteError(null);
                     }}
-                    className="w-full py-2 px-3 rounded-xl text-xs font-bold text-rose-600 bg-rose-50/80 hover:bg-rose-100 border border-rose-200 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                    className="w-full py-1.5 px-3 rounded-xl text-xs font-medium text-rose-600 bg-rose-50/60 hover:bg-rose-100/70 border border-rose-200/60 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <svg className="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg className="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                     </svg>
                     <span>Hapus</span>
@@ -368,30 +360,30 @@ export default function ParticipantsPage() {
       </div>
 
       {/* ════════════════════════════════════════════════════════════════
-          DESKTOP VIEW: COMPACT, ELEGANT TABLE (HIDDEN ON MOBILE)
+          DESKTOP VIEW: CLEAN APPLE-STYLE TABLE (HIDDEN ON MOBILE)
           ════════════════════════════════════════════════════════════════ */}
-      <div className="hidden md:block overflow-hidden bg-white border border-slate-200 shadow-2xs rounded-2xl">
+      <div className="hidden md:block overflow-hidden bg-white border border-neutral-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] rounded-2xl">
         <div className="overflow-x-auto w-full">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
-                <th className="py-3.5 px-5 min-w-[200px]">Kode Registrasi / Tiket</th>
-                <th className="py-3.5 px-5 min-w-[220px]">Nama Peserta / Pengunjung</th>
-                <th className="py-3.5 px-5 min-w-[150px]">Kategori</th>
-                <th className="py-3.5 px-5 min-w-[140px]">Waktu Presensi</th>
-                <th className="py-3.5 px-5 min-w-[180px] text-right pr-6">Aksi</th>
+              <tr className="bg-neutral-50/75 border-b border-neutral-200/80 text-neutral-500 font-medium text-[11px]">
+                <th className="py-3 px-5 min-w-[190px]">Kode Registrasi / Tiket</th>
+                <th className="py-3 px-5 min-w-[220px]">Nama Peserta / Pengunjung</th>
+                <th className="py-3 px-5 min-w-[150px]">Kategori</th>
+                <th className="py-3 px-5 min-w-[140px]">Waktu Presensi</th>
+                <th className="py-3 px-5 min-w-[170px] text-right pr-6">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-neutral-100">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-12 text-xs font-medium text-slate-400">
+                  <td colSpan={5} className="text-center py-12 text-xs font-normal text-neutral-400">
                     Memuat data presensi gate...
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-12 text-xs font-medium text-slate-400">
+                  <td colSpan={5} className="text-center py-12 text-xs font-normal text-neutral-400">
                     {search || compFilter !== 'all'
                       ? 'Tidak ditemukan data presensi yang sesuai kriteria pencarian.'
                       : 'Belum ada data presensi yang tercatat di gate.'}
@@ -400,32 +392,24 @@ export default function ParticipantsPage() {
               ) : (
                 filtered.map((p) => {
                   return (
-                    <tr key={p.id} className="hover:bg-slate-50/80 transition-colors">
+                    <tr key={p.id} className="hover:bg-neutral-50/60 transition-colors">
                       {/* Column 1: Kode */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
-                        <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
+                        <span className="font-mono text-xs font-medium text-neutral-800 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-200/60">
                           {highlightMatch(p.registration_code, search)}
                         </span>
                       </td>
 
                       {/* Column 2: Nama */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
-                        <div className="font-extrabold text-slate-900 text-sm">
+                        <div className="font-medium text-neutral-900 text-sm">
                           {highlightMatch(p.full_name, search)}
                         </div>
                       </td>
 
                       {/* Column 3: Kategori */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
-                        <span
-                          className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${
-                            p.competition_id === 'desain-kemasan'
-                              ? 'bg-orange-50 text-orange-700 border-orange-200'
-                              : p.competition_id === 'video-lokal'
-                              ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                              : 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                          }`}
-                        >
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-neutral-100 text-neutral-700 border border-neutral-200/70">
                           {p.competition_id === 'desain-kemasan'
                             ? 'Desain Kemasan'
                             : p.competition_id === 'video-lokal'
@@ -436,7 +420,7 @@ export default function ParticipantsPage() {
 
                       {/* Column 4: Waktu Presensi */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
-                        <span className="font-mono text-xs font-semibold text-slate-600">
+                        <span className="font-mono text-xs text-neutral-600">
                           {p.checked_in_at
                             ? `${new Date(p.checked_in_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB`
                             : 'Hadir'}
@@ -449,10 +433,12 @@ export default function ParticipantsPage() {
                           <button
                             type="button"
                             onClick={() => setSelectedParticipant(p)}
-                            className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors cursor-pointer inline-flex items-center gap-1"
+                            className="px-2.5 py-1 rounded-lg text-xs font-medium text-neutral-700 hover:text-neutral-900 bg-neutral-100/80 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors cursor-pointer inline-flex items-center gap-1"
                           >
                             <span>Detail</span>
-                            <span aria-hidden="true">→</span>
+                            <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="9 18 15 12 9 6" />
+                            </svg>
                           </button>
 
                           <button
@@ -461,10 +447,10 @@ export default function ParticipantsPage() {
                               setRecordToDelete(p);
                               setDeleteError(null);
                             }}
-                            className="px-2.5 py-1.5 rounded-lg text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors cursor-pointer inline-flex items-center gap-1"
+                            className="px-2.5 py-1 rounded-lg text-xs font-medium text-rose-600 hover:text-rose-700 bg-rose-50/60 hover:bg-rose-100/70 border border-rose-200/60 transition-colors cursor-pointer inline-flex items-center gap-1"
                             title="Hapus data presensi"
                           >
-                            <svg className="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <svg className="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                             </svg>
                             <span>Hapus</span>
@@ -492,22 +478,22 @@ export default function ParticipantsPage() {
             className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-4 border-b border-neutral-100">
               <div>
-                <span className="font-mono text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">
+                <span className="font-mono text-xs font-medium text-neutral-800 bg-neutral-100 px-2.5 py-0.5 rounded border border-neutral-200/60">
                   {selectedParticipant.registration_code}
                 </span>
-                <h3 className="text-xl font-extrabold text-slate-900 mt-2">
+                <h3 className="text-lg sm:text-xl font-semibold text-[#1d1d1f] mt-1.5">
                   {selectedParticipant.full_name}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedParticipant(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+                className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 cursor-pointer transition-colors"
                 aria-label="Tutup popup detail"
               >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
@@ -515,19 +501,19 @@ export default function ParticipantsPage() {
             </div>
 
             {/* Information Grid */}
-            <div className="space-y-3 text-xs">
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                <span className="text-slate-500 font-medium">Status Kehadiran Gate:</span>
-                <span className="font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+            <div className="space-y-2.5 text-xs">
+              <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
+                <span className="text-neutral-500 font-normal">Status Kehadiran Gate:</span>
+                <span className="font-medium text-neutral-700 bg-neutral-100 px-2.5 py-0.5 rounded-full border border-neutral-200/70 inline-flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
                   Hadir di Braga City Walk
                 </span>
               </div>
 
               {selectedParticipant.checked_in_at && (
-                <div className="p-3 rounded-xl bg-emerald-50/50 border border-emerald-100 flex justify-between items-center text-emerald-900">
-                  <span className="font-medium">Waktu Presensi:</span>
-                  <span className="font-mono font-bold">
+                <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center text-neutral-700">
+                  <span className="text-neutral-500 font-normal">Waktu Presensi:</span>
+                  <span className="font-mono font-medium">
                     {new Date(selectedParticipant.checked_in_at).toLocaleString('id-ID')} WIB
                   </span>
                 </div>
@@ -535,53 +521,53 @@ export default function ParticipantsPage() {
 
               {selectedParticipant.competition_id === 'pengunjung-umum' ? (
                 <>
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                    <span className="text-slate-500 font-medium">Kategori:</span>
-                    <span className="font-bold text-slate-800">Pengunjung Festival (Umum)</span>
+                  <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
+                    <span className="text-neutral-500 font-normal">Kategori:</span>
+                    <span className="font-medium text-neutral-900">Pengunjung Festival (Umum)</span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                    <span className="text-slate-500 font-medium">Asal Domisili:</span>
-                    <span className="font-bold text-slate-800">{selectedParticipant.address || selectedParticipant.phone || 'Kota Bandung'}</span>
+                  <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
+                    <span className="text-neutral-500 font-normal">Asal Domisili:</span>
+                    <span className="font-medium text-neutral-900">{selectedParticipant.address || selectedParticipant.phone || 'Kota Bandung'}</span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                    <span className="text-slate-500 font-medium">Pintu Masuk:</span>
-                    <span className="font-semibold text-slate-700">Gate Utama Braga City Walk</span>
+                  <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
+                    <span className="text-neutral-500 font-normal">Pintu Masuk:</span>
+                    <span className="font-medium text-neutral-700">Gate Utama Braga City Walk</span>
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                    <span className="text-slate-500 font-medium">Kategori Lomba:</span>
-                    <span className="font-bold text-slate-800">
+                  <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
+                    <span className="text-neutral-500 font-normal">Kategori Lomba:</span>
+                    <span className="font-medium text-neutral-900">
                       {selectedParticipant.competition_id === 'desain-kemasan'
                         ? 'Lomba Desain Kemasan'
                         : 'Lomba Video 1 Menit'}
                     </span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                    <span className="text-slate-500 font-medium">Email:</span>
-                    <span className="font-mono font-bold text-slate-800">{selectedParticipant.email}</span>
+                  <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
+                    <span className="text-neutral-500 font-normal">Email:</span>
+                    <span className="font-mono font-medium text-neutral-900">{selectedParticipant.email}</span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                    <span className="text-slate-500 font-medium">Nomor WhatsApp:</span>
-                    <span className="font-mono font-bold text-slate-800">{selectedParticipant.phone}</span>
+                  <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
+                    <span className="text-neutral-500 font-normal">Nomor WhatsApp:</span>
+                    <span className="font-mono font-medium text-neutral-900">{selectedParticipant.phone}</span>
                   </div>
 
                   {selectedParticipant.brand_name && (
-                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                      <span className="text-slate-500 font-medium">Brand Produk:</span>
-                      <span className="font-bold text-slate-800">{selectedParticipant.brand_name}</span>
+                    <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
+                      <span className="text-neutral-500 font-normal">Brand Produk:</span>
+                      <span className="font-medium text-neutral-900">{selectedParticipant.brand_name}</span>
                     </div>
                   )}
 
                   {selectedParticipant.video_title && (
-                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                      <span className="text-slate-500 font-medium">Judul Karya Video:</span>
-                      <span className="font-bold text-slate-800">{selectedParticipant.video_title}</span>
+                    <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
+                      <span className="text-neutral-500 font-normal">Judul Karya Video:</span>
+                      <span className="font-medium text-neutral-900">{selectedParticipant.video_title}</span>
                     </div>
                   )}
                 </>
@@ -589,18 +575,18 @@ export default function ParticipantsPage() {
             </div>
 
             {/* Modal Bottom Actions */}
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex items-center gap-2.5 pt-2">
               <button
                 type="button"
                 onClick={() => handleCancelCheckIn(selectedParticipant)}
-                className="py-2.5 px-4 rounded-xl text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 transition-colors cursor-pointer"
+                className="py-2 px-3.5 rounded-xl text-xs font-medium text-neutral-700 bg-white border border-neutral-200/80 hover:bg-neutral-50 transition-colors cursor-pointer"
               >
                 Batalkan Hadir
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedParticipant(null)}
-                className="flex-1 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+                className="flex-1 py-2 rounded-xl text-xs font-medium text-white bg-[#0071e3] hover:bg-[#0077ed] transition-colors cursor-pointer"
               >
                 Tutup Detail
               </button>
@@ -614,47 +600,47 @@ export default function ParticipantsPage() {
           ════════════════════════════════════════════════════════════════ */}
       {recordToDelete && (
         <div
-          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in-50 duration-200"
+          className="fixed inset-0 z-50 bg-black/30 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in-50 duration-200"
           onClick={() => !isDeleting && setRecordToDelete(null)}
         >
           <div
-            className="bg-white rounded-3xl border border-slate-200 p-6 max-w-md w-full shadow-2xl space-y-5 animate-in zoom-in-95 duration-200"
+            className="bg-white rounded-2xl border border-neutral-200/80 p-6 max-w-md w-full shadow-2xl space-y-4 animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 shrink-0">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <div className="w-9 h-9 rounded-xl bg-rose-50 border border-rose-200/60 flex items-center justify-center text-rose-600 shrink-0">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
                   <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                 </svg>
               </div>
               <div className="space-y-1">
-                <h3 className="text-base font-extrabold text-slate-900">
+                <h3 className="text-base font-semibold text-[#1d1d1f]">
                   Hapus Data Presensi?
                 </h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
+                <p className="text-xs text-neutral-500 leading-relaxed">
                   Apakah Anda yakin ingin menghapus data presensi untuk{' '}
-                  <strong className="text-slate-800">{recordToDelete.full_name}</strong> (
-                  <span className="font-mono text-slate-700">{recordToDelete.registration_code}</span>)?
+                  <strong className="text-neutral-800 font-medium">{recordToDelete.full_name}</strong> (
+                  <span className="font-mono text-neutral-700">{recordToDelete.registration_code}</span>)?
                 </p>
               </div>
             </div>
 
             {deleteError && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-semibold">
+              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-medium">
                 {deleteError}
               </div>
             )}
 
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-[11px] text-slate-500">
+            <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200/60 text-[11px] text-neutral-500">
               Tindakan ini akan menghapus catatan presensi ini dari database.
             </div>
 
-            <div className="flex items-center gap-3 pt-1">
+            <div className="flex items-center gap-2.5 pt-1">
               <button
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setRecordToDelete(null)}
-                className="flex-1 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors disabled:opacity-50 cursor-pointer"
+                className="flex-1 py-2 rounded-xl text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 Batal
               </button>
@@ -662,7 +648,7 @@ export default function ParticipantsPage() {
                 type="button"
                 disabled={isDeleting}
                 onClick={handleDeleteConfirm}
-                className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+                className="flex-1 py-2 rounded-xl text-xs font-medium text-white bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
               >
                 {isDeleting ? 'Menghapus...' : 'Ya, Hapus Data'}
               </button>
