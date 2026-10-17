@@ -40,20 +40,13 @@ export default function TactlinkBanner({
               />
             </div>
 
-            {/* Headline, Tag & Description */}
+            {/* Headline & Description */}
             <div className="space-y-0.5 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span
-                  className={`inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider border ${
-                    isDark
-                      ? 'bg-blue-500/15 text-blue-300 border-blue-500/30'
-                      : 'bg-blue-50 text-blue-700 border-blue-200'
-                  }`}
-                >
-                  SUPPORTED BY
-                </span>
-                <span className="text-xs font-black tracking-tight">
-                  <span className="text-amber-500 font-extrabold">Tactlink</span> — Smart Digital Directory
+              <div className="text-xs sm:text-sm font-black tracking-tight flex items-center gap-1.5 flex-wrap">
+                <span className="text-amber-500 font-extrabold">Tactlink</span>
+                <span className="text-slate-400 font-normal">—</span>
+                <span className={isDark ? 'text-white' : 'text-slate-900'}>
+                  Smart Digital Directory
                 </span>
               </div>
               <p
