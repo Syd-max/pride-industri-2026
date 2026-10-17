@@ -410,7 +410,7 @@ export default function DesainKemasanPage() {
         brand_name: brandName.trim(),
         product_name: productName.trim(),
       });
-      window.scrollTo({ top: 100, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {
       console.error('[REGISTRATION_SUBMIT_ERROR]', err);
       setErrorMessage(
@@ -428,15 +428,17 @@ export default function DesainKemasanPage() {
         
         {/* Navigation Bar: Clean Brand Logo on left, back button on right */}
         <div className="flex items-center justify-between pb-3.5 border-b border-slate-200/80">
-          <Link href="/" className="flex items-center gap-2 cursor-pointer">
-            <Image
-              src="/LOGO_PRIDE_INDUSTRI.png"
-              alt="PRIDE Industri 2026"
-              width={120}
-              height={36}
-              className="h-7 sm:h-8 w-auto object-contain"
-              priority
-            />
+          <Link href="/" className="flex items-center gap-2 cursor-pointer group">
+            <div className="h-8 flex items-center">
+              <Image
+                src="/LOGO_PRIDE_INDUSTRI.png"
+                alt="PRIDE Industri 2026"
+                width={120}
+                height={32}
+                style={{ height: '32px', width: 'auto', objectFit: 'contain' }}
+                priority
+              />
+            </div>
           </Link>
           <Link
             href="/"
@@ -449,111 +451,113 @@ export default function DesainKemasanPage() {
           </Link>
         </div>
 
-        {/* Page Title & Context Header */}
-        <div className="pt-1 space-y-1.5">
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Pendaftaran Desain Kemasan IKM
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Inovasi Eco-Packaging Produk Kuliner &amp; Olahan Pangan Lokal Kota Bandung. Pendaftaran 100% gratis.
-          </p>
-        </div>
-
-        {/* Download Buttons: Compact single-row pills */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          <a
-            href="/template-desain-kemasan.pdf"
-            download
-            className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:bg-slate-50 transition-colors shadow-2xs text-xs font-semibold text-slate-800"
-          >
-            <span className="flex items-center gap-2 min-w-0">
-              <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              <span className="truncate">Format Template Desain (PDF)</span>
-            </span>
-            <span className="text-[11px] text-blue-600 font-medium shrink-0 ml-2">Unduh ↗</span>
-          </a>
-
-          <a
-            href="/syarat-desain-kemasan.pdf"
-            download
-            className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:bg-slate-50 transition-colors shadow-2xs text-xs font-semibold text-slate-800"
-          >
-            <span className="flex items-center gap-2 min-w-0">
-              <svg className="w-4 h-4 text-slate-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-              </svg>
-              <span className="truncate">Juknis &amp; Format Pakta (PDF)</span>
-            </span>
-            <span className="text-[11px] text-slate-600 font-medium shrink-0 ml-2">Unduh ↗</span>
-          </a>
-        </div>
-
         {/* ─── SUCCESS SCREEN ─── */}
         {successData ? (
-          <div className="p-8 sm:p-10 rounded-3xl bg-white border border-emerald-200 shadow-xl space-y-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto shadow-sm">
-              <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <div className="p-6 sm:p-9 rounded-3xl bg-white border border-emerald-200 shadow-xl space-y-5 text-center">
+            <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto shadow-xs">
+              <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
 
-            <div className="space-y-2">
-              <span className="text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Pendaftaran Berhasil Terkonfirmasi
-              </span>
-              <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+            <div className="space-y-1.5">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Pendaftaran Berhasil
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight pt-1">
                 Selamat, {successData.full_name}!
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto">
+              <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
                 Berkas pendaftaran Lomba Desain Kemasan IKM PRIDE Industri 2026 Anda telah kami terima dan diverifikasi oleh sistem.
               </p>
             </div>
 
             {/* Registration Code Box */}
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 max-w-md mx-auto space-y-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 max-w-md mx-auto space-y-1">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Kode Registrasi Peserta
               </span>
-              <div className="font-mono text-2xl sm:text-3xl font-black text-blue-600 tracking-wider">
+              <div className="font-mono text-base sm:text-xl font-black text-blue-600 tracking-normal select-all">
                 {successData.registration_code}
               </div>
             </div>
 
             {/* Summary Data */}
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-left max-w-md mx-auto text-xs space-y-2.5">
-              <div className="flex justify-between border-b border-slate-200/60 pb-2">
-                <span className="text-slate-500">Nama Merek Produk:</span>
-                <span className="font-bold text-slate-800">{successData.brand_name}</span>
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 text-left max-w-md mx-auto text-xs space-y-2.5">
+              <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
+                <span className="text-slate-500 font-medium">Nama Merek:</span>
+                <span className="font-semibold text-slate-900 text-right">{successData.brand_name}</span>
               </div>
-              <div className="flex justify-between border-b border-slate-200/60 pb-2">
-                <span className="text-slate-500">Produk Kuliner:</span>
-                <span className="font-bold text-blue-700">{successData.product_name}</span>
+              <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
+                <span className="text-slate-500 font-medium">Produk Kuliner:</span>
+                <span className="font-semibold text-slate-900 text-right">{successData.product_name}</span>
               </div>
-              <div className="flex justify-between border-b border-slate-200/60 pb-2">
-                <span className="text-slate-500">Peserta:</span>
-                <span className="font-bold text-slate-800">{successData.full_name}</span>
+              <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
+                <span className="text-slate-500 font-medium">Peserta:</span>
+                <span className="font-semibold text-slate-900 text-right">{successData.full_name}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">Email:</span>
-                <span className="font-bold text-slate-800">{successData.email}</span>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500 font-medium">Email:</span>
+                <span className="font-semibold text-slate-900 text-right">{successData.email}</span>
               </div>
             </div>
 
             <div className="pt-2">
               <Link
                 href="/"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-full text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md cursor-pointer"
+                className="inline-flex items-center justify-center px-6 py-2.5 rounded-full text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md cursor-pointer"
               >
                 Kembali ke Beranda Utama
               </Link>
             </div>
           </div>
         ) : (
+          <>
+            {/* Page Title & Context Header */}
+            <div className="pt-1 space-y-1.5">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Pendaftaran Desain Kemasan IKM
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Inovasi Eco-Packaging Produk Kuliner &amp; Olahan Pangan Lokal Kota Bandung. Pendaftaran 100% gratis.
+              </p>
+            </div>
+
+            {/* Download Buttons: Compact single-row pills */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <a
+                href="/template-desain-kemasan.pdf"
+                download
+                className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:bg-slate-50 transition-colors shadow-2xs text-xs font-semibold text-slate-800"
+              >
+                <span className="flex items-center gap-2 min-w-0">
+                  <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  <span className="truncate">Format Template Desain (PDF)</span>
+                </span>
+                <span className="text-[11px] text-blue-600 font-medium shrink-0 ml-2">Unduh ↗</span>
+              </a>
+
+              <a
+                href="/syarat-desain-kemasan.pdf"
+                download
+                className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:bg-slate-50 transition-colors shadow-2xs text-xs font-semibold text-slate-800"
+              >
+                <span className="flex items-center gap-2 min-w-0">
+                  <svg className="w-4 h-4 text-slate-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                  </svg>
+                  <span className="truncate">Juknis &amp; Format Pakta (PDF)</span>
+                </span>
+                <span className="text-[11px] text-slate-600 font-medium shrink-0 ml-2">Unduh ↗</span>
+              </a>
+            </div>
           <div className="space-y-6">
 
             {/* ════════════════════════════════════════════════════════════════
@@ -1548,6 +1552,7 @@ export default function DesainKemasanPage() {
 
             </form>
           </div>
+          </>
         )}
 
       </div>

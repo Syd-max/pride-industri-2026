@@ -300,7 +300,7 @@ export default function VideoLokalPage() {
         category: videoCategory,
         video_title: videoTitle.trim(),
       });
-      window.scrollTo({ top: 100, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {
       setErrorMessage(err?.message || 'Gagal menghubungi server. Pastikan koneksi internet Anda stabil.');
     } finally {
@@ -311,126 +311,94 @@ export default function VideoLokalPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 py-6 sm:py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
+      <div className="max-w-3xl mx-auto space-y-6">
         
         {/* Navigation Bar: Brand Logo on LEFT, Back Button on RIGHT */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-200/80">
+        <div className="flex items-center justify-between pb-3.5 border-b border-slate-200/80">
           <Link href="/" className="flex items-center gap-2 cursor-pointer group">
-            <Image
-              src="/LOGO_PRIDE_INDUSTRI.png"
-              alt="PRIDE Industri 2026"
-              width={140}
-              height={40}
-              className="h-7 sm:h-8 w-auto object-contain"
-              priority
-            />
+            <div className="h-8 flex items-center">
+              <Image
+                src="/LOGO_PRIDE_INDUSTRI.png"
+                alt="PRIDE Industri 2026"
+                width={120}
+                height={32}
+                style={{ height: '32px', width: 'auto', objectFit: 'contain' }}
+                priority
+              />
+            </div>
           </Link>
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-100 border border-slate-200/80 transition-all shadow-2xs cursor-pointer"
           >
-            <span className="text-slate-400">←</span>
+            <svg className="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
             <span>Kembali</span>
           </Link>
         </div>
 
-        {/* Page Title & Context Header */}
-        <div className="pt-2 sm:pt-4 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs">
-            Formulir Pendaftaran Resmi
-          </div>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug sm:leading-tight pt-1">
-            Lomba Video 1 Menit PRIDE Industri 2026
-          </h1>
-          <p className="text-sm sm:text-base font-semibold text-slate-700 italic">
-            &ldquo;Karya Lokal, Cerita Lokal: Mengangkat Dinamika &amp; Eksistensi IKM Kota Bandung&rdquo;
-          </p>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
-            Pendaftaran terbuka untuk umum WNI, 100% gratis tanpa dipungut biaya. Total hadiah Rp 2.250.000 dengan piala dan sertifikat Walikota Bandung.
-          </p>
-        </div>
-
-        {/* Technical Guide Notice Card */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="text-xs font-bold text-slate-900">
-              Panduan Teknis Video
-            </div>
-            <div className="text-xs text-slate-500 mt-0.5">
-              Format vertikal (9:16) maksimal 60 detik di koridor Jalan Braga pada 27–28 Nov 2026.
-            </div>
-          </div>
-          <a
-            href="/syarat-lomba-video.pdf"
-            download
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200/80 transition-all shrink-0 cursor-pointer"
-          >
-            <span>Unduh Petunjuk Teknis PDF</span>
-            <span>↗</span>
-          </a>
-        </div>
-
         {/* ─── SUCCESS SCREEN ─── */}
         {successData ? (
-          <div className="p-8 sm:p-10 rounded-3xl bg-white border border-emerald-200 shadow-xl space-y-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto shadow-sm">
-              <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <div className="p-6 sm:p-9 rounded-3xl bg-white border border-emerald-200 shadow-xl space-y-5 text-center">
+            <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto shadow-xs">
+              <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
 
-            <div className="space-y-2">
-              <span className="text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Pendaftaran Berhasil Dikirim
-              </span>
-              <h2 className="text-2xl font-black text-slate-900 tracking-tight">
-                Selamat, Berkas Anda Telah Terdaftar!
+            <div className="space-y-1.5">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Pendaftaran Berhasil
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight pt-1">
+                Selamat, {successData.full_name}!
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto">
-                Terima kasih atas partisipasi Anda dalam Lomba Video 1 Menit PRIDE Industri 2026. Simpan kode registrasi Anda untuk verifikasi dan check-in di venue.
+              <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
+                Berkas pendaftaran Lomba Video 1 Menit PRIDE Industri 2026 Anda telah kami terima dan diverifikasi oleh sistem.
               </p>
             </div>
 
             {/* Registration Code Box */}
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 max-w-md mx-auto space-y-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 max-w-md mx-auto space-y-1">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Kode Registrasi Peserta
               </span>
-              <div className="font-mono text-2xl sm:text-3xl font-black text-blue-600 tracking-wider">
+              <div className="font-mono text-base sm:text-xl font-black text-blue-600 tracking-normal select-all">
                 {successData.registration_code}
               </div>
             </div>
 
             {/* Summary Data */}
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-left max-w-md mx-auto text-xs space-y-2.5">
-              <div className="flex justify-between border-b border-slate-200/60 pb-2">
-                <span className="text-slate-500">Nama Peserta:</span>
-                <span className="font-bold text-slate-800">{successData.full_name}</span>
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 text-left max-w-md mx-auto text-xs space-y-2.5">
+              <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
+                <span className="text-slate-500 font-medium">Nama Peserta:</span>
+                <span className="font-semibold text-slate-900 text-right">{successData.full_name}</span>
               </div>
-              <div className="flex justify-between border-b border-slate-200/60 pb-2">
-                <span className="text-slate-500">Instansi / Asal:</span>
-                <span className="font-bold text-slate-800">{successData.institution}</span>
+              <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
+                <span className="text-slate-500 font-medium">Instansi / Asal:</span>
+                <span className="font-semibold text-slate-900 text-right">{successData.institution}</span>
               </div>
-              <div className="flex justify-between border-b border-slate-200/60 pb-2">
-                <span className="text-slate-500">Kategori Sub-Sektor:</span>
-                <span className="font-bold text-blue-700">{successData.category}</span>
+              <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
+                <span className="text-slate-500 font-medium">Sub-Sektor IKM:</span>
+                <span className="font-semibold text-slate-900 text-right">{successData.category}</span>
               </div>
-              <div className="flex justify-between border-b border-slate-200/60 pb-2">
-                <span className="text-slate-500">Judul Karya:</span>
-                <span className="font-bold text-slate-800 line-clamp-1">{successData.video_title}</span>
+              <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
+                <span className="text-slate-500 font-medium">Judul Karya:</span>
+                <span className="font-semibold text-slate-900 text-right line-clamp-1">{successData.video_title}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">Email Konfirmasi:</span>
-                <span className="font-bold text-slate-800">{successData.email}</span>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500 font-medium">Email:</span>
+                <span className="font-semibold text-slate-900 text-right">{successData.email}</span>
               </div>
             </div>
 
             {/* Next Steps Prompt */}
-            <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/70 text-xs text-blue-900 text-left max-w-md mx-auto space-y-1.5">
-              <div className="font-bold flex items-center gap-1.5">
-                <span>📍</span> Langkah Selanjutnya:
-              </div>
-              <ul className="list-disc list-inside space-y-1 text-slate-700 pl-1">
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 text-xs text-slate-700 text-left max-w-md mx-auto space-y-2">
+              <div className="font-bold text-slate-900">Informasi Penting:</div>
+              <ul className="list-disc list-inside space-y-1 text-slate-600 pl-0.5">
                 <li>Bawa smartphone dan kartu identitas saat shooting di Braga (27–28 Nov 2026).</li>
                 <li>Gunakan aplikasi TactLink Anda untuk check-in dan bertukar kontak digital.</li>
                 <li>Pengumuman pemenang pada Malam Penganugerahan di Ballroom The Papandayan.</li>
@@ -440,13 +408,39 @@ export default function VideoLokalPage() {
             <div className="pt-2">
               <Link
                 href="/"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-full text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md cursor-pointer"
+                className="inline-flex items-center justify-center px-6 py-2.5 rounded-full text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md cursor-pointer"
               >
                 Kembali ke Beranda Utama
               </Link>
             </div>
           </div>
         ) : (
+          <>
+            {/* Page Title & Context Header */}
+            <div className="pt-1 space-y-1.5">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Pendaftaran Lomba Video 1 Menit
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                &ldquo;Karya Lokal, Cerita Lokal: Mengangkat Eksistensi IKM Kota Bandung&rdquo; · Pendaftaran 100% gratis.
+              </p>
+            </div>
+
+            {/* Technical Guide Pill */}
+            <a
+              href="/syarat-video-lokal.pdf"
+              download
+              className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:bg-slate-50 transition-colors shadow-2xs text-xs font-semibold text-slate-800"
+            >
+              <span className="flex items-center gap-2 min-w-0">
+                <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                </svg>
+                <span className="truncate">Juknis &amp; Panduan Lomba Video (PDF)</span>
+              </span>
+              <span className="text-[11px] text-blue-600 font-medium shrink-0 ml-2">Unduh ↗</span>
+            </a>
           <div className="space-y-6">
 
             {/* ════════════════════════════════════════════════════════════════
@@ -542,7 +536,7 @@ export default function VideoLokalPage() {
                         Data Diri / Tim Peserta
                       </h2>
                       <p className="text-xs text-slate-500">
-                        Identitas ketua tim atau peserta perorangan yang sah.
+                        Identitas peserta atau ketua tim yang sah.
                       </p>
                     </div>
                   </div>
@@ -550,13 +544,13 @@ export default function VideoLokalPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                     <div className="space-y-1.5 sm:col-span-2">
                       <label htmlFor="full_name" className="text-xs font-bold text-slate-700 block">
-                        Nama Lengkap (Sesuai KTP/Kartu Pelajar/Mahasiswa) <span className="text-blue-600">*</span>
+                        Nama Lengkap (Sesuai KTP / Pelajar) <span className="text-blue-600">*</span>
                       </label>
                       <input
                         id="full_name"
                         type="text"
                         required
-                        placeholder="Contoh: Raden Rangga Sasana"
+                        placeholder="Nama lengkap peserta atau ketua tim"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition-all"
@@ -571,7 +565,7 @@ export default function VideoLokalPage() {
                         id="institution"
                         type="text"
                         required
-                        placeholder="Contoh: Institut Teknologi Bandung / Komunitas Kreator Bandung / Umum"
+                        placeholder="Universitas, sekolah, komunitas, atau umum"
                         value={institution}
                         onChange={(e) => setInstitution(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition-all"
@@ -636,7 +630,7 @@ export default function VideoLokalPage() {
                         Informasi Karya Video
                       </h2>
                       <p className="text-xs text-slate-500">
-                        Rincian sub-sektor IKM, judul karya, dan konsep video promosi.
+                        Kategori IKM, judul karya, dan konsep video 1 menit.
                       </p>
                     </div>
                   </div>
@@ -644,7 +638,7 @@ export default function VideoLokalPage() {
                   <div className="space-y-4 pt-1">
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-slate-700 block">
-                        Kategori Sub-Sektor IKM yang Diangkat <span className="text-blue-600">*</span>
+                        Kategori Sub-Sektor IKM <span className="text-blue-600">*</span>
                       </label>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                         {(['Fesyen', 'Kuliner', 'Kriya', 'PRIDE Industri 2026'] as VideoCategory[]).map((cat) => (
@@ -681,13 +675,13 @@ export default function VideoLokalPage() {
 
                     <div className="space-y-1.5">
                       <label htmlFor="video_description" className="text-xs font-bold text-slate-700 block">
-                        Sinopsis / Deskripsi Singkat Karya <span className="text-blue-600">*</span>
+                        Sinopsis / Deskripsi Singkat <span className="text-blue-600">*</span>
                       </label>
                       <textarea
                         id="video_description"
                         rows={3}
                         required
-                        placeholder="Ceritakan pesan utama, keunikan produk IKM yang diangkat, dan sudut pandang visual video Anda..."
+                        placeholder="Pesan utama, keunikan produk IKM yang diangkat, dan sudut pandang visual karya Anda..."
                         value={videoDescription}
                         onChange={(e) => setVideoDescription(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition-all resize-none"
@@ -729,7 +723,7 @@ export default function VideoLokalPage() {
                         Persetujuan &amp; Komitmen Peserta
                       </h2>
                       <p className="text-xs text-slate-500">
-                        Pernyataan integritas karya, kepatuhan teknis festival, dan hak siar.
+                        Pernyataan orisinalitas karya, kepatuhan teknis, dan hak tayang.
                       </p>
                     </div>
                   </div>
@@ -743,8 +737,8 @@ export default function VideoLokalPage() {
                         className="mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300 cursor-pointer"
                       />
                       <div className="text-xs text-slate-700 leading-relaxed">
-                        <strong className="text-slate-900 block mb-0.5">Keaslian Karya &amp; Bebas Pelanggaran Hak Cipta</strong>
-                        Saya menyatakan bahwa video yang diikutsertakan adalah karya orisinal, tidak melanggar hak cipta pihak ketiga, tidak mengandung unsur SARA/pornografi, dan belum pernah memenangkan kompetisi lain.
+                        <strong className="text-slate-900 block mb-0.5">Keaslian Karya &amp; Hak Cipta</strong>
+                        Video adalah karya orisinal, bebas dari sengketa hak cipta dan unsur SARA, serta belum pernah menjuarai lomba lain.
                       </div>
                     </label>
 
@@ -756,8 +750,8 @@ export default function VideoLokalPage() {
                         className="mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300 cursor-pointer"
                       />
                       <div className="text-xs text-slate-700 leading-relaxed">
-                        <strong className="text-slate-900 block mb-0.5">Kepatuhan Syarat &amp; Ketentuan Teknis</strong>
-                        Saya menyetujui seluruh ketentuan teknis festival, termasuk durasi maksimal 60 detik, format vertikal 9:16, serta jadwal shooting langsung di venue Braga City Walk pada 27–28 November 2026.
+                        <strong className="text-slate-900 block mb-0.5">Kepatuhan Ketentuan Teknis</strong>
+                        Menyetujui ketentuan teknis (durasi maksimal 60 detik, format vertikal 9:16, dan shooting di Braga 27–28 Nov 2026).
                       </div>
                     </label>
 
@@ -769,8 +763,8 @@ export default function VideoLokalPage() {
                         className="mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300 cursor-pointer"
                       />
                       <div className="text-xs text-slate-700 leading-relaxed">
-                        <strong className="text-slate-900 block mb-0.5">Hak Tayang &amp; Publikasi Edukasi IKM</strong>
-                        Saya memberikan hak kepada Disdagin Kota Bandung dan Pemerintah Kota Bandung untuk menayangkan, mengarsipkan, serta mempublikasikan video untuk kepentingan promosi IKM lokal dan dokumentasi resmi.
+                        <strong className="text-slate-900 block mb-0.5">Hak Tayang &amp; Publikasi Nonkomersial</strong>
+                        Memberikan izin kepada Disdagin Kota Bandung untuk menayangkan dan mempublikasikan karya demi promosi IKM secara nonkomersial.
                       </div>
                     </label>
                   </div>
@@ -809,24 +803,18 @@ export default function VideoLokalPage() {
                         Upload Dokumen Persyaratan
                       </h2>
                       <p className="text-xs text-slate-500">
-                        Pakta integritas dan kartu identitas peserta dalam 1 berkas (Maksimal 5 MB).
+                        Pakta integritas dan kartu identitas peserta.
                       </p>
                     </div>
                   </div>
 
                   <div className="space-y-3 pt-1">
-                    {/* Warning Note */}
-                    <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between gap-3">
-                      <span className="flex items-center gap-2">
-                        <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <circle cx="12" cy="12" r="10" />
-                          <line x1="12" y1="8" x2="12" y2="12" />
-                          <line x1="12" y1="16" x2="12.01" y2="16" />
-                        </svg>
-                        <span>Format: PDF, DOCX, atau ZIP · <strong>Maksimal 5 MB</strong></span>
-                      </span>
-                      <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                        Strict 5 MB
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-slate-800 block">
+                        Dokumen Persyaratan (Pakta Integritas &amp; Identitas) <span className="text-blue-600">*</span>
+                      </label>
+                      <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                        PDF / DOCX / ZIP · Maks 5 MB
                       </span>
                     </div>
 
@@ -936,11 +924,16 @@ export default function VideoLokalPage() {
                       5
                     </span>
                     <div>
-                      <h2 className="text-base sm:text-lg font-black text-slate-900">
-                        Siapkan TactLink (Wadah Jejaring Digital Resmi)
-                      </h2>
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-base sm:text-lg font-black text-slate-900">
+                          Siapkan TactLink (Wadah Jejaring Digital Resmi)
+                        </h2>
+                        <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                          Wajib
+                        </span>
+                      </div>
                       <p className="text-xs text-slate-500">
-                        Ikuti 5 langkah mudah berikut untuk melengkapi kartu nama digital resmi Anda.
+                        Lengkapi kartu nama digital resmi Anda sebagai syarat wajib festival PRIDE Industri 2026.
                       </p>
                     </div>
                   </div>
@@ -1203,6 +1196,7 @@ export default function VideoLokalPage() {
 
             </form>
           </div>
+          </>
         )}
 
       </div>
