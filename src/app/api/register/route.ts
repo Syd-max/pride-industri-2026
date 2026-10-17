@@ -318,7 +318,9 @@ export async function POST(
     }
 
     // 5. Generate Unique Public Registration Code (Does not leak DB IDs)
-    const registrationCode = generateRegistrationCode(competitionId);
+    const registrationCode = body.registration_code
+      ? sanitizeString(body.registration_code)
+      : generateRegistrationCode(competitionId);
 
     // 6. Check duplicates in Shared Store (In-Memory baseline)
     const sharedList = getSharedRegistrations();
