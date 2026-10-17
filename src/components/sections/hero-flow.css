@@ -476,14 +476,14 @@
     flex-shrink: 0;
   }
 
-  /* Dedicated Mobile Category Chips Row (Symmetrical 2x2 Grid) */
+  /* Dedicated Mobile Category Chips Row (Natural, cohesive Apple-style glass pills) */
   .hero-mobile-categories-row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 6px 8px;
     width: 100%;
-    max-width: min(88vw, 300px);
-    margin: 4px auto 7px;
+    max-width: min(88vw, 310px);
+    margin: 4px auto 8px;
     z-index: 2;
     box-sizing: border-box;
     animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
@@ -493,44 +493,31 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: clamp(4px, 1.2vw, 6px);
-    padding: clamp(4.5px, 1.2vw, 6px) clamp(8px, 2.5vw, 12px);
+    gap: 6px;
+    padding: 6px 12px;
     border-radius: 999px;
-    font-size: clamp(10px, 2.8vw, 11px);
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.01em;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    letter-spacing: -0.01em;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
     border: 1px solid rgba(255, 255, 255, 0.16);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+    color: #f8fafc;
     white-space: nowrap;
     text-align: center;
     width: 100%;
     box-sizing: border-box;
   }
 
-  .mob-chip-fesyen {
-    background: rgba(30, 58, 138, 0.72);
-    color: #bfdbfe;
-    border-color: rgba(96, 165, 250, 0.4);
-  }
-
-  .mob-chip-kuliner {
-    background: rgba(124, 45, 18, 0.72);
-    color: #fed7aa;
-    border-color: rgba(251, 146, 60, 0.4);
-  }
-
-  .mob-chip-video {
-    background: rgba(88, 28, 135, 0.72);
-    color: #e9d5ff;
-    border-color: rgba(192, 132, 252, 0.4);
-  }
-
+  .mob-chip-fesyen,
+  .mob-chip-kuliner,
+  .mob-chip-video,
   .mob-chip-kemasan {
-    background: rgba(6, 78, 59, 0.72);
-    color: #a7f3d0;
-    border-color: rgba(52, 211, 153, 0.4);
+    background: rgba(15, 23, 42, 0.65);
+    color: #f8fafc;
+    border-color: rgba(255, 255, 255, 0.16);
   }
 
   .headline-block {

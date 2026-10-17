@@ -404,19 +404,19 @@ export default function HeroSection() {
           {/* Clean Dedicated Mobile Category Chips Row (md:hidden) */}
           <div className="hero-mobile-categories-row md:hidden">
             <span className="mob-chip mob-chip-fesyen">
-              <FesyenIcon className="w-3 h-3 text-blue-300" />
+              <FesyenIcon className="w-3.5 h-3.5 text-blue-400 shrink-0" />
               <span>Fesyen Binaan</span>
             </span>
             <span className="mob-chip mob-chip-kuliner">
-              <KulinerIcon className="w-3 h-3 text-amber-300" />
+              <KulinerIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               <span>Kuliner Lokal</span>
             </span>
             <span className="mob-chip mob-chip-video">
-              <VideoIcon className="w-3 h-3 text-purple-300" />
+              <VideoIcon className="w-3.5 h-3.5 text-purple-400 shrink-0" />
               <span>Video 1 Menit</span>
             </span>
             <span className="mob-chip mob-chip-kemasan">
-              <KemasanIcon className="w-3 h-3 text-emerald-300" />
+              <KemasanIcon className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <span>Desain Kemasan</span>
             </span>
           </div>
