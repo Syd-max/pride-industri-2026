@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import type { PrideRegistration, RegistrationStatus } from '@/types';
-import { handleUniversalDownload } from '@/lib/document-service';
 
 // Helper to highlight matching search text (Apple clean styling)
 function highlightMatch(text: string | undefined | null, query: string) {
@@ -28,6 +27,145 @@ function highlightMatch(text: string | undefined | null, query: string) {
         )
       )}
     </>
+  );
+}
+
+interface FileAttachmentItemProps {
+  label: string;
+  fileName: string | undefined | null;
+  registrationCode: string;
+  onDownload: () => void;
+  isDownloading: boolean;
+}
+
+function FileAttachmentItem({
+  label,
+  fileName,
+  registrationCode,
+  onDownload,
+  isDownloading,
+}: FileAttachmentItemProps) {
+  const cleanName = fileName?.trim();
+
+  if (!cleanName) {
+    return (
+      <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/60 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+        <div className="min-w-0">
+          <div className="font-medium text-neutral-800 text-xs">{label}</div>
+          <div className="text-[11px] text-neutral-400 mt-0.5 italic">
+            Tidak ada file yang diunggah
+          </div>
+        </div>
+        <span className="px-2 py-0.5 rounded text-[10px] font-medium text-neutral-400 bg-neutral-100 border border-neutral-200/50 shrink-0">
+          Belum Diunggah
+        </span>
+      </div>
+    );
+  }
+
+  const ext = cleanName.includes('.')
+    ? cleanName.split('.').pop()?.toUpperCase() || 'FILE'
+    : 'FILE';
+
+  const isImage = ['PNG', 'JPG', 'JPEG', 'WEBP', 'SVG'].includes(ext);
+
+  // Format badge styling
+  let badgeStyle = 'bg-neutral-100 text-neutral-600 border-neutral-200/60';
+  if (ext === 'PDF') {
+    badgeStyle = 'bg-red-50 text-red-700 border-red-200/70';
+  } else if (isImage) {
+    badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200/70';
+  } else if (['AI', 'PSD', 'CDR'].includes(ext)) {
+    badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200/70';
+  } else if (['ZIP', 'RAR', '7Z'].includes(ext)) {
+    badgeStyle = 'bg-purple-50 text-purple-700 border-purple-200/70';
+  }
+
+  const previewUrl = `/api/download?code=${encodeURIComponent(
+    registrationCode
+  )}&file=${encodeURIComponent(cleanName)}&inline=true`;
+
+  return (
+    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+      <div className="flex items-center gap-2.5 min-w-0">
+        {isImage ? (
+          <div className="relative w-11 h-11 rounded-lg overflow-hidden border border-neutral-200/80 bg-neutral-100 shrink-0 group">
+            <img
+              src={previewUrl}
+              alt={cleanName}
+              className="w-full h-full object-cover cursor-pointer group-hover:scale-105 transition-transform"
+              onClick={() => window.open(previewUrl, '_blank')}
+              title="Klik untuk membuka gambar ukuran penuh"
+            />
+          </div>
+        ) : (
+          <div className="w-10 h-10 rounded-lg bg-neutral-100 border border-neutral-200/70 flex items-center justify-center shrink-0 text-neutral-600">
+            <svg
+              className="w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+          </div>
+        )}
+
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5">
+            <span className="font-medium text-neutral-900 text-xs truncate">
+              {label}
+            </span>
+            <span
+              className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-medium border ${badgeStyle} shrink-0`}
+            >
+              {ext}
+            </span>
+          </div>
+          <div
+            className="text-[11px] font-mono text-neutral-500 truncate mt-0.5"
+            title={cleanName}
+          >
+            {cleanName}
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        disabled={isDownloading}
+        onClick={onDownload}
+        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 active:bg-neutral-200 disabled:opacity-50 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
+      >
+        {isDownloading ? (
+          <>
+            <span className="w-3 h-3 border-2 border-neutral-600 border-t-transparent rounded-full animate-spin" />
+            <span>Mengunduh...</span>
+          </>
+        ) : (
+          <>
+            <svg
+              className="w-3.5 h-3.5 text-neutral-600"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span>Unduh {ext}</span>
+          </>
+        )}
+      </button>
+    </div>
   );
 }
 
@@ -132,45 +270,54 @@ export default function RegistrationsPage() {
     }
   };
 
-  // Download Attachment (Generates real, valid binary PDF and PNG files)
+  // Download Original Attachment from Storage
   const [downloadingFile, setDownloadingFile] = useState<string | null>(null);
 
   const handleDownloadAttachment = async (
-    fileName: string | undefined,
+    fileName: string | undefined | null,
     fileLabel: string,
     reg: PrideRegistration
   ) => {
+    const targetName = fileName?.trim();
+    if (!targetName) {
+      alert(`Tidak ada berkas yang diunggah untuk ${fileLabel}.`);
+      return;
+    }
+
     const fileKey = `${reg.id}-${fileLabel}`;
     try {
       setDownloadingFile(fileKey);
 
-      const targetName = fileName?.trim() || '';
-      if (targetName) {
-        // 1. Fetch real binary file uploaded by participant from /api/download
-        const downloadUrl = `/api/download?code=${encodeURIComponent(
-          reg.registration_code
-        )}&file=${encodeURIComponent(targetName)}`;
+      // Fetch real binary file uploaded by participant from /api/download
+      const downloadUrl = `/api/download?code=${encodeURIComponent(
+        reg.registration_code
+      )}&file=${encodeURIComponent(targetName)}`;
 
-        const res = await fetch(downloadUrl);
-        if (res.ok) {
-          const blob = await res.blob();
-          const blobUrl = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = blobUrl;
-          a.download = targetName;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(blobUrl);
-          return;
-        }
+      const res = await fetch(downloadUrl);
+      if (!res.ok) {
+        let errorMsg = `Berkas asli "${targetName}" tidak ditemukan di server.`;
+        try {
+          const json = await res.json();
+          if (json.error) errorMsg = json.error;
+        } catch {}
+        alert(
+          `${errorMsg}\n\nCatatan: Berkas fisik tidak ditemukan pada server penyimpanan. Pendaftaran ini kemungkinan dibuat sebelum fitur upload berkas diaktifkan.`
+        );
+        return;
       }
 
-      // 2. Fallback: if record predates file upload or file was removed, generate valid binary
-      await handleUniversalDownload(reg, fileLabel, fileName);
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = targetName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
     } catch (err) {
-      console.error('Gagal mengunduh berkas fisik, beralih ke arsip terverifikasi:', err);
-      await handleUniversalDownload(reg, fileLabel, fileName);
+      console.error('Gagal mengunduh berkas fisik:', err);
+      alert('Terjadi kesalahan jaringan saat mengunduh berkas fisik.');
     } finally {
       setDownloadingFile(null);
     }
@@ -681,165 +828,61 @@ export default function RegistrationsPage() {
                     3. Berkas Karya &amp; Dokumen Pendukung
                   </h4>
                   <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2">
-                    {/* Item 1: Karya Desain */}
-                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-                      <div className="min-w-0">
-                        <div className="font-medium text-neutral-900 truncate">
-                          File Karya Desain Kemasan
-                        </div>
-                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
-                          {selectedReg.design_file_name || selectedReg.packaging_file_name || 'karya-desain.pdf'}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        disabled={Boolean(downloadingFile)}
-                        onClick={() =>
-                          handleDownloadAttachment(
-                            selectedReg.design_file_name || selectedReg.packaging_file_name,
-                            'File Karya Desain Kemasan',
-                            selectedReg
-                          )
-                        }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-[#0071e3] hover:bg-[#0077ed] disabled:opacity-50 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
-                      >
-                        {downloadingFile === `${selectedReg.id}-File Karya Desain Kemasan` ? (
-                          <>
-                            <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            <span>Mengunduh...</span>
-                          </>
-                        ) : (
-                          <>
-                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                              <polyline points="7 10 12 15 17 10" />
-                              <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
-                            <span>Unduh PDF</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
+                    <FileAttachmentItem
+                      label="File Karya Desain Kemasan"
+                      fileName={selectedReg.design_file_name || selectedReg.packaging_file_name}
+                      registrationCode={selectedReg.registration_code}
+                      onDownload={() =>
+                        handleDownloadAttachment(
+                          selectedReg.design_file_name || selectedReg.packaging_file_name,
+                          'File Karya Desain Kemasan',
+                          selectedReg
+                        )
+                      }
+                      isDownloading={downloadingFile === `${selectedReg.id}-File Karya Desain Kemasan`}
+                    />
 
-                    {/* Item 2: Master File */}
-                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-                      <div className="min-w-0">
-                        <div className="font-medium text-neutral-900 truncate">
-                          Master File Desain
-                        </div>
-                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
-                          {selectedReg.master_file_name || 'master-file.pdf'}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        disabled={Boolean(downloadingFile)}
-                        onClick={() =>
-                          handleDownloadAttachment(
-                            selectedReg.master_file_name,
-                            'Master File Desain',
-                            selectedReg
-                          )
-                        }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 disabled:opacity-50 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
-                      >
-                        {downloadingFile === `${selectedReg.id}-Master File Desain` ? (
-                          <>
-                            <span className="w-3 h-3 border-2 border-neutral-600 border-t-transparent rounded-full animate-spin" />
-                            <span>Mengunduh...</span>
-                          </>
-                        ) : (
-                          <>
-                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                              <polyline points="7 10 12 15 17 10" />
-                              <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
-                            <span>Unduh PDF</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
+                    <FileAttachmentItem
+                      label="Master File Desain"
+                      fileName={selectedReg.master_file_name}
+                      registrationCode={selectedReg.registration_code}
+                      onDownload={() =>
+                        handleDownloadAttachment(
+                          selectedReg.master_file_name,
+                          'Master File Desain',
+                          selectedReg
+                        )
+                      }
+                      isDownloading={downloadingFile === `${selectedReg.id}-Master File Desain`}
+                    />
 
-                    {/* Item 3: Pakta Integritas */}
-                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-                      <div className="min-w-0">
-                        <div className="font-medium text-neutral-900 truncate">
-                          Pakta Integritas Bertanda Tangan
-                        </div>
-                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
-                          {selectedReg.pakta_integritas_file_name || 'pakta-integritas.pdf'}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        disabled={Boolean(downloadingFile)}
-                        onClick={() =>
-                          handleDownloadAttachment(
-                            selectedReg.pakta_integritas_file_name,
-                            'Pakta Integritas',
-                            selectedReg
-                          )
-                        }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 disabled:opacity-50 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
-                      >
-                        {downloadingFile === `${selectedReg.id}-Pakta Integritas` ? (
-                          <>
-                            <span className="w-3 h-3 border-2 border-neutral-600 border-t-transparent rounded-full animate-spin" />
-                            <span>Mengunduh...</span>
-                          </>
-                        ) : (
-                          <>
-                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                              <polyline points="7 10 12 15 17 10" />
-                              <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
-                            <span>Unduh PDF</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
+                    <FileAttachmentItem
+                      label="Pakta Integritas Bertanda Tangan"
+                      fileName={selectedReg.pakta_integritas_file_name}
+                      registrationCode={selectedReg.registration_code}
+                      onDownload={() =>
+                        handleDownloadAttachment(
+                          selectedReg.pakta_integritas_file_name,
+                          'Pakta Integritas',
+                          selectedReg
+                        )
+                      }
+                      isDownloading={downloadingFile === `${selectedReg.id}-Pakta Integritas`}
+                    />
 
-                    {/* Item 4: Surat Pernyataan */}
-                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-                      <div className="min-w-0">
-                        <div className="font-medium text-neutral-900 truncate">
-                          Surat Pernyataan Persetujuan
-                        </div>
-                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
-                          {selectedReg.surat_persetujuan_file_name || 'surat-persetujuan.pdf'}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        disabled={Boolean(downloadingFile)}
-                        onClick={() =>
-                          handleDownloadAttachment(
-                            selectedReg.surat_persetujuan_file_name,
-                            'Surat Pernyataan Persetujuan',
-                            selectedReg
-                          )
-                        }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 disabled:opacity-50 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
-                      >
-                        {downloadingFile === `${selectedReg.id}-Surat Pernyataan Persetujuan` ? (
-                          <>
-                            <span className="w-3 h-3 border-2 border-neutral-600 border-t-transparent rounded-full animate-spin" />
-                            <span>Mengunduh...</span>
-                          </>
-                        ) : (
-                          <>
-                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                              <polyline points="7 10 12 15 17 10" />
-                              <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
-                            <span>Unduh PDF</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
+                    <FileAttachmentItem
+                      label="Surat Pernyataan Persetujuan"
+                      fileName={selectedReg.surat_persetujuan_file_name}
+                      registrationCode={selectedReg.registration_code}
+                      onDownload={() =>
+                        handleDownloadAttachment(
+                          selectedReg.surat_persetujuan_file_name,
+                          'Surat Pernyataan Persetujuan',
+                          selectedReg
+                        )
+                      }
+                      isDownloading={downloadingFile === `${selectedReg.id}-Surat Pernyataan Persetujuan`}
+                    />
                   </div>
                 </div>
 
@@ -969,85 +1012,33 @@ export default function RegistrationsPage() {
                     3. Berkas Dokumen &amp; QR TactLink
                   </h4>
                   <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2">
-                    {/* Item 1: Dokumen Persyaratan */}
-                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-                      <div className="min-w-0">
-                        <div className="font-medium text-neutral-900 truncate">
-                          Dokumen Persyaratan Lomba
-                        </div>
-                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
-                          {selectedReg.document_file_name || selectedReg.pakta_integritas_file_name || 'dokumen-persyaratan.pdf'}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        disabled={Boolean(downloadingFile)}
-                        onClick={() =>
-                          handleDownloadAttachment(
-                            selectedReg.document_file_name || selectedReg.pakta_integritas_file_name,
-                            'Dokumen Persyaratan Lomba',
-                            selectedReg
-                          )
-                        }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-[#0071e3] hover:bg-[#0077ed] disabled:opacity-50 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
-                      >
-                        {downloadingFile === `${selectedReg.id}-Dokumen Persyaratan Lomba` ? (
-                          <>
-                            <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            <span>Mengunduh...</span>
-                          </>
-                        ) : (
-                          <>
-                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                              <polyline points="7 10 12 15 17 10" />
-                              <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
-                            <span>Unduh PDF</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
+                    <FileAttachmentItem
+                      label="Dokumen Persyaratan Lomba"
+                      fileName={selectedReg.document_file_name || selectedReg.pakta_integritas_file_name}
+                      registrationCode={selectedReg.registration_code}
+                      onDownload={() =>
+                        handleDownloadAttachment(
+                          selectedReg.document_file_name || selectedReg.pakta_integritas_file_name,
+                          'Dokumen Persyaratan Lomba',
+                          selectedReg
+                        )
+                      }
+                      isDownloading={downloadingFile === `${selectedReg.id}-Dokumen Persyaratan Lomba`}
+                    />
 
-                    {/* Item 2: Barcode TactLink */}
-                    <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-                      <div className="min-w-0">
-                        <div className="font-medium text-neutral-900 truncate">
-                          Foto Barcode QR TactLink
-                        </div>
-                        <div className="text-[11px] font-mono text-neutral-500 truncate mt-0.5">
-                          {selectedReg.tactlink_qr_name || selectedReg.surat_persetujuan_file_name || 'qr-tactlink.png'}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        disabled={Boolean(downloadingFile)}
-                        onClick={() =>
-                          handleDownloadAttachment(
-                            selectedReg.tactlink_qr_name || selectedReg.surat_persetujuan_file_name,
-                            'QR Kartu Nama TactLink',
-                            selectedReg
-                          )
-                        }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 disabled:opacity-50 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
-                      >
-                        {downloadingFile === `${selectedReg.id}-QR Kartu Nama TactLink` ? (
-                          <>
-                            <span className="w-3 h-3 border-2 border-neutral-600 border-t-transparent rounded-full animate-spin" />
-                            <span>Mengunduh...</span>
-                          </>
-                        ) : (
-                          <>
-                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                              <polyline points="7 10 12 15 17 10" />
-                              <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
-                            <span>Unduh PNG</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
+                    <FileAttachmentItem
+                      label="Foto Barcode QR TactLink"
+                      fileName={selectedReg.tactlink_qr_name || selectedReg.surat_persetujuan_file_name}
+                      registrationCode={selectedReg.registration_code}
+                      onDownload={() =>
+                        handleDownloadAttachment(
+                          selectedReg.tactlink_qr_name || selectedReg.surat_persetujuan_file_name,
+                          'Foto Barcode QR TactLink',
+                          selectedReg
+                        )
+                      }
+                      isDownloading={downloadingFile === `${selectedReg.id}-Foto Barcode QR TactLink`}
+                    />
                   </div>
                 </div>
 

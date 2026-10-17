@@ -56,12 +56,15 @@ export async function GET(request: NextRequest) {
     else if (ext === '.zip') mimeType = 'application/zip';
 
     const fileBuffer = fs.readFileSync(/*turbopackIgnore: true*/ foundPath);
+    const isInline = request.nextUrl.searchParams.get('inline') === 'true';
 
     return new NextResponse(fileBuffer, {
       status: 200,
       headers: {
         'Content-Type': mimeType,
-        'Content-Disposition': `attachment; filename="${safeFile}"`,
+        'Content-Disposition': isInline
+          ? `inline; filename="${safeFile}"`
+          : `attachment; filename="${safeFile}"`,
         'Content-Length': fileBuffer.length.toString(),
       },
     });

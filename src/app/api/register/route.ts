@@ -318,7 +318,34 @@ export async function POST(
       );
     }
 
-    // 7. Persist to Supabase if credentials are provided
+    // 7. Save actual uploaded binary files to disk storage
+    if (Object.keys(uploadedFiles).length > 0) {
+      try {
+        const uploadDir = path.join(process.cwd(), 'public', 'uploads', registrationCode);
+        await fs.promises.mkdir(uploadDir, { recursive: true });
+
+        for (const [key, file] of Object.entries(uploadedFiles)) {
+          if (file && file.size > 0) {
+            const rawName = file.name;
+            const safeName = rawName.replace(/[^a-zA-Z0-9._-]/g, '_');
+            const targetFilePath = path.join(uploadDir, safeName);
+            const arrayBuffer = await file.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
+            await fs.promises.writeFile(targetFilePath, buffer);
+            if (safeName !== rawName) {
+              try {
+                await fs.promises.writeFile(path.join(uploadDir, rawName), buffer);
+              } catch {}
+            }
+            console.log(`[FILE_SAVED] Successfully stored ${key}: ${safeName} (${file.size} bytes)`);
+          }
+        }
+      } catch (saveErr) {
+        console.error('[FILE_SAVE_ERROR] Failed to save uploaded files to disk:', saveErr);
+      }
+    }
+
+    // 8. Persist to Supabase if credentials are provided
     const hasSupabase =
       Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
       (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
@@ -348,33 +375,6 @@ export async function POST(
             },
             { status: 409 }
           );
-        }
-
-        // Save actual uploaded binary files to disk
-        if (Object.keys(uploadedFiles).length > 0) {
-          try {
-            const uploadDir = path.join(process.cwd(), 'public', 'uploads', registrationCode);
-            await fs.promises.mkdir(uploadDir, { recursive: true });
-
-            for (const [key, file] of Object.entries(uploadedFiles)) {
-              if (file && file.size > 0) {
-                const rawName = file.name;
-                const safeName = rawName.replace(/[^a-zA-Z0-9._-]/g, '_');
-                const targetFilePath = path.join(uploadDir, safeName);
-                const arrayBuffer = await file.arrayBuffer();
-                const buffer = Buffer.from(arrayBuffer);
-                await fs.promises.writeFile(targetFilePath, buffer);
-                if (safeName !== rawName) {
-                  try {
-                    await fs.promises.writeFile(path.join(uploadDir, rawName), buffer);
-                  } catch {}
-                }
-                console.log(`[FILE_SAVED] Successfully stored ${key}: ${safeName} (${file.size} bytes)`);
-              }
-            }
-          } catch (saveErr) {
-            console.error('[FILE_SAVE_ERROR] Failed to save uploaded files to disk:', saveErr);
-          }
         }
 
         const insertPayload: Record<string, unknown> = {
