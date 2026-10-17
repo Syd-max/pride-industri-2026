@@ -241,16 +241,17 @@ export default function ParticipantsPage() {
           </div>
         </div>
 
-        {/* Competition Filter Dropdown Only (2 Lomba) */}
+        {/* Competition Filter Dropdown Only (2 Lomba + Pengunjung) */}
         <div className="w-full sm:w-auto">
           <select
             value={compFilter}
             onChange={(e) => setCompFilter(e.target.value)}
             className="form-input form-select text-xs py-2.5 px-3.5 w-full sm:w-auto rounded-xl bg-slate-50/70 font-semibold text-slate-700 border-slate-200"
           >
-            <option value="all">Semua Kategori Lomba</option>
+            <option value="all">Semua Kategori (Peserta & Pengunjung)</option>
             <option value="desain-kemasan">Lomba Desain Kemasan</option>
             <option value="video-lokal">Lomba Video 1 Menit</option>
+            <option value="pengunjung-umum">Pengunjung Festival (Umum)</option>
           </select>
         </div>
 
@@ -258,7 +259,7 @@ export default function ParticipantsPage() {
         <div className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50/80 border border-emerald-200/90 text-[11px] font-bold text-emerald-800 whitespace-nowrap ml-auto">
           <span>Menampilkan:</span>
           <span className="text-emerald-700 font-extrabold">{filtered.length}</span>
-          <span>dari {checkedInList.length} Peserta (Sudah Scan QR Gate)</span>
+          <span>dari {checkedInList.length} Kehadiran (Sudah Scan QR Gate)</span>
         </div>
       </div>
 
@@ -269,9 +270,9 @@ export default function ParticipantsPage() {
             <thead className="sticky top-0 z-10 bg-slate-50 border-b border-slate-200 shadow-2xs">
               <tr className="text-slate-600 font-bold uppercase tracking-wider text-[11px]">
                 <th className="py-3.5 px-5 min-w-[220px] whitespace-nowrap bg-slate-50">Kode Registrasi</th>
-                <th className="py-3.5 px-5 min-w-[240px] whitespace-nowrap bg-slate-50">Nama &amp; Identitas Peserta</th>
-                <th className="py-3.5 px-5 min-w-[150px] whitespace-nowrap bg-slate-50">Kategori Lomba</th>
-                <th className="py-3.5 px-5 min-w-[150px] whitespace-nowrap bg-slate-50">Kontak WhatsApp</th>
+                <th className="py-3.5 px-5 min-w-[240px] whitespace-nowrap bg-slate-50">Nama &amp; Identitas</th>
+                <th className="py-3.5 px-5 min-w-[150px] whitespace-nowrap bg-slate-50">Kategori</th>
+                <th className="py-3.5 px-5 min-w-[150px] whitespace-nowrap bg-slate-50">Kontak / Domisili</th>
                 <th className="py-3.5 px-5 min-w-[220px] whitespace-nowrap bg-slate-50">Status Presensi Gate</th>
                 <th className="py-3.5 px-5 min-w-[110px] whitespace-nowrap bg-slate-50 text-right pr-6">Aksi Detail</th>
               </tr>
@@ -288,7 +289,7 @@ export default function ParticipantsPage() {
                   <td colSpan={6} className="text-center py-12 text-xs font-medium text-slate-400">
                     {search || compFilter !== 'all'
                       ? 'Tidak ditemukan data presensi yang sesuai dengan kriteria filter / pencarian.'
-                      : 'Belum ada data presensi. Peserta akan otomatis muncul di sini setelah melakukan scan barcode / QR code di Gate Event.'}
+                      : 'Belum ada data presensi. Peserta dan pengunjung akan otomatis muncul di sini setelah melakukan presensi QR code di Gate Event.'}
                   </td>
                 </tr>
               ) : (
@@ -311,37 +312,49 @@ export default function ParticipantsPage() {
                           {highlightMatch(p.full_name, search)}
                         </div>
                         <div className="text-[11px] text-slate-500 font-medium whitespace-nowrap">
-                          {highlightMatch(p.email, search)}
+                          {p.competition_id === 'pengunjung-umum'
+                            ? `Pengunjung Umum • Asal: ${p.address || p.phone || 'Kota Bandung'}`
+                            : highlightMatch(p.email, search)}
                         </div>
                       </td>
 
-                      {/* Column 3: Kategori Lomba */}
+                      {/* Column 3: Kategori */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
                         <span
                           className={`inline-block px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap ${
                             p.competition_id === 'desain-kemasan'
                               ? 'bg-orange-50 text-orange-700 border border-orange-200'
-                              : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+                              : p.competition_id === 'video-lokal'
+                              ? 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+                              : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                           }`}
                         >
                           {p.competition_id === 'desain-kemasan'
                             ? 'Desain Kemasan'
-                            : 'Video 1 Menit'}
+                            : p.competition_id === 'video-lokal'
+                            ? 'Video 1 Menit'
+                            : 'Pengunjung Festival'}
                         </span>
                       </td>
 
-                      {/* Column 4: Kontak WhatsApp */}
+                      {/* Column 4: Kontak WhatsApp / Domisili */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
-                        <a
-                          href={`https://wa.me/62${p.phone.replace(/^0/, '')}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-mono text-xs text-slate-700 hover:text-emerald-600 font-semibold inline-flex items-center gap-1.5 transition-colors"
-                          title="Hubungi via WhatsApp"
-                        >
-                          <span>{highlightMatch(p.phone, search)}</span>
-                          <span className="text-[10px] text-emerald-600 font-bold">↗</span>
-                        </a>
+                        {p.competition_id === 'pengunjung-umum' ? (
+                          <span className="text-xs text-slate-600 font-medium">
+                            {p.address || p.phone || 'Kota Bandung'}
+                          </span>
+                        ) : (
+                          <a
+                            href={`https://wa.me/62${p.phone.replace(/^0/, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-mono text-xs text-slate-700 hover:text-emerald-600 font-semibold inline-flex items-center gap-1.5 transition-colors"
+                            title="Hubungi via WhatsApp"
+                          >
+                            <span>{highlightMatch(p.phone, search)}</span>
+                            <span className="text-[10px] text-emerald-600 font-bold">↗</span>
+                          </a>
+                        )}
                       </td>
 
                       {/* Column 5: Status Presensi (Semua di sini sudah scan QR) */}

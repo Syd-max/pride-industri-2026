@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
 import { sanitizeString, isRateLimited } from '@/lib/utils';
-import { getSharedRegistrations, updateSharedRegistration, addSharedVisitor } from '@/lib/store';
+import { getSharedRegistrations, updateSharedRegistration, addSharedRegistration, addSharedVisitor } from '@/lib/store';
 
 const DEFAULT_GATE_TOKEN = 'PRIDE2026-GATE-BRAGA-MAIN';
 
@@ -24,11 +24,19 @@ export async function POST(request: NextRequest) {
     const visitorType = body.visitor_type === 'umum' ? 'umum' : 'peserta';
     const gateToken = sanitizeString(body.gate_token) || DEFAULT_GATE_TOKEN;
 
+    const hasSupabase =
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+      (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
+        Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
+        Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
+      process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
+
     // ─── ALUR 1: VISITOR UMUM (PENGUNJUNG UMUM FESTIVAL) ───
     if (visitorType === 'umum') {
       const fullName = sanitizeString(body.full_name) || 'Pengunjung Umum';
       const city = sanitizeString(body.city) || 'Kota Bandung';
       const groupSize = Number(body.group_size) || 1;
+      const checkedInAt = new Date().toISOString();
 
       const newVisitor = addSharedVisitor({
         full_name: fullName,
@@ -37,15 +45,63 @@ export async function POST(request: NextRequest) {
         visitor_type: 'umum',
       });
 
+      const ticketCode = newVisitor.ticket_code;
+
+      // Persist Visitor Presensi to Supabase pride_registrations
+      if (hasSupabase) {
+        try {
+          const supabase = createAdminClient();
+          const { error: visInsertErr } = await supabase.from('pride_registrations').insert({
+            registration_code: ticketCode,
+            competition_id: 'pengunjung-umum',
+            full_name: fullName,
+            email: `${ticketCode.toLowerCase()}@festival.prideindustri.id`,
+            phone: city,
+            address: city,
+            status: 'confirmed',
+            check_in_status: 'checked_in',
+            checked_in_at: checkedInAt,
+            declaration_original: true,
+            declaration_terms: true,
+          });
+
+          if (visInsertErr) {
+            console.error('[PRIDE_VISITOR_INSERT_ERROR]', visInsertErr);
+          } else {
+            console.log('[PRIDE_VISITOR_INSERT_SUCCESS]', ticketCode);
+          }
+        } catch (err) {
+          console.error('[PRIDE_VISITOR_PERSIST_ERROR]', err);
+        }
+      }
+
+      // Also mirror to shared in-memory registrations for instantaneous local reflections
+      addSharedRegistration({
+        id: `vis-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        registration_code: ticketCode,
+        competition_id: 'pengunjung-umum',
+        full_name: fullName,
+        email: `${ticketCode.toLowerCase()}@festival.prideindustri.id`,
+        phone: city,
+        address: city,
+        status: 'confirmed',
+        check_in_status: 'checked_in',
+        checked_in_at: checkedInAt,
+        created_at: checkedInAt,
+        updated_at: checkedInAt,
+        declaration_original: true,
+        declaration_terms: true,
+      });
+
       return NextResponse.json({
         success: true,
         data: {
           visitor_type: 'umum',
-          ticket_code: newVisitor.ticket_code,
+          ticket_code: ticketCode,
           full_name: newVisitor.full_name,
           city: newVisitor.city,
           group_size: newVisitor.group_size,
-          checked_in_at: newVisitor.checked_in_at,
+          checked_in_at: checkedInAt,
           gate_name: 'Main Entrance Braga City Walk',
         },
       });
@@ -64,13 +120,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    const hasSupabase =
-      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-      (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
-        Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
-        Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
-      process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
 
     if (hasSupabase) {
       const supabase = createAdminClient();

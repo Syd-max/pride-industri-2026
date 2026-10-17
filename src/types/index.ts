@@ -1,6 +1,6 @@
 // ─── Competition & Registration Types ───────────────────────────────────────
 
-export type CompetitionSlug = 'desain-kemasan' | 'video-lokal';
+export type CompetitionSlug = 'desain-kemasan' | 'video-lokal' | 'pengunjung-umum';
 
 export type RegistrationStatus =
   | 'pending'

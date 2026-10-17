@@ -126,12 +126,16 @@ export default function CheckInsPage() {
                         className={`badge whitespace-nowrap ${
                           p.competition_id === 'desain-kemasan'
                             ? 'badge-desain-kemasan'
-                            : 'badge-video-lokal'
+                            : p.competition_id === 'video-lokal'
+                            ? 'badge-video-lokal'
+                            : 'bg-emerald-100 text-emerald-800 border-emerald-300'
                         }`}
                       >
                         {p.competition_id === 'desain-kemasan'
                           ? 'Desain Kemasan'
-                          : 'Video 1 Menit'}
+                          : p.competition_id === 'video-lokal'
+                          ? 'Video 1 Menit'
+                          : 'Pengunjung Festival'}
                       </span>
                     </td>
                     <td>
