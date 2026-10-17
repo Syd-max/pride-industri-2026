@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import type { PrideRegistration, RegistrationStatus } from '@/types';
+import { handleUniversalDownload } from '@/lib/document-service';
 
 // Helper to highlight matching search text (Apple clean styling)
 function highlightMatch(text: string | undefined | null, query: string) {
@@ -131,46 +132,23 @@ export default function RegistrationsPage() {
     }
   };
 
-  // Download Attachment simulation
-  const handleDownloadAttachment = (
+  // Download Attachment (Generates real, valid binary PDF and PNG files)
+  const [downloadingFile, setDownloadingFile] = useState<string | null>(null);
+
+  const handleDownloadAttachment = async (
     fileName: string | undefined,
     fileLabel: string,
     reg: PrideRegistration
   ) => {
-    const safeName =
-      fileName?.trim() ||
-      `${fileLabel.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${reg.registration_code}.pdf`;
-    const content =
-      `=====================================================\n` +
-      `DOKUMEN RESMI PENDAFTARAN PRIDE INDUSTRI 2026\n` +
-      `Dinas Perdagangan dan Perindustrian Kota Bandung\n` +
-      `=====================================================\n\n` +
-      `Jenis Berkas    : ${fileLabel}\n` +
-      `Nama Berkas Asli: ${safeName}\n` +
-      `Kode Registrasi : ${reg.registration_code}\n` +
-      `Nama Peserta    : ${reg.full_name}\n` +
-      `Email           : ${reg.email}\n` +
-      `WhatsApp        : ${reg.phone}\n` +
-      `Kategori Lomba  : ${
-        reg.competition_id === 'desain-kemasan'
-          ? 'Lomba Desain Kemasan IKM'
-          : 'Lomba Video 1 Menit'
-      }\n` +
-      `Tanggal Submit  : ${new Date(reg.created_at).toLocaleString('id-ID')} WIB\n` +
-      `Status Berkas   : Valid dan Terverifikasi di Database Panitia PRIDE 2026\n\n` +
-      `Catatan: Berkas ini merupakan salinan arsip digital formulir pendaftaran resmi peserta.`;
-
-    const isImage = Boolean(safeName.match(/\.(png|jpg|jpeg|webp)$/i));
-    const mimeType = isImage ? 'image/png' : 'application/pdf';
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = safeName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const fileKey = `${reg.id}-${fileLabel}`;
+    try {
+      setDownloadingFile(fileKey);
+      await handleUniversalDownload(reg, fileLabel, fileName);
+    } catch (err) {
+      console.error('Gagal mengunduh berkas:', err);
+    } finally {
+      setDownloadingFile(null);
+    }
   };
 
   // Filtered registrations (Competition participants only)
@@ -690,6 +668,7 @@ export default function RegistrationsPage() {
                       </div>
                       <button
                         type="button"
+                        disabled={Boolean(downloadingFile)}
                         onClick={() =>
                           handleDownloadAttachment(
                             selectedReg.design_file_name || selectedReg.packaging_file_name,
@@ -697,14 +676,23 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-[#0071e3] hover:bg-[#0077ed] transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-[#0071e3] hover:bg-[#0077ed] disabled:opacity-50 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
-                        <span>Unduh</span>
+                        {downloadingFile === `${selectedReg.id}-File Karya Desain Kemasan` ? (
+                          <>
+                            <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <span>Mengunduh...</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            <span>Unduh PDF</span>
+                          </>
+                        )}
                       </button>
                     </div>
 
@@ -720,6 +708,7 @@ export default function RegistrationsPage() {
                       </div>
                       <button
                         type="button"
+                        disabled={Boolean(downloadingFile)}
                         onClick={() =>
                           handleDownloadAttachment(
                             selectedReg.master_file_name,
@@ -727,14 +716,23 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 disabled:opacity-50 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
-                        <span>Unduh</span>
+                        {downloadingFile === `${selectedReg.id}-Master File Desain` ? (
+                          <>
+                            <span className="w-3 h-3 border-2 border-neutral-600 border-t-transparent rounded-full animate-spin" />
+                            <span>Mengunduh...</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            <span>Unduh PDF</span>
+                          </>
+                        )}
                       </button>
                     </div>
 
@@ -750,6 +748,7 @@ export default function RegistrationsPage() {
                       </div>
                       <button
                         type="button"
+                        disabled={Boolean(downloadingFile)}
                         onClick={() =>
                           handleDownloadAttachment(
                             selectedReg.pakta_integritas_file_name,
@@ -757,14 +756,23 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 disabled:opacity-50 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
-                        <span>Unduh</span>
+                        {downloadingFile === `${selectedReg.id}-Pakta Integritas` ? (
+                          <>
+                            <span className="w-3 h-3 border-2 border-neutral-600 border-t-transparent rounded-full animate-spin" />
+                            <span>Mengunduh...</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            <span>Unduh PDF</span>
+                          </>
+                        )}
                       </button>
                     </div>
 
@@ -780,6 +788,7 @@ export default function RegistrationsPage() {
                       </div>
                       <button
                         type="button"
+                        disabled={Boolean(downloadingFile)}
                         onClick={() =>
                           handleDownloadAttachment(
                             selectedReg.surat_persetujuan_file_name,
@@ -787,14 +796,23 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 disabled:opacity-50 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
-                        <span>Unduh</span>
+                        {downloadingFile === `${selectedReg.id}-Surat Pernyataan Persetujuan` ? (
+                          <>
+                            <span className="w-3 h-3 border-2 border-neutral-600 border-t-transparent rounded-full animate-spin" />
+                            <span>Mengunduh...</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            <span>Unduh PDF</span>
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -938,6 +956,7 @@ export default function RegistrationsPage() {
                       </div>
                       <button
                         type="button"
+                        disabled={Boolean(downloadingFile)}
                         onClick={() =>
                           handleDownloadAttachment(
                             selectedReg.document_file_name || selectedReg.pakta_integritas_file_name,
@@ -945,14 +964,23 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-[#0071e3] hover:bg-[#0077ed] transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-[#0071e3] hover:bg-[#0077ed] disabled:opacity-50 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
-                        <span>Unduh</span>
+                        {downloadingFile === `${selectedReg.id}-Dokumen Persyaratan Lomba` ? (
+                          <>
+                            <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <span>Mengunduh...</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            <span>Unduh PDF</span>
+                          </>
+                        )}
                       </button>
                     </div>
 
@@ -968,6 +996,7 @@ export default function RegistrationsPage() {
                       </div>
                       <button
                         type="button"
+                        disabled={Boolean(downloadingFile)}
                         onClick={() =>
                           handleDownloadAttachment(
                             selectedReg.tactlink_qr_name || selectedReg.surat_persetujuan_file_name,
@@ -975,14 +1004,23 @@ export default function RegistrationsPage() {
                             selectedReg
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200/80 disabled:opacity-50 border border-neutral-200/70 transition-colors shrink-0 cursor-pointer inline-flex items-center gap-1.5"
                       >
-                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
-                        <span>Unduh</span>
+                        {downloadingFile === `${selectedReg.id}-QR Kartu Nama TactLink` ? (
+                          <>
+                            <span className="w-3 h-3 border-2 border-neutral-600 border-t-transparent rounded-full animate-spin" />
+                            <span>Mengunduh...</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            <span>Unduh PNG</span>
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>

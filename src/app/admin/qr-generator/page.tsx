@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import QRCode from 'qrcode';
+import { downloadQrCodePng } from '@/lib/document-service';
 
 interface QrItem {
   id: string;
@@ -15,6 +17,8 @@ interface QrItem {
 export default function QrGeneratorPage() {
   const [gateToken, setGateToken] = useState('PRIDE2026-GATE-BRAGA-MAIN');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [gateQrDataUrl, setGateQrDataUrl] = useState<string>('');
+  const [compQrDataUrls, setCompQrDataUrls] = useState<Record<string, string>>({});
 
   const currentHost =
     typeof window !== 'undefined'
@@ -26,9 +30,24 @@ export default function QrGeneratorPage() {
     gateToken
   )}&scanned=true`;
 
-  const gateQrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(
-    gateCheckInUrl
-  )}&bgcolor=ffffff&color=000000&margin=12`;
+  // Generate local data URLs for Gate QR
+  useEffect(() => {
+    let isMounted = true;
+    QRCode.toDataURL(gateCheckInUrl, {
+      width: 600,
+      margin: 2,
+      color: { dark: '#000000', light: '#ffffff' },
+      errorCorrectionLevel: 'H',
+    })
+      .then((url) => {
+        if (isMounted) setGateQrDataUrl(url);
+      })
+      .catch((err) => console.error('Failed to generate gate QR:', err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, [gateCheckInUrl]);
 
   // ─── Group B: Competition Registration Pages ───
   const competitionList: QrItem[] = [
@@ -61,27 +80,40 @@ export default function QrGeneratorPage() {
     },
   ];
 
+  // Generate local data URLs for Competition QRs
+  useEffect(() => {
+    let isMounted = true;
+    const generateAll = async () => {
+      const urls: Record<string, string> = {};
+      for (const comp of competitionList) {
+        try {
+          urls[comp.id] = await QRCode.toDataURL(`${currentHost}${comp.path}`, {
+            width: 450,
+            margin: 2,
+            color: { dark: '#000000', light: '#ffffff' },
+            errorCorrectionLevel: 'H',
+          });
+        } catch (err) {
+          console.error(`Failed to generate QR for ${comp.id}:`, err);
+        }
+      }
+      if (isMounted) setCompQrDataUrls(urls);
+    };
+    generateAll();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentHost]);
+
   const handleCopy = (text: string, key: string) => {
     navigator.clipboard.writeText(text);
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
-  const handleDownload = async (url: string, filename: string) => {
-    try {
-      const res = await fetch(url);
-      const blob = await res.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = blobUrl;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(blobUrl);
-    } catch {
-      window.open(url, '_blank');
-    }
+  const handleDownload = async (targetUrl: string, filename: string) => {
+    await downloadQrCodePng(targetUrl, filename);
   };
 
   const handlePrint = () => {
@@ -143,7 +175,7 @@ export default function QrGeneratorPage() {
                 <div className="p-3 bg-white rounded-xl inline-block border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={gateQrImageUrl}
+                    src={gateQrDataUrl || `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(gateCheckInUrl)}&bgcolor=ffffff&color=000000&margin=12`}
                     alt="QR Gate PRIDE Industri 2026"
                     className="w-48 h-48 mx-auto object-contain"
                   />
@@ -225,7 +257,7 @@ export default function QrGeneratorPage() {
                 <button
                   type="button"
                   onClick={() =>
-                    handleDownload(gateQrImageUrl, `PRIDE2026-QR-Gate-Braga.png`)
+                    handleDownload(gateCheckInUrl, 'PRIDE2026-QR-Gate-Braga.png')
                   }
                   className="px-4 py-2 rounded-xl text-xs font-medium text-white bg-[#0071e3] hover:bg-[#0077ed] transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
                 >
@@ -308,7 +340,7 @@ export default function QrGeneratorPage() {
                     <div className="p-2 bg-white rounded-lg inline-block border border-neutral-200/60 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={qrImg}
+                        src={compQrDataUrls[comp.id] || qrImg}
                         alt={`QR Code ${comp.title}`}
                         className="w-36 h-36 mx-auto object-contain"
                       />
@@ -324,7 +356,7 @@ export default function QrGeneratorPage() {
                   <button
                     type="button"
                     onClick={() =>
-                      handleDownload(qrImg, `PRIDE2026-QR-${comp.id}.png`)
+                      handleDownload(targetUrl, `PRIDE2026-QR-${comp.id}.png`)
                     }
                     className="flex-1 py-1.5 px-3 rounded-xl text-xs font-medium text-white bg-[#0071e3] hover:bg-[#0077ed] transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                   >
