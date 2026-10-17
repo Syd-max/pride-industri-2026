@@ -64,7 +64,7 @@ export default function ActivitiesDeckSection() {
         // This card is currently peeling down or has already peeled off the bottom of the screen
         const peelAmount = clamp(-depth, 0, 1);
         const easedPeel = easeInOutCubic(peelAmount);
-        const translateYPercent = easedPeel * 160; // Slides smoothly past bottom viewport edge
+        const translateYPercent = easedPeel * 140; // Slides smoothly past bottom viewport edge
         card.style.transform = `translate3d(0, ${translateYPercent.toFixed(2)}%, 0) scale(1)`;
         card.style.pointerEvents = peelAmount > 0.15 ? 'none' : 'auto';
         card.classList.add('is-peeled');

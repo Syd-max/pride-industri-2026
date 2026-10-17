@@ -60,7 +60,7 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="relative pt-10 pb-0 sm:pt-14 sm:pb-6 lg:py-16 bg-white overflow-hidden"
+      className="relative pt-10 pb-6 sm:pt-14 sm:pb-8 lg:py-16 bg-white overflow-hidden"
       aria-label="Tentang PRIDE Industri 2026"
     >
       {/* Background Architectural Accent: Subtle Blueprint Dot Grid & Ambient Warm Mesh */}
