@@ -281,7 +281,9 @@ export async function POST(
     // 7. Persist to Supabase if credentials are provided
     const hasSupabase =
       Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-      Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) &&
+      (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
+        Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
+        Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
       process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
 
     if (hasSupabase) {
@@ -308,28 +310,78 @@ export async function POST(
           );
         }
 
+        const insertPayload: Record<string, unknown> = {
+          registration_code: registrationCode,
+          competition_id: competitionId,
+          full_name: fullName,
+          email,
+          phone,
+          ...specificData,
+          declaration_original: Boolean(body.declaration_original),
+          declaration_secondary: Boolean(
+            body.declaration_secondary ||
+              body.declaration_public_account ||
+              body.declaration_usage_rights
+          ),
+          declaration_terms: Boolean(body.declaration_terms),
+          status: 'confirmed',
+          check_in_status: 'not_checked_in',
+        };
+
         const { error: insertError } = await supabase
           .from('pride_registrations')
-          .insert({
-            registration_code: registrationCode,
-            competition_id: competitionId,
-            full_name: fullName,
-            email,
-            phone,
-            ...specificData,
-            declaration_original: Boolean(body.declaration_original),
-            declaration_secondary: Boolean(
-              body.declaration_secondary ||
-                body.declaration_public_account ||
-                body.declaration_usage_rights
-            ),
-            declaration_terms: Boolean(body.declaration_terms),
-            status: 'confirmed',
-            check_in_status: 'not_checked_in',
-          });
+          .insert(insertPayload);
 
         if (insertError) {
-          console.error('[PRIDE_REGISTRATION_SUPABASE_ERROR]', insertError);
+          console.error(
+            '[PRIDE_REGISTRATION_SUPABASE_ERROR]',
+            insertError.code,
+            insertError.message,
+            insertError.details,
+            insertError.hint
+          );
+
+          // If a custom column is missing in the database table, retry with core schema columns
+          if (insertError.code === '42703') {
+            console.warn('[PRIDE_REGISTRATION] Retrying with core schema columns fallback...');
+            const corePayload: Record<string, unknown> = {
+              registration_code: registrationCode,
+              competition_id: competitionId,
+              full_name: fullName,
+              email,
+              phone,
+              declaration_original: Boolean(body.declaration_original),
+              declaration_secondary: Boolean(
+                body.declaration_secondary ||
+                  body.declaration_public_account ||
+                  body.declaration_usage_rights
+              ),
+              declaration_terms: Boolean(body.declaration_terms),
+              status: 'confirmed',
+              check_in_status: 'not_checked_in',
+            };
+
+            if (specificData.address) corePayload.address = specificData.address;
+            if (specificData.product_name) corePayload.product_name = specificData.product_name;
+            if (specificData.brand_name) corePayload.brand_name = specificData.brand_name;
+            if (specificData.local_ingredients) corePayload.local_ingredients = specificData.local_ingredients;
+            if (specificData.video_category) corePayload.video_category = specificData.video_category;
+            if (specificData.video_url) corePayload.video_url = specificData.video_url;
+            if (specificData.instagram_handle) corePayload.instagram_handle = specificData.instagram_handle;
+            if (specificData.tiktok_handle) corePayload.tiktok_handle = specificData.tiktok_handle;
+
+            const { error: retryError } = await supabase
+              .from('pride_registrations')
+              .insert(corePayload);
+
+            if (retryError) {
+              console.error('[PRIDE_REGISTRATION_RETRY_ERROR]', retryError);
+            } else {
+              console.log('[PRIDE_REGISTRATION_SUCCESS] Inserted with core columns');
+            }
+          }
+        } else {
+          console.log('[PRIDE_REGISTRATION_SUCCESS] Saved to Supabase:', registrationCode);
         }
       } catch (err) {
         console.error('[SUPABASE_CLIENT_ERROR]', err);

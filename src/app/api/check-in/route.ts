@@ -67,18 +67,24 @@ export async function POST(request: NextRequest) {
 
     const hasSupabase =
       Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-      Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) &&
+      (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
+        Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
+        Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
       process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
 
     if (hasSupabase) {
       const supabase = createAdminClient();
 
-      // Strict exact match on official registration code only
+      // Match on official registration code (case-insensitive)
       const { data: registration, error: regError } = await supabase
         .from('pride_registrations')
         .select('*')
-        .eq('registration_code', inputCode)
+        .ilike('registration_code', inputCode)
         .maybeSingle();
+
+      if (regError) {
+        console.error('[PRIDE_CHECKIN_SUPABASE_ERROR]', regError.code, regError.message, regError.hint);
+      }
 
       if (regError || !registration) {
         // Fallback to in-memory check with exact code match
@@ -154,13 +160,17 @@ export async function POST(request: NextRequest) {
 
       const checkedInAt = new Date().toISOString();
 
-      await supabase
+      const { error: updateError } = await supabase
         .from('pride_registrations')
         .update({
           check_in_status: 'checked_in',
           checked_in_at: checkedInAt,
         })
         .eq('id', registration.id);
+
+      if (updateError) {
+        console.error('[PRIDE_CHECKIN_UPDATE_ERROR]', updateError.code, updateError.message, updateError.hint);
+      }
 
       updateSharedRegistration(registration.registration_code, {
         check_in_status: 'checked_in',

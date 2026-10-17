@@ -8,7 +8,9 @@ export async function GET(request: NextRequest) {
 
   const hasSupabase =
     Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-    Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) &&
+    (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
     process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
 
   if (hasSupabase) {
@@ -19,7 +21,9 @@ export async function GET(request: NextRequest) {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (!error && data && data.length > 0) {
+      if (error) {
+        console.error('[PRIDE_ADMIN_DATA_FETCH_ERROR]', error);
+      } else if (data) {
         return NextResponse.json({
           success: true,
           data,
@@ -44,7 +48,9 @@ export async function PATCH(request: NextRequest) {
 
     const hasSupabase =
       Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-      Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) &&
+      (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
+        Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
+        Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
       process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
 
     if (hasSupabase) {
@@ -61,10 +67,15 @@ export async function PATCH(request: NextRequest) {
           }
         }
 
-        const { error } = await supabase
-          .from('pride_registrations')
-          .update(updatePayload)
-          .eq('id', id);
+        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(id));
+        let query = supabase.from('pride_registrations').update(updatePayload);
+        if (isUuid) {
+          query = query.eq('id', id);
+        } else {
+          query = query.eq('registration_code', id);
+        }
+
+        const { error } = await query;
 
         if (!error) {
           updateSharedRegistration(id, {
@@ -73,6 +84,8 @@ export async function PATCH(request: NextRequest) {
             checked_in_at: check_in_status === 'checked_in' ? new Date().toISOString() : undefined,
           });
           return NextResponse.json({ success: true });
+        } else {
+          console.error('[PRIDE_ADMIN_DATA_PATCH_ERROR]', error);
         }
       } catch (err) {
         console.warn('Supabase update failed:', err);
