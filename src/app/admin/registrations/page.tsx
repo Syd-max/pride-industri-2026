@@ -227,18 +227,19 @@ export default function RegistrationsPage() {
       <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-wrap items-center gap-3 text-xs">
         {/* Real-time Search Input with Yellow Highlight */}
         <div className="flex-1 min-w-[260px]">
-          <div className="relative">
-            <input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Cari nama peserta, email, HP, kode pendaftaran, atau brand..."
-              className="form-input text-xs py-2.5 pl-9 pr-8 w-full rounded-xl bg-white border border-slate-200"
-            />
-            <svg className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="relative flex items-center">
+            <svg className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
             </svg>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Cari nama peserta, email, HP, kode pendaftaran, atau brand..."
+              className="w-full text-xs py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
+              style={{ paddingLeft: '2.6rem', paddingRight: '2.25rem' }}
+            />
             {search && (
               <button
                 type="button"

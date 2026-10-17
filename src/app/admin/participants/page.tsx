@@ -213,18 +213,19 @@ export default function ParticipantsPage() {
       <div className="sticky top-16 sm:top-20 z-20 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-3 sm:p-4 shadow-sm flex flex-wrap items-center gap-3 text-xs mb-4">
         {/* Search Input */}
         <div className="flex-1 min-w-[260px]">
-          <div className="relative">
+          <div className="relative flex items-center">
+            <svg className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari nama peserta, email, nomor HP, atau kode..."
-              className="form-input text-xs py-2.5 pl-9 pr-8 w-full rounded-xl bg-slate-50/70 focus:bg-white border-slate-200"
+              className="w-full text-xs py-2.5 rounded-xl bg-slate-50/70 focus:bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
+              style={{ paddingLeft: '2.6rem', paddingRight: '2.25rem' }}
             />
-            <svg className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
             {search && (
               <button
                 type="button"
@@ -272,8 +273,8 @@ export default function ParticipantsPage() {
                 <th className="py-3.5 px-5 min-w-[220px] whitespace-nowrap bg-slate-50">Kode Registrasi</th>
                 <th className="py-3.5 px-5 min-w-[240px] whitespace-nowrap bg-slate-50">Nama &amp; Identitas</th>
                 <th className="py-3.5 px-5 min-w-[150px] whitespace-nowrap bg-slate-50">Kategori</th>
-                <th className="py-3.5 px-5 min-w-[150px] whitespace-nowrap bg-slate-50">Kontak / Domisili</th>
-                <th className="py-3.5 px-5 min-w-[220px] whitespace-nowrap bg-slate-50">Status Presensi Gate</th>
+                <th className="py-3.5 px-5 min-w-[150px] whitespace-nowrap bg-slate-50">Kontak WhatsApp</th>
+                <th className="py-3.5 px-5 min-w-[200px] whitespace-nowrap bg-slate-50">Status Presensi Gate</th>
                 <th className="py-3.5 px-5 min-w-[110px] whitespace-nowrap bg-slate-50 text-right pr-6">Aksi Detail</th>
               </tr>
             </thead>
@@ -311,11 +312,11 @@ export default function ParticipantsPage() {
                         <div className="font-extrabold text-slate-900 text-sm whitespace-nowrap">
                           {highlightMatch(p.full_name, search)}
                         </div>
-                        <div className="text-[11px] text-slate-500 font-medium whitespace-nowrap">
-                          {p.competition_id === 'pengunjung-umum'
-                            ? `Pengunjung Umum • Asal: ${p.address || p.phone || 'Kota Bandung'}`
-                            : highlightMatch(p.email, search)}
-                        </div>
+                        {p.competition_id !== 'pengunjung-umum' && p.email && (
+                          <div className="text-[11px] text-slate-500 font-medium whitespace-nowrap">
+                            {highlightMatch(p.email, search)}
+                          </div>
+                        )}
                       </td>
 
                       {/* Column 3: Kategori */}
@@ -337,12 +338,10 @@ export default function ParticipantsPage() {
                         </span>
                       </td>
 
-                      {/* Column 4: Kontak WhatsApp / Domisili */}
+                      {/* Column 4: Kontak WhatsApp */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
                         {p.competition_id === 'pengunjung-umum' ? (
-                          <span className="text-xs text-slate-600 font-medium">
-                            {p.address || p.phone || 'Kota Bandung'}
-                          </span>
+                          <span className="text-slate-400 font-mono text-xs pl-2">-</span>
                         ) : (
                           <a
                             href={`https://wa.me/62${p.phone.replace(/^0/, '')}`}
@@ -359,29 +358,17 @@ export default function ParticipantsPage() {
 
                       {/* Column 5: Status Presensi (Semua di sini sudah scan QR) */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
-                        <div className="flex flex-col gap-1 items-start whitespace-nowrap">
-                          <button
-                            type="button"
-                            onClick={() => handleToggleCheckIn(p)}
-                            className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 border whitespace-nowrap bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100 shadow-2xs"
-                            title="Klik jika ingin membatalkan status presensi hadir"
-                          >
-                            <svg className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            <span>Sudah Scan QR Gate</span>
-                          </button>
-
-                          {p.checked_in_at ? (
-                            <span className="text-[10px] font-mono text-slate-500 ml-1 whitespace-nowrap">
-                              Waktu: {new Date(p.checked_in_at).toLocaleTimeString('id-ID')} WIB
-                            </span>
-                          ) : (
-                            <span className="text-[10px] font-mono text-emerald-600 ml-1 whitespace-nowrap">
-                              Terverifikasi Hadir di Gate
-                            </span>
-                          )}
-                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleToggleCheckIn(p)}
+                          className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 border whitespace-nowrap bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100 shadow-2xs"
+                          title="Klik jika ingin membatalkan status presensi hadir"
+                        >
+                          <svg className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          <span>Sudah Scan QR Gate</span>
+                        </button>
                       </td>
 
                       {/* Column 6: Aksi Detail */}
