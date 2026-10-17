@@ -6,8 +6,6 @@ import './activities-deck.css';
 export default function ActivitiesDeckSection() {
   const scrollDriverRef = useRef<HTMLDivElement>(null);
   const deckContainerRef = useRef<HTMLDivElement>(null);
-  const stepperTextRef = useRef<HTMLSpanElement>(null);
-  const hudRef = useRef<HTMLDivElement>(null);
   const activeCardIndexRef = useRef(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const autoPlayRafRef = useRef<number | null>(null);
@@ -44,13 +42,10 @@ export default function ActivitiesDeckSection() {
     const peelStages = totalCards - 1; // 6
     const stageProgress = scrollProgress * peelStages;
 
-    // Update active index & HUD stepper
+    // Update active index
     const activeIdx = clamp(Math.round(stageProgress), 0, totalCards - 1);
     if (activeIdx !== activeCardIndexRef.current) {
       activeCardIndexRef.current = activeIdx;
-      if (stepperTextRef.current) {
-        stepperTextRef.current.textContent = activeIdx === 0 ? 'Cover' : `0${activeIdx} / 06`;
-      }
     }
 
     cards.forEach((card, i) => {
@@ -219,15 +214,7 @@ export default function ActivitiesDeckSection() {
       return clamp(current / totalScroll, 0, 1);
     }
 
-    const updateHud = () => {
-      if (!hudRef.current) return;
-      const rect = driver!.getBoundingClientRect();
-      const inView = rect.top < window.innerHeight && rect.bottom > 0;
-      hudRef.current.classList.toggle('is-visible', inView);
-    };
-
     const onScroll = () => {
-      updateHud();
       if (autoPlayRafRef.current !== null || animationRafRef.current !== null) return;
       if (!ticking) {
         requestAnimationFrame(() => {
@@ -239,7 +226,6 @@ export default function ActivitiesDeckSection() {
     };
 
     const onResize = () => {
-      updateHud();
       if (autoPlayRafRef.current === null && animationRafRef.current === null) {
         updateDeck(getScrollProgress());
       }
@@ -250,10 +236,8 @@ export default function ActivitiesDeckSection() {
 
     // Initial render calls on mount to guarantee perfect positioning
     updateDeck(getScrollProgress());
-    updateHud();
     requestAnimationFrame(() => {
       updateDeck(getScrollProgress());
-      updateHud();
     });
 
     return () => {
@@ -362,120 +346,15 @@ export default function ActivitiesDeckSection() {
               <div className="decor-circle decor-orange" />
             </div>
 
-            {/* Top Bar: Clean & Balanced */}
-            <div className="deck-cover-top">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200">
-                <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
-                <span>Rangkaian Acara Festival</span>
-              </div>
-              <div className="deck-cover-venue-pill">
-                <svg className="w-3.5 h-3.5 text-rose-600 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                </svg>
-                <span>Braga City Walk · 27–28 Nov 2026</span>
-              </div>
-            </div>
-
-            {/* Center Focal Point: Pure & Bold "6 PROGRAM UNGGULAN" */}
-            <div className="deck-cover-hero">
-              <div className="deck-cover-badge-row">
-                <span className="deck-cover-kicker">PRIDE INDUSTRI KOTA BANDUNG 2026</span>
-              </div>
-
-              <div className="deck-cover-title-group">
-                <span className="deck-cover-large-number">6</span>
-                <h2 className="deck-cover-main-title">
-                  <span>PROGRAM</span>
-                  <span className="deck-title-highlight">UNGGULAN</span>
-                </h2>
-              </div>
-
-              <p className="deck-cover-subtitle">
-                Eksplorasi panggung fesyen wastra, kompetisi kreatif, apresiasi kepatuhan industri, hingga fasilitasi legalitas halal dan pesta seni budaya. Klik kategori untuk langsung membuka kartu program.
-              </p>
-
-              {/* Interactive Clickable Program Chips: Direct Jump to Card */}
-              <div className="deck-cover-palette-row" aria-label="6 Kategori Program Festival">
-                <button
-                  type="button"
-                  onClick={() => goToCard(1)}
-                  className="palette-chip chip-red cursor-pointer"
-                  title="Buka Kartu 01: Fesyen & Wastra"
-                >
-                  ✦ Fesyen
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(2)}
-                  className="palette-chip chip-green cursor-pointer"
-                  title="Buka Kartu 02: Desain Kemasan"
-                >
-                  ✦ Kemasan
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(3)}
-                  className="palette-chip chip-orange cursor-pointer"
-                  title="Buka Kartu 03: Video 1 Menit"
-                >
-                  ✦ Video 1 Menit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(4)}
-                  className="palette-chip chip-yellow cursor-pointer"
-                  title="Buka Kartu 04: Gala SIINAS"
-                >
-                  ✦ Gala SIINAS
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(5)}
-                  className="palette-chip chip-blue cursor-pointer"
-                  title="Buka Kartu 05: Halal & SNI"
-                >
-                  ✦ Halal &amp; SNI
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(6)}
-                  className="palette-chip chip-purple cursor-pointer"
-                  title="Buka Kartu 06: Seni Budaya"
-                >
-                  ✦ Seni Budaya
-                </button>
-              </div>
-            </div>
-
-            {/* Footer Bar: Scroll Prompt & Quick Tour Button */}
-            <div className="deck-cover-footer flex flex-wrap items-center justify-between gap-3">
-              <div className="deck-cover-scroll-indicator">
-                <span className="scroll-arrow-box">
-                  <svg className="w-4 h-4 animate-bounce text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 5v14M19 12l-7 7-7-7"/>
-                  </svg>
-                </span>
-                <span className="font-semibold text-slate-700 text-xs sm:text-sm">
-                  Scroll ke bawah untuk membuka kartu program ↓
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={toggleAutoPlay}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 transition-transform active:scale-95 shadow-sm cursor-pointer"
-                >
-                  <span>{isPlaying ? '⏸ Jeda' : '▶ Putar Animasi'}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(1)}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold bg-rose-600 text-white hover:bg-rose-700 transition-transform active:scale-95 shadow-sm cursor-pointer"
-                >
-                  <span>Buka Program →</span>
-                </button>
-              </div>
+            {/* Center Focal Point: Simple & Elegant Mixed Font Title */}
+            <div className="deck-cover-center">
+              <h2 className="deck-cover-mix-title">
+                <div className="deck-mix-main-row">
+                  <span className="deck-mix-num">6</span>
+                  <span className="deck-mix-sans">PROGRAM</span>
+                </div>
+                <span className="deck-mix-serif">Unggulan</span>
+              </h2>
             </div>
           </section>
           <article className="activities-card deck-festival-card theme-red" data-index="1">
@@ -994,38 +873,6 @@ export default function ActivitiesDeckSection() {
 
       </section>
 
-      {/* Floating Interactive Controls (Bottom Right - Matching Ilia Delin reference) */}
-      <div className="demo-hud" ref={hudRef} role="region" aria-label="Kontrol Animasi Rangkaian">
-        <button
-          type="button"
-          onClick={() => goToCard(Math.max(0, activeCardIndexRef.current - 1))}
-          className="demo-hud-arrow"
-          aria-label="Kartu program sebelumnya"
-          title="Program sebelumnya"
-        >
-          ‹
-        </button>
-        <button
-          type="button"
-          onClick={toggleAutoPlay}
-          className="demo-hud-btn"
-          aria-label={isPlaying ? 'Jeda sequence animasi' : 'Putar sequence animasi kartu'}
-        >
-          {isPlaying ? '⏸ Jeda Animasi' : '▶ Putar Animasi Kartu'}
-        </button>
-        <div className="demo-hud-stepper">
-          <span ref={stepperTextRef}>Cover</span>
-        </div>
-        <button
-          type="button"
-          onClick={() => goToCard(Math.min(6, activeCardIndexRef.current + 1))}
-          className="demo-hud-arrow"
-          aria-label="Kartu program berikutnya"
-          title="Program berikutnya"
-        >
-          ›
-        </button>
-      </div>
     </div>
   );
 }

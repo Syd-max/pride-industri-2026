@@ -147,8 +147,9 @@
   padding: clamp(20px, 3.2vh, 36px) clamp(24px, 3.8vw, 48px);
   display: flex !important;
   flex-direction: column !important;
-  justify-content: space-between !important;
-  align-items: stretch !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
 }
 
 .deck-cover-title {
@@ -232,184 +233,67 @@
   background: #f69321;
 }
 
-/* Cover Card Top Header */
-.deck-cover-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  position: relative;
-  z-index: 2;
-}
-
-.deck-cover-venue-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: #ffffff;
-  border: 1px solid #f1f5f9;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #334155;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-/* Cover Card Hero Centerpiece */
-.deck-cover-hero {
+/* ─── Card 0: Simple & Elegant Mixed Font Centerpiece ─── */
+.deck-cover-center {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: clamp(10px, 1.8vh, 18px);
-  margin: auto 0;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: auto;
   max-width: 900px;
+  width: 100%;
 }
 
-.deck-cover-badge-row {
+.deck-cover-mix-title {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 1.4vh, 16px);
+  text-align: center;
+  margin: 0;
 }
 
-.deck-cover-kicker {
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  font-size: clamp(11px, 1.2vw, 13px);
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.deck-mix-main-row {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: clamp(10px, 2.2vw, 24px);
+}
+
+.deck-mix-num {
+  font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(4.5rem, 11vw, 9.5rem);
   color: #e51937;
-  display: inline-block;
-}
-
-.deck-cover-title-group {
-  display: flex;
-  align-items: center;
-  gap: clamp(12px, 2.5vw, 24px);
-}
-
-.deck-cover-large-number {
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  font-size: clamp(68px, 11vw, 136px);
-  font-weight: 900;
-  line-height: 0.82;
-  letter-spacing: -0.05em;
-  color: #e51937;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
   text-shadow: 0 4px 24px rgba(229, 25, 55, 0.18);
   user-select: none;
 }
 
-.deck-cover-main-title {
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  font-size: clamp(28px, 5.2vw, 68px);
+.deck-mix-sans {
+  font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-weight: 900;
-  line-height: 0.94;
+  font-size: clamp(2.5rem, 6.5vw, 5.5rem);
   letter-spacing: -0.035em;
   color: #0f172a;
-  display: flex;
-  flex-direction: column;
+  line-height: 0.95;
+  text-transform: uppercase;
 }
 
-.deck-title-highlight {
-  color: #e51937;
-  position: relative;
-  display: inline-block;
-}
-
-.deck-cover-subtitle {
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  font-size: clamp(13px, 1.45vw, 16.5px);
-  line-height: 1.55;
-  color: #475569;
+.deck-mix-serif {
+  font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  font-style: italic;
   font-weight: 500;
-  max-width: 660px;
-}
-
-/* Playful Proposal Palette Indicator Pills */
-.deck-cover-palette-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 2px;
-}
-
-.palette-chip {
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  font-size: 11.5px;
-  font-weight: 700;
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  white-space: nowrap;
-}
-
-.palette-chip:hover {
-  transform: translateY(-2px);
-}
-
-.chip-red {
-  background: #fff1f2;
-  color: #be123c;
-  border-color: #fecdd3;
-}
-
-.chip-green {
-  background: #f0fdf4;
-  color: #15803d;
-  border-color: #bbf7d0;
-}
-
-.chip-orange {
-  background: #fff7ed;
-  color: #c2410c;
-  border-color: #fed7aa;
-}
-
-.chip-yellow {
-  background: #fefce8;
-  color: #a16207;
-  border-color: #fef08a;
-}
-
-.chip-blue {
-  background: #eff6ff;
-  color: #1d4ed8;
-  border-color: #bfdbfe;
-}
-
-.chip-purple {
-  background: #faf5ff;
-  color: #7c3aed;
-  border-color: #e9d5ff;
-}
-
-/* Cover Card Footer */
-.deck-cover-footer {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.deck-cover-scroll-indicator {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 16px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 999px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-}
-
-.scroll-arrow-box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  font-size: clamp(2.4rem, 6vw, 5.2rem);
+  color: #e51937;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
 }
 
 /* ==========================================================================
@@ -764,34 +648,16 @@
     border-radius: var(--deck-card-radius-sm);
   }
 
-  .deck-cover-venue-pill {
-    padding: 4px 10px;
-    font-size: 10.5px;
+  .deck-mix-num {
+    font-size: clamp(3.8rem, 14vw, 5.5rem);
   }
 
-  .deck-cover-large-number {
-    font-size: clamp(52px, 14vw, 76px);
+  .deck-mix-sans {
+    font-size: clamp(2rem, 8vw, 3.2rem);
   }
 
-  .deck-cover-main-title {
-    font-size: clamp(24px, 6.8vw, 36px);
-    line-height: 0.98;
-  }
-
-  .deck-cover-subtitle {
-    font-size: clamp(12px, 3.4vw, 13.5px);
-    line-height: 1.45;
-  }
-
-  .palette-chip {
-    font-size: 10.5px;
-    padding: 4px 9px;
-  }
-
-  .deck-cover-scroll-indicator {
-    padding: 6px 12px;
-    font-size: 11px;
-    gap: 7px;
+  .deck-mix-serif {
+    font-size: clamp(1.8rem, 7.5vw, 2.8rem);
   }
 
   .deck-card-inner {
@@ -849,21 +715,16 @@
     padding: 16px 14px 16px;
   }
 
-  .deck-cover-kicker {
-    font-size: 10px;
+  .deck-mix-num {
+    font-size: 3.5rem;
   }
 
-  .deck-cover-large-number {
-    font-size: 54px;
+  .deck-mix-sans {
+    font-size: 1.85rem;
   }
 
-  .deck-cover-main-title {
-    font-size: 24px;
-  }
-
-  .deck-cover-subtitle {
-    font-size: 11.5px;
-    line-height: 1.4;
+  .deck-mix-serif {
+    font-size: 1.75rem;
   }
 
   .deck-card-inner {
@@ -938,114 +799,13 @@
   border-color: #1e293b;
 }
 
-/* ─── Floating Interactive Demo Controls (Matching Ilia Delin Reference) ─── */
-.demo-hud {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 45;
-  background: rgba(15, 23, 42, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #ffffff;
-  padding: 6px 14px 6px 6px;
-  border-radius: 999px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
-  user-select: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(8px);
-  pointer-events: none;
-}
-
-.demo-hud.is-visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.demo-hud-btn {
-  background: #ffffff;
-  color: #0f172a;
-  border: none;
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 11.5px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: transform 0.18s ease, background-color 0.18s ease;
-  white-space: nowrap;
-}
-
-.demo-hud-btn:hover {
-  background: #f1f5f9;
-  transform: scale(1.04);
-}
-
-.demo-hud-btn:active {
-  transform: scale(0.96);
-}
-
-.demo-hud-stepper {
-  font-size: 11.5px;
-  font-weight: 700;
-  font-family: 'JetBrains Mono', monospace;
-  color: #94a3b8;
-  letter-spacing: 0.05em;
-  padding: 0 2px;
-}
-
-.demo-hud-arrow {
-  background: rgba(255, 255, 255, 0.14);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 17px;
-  line-height: 1;
-  cursor: pointer;
-  transition: all 0.18s ease;
-  user-select: none;
-}
-
-.demo-hud-arrow:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.08);
-}
-
-.demo-hud-arrow:active {
-  transform: scale(0.92);
-}
-
 @media (max-width: 768px) {
-  .demo-hud {
-    bottom: 16px;
-    right: 14px;
-    padding: 5px 12px 5px 5px;
-    font-size: 11px;
-  }
-  .demo-hud-btn {
-    padding: 5px 11px;
-    font-size: 10.5px;
-  }
   .deck-nav-btn {
     padding: 4px 10px;
     font-size: 10.5px;
   }
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {

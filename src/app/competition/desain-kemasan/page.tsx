@@ -309,7 +309,7 @@ export default function DesainKemasanPage() {
             href="/"
             className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-blue-600 transition-colors cursor-pointer"
           >
-            ← Kembali ke Beranda Festival
+            ← Kembali
           </Link>
           <Link href="/" className="flex items-center gap-2 group cursor-pointer">
             <Image
@@ -620,7 +620,7 @@ export default function DesainKemasanPage() {
                       onClick={() => goToNextStep(2)}
                       className="py-3 px-6 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md flex items-center gap-2 cursor-pointer"
                     >
-                      <span>Lanjutkan ke Langkah 2: Info Produk &amp; Desain</span>
+                      <span>Lanjut</span>
                       <span>→</span>
                     </button>
                   </div>
@@ -723,14 +723,14 @@ export default function DesainKemasanPage() {
                       onClick={() => goToPreviousStep(1)}
                       className="py-3 px-5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
                     >
-                      <span>← Kembali ke Data Diri</span>
+                      <span>← Kembali</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => goToNextStep(3)}
                       className="py-3 px-6 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md flex items-center gap-2 cursor-pointer"
                     >
-                      <span>Lanjutkan ke Langkah 3: File Karya &amp; Dokumen</span>
+                      <span>Lanjut</span>
                       <span>→</span>
                     </button>
                   </div>
@@ -1049,14 +1049,14 @@ export default function DesainKemasanPage() {
                       onClick={() => goToPreviousStep(2)}
                       className="py-3 px-5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
                     >
-                      <span>← Kembali ke Info Produk</span>
+                      <span>← Kembali</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => goToNextStep(4)}
                       className="py-3 px-6 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md flex items-center gap-2 cursor-pointer"
                     >
-                      <span>Lanjutkan ke Langkah 4: Persetujuan</span>
+                      <span>Lanjut</span>
                       <span>→</span>
                     </button>
                   </div>
@@ -1146,7 +1146,7 @@ export default function DesainKemasanPage() {
                       onClick={() => goToPreviousStep(3)}
                       className="w-full sm:w-auto py-3 px-5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
-                      <span>← Kembali ke File Karya</span>
+                      <span>← Kembali</span>
                     </button>
                     <button
                       type="submit"
