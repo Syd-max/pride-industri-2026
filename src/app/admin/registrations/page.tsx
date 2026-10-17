@@ -899,6 +899,20 @@ export default function RegistrationsPage() {
                       }
                       isDownloading={downloadingFile === `${selectedReg.id}-Surat Pernyataan Persetujuan`}
                     />
+
+                    <FileAttachmentItem
+                      label="Foto Barcode QR TactLink"
+                      fileName={selectedReg.tactlink_qr_name}
+                      registrationCode={selectedReg.registration_code}
+                      onDownload={() =>
+                        handleDownloadAttachment(
+                          selectedReg.tactlink_qr_name,
+                          'Foto Barcode QR TactLink',
+                          selectedReg
+                        )
+                      }
+                      isDownloading={downloadingFile === `${selectedReg.id}-Foto Barcode QR TactLink`}
+                    />
                   </div>
                 </div>
 

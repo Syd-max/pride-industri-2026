@@ -9,6 +9,7 @@ const FORM_STEPS = [
   { step: 2, title: 'Info Produk & Desain', subtitle: 'Merek & bahan lokal' },
   { step: 3, title: 'File Karya & Dokumen', subtitle: 'Desain PDF & pakta integritas' },
   { step: 4, title: 'Persetujuan Peserta', subtitle: 'Orisinalitas & ketentuan lomba' },
+  { step: 5, title: 'Siapkan TactLink', subtitle: 'Kartu nama digital resmi (Wajib)' },
 ];
 
 export default function DesainKemasanPage() {
@@ -54,6 +55,12 @@ export default function DesainKemasanPage() {
   const [declarationUnpublished, setDeclarationUnpublished] = useState(false);
   const [declarationTerms, setDeclarationTerms] = useState(false);
   const [declarationUsageRights, setDeclarationUsageRights] = useState(false);
+
+  // ─── Section 5: Siapkan TactLink (Wadah Jejaring Digital Resmi - Wajib) ───
+  const [tactlinkQrFile, setTactlinkQrFile] = useState<File | null>(null);
+  const [tactlinkQrPreview, setTactlinkQrPreview] = useState<string | null>(null);
+  const [tactlinkQrError, setTactlinkQrError] = useState<string | null>(null);
+  const tactlinkQrInputRef = useRef<HTMLInputElement>(null);
 
   // ─── Submission States ───
   const [loading, setLoading] = useState(false);
@@ -150,6 +157,34 @@ export default function DesainKemasanPage() {
     setPersetujuanFile(file);
   };
 
+  const handleTactlinkQrChange = (file: File | null) => {
+    setTactlinkQrError(null);
+    setErrorMessage(null);
+    if (!file) {
+      setTactlinkQrFile(null);
+      setTactlinkQrPreview(null);
+      return;
+    }
+    const MAX_QR_SIZE = 2 * 1024 * 1024; // 2 MB
+    if (file.size > MAX_QR_SIZE) {
+      setTactlinkQrError(
+        `File "${file.name}" berukuran ${formatFileSize(file.size)}, melebihi batas maksimal 2 MB. File tidak dapat dimasukkan.`
+      );
+      if (tactlinkQrInputRef.current) tactlinkQrInputRef.current.value = '';
+      setTactlinkQrFile(null);
+      setTactlinkQrPreview(null);
+      return;
+    }
+    setTactlinkQrFile(file);
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = () => setTactlinkQrPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setTactlinkQrPreview(null);
+    }
+  };
+
   // ─── Step Transitions with Validations ───
   const goToNextStep = (targetStep: number) => {
     setStepError(null);
@@ -210,6 +245,23 @@ export default function DesainKemasanPage() {
         setStepError(persetujuanError);
         return;
       }
+    } else if (currentStep === 4) {
+      if (!declarationOriginal) {
+        setStepError('Anda wajib mencentang pernyataan bahwa karya merupakan karya asli dan tidak melanggar hak cipta.');
+        return;
+      }
+      if (!declarationUnpublished) {
+        setStepError('Anda wajib mencentang persetujuan bahwa karya belum pernah dipublikasikan atau diikutsertakan lomba lain.');
+        return;
+      }
+      if (!declarationTerms) {
+        setStepError('Anda wajib mencentang persetujuan terhadap seluruh syarat dan ketentuan lomba.');
+        return;
+      }
+      if (!declarationUsageRights) {
+        setStepError('Anda wajib mencentang persetujuan penggunaan karya untuk publikasi & promosi nonkomersial.');
+        return;
+      }
     }
 
     setCurrentStep(targetStep);
@@ -223,7 +275,7 @@ export default function DesainKemasanPage() {
     window.scrollTo({ top: 200, behavior: 'smooth' });
   };
 
-  // ─── Form Submission Handler (Step 4) ───
+  // ─── Form Submission Handler (Step 5) ───
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -244,6 +296,16 @@ export default function DesainKemasanPage() {
     }
     if (!declarationUsageRights) {
       setErrorMessage('Anda wajib mencentang persetujuan penggunaan karya untuk publikasi & promosi nonkomersial.');
+      return;
+    }
+
+    // Mandatory check for TactLink QR (Step 5)
+    if (!tactlinkQrFile) {
+      setErrorMessage('Wajib mengunggah foto barcode / QR kartu nama digital TactLink (maksimal 2 MB).');
+      return;
+    }
+    if (tactlinkQrError) {
+      setErrorMessage(tactlinkQrError);
       return;
     }
 
@@ -280,6 +342,10 @@ export default function DesainKemasanPage() {
       if (persetujuanFile) {
         formData.append('surat_persetujuan_file', persetujuanFile);
         formData.append('surat_persetujuan_file_name', persetujuanFile.name);
+      }
+      if (tactlinkQrFile) {
+        formData.append('tactlink_qr_file', tactlinkQrFile);
+        formData.append('tactlink_qr_name', tactlinkQrFile.name);
       }
 
       const res = await fetch('/api/register', {
@@ -462,15 +528,15 @@ export default function DesainKemasanPage() {
           <div className="space-y-6">
 
             {/* ════════════════════════════════════════════════════════════════
-                STEP PROGRESS BAR & STEPPER NAVIGATION (4 SECTIONS)
+                STEP PROGRESS BAR & STEPPER NAVIGATION (5 SECTIONS)
                 ════════════════════════════════════════════════════════════════ */}
             <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-bold text-slate-700">
-                  Langkah {currentStep} dari 4: <span className="text-blue-600">{FORM_STEPS[currentStep - 1].title}</span>
+                  Langkah {currentStep} dari 5: <span className="text-blue-600">{FORM_STEPS[currentStep - 1].title}</span>
                 </span>
                 <span className="text-slate-500 font-medium">
-                  {Math.round((currentStep / 4) * 100)}% Selesai
+                  {Math.round((currentStep / 5) * 100)}% Selesai
                 </span>
               </div>
 
@@ -478,12 +544,12 @@ export default function DesainKemasanPage() {
               <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
                 <div
                   className="h-full bg-blue-600 transition-all duration-300 ease-out"
-                  style={{ width: `${(currentStep / 4) * 100}%` }}
+                  style={{ width: `${(currentStep / 5) * 100}%` }}
                 />
               </div>
 
               {/* Stepper Buttons (Quick Jump to visited steps) */}
-              <div className="grid grid-cols-4 gap-2 pt-1">
+              <div className="grid grid-cols-5 gap-1.5 sm:gap-2 pt-1">
                 {FORM_STEPS.map((s) => {
                   const isCompleted = s.step < currentStep;
                   const isActive = s.step === currentStep;
@@ -1155,6 +1221,300 @@ export default function DesainKemasanPage() {
                     <button
                       type="button"
                       onClick={() => goToPreviousStep(3)}
+                      className="w-full sm:w-auto py-3 px-5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <span>← Kembali</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => goToNextStep(5)}
+                      className="w-full sm:w-auto py-3.5 px-8 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 active:scale-[0.99] transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <span>Lanjut ke Step 5 (TactLink)</span>
+                      <span>→</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* ════════════════════════════════════════════════════════════════
+                  SECTION 5: SIAPKAN TACTLINK (Visible on currentStep === 5)
+                  ════════════════════════════════════════════════════════════════ */}
+              {currentStep === 5 && (
+                <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-xs space-y-6 animate-in fade-in duration-200">
+                  <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                    <span className="w-8 h-8 rounded-full bg-blue-600 text-white font-black text-xs flex items-center justify-center">
+                      5
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-base sm:text-lg font-black text-slate-900">
+                          Siapkan TactLink (Wadah Jejaring Digital Resmi)
+                        </h2>
+                        <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                          Wajib
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        Ikuti langkah mudah berikut untuk melengkapi kartu nama digital resmi Anda sebagai syarat wajib festival PRIDE Industri 2026.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6 pt-1">
+
+                    {/* ─── Step 1: Download Tactlink ─── */}
+                    <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-3">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-6 h-6 rounded-full bg-slate-900 text-white text-xs font-black flex items-center justify-center shrink-0">
+                          1
+                        </span>
+                        <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                          Download Aplikasi TactLink <span className="text-blue-600">*</span>
+                        </h3>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        TactLink adalah platform kartu nama digital resmi festival PRIDE Industri 2026. Setiap peserta lomba Desain Kemasan wajib mengunduh aplikasinya secara gratis melalui Play Store atau App Store.
+                      </p>
+                      <div className="flex flex-wrap items-center gap-2.5 pt-1">
+                        <a
+                          href="https://apps.apple.com/id/app/tactlink/id1469516661"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-800 bg-white hover:bg-slate-100 border border-slate-200 shadow-2xs transition-all hover:scale-102 cursor-pointer"
+                        >
+                          <svg className="w-4 h-4 text-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                            <line x1="12" y1="18" x2="12.01" y2="18" />
+                          </svg>
+                          <span>Download di App Store ↗</span>
+                        </a>
+                        <a
+                          href="https://play.google.com/store/apps/details?id=com.tactlink.app"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-800 bg-white hover:bg-slate-100 border border-slate-200 shadow-2xs transition-all hover:scale-102 cursor-pointer"
+                        >
+                          <svg className="w-4 h-4 text-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                          </svg>
+                          <span>Download di Google Play ↗</span>
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* ─── Step 2: Register Akun Tactlink (Embed Video 1) ─── */}
+                    <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-4">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-6 h-6 rounded-full bg-slate-900 text-white text-xs font-black flex items-center justify-center shrink-0">
+                          2
+                        </span>
+                        <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                          Register Akun TactLink
+                        </h3>
+                      </div>
+                      <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200/60 text-xs text-blue-800 flex items-center gap-2 font-medium">
+                        <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                          <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        <span>Instruksi: Tekan tombol play untuk memutar video panduan registrasi akun. Video tidak autoplay agar halaman web Anda tetap ringan dan cepat.</span>
+                      </div>
+
+                      <div className="w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-md aspect-video sm:aspect-[16/9] relative">
+                        <iframe
+                          src="https://www.youtube.com/embed/v7jOZ2_Igu8"
+                          title="Panduan Registrasi Akun TactLink"
+                          style={{ width: '100%', height: '100%', minHeight: '100%', border: 0 }}
+                          className="w-full h-full block absolute inset-0 select-none"
+                          loading="lazy"
+                          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    </div>
+
+                    {/* ─── Step 3: Lengkapi Kartu Nama Digital (Embed Video 2) ─── */}
+                    <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-4">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-6 h-6 rounded-full bg-slate-900 text-white text-xs font-black flex items-center justify-center shrink-0">
+                          3
+                        </span>
+                        <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                          Lengkapi Kartu Nama Digital
+                        </h3>
+                      </div>
+                      <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200/60 text-xs text-blue-800 flex items-center gap-2 font-medium">
+                        <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                          <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        <span>Instruksi: Tekan tombol play untuk menonton video panduan melengkapi profil dan informasi kartu nama digital.</span>
+                      </div>
+
+                      <div className="w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-md aspect-video sm:aspect-[16/9] relative">
+                        <iframe
+                          src="https://www.youtube.com/embed/DJ1zPGb8YTM"
+                          title="Panduan Melengkapi Kartu Nama Digital TactLink"
+                          style={{ width: '100%', height: '100%', minHeight: '100%', border: 0 }}
+                          className="w-full h-full block absolute inset-0 select-none"
+                          loading="lazy"
+                          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    </div>
+
+                    {/* ─── Step 4: Screenshot QR Code TactLink (Embed Video 3) ─── */}
+                    <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-4">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-6 h-6 rounded-full bg-slate-900 text-white text-xs font-black flex items-center justify-center shrink-0">
+                          4
+                        </span>
+                        <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                          Screenshoot QR Code untuk Diunggah
+                        </h3>
+                      </div>
+                      <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200/60 text-xs text-blue-800 flex items-center gap-2 font-medium">
+                        <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                          <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        <span>Instruksi: Tekan tombol play untuk menonton video panduan mengambil tangkapan layar (screenshot) QR code kartu nama digital.</span>
+                      </div>
+
+                      <div className="w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-md aspect-video sm:aspect-[16/9] relative">
+                        <iframe
+                          src="https://www.youtube.com/embed/jsNUHQI1EF4"
+                          title="Panduan Screenshot QR Code TactLink"
+                          style={{ width: '100%', height: '100%', minHeight: '100%', border: 0 }}
+                          className="w-full h-full block absolute inset-0 select-none"
+                          loading="lazy"
+                          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    </div>
+
+                    {/* ─── Step 5: Upload Foto Barcode / QR Kartu Nama Digital ─── */}
+                    <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-3">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-6 h-6 rounded-full bg-slate-900 text-white text-xs font-black flex items-center justify-center shrink-0">
+                          5
+                        </span>
+                        <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                          Unggah Foto Barcode / QR Kartu Nama Digital TactLink <span className="text-blue-600">*</span>
+                        </h3>
+                      </div>
+
+                      <div className="p-3.5 rounded-2xl bg-slate-100 border border-slate-200 text-xs text-slate-700 flex items-center justify-between gap-3">
+                        <span className="flex items-center gap-2">
+                          <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <rect x="3" y="3" width="7" height="7" />
+                            <rect x="14" y="3" width="7" height="7" />
+                            <rect x="14" y="14" width="7" height="7" />
+                            <rect x="3" y="14" width="7" height="7" />
+                          </svg>
+                          <span>Format: JPG atau PNG · <strong>Maksimal 2 MB</strong></span>
+                        </span>
+                        <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                          Wajib · Maks 2 MB
+                        </span>
+                      </div>
+
+                      {/* QR Error Alert */}
+                      {tactlinkQrError && (
+                        <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-medium flex items-center gap-2">
+                          <svg className="w-4 h-4 text-amber-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                          </svg>
+                          <span>{tactlinkQrError}</span>
+                        </div>
+                      )}
+
+                      {/* Upload Box */}
+                      <div
+                        onClick={() => tactlinkQrInputRef.current?.click()}
+                        className={`p-6 sm:p-8 rounded-2xl border-2 border-dashed text-center transition-all cursor-pointer ${
+                          tactlinkQrFile
+                            ? 'border-emerald-300 bg-emerald-50/40 text-emerald-900'
+                            : 'border-slate-300 bg-white hover:border-blue-400 text-slate-600'
+                        }`}
+                      >
+                        <input
+                          ref={tactlinkQrInputRef}
+                          type="file"
+                          accept="image/png,image/jpeg,image/jpg"
+                          onChange={(e) => handleTactlinkQrChange(e.target.files?.[0] || null)}
+                          className="hidden"
+                        />
+
+                        {tactlinkQrFile ? (
+                          <div className="flex items-center justify-between gap-3 text-left">
+                            <div className="flex items-center gap-3 min-w-0">
+                              {tactlinkQrPreview ? (
+                                <img
+                                  src={tactlinkQrPreview}
+                                  alt="Preview QR Tactlink"
+                                  className="w-12 h-12 rounded-xl object-contain bg-white border border-slate-200 p-1 shrink-0"
+                                />
+                              ) : (
+                                <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <rect x="3" y="3" width="7" height="7" />
+                                    <rect x="14" y="3" width="7" height="7" />
+                                    <rect x="14" y="14" width="7" height="7" />
+                                    <rect x="3" y="14" width="7" height="7" />
+                                  </svg>
+                                </div>
+                              )}
+                              <div className="min-w-0">
+                                <div className="text-xs font-bold text-slate-900 truncate">
+                                  {tactlinkQrFile.name}
+                                </div>
+                                <div className="text-[11px] text-emerald-700 font-semibold mt-0.5">
+                                  {formatFileSize(tactlinkQrFile.size)} · Foto barcode / QR siap diunggah
+                                </div>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleTactlinkQrChange(null);
+                              }}
+                              className="px-3 py-1 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 hover:bg-slate-200/70 transition-colors"
+                            >
+                              Ganti QR
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center mx-auto">
+                              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <rect x="3" y="3" width="7" height="7" />
+                                <rect x="14" y="3" width="7" height="7" />
+                                <rect x="14" y="14" width="7" height="7" />
+                                <rect x="3" y="14" width="7" height="7" />
+                              </svg>
+                            </div>
+                            <div className="text-xs font-bold text-slate-800">
+                              Klik untuk mengunggah foto barcode / QR TactLink (Wajib)
+                            </div>
+                            <div className="text-[11px] text-slate-500">
+                              JPG atau PNG · Maksimal 2 MB (Kamera / Galeri)
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Step 5 Navigation & Final Submission */}
+                  <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <button
+                      type="button"
+                      onClick={() => goToPreviousStep(4)}
                       className="w-full sm:w-auto py-3 px-5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <span>← Kembali</span>

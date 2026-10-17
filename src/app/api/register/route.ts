@@ -156,6 +156,21 @@ export async function POST(
         );
       }
 
+      // TactLink Digital Business Card QR upload (Wajib Step 5)
+      const tactlinkQrName = sanitizeString(
+        uploadedFiles['tactlink_qr_file']?.name || body.tactlink_qr_name || ''
+      );
+      if (!tactlinkQrName) {
+        return NextResponse.json(
+          {
+            success: false,
+            error:
+              'Upload foto barcode / QR kartu nama digital TactLink (maksimal 2 MB) wajib dilakukan.',
+          },
+          { status: 400 }
+        );
+      }
+
       specificData = {
         product_name: productName,
         brand_name: brandName,
@@ -166,6 +181,7 @@ export async function POST(
         master_file_name: masterFileName,
         pakta_integritas_file_name: paktaFileName,
         surat_persetujuan_file_name: persetujuanFileName,
+        tactlink_qr_name: tactlinkQrName,
         declaration_original: Boolean(body.declaration_original),
         declaration_unpublished: Boolean(body.declaration_unpublished),
         declaration_terms: Boolean(body.declaration_terms),
