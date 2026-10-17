@@ -128,7 +128,10 @@ export default function RegistrationsPage() {
       (r.brand_name && r.brand_name.toLowerCase().includes(q)) ||
       (r.video_category && r.video_category.toLowerCase().includes(q));
 
-    const matchComp = compFilter === 'all' || r.competition_id === compFilter;
+    const matchComp =
+      compFilter === 'all'
+        ? r.competition_id !== 'pengunjung-umum'
+        : r.competition_id === compFilter;
     const matchStatus = statusFilter === 'all' || r.status === statusFilter;
 
     return matchSearch && matchComp && matchStatus;

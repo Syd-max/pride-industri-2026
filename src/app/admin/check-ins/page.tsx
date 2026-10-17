@@ -118,7 +118,9 @@ export default function CheckInsPage() {
                         {p.full_name}
                       </div>
                       <div className="text-[11px] text-slate-500 font-medium">
-                        {p.email}
+                        {p.competition_id === 'pengunjung-umum'
+                          ? `Pengunjung Umum • Asal: ${p.address || p.phone || 'Kota Bandung'}`
+                          : p.email}
                       </div>
                     </td>
                     <td>

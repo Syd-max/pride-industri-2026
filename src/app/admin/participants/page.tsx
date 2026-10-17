@@ -559,44 +559,72 @@ export default function ParticipantsPage() {
                 </div>
               )}
 
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                <span className="text-slate-500 font-medium">Kategori Lomba:</span>
-                <span className="font-bold text-slate-800">
-                  {selectedParticipant.competition_id === 'desain-kemasan'
-                    ? 'Desain Kemasan Pangan Lokal'
-                    : 'Video Sinematik 1 Menit'}
-                </span>
-              </div>
+              {selectedParticipant.competition_id === 'pengunjung-umum' ? (
+                <>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
+                    <span className="text-slate-500 font-medium">Tipe Presensi:</span>
+                    <span className="font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                      Pengunjung Umum Festival
+                    </span>
+                  </div>
 
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                <span className="text-slate-500 font-medium">Email:</span>
-                <span className="font-mono font-bold text-slate-800">{selectedParticipant.email}</span>
-              </div>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
+                    <span className="text-slate-500 font-medium">Nama Pengunjung:</span>
+                    <span className="font-bold text-slate-900 text-sm">{selectedParticipant.full_name}</span>
+                  </div>
 
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                <span className="text-slate-500 font-medium">WhatsApp:</span>
-                <span className="font-mono font-bold text-slate-800">{selectedParticipant.phone}</span>
-              </div>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
+                    <span className="text-slate-500 font-medium">Asal Domisili / Kota:</span>
+                    <span className="font-bold text-slate-800 text-sm">{selectedParticipant.address || selectedParticipant.phone || 'Kota Bandung'}</span>
+                  </div>
 
-              {selectedParticipant.brand_name && (
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                  <span className="text-slate-500 font-medium">Brand Produk:</span>
-                  <span className="font-bold text-slate-800">{selectedParticipant.brand_name}</span>
-                </div>
-              )}
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
+                    <span className="text-slate-500 font-medium">Pintu Masuk Event:</span>
+                    <span className="font-semibold text-slate-700">Gate Utama Braga City Walk</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
+                    <span className="text-slate-500 font-medium">Kategori Lomba:</span>
+                    <span className="font-bold text-slate-800">
+                      {selectedParticipant.competition_id === 'desain-kemasan'
+                        ? 'Desain Kemasan Pangan Lokal'
+                        : 'Video Sinematik 1 Menit'}
+                    </span>
+                  </div>
 
-              {selectedParticipant.video_url && (
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                  <span className="text-slate-500 font-medium">Link Karya Video:</span>
-                  <a
-                    href={selectedParticipant.video_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-bold text-blue-600 hover:underline truncate max-w-[200px]"
-                  >
-                    Buka Link Karya ↗
-                  </a>
-                </div>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
+                    <span className="text-slate-500 font-medium">Email:</span>
+                    <span className="font-mono font-bold text-slate-800">{selectedParticipant.email}</span>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
+                    <span className="text-slate-500 font-medium">WhatsApp:</span>
+                    <span className="font-mono font-bold text-slate-800">{selectedParticipant.phone}</span>
+                  </div>
+
+                  {selectedParticipant.brand_name && (
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
+                      <span className="text-slate-500 font-medium">Brand Produk:</span>
+                      <span className="font-bold text-slate-800">{selectedParticipant.brand_name}</span>
+                    </div>
+                  )}
+
+                  {selectedParticipant.video_url && (
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
+                      <span className="text-slate-500 font-medium">Link Karya Video:</span>
+                      <a
+                        href={selectedParticipant.video_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-bold text-blue-600 hover:underline truncate max-w-[200px]"
+                      >
+                        Buka Link Karya ↗
+                      </a>
+                    </div>
+                  )}
+                </>
               )}
             </div>
 
