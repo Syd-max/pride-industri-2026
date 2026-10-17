@@ -250,30 +250,41 @@ export default function DesainKemasanPage() {
     setLoading(true);
 
     try {
-      const payload = {
-        competition_id: 'desain-kemasan',
-        full_name: fullName.trim(),
-        address: address.trim(),
-        phone: phone.trim(),
-        email: email.trim().toLowerCase(),
-        brand_name: brandName.trim(),
-        product_name: productName.trim(),
-        local_ingredients: localIngredients.trim(),
-        design_concept: designConcept.trim(),
-        design_file_name: designFile ? designFile.name : '',
-        master_file_name: masterFile ? masterFile.name : '',
-        pakta_integritas_file_name: paktaFile ? paktaFile.name : '',
-        surat_persetujuan_file_name: persetujuanFile ? persetujuanFile.name : '',
-        declaration_original: declarationOriginal,
-        declaration_unpublished: declarationUnpublished,
-        declaration_terms: declarationTerms,
-        declaration_usage_rights: declarationUsageRights,
-      };
+      const formData = new FormData();
+      formData.append('competition_id', 'desain-kemasan');
+      formData.append('full_name', fullName.trim());
+      formData.append('address', address.trim());
+      formData.append('phone', phone.trim());
+      formData.append('email', email.trim().toLowerCase());
+      formData.append('brand_name', brandName.trim());
+      formData.append('product_name', productName.trim());
+      formData.append('local_ingredients', localIngredients.trim());
+      formData.append('design_concept', designConcept.trim());
+      formData.append('declaration_original', String(declarationOriginal));
+      formData.append('declaration_unpublished', String(declarationUnpublished));
+      formData.append('declaration_terms', String(declarationTerms));
+      formData.append('declaration_usage_rights', String(declarationUsageRights));
+
+      if (designFile) {
+        formData.append('design_file', designFile);
+        formData.append('design_file_name', designFile.name);
+      }
+      if (masterFile) {
+        formData.append('master_file', masterFile);
+        formData.append('master_file_name', masterFile.name);
+      }
+      if (paktaFile) {
+        formData.append('pakta_integritas_file', paktaFile);
+        formData.append('pakta_integritas_file_name', paktaFile.name);
+      }
+      if (persetujuanFile) {
+        formData.append('surat_persetujuan_file', persetujuanFile);
+        formData.append('surat_persetujuan_file_name', persetujuanFile.name);
+      }
 
       const res = await fetch('/api/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       const json = await res.json();

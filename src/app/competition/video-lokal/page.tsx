@@ -199,26 +199,31 @@ export default function VideoLokalPage() {
     setLoading(true);
 
     try {
-      const payload = {
-        competition_id: 'video-lokal',
-        full_name: fullName.trim(),
-        institution: institution.trim(),
-        phone: phone.trim(),
-        email: email.trim().toLowerCase(),
-        video_category: videoCategory,
-        video_title: videoTitle.trim(),
-        video_description: videoDescription.trim(),
-        declaration_original: declarationOriginal,
-        declaration_terms: declarationTerms,
-        declaration_usage_rights: declarationUsageRights,
-        document_file_name: documentFile ? documentFile.name : '',
-        tactlink_qr_name: tactlinkQrFile.name,
-      };
+      const formData = new FormData();
+      formData.append('competition_id', 'video-lokal');
+      formData.append('full_name', fullName.trim());
+      formData.append('institution', institution.trim());
+      formData.append('phone', phone.trim());
+      formData.append('email', email.trim().toLowerCase());
+      formData.append('video_category', videoCategory);
+      formData.append('video_title', videoTitle.trim());
+      formData.append('video_description', videoDescription.trim());
+      formData.append('declaration_original', String(declarationOriginal));
+      formData.append('declaration_terms', String(declarationTerms));
+      formData.append('declaration_usage_rights', String(declarationUsageRights));
+
+      if (documentFile) {
+        formData.append('document_file', documentFile);
+        formData.append('document_file_name', documentFile.name);
+      }
+      if (tactlinkQrFile) {
+        formData.append('tactlink_qr_file', tactlinkQrFile);
+        formData.append('tactlink_qr_name', tactlinkQrFile.name);
+      }
 
       const res = await fetch('/api/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       const json = await res.json();

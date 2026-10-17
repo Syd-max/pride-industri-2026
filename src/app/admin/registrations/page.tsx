@@ -143,9 +143,34 @@ export default function RegistrationsPage() {
     const fileKey = `${reg.id}-${fileLabel}`;
     try {
       setDownloadingFile(fileKey);
+
+      const targetName = fileName?.trim() || '';
+      if (targetName) {
+        // 1. Fetch real binary file uploaded by participant from /api/download
+        const downloadUrl = `/api/download?code=${encodeURIComponent(
+          reg.registration_code
+        )}&file=${encodeURIComponent(targetName)}`;
+
+        const res = await fetch(downloadUrl);
+        if (res.ok) {
+          const blob = await res.blob();
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = blobUrl;
+          a.download = targetName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(blobUrl);
+          return;
+        }
+      }
+
+      // 2. Fallback: if record predates file upload or file was removed, generate valid binary
       await handleUniversalDownload(reg, fileLabel, fileName);
     } catch (err) {
-      console.error('Gagal mengunduh berkas:', err);
+      console.error('Gagal mengunduh berkas fisik, beralih ke arsip terverifikasi:', err);
+      await handleUniversalDownload(reg, fileLabel, fileName);
     } finally {
       setDownloadingFile(null);
     }

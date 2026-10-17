@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 import { createAdminClient } from '@/lib/supabase/server';
 import {
   generateRegistrationCode,
@@ -27,8 +29,30 @@ export async function POST(
       );
     }
 
-    // 2. Parse & Sanitize Request
-    const body = await request.json();
+    // 2. Parse & Sanitize Request (Supports both FormData with binary files and JSON)
+    const contentType = request.headers.get('content-type') || '';
+    const body: Record<string, any> = {};
+    const uploadedFiles: Record<string, File> = {};
+
+    if (contentType.includes('multipart/form-data')) {
+      const formData = await request.formData();
+      for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          if (value.size > 0) {
+            uploadedFiles[key] = value;
+            body[`${key}_name`] = value.name;
+          }
+        } else {
+          if (value === 'true') body[key] = true;
+          else if (value === 'false') body[key] = false;
+          else body[key] = value;
+        }
+      }
+    } else {
+      const json = await request.json();
+      Object.assign(body, json);
+    }
+
     const competitionId = sanitizeString(body.competition_id);
     const fullName = sanitizeString(body.full_name);
     const email = sanitizeString(body.email).toLowerCase();
@@ -75,10 +99,18 @@ export async function POST(
       const address = sanitizeString(body.address);
       const localIngredients = sanitizeString(body.local_ingredients);
       const designConcept = sanitizeString(body.design_concept || body.description || '');
-      const designFileName = sanitizeString(body.design_file_name || '');
-      const masterFileName = sanitizeString(body.master_file_name || '');
-      const paktaFileName = sanitizeString(body.pakta_integritas_file_name || '');
-      const persetujuanFileName = sanitizeString(body.surat_persetujuan_file_name || '');
+      const designFileName = sanitizeString(
+        uploadedFiles['design_file']?.name || body.design_file_name || ''
+      );
+      const masterFileName = sanitizeString(
+        uploadedFiles['master_file']?.name || body.master_file_name || ''
+      );
+      const paktaFileName = sanitizeString(
+        uploadedFiles['pakta_integritas_file']?.name || body.pakta_integritas_file_name || ''
+      );
+      const persetujuanFileName = sanitizeString(
+        uploadedFiles['surat_persetujuan_file']?.name || body.surat_persetujuan_file_name || ''
+      );
 
       if (!productName || !brandName || !address) {
         return NextResponse.json(
@@ -207,7 +239,11 @@ export async function POST(
 
       // 7. Dokumen Persyaratan Lomba (maks 5 MB)
       const documentFileName = sanitizeString(
-        body.document_file_name || body.pakta_integritas_name || body.pakta_integritas_file_name || ''
+        uploadedFiles['document_file']?.name ||
+          body.document_file_name ||
+          body.pakta_integritas_name ||
+          body.pakta_integritas_file_name ||
+          ''
       );
       if (!documentFileName) {
         return NextResponse.json(
@@ -221,7 +257,11 @@ export async function POST(
 
       // 8. Foto QR / Barcode Kartu Nama Digital TactLink (maks 2 MB)
       const tactlinkQrName = sanitizeString(
-        body.tactlink_qr_name || body.surat_persetujuan_name || body.surat_persetujuan_file_name || ''
+        uploadedFiles['tactlink_qr_file']?.name ||
+          body.tactlink_qr_name ||
+          body.surat_persetujuan_name ||
+          body.surat_persetujuan_file_name ||
+          ''
       );
       if (!tactlinkQrName) {
         return NextResponse.json(
@@ -308,6 +348,33 @@ export async function POST(
             },
             { status: 409 }
           );
+        }
+
+        // Save actual uploaded binary files to disk
+        if (Object.keys(uploadedFiles).length > 0) {
+          try {
+            const uploadDir = path.join(process.cwd(), 'public', 'uploads', registrationCode);
+            await fs.promises.mkdir(uploadDir, { recursive: true });
+
+            for (const [key, file] of Object.entries(uploadedFiles)) {
+              if (file && file.size > 0) {
+                const rawName = file.name;
+                const safeName = rawName.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const targetFilePath = path.join(uploadDir, safeName);
+                const arrayBuffer = await file.arrayBuffer();
+                const buffer = Buffer.from(arrayBuffer);
+                await fs.promises.writeFile(targetFilePath, buffer);
+                if (safeName !== rawName) {
+                  try {
+                    await fs.promises.writeFile(path.join(uploadDir, rawName), buffer);
+                  } catch {}
+                }
+                console.log(`[FILE_SAVED] Successfully stored ${key}: ${safeName} (${file.size} bytes)`);
+              }
+            }
+          } catch (saveErr) {
+            console.error('[FILE_SAVE_ERROR] Failed to save uploaded files to disk:', saveErr);
+          }
         }
 
         const insertPayload: Record<string, unknown> = {
