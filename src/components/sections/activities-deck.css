@@ -90,6 +90,30 @@
   will-change: transform;
   box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.08);
   user-select: none;
+  contain: paint;
+}
+
+/* Smooth GPU hardware-accelerated transitions during button navigation & autoplay */
+.activities-deck-container.is-transitioning .activities-card {
+  transition: transform 0.52s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+.activities-card.is-peeled {
+  pointer-events: none !important;
+}
+
+.activities-card.is-active {
+  pointer-events: auto !important;
+}
+
+.activities-card.is-stacked {
+  pointer-events: none !important;
+}
+
+/* Pause heavy blur animations on inactive cards to save GPU/CPU cycles */
+.activities-card:not(.is-active) .decor-blob,
+.activities-card:not(.is-active) .decor-ring {
+  animation-play-state: paused !important;
 }
 
 /* Distinct Colored Top Accent Strip on every card so stacked cards behind are clearly visible */
@@ -945,7 +969,33 @@
   font-family: 'JetBrains Mono', monospace;
   color: #94a3b8;
   letter-spacing: 0.05em;
-  padding-right: 4px;
+  padding: 0 2px;
+}
+
+.demo-hud-arrow {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.demo-hud-arrow:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.08);
+}
+
+.demo-hud-arrow:active {
+  transform: scale(0.92);
 }
 
 @media (max-width: 768px) {

@@ -252,10 +252,24 @@ export default function HeroSection() {
       }
     }
 
-    // Scroll listener
+    // Scroll listener with off-screen pause via IntersectionObserver
     let ticking = false;
+    let isHeroInView = true;
     let lastFollowTarget: HTMLElement | null = null;
+
+    const heroObserver = new IntersectionObserver(
+      (entries) => {
+        isHeroInView = entries[0].isIntersecting;
+      },
+      { threshold: 0 }
+    );
+
+    if (scrollStageRef.current) {
+      heroObserver.observe(scrollStageRef.current);
+    }
+
     const handleScroll = () => {
+      if (!isHeroInView) return;
       if (!ticking) {
         window.requestAnimationFrame(() => {
           updateTimeline(getScrollProgress());
@@ -283,8 +297,9 @@ export default function HeroSection() {
       clearTimeout(tSub);
       clearTimeout(tLogos);
       clearTimeout(tBrowser);
+      heroObserver.disconnect();
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -537,7 +552,13 @@ export default function HeroSection() {
                         <FilePdfIcon className="w-3.5 h-3.5 text-rose-400" />
                         <span>Unduh Panduan PDF</span>
                       </a>
-                      <button className="btn-quick-action" ref={btnRepRef}>
+                      <button
+                        className="btn-quick-action cursor-pointer"
+                        ref={btnRepRef}
+                        onClick={() => {
+                          window.location.href = '/competition/desain-kemasan';
+                        }}
+                      >
                         Buka Formulir Pendaftaran
                       </button>
                       
@@ -599,7 +620,13 @@ export default function HeroSection() {
                         <Link href="/competition/desain-kemasan" className="btn-assign" style={{ textDecoration: 'none' }}>
                           Daftar Sekarang
                         </Link>
-                        <button className="btn-send flex items-center gap-1">
+                        <button
+                          type="button"
+                          className="btn-send flex items-center gap-1 cursor-pointer"
+                          onClick={() => {
+                            window.location.href = '/competition/desain-kemasan';
+                          }}
+                        >
                           <span>Kirim</span>
                           <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m5 12 14-7-7 14-2-5-5-2z"/></svg>
                         </button>
