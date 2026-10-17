@@ -89,11 +89,27 @@ function FileAttachmentItem({
     <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white border border-neutral-200/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
       <div className="flex items-center gap-2.5 min-w-0">
         {isImage ? (
-          <div className="relative w-11 h-11 rounded-lg overflow-hidden border border-neutral-200/80 bg-neutral-100 shrink-0 group">
+          <div className="relative w-11 h-11 rounded-lg overflow-hidden border border-neutral-200/80 bg-neutral-100 shrink-0 group flex items-center justify-center">
+            <svg
+              className="w-5 h-5 text-neutral-400 absolute"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
             <img
               src={previewUrl}
               alt={cleanName}
-              className="w-full h-full object-cover cursor-pointer group-hover:scale-105 transition-transform"
+              className="w-full h-full object-cover cursor-pointer group-hover:scale-105 transition-transform relative z-10"
+              onError={(e) => {
+                (e.currentTarget as HTMLElement).style.display = 'none';
+              }}
               onClick={() => window.open(previewUrl, '_blank')}
               title="Klik untuk membuka gambar ukuran penuh"
             />
@@ -295,13 +311,13 @@ export default function RegistrationsPage() {
 
       const res = await fetch(downloadUrl);
       if (!res.ok) {
-        let errorMsg = `Berkas asli "${targetName}" tidak ditemukan di server.`;
+        let errorMsg = `Berkas asli "${targetName}" tidak ditemukan di Supabase Storage.`;
         try {
           const json = await res.json();
           if (json.error) errorMsg = json.error;
         } catch {}
         alert(
-          `${errorMsg}\n\nCatatan: Berkas fisik tidak ditemukan pada server penyimpanan. Pendaftaran ini kemungkinan dibuat sebelum fitur upload berkas diaktifkan.`
+          `${errorMsg}\n\nCatatan: Berkas untuk pendaftaran ${reg.registration_code} ini tidak tersimpan di Supabase Storage (bucket: community-assets).`
         );
         return;
       }

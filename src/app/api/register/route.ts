@@ -9,6 +9,13 @@ import {
   sanitizeString,
   isRateLimited,
 } from '@/lib/utils';
+import {
+  uploadRegistrationFileToSupabase,
+  deleteRegistrationFilesFromSupabase,
+  sanitizeStorageFileName,
+  buildRegistrationStoragePath,
+  DEFAULT_STORAGE_BUCKET,
+} from '@/lib/storage';
 import { getSharedRegistrations, addSharedRegistration } from '@/lib/store';
 import type { ApiResponse, RegistrationSuccessData, PrideRegistration } from '@/types';
 
@@ -318,40 +325,15 @@ export async function POST(
       );
     }
 
-    // 7. Save actual uploaded binary files to disk storage
-    if (Object.keys(uploadedFiles).length > 0) {
-      try {
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', registrationCode);
-        await fs.promises.mkdir(uploadDir, { recursive: true });
-
-        for (const [key, file] of Object.entries(uploadedFiles)) {
-          if (file && file.size > 0) {
-            const rawName = file.name;
-            const safeName = rawName.replace(/[^a-zA-Z0-9._-]/g, '_');
-            const targetFilePath = path.join(uploadDir, safeName);
-            const arrayBuffer = await file.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-            await fs.promises.writeFile(targetFilePath, buffer);
-            if (safeName !== rawName) {
-              try {
-                await fs.promises.writeFile(path.join(uploadDir, rawName), buffer);
-              } catch {}
-            }
-            console.log(`[FILE_SAVED] Successfully stored ${key}: ${safeName} (${file.size} bytes)`);
-          }
-        }
-      } catch (saveErr) {
-        console.error('[FILE_SAVE_ERROR] Failed to save uploaded files to disk:', saveErr);
-      }
-    }
-
-    // 8. Persist to Supabase if credentials are provided
+    // 7. Check credentials and prepare Supabase client
     const hasSupabase =
       Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
       (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
         Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
         Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
       process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
+
+    const uploadedStoragePaths: string[] = [];
 
     if (hasSupabase) {
       try {
@@ -375,6 +357,75 @@ export async function POST(
             },
             { status: 409 }
           );
+        }
+
+        // Upload actual uploaded binary files to Supabase Storage
+        if (Object.keys(uploadedFiles).length > 0) {
+          for (const [key, file] of Object.entries(uploadedFiles)) {
+            if (file && file.size > 0) {
+              const safeName = sanitizeStorageFileName(file.name);
+              const objectPath = buildRegistrationStoragePath(registrationCode, safeName);
+              const arrayBuffer = await file.arrayBuffer();
+              const buffer = Buffer.from(arrayBuffer);
+
+              const { path: uploadedPath, error: uploadErr } =
+                await uploadRegistrationFileToSupabase(
+                  supabase,
+                  buffer,
+                  objectPath,
+                  file.type || 'application/octet-stream',
+                  DEFAULT_STORAGE_BUCKET
+                );
+
+              if (uploadErr || !uploadedPath) {
+                console.error(
+                  `[SUPABASE_STORAGE_ERROR] Failed to upload ${key} (${safeName}):`,
+                  uploadErr
+                );
+
+                // Roll back any already-uploaded files for this registration
+                if (uploadedStoragePaths.length > 0) {
+                  await deleteRegistrationFilesFromSupabase(
+                    supabase,
+                    uploadedStoragePaths,
+                    DEFAULT_STORAGE_BUCKET
+                  );
+                }
+
+                return NextResponse.json(
+                  {
+                    success: false,
+                    error: `Gagal mengunggah berkas "${file.name}" ke Supabase Storage: ${
+                      uploadErr?.message || 'Upload error'
+                    }. Pastikan berkas sesuai ketentuan.`,
+                    code: 'STORAGE_UPLOAD_FAILED',
+                  },
+                  { status: 500 }
+                );
+              }
+
+              uploadedStoragePaths.push(objectPath);
+              console.log(
+                `[SUPABASE_STORAGE_SAVED] Successfully uploaded ${key} -> ${objectPath} (${file.size} bytes)`
+              );
+            }
+          }
+        }
+
+        // Also save to local uploads directory in local development for offline access
+        if (Object.keys(uploadedFiles).length > 0) {
+          try {
+            const uploadDir = path.join(process.cwd(), 'public', 'uploads', registrationCode);
+            await fs.promises.mkdir(uploadDir, { recursive: true });
+            for (const [, file] of Object.entries(uploadedFiles)) {
+              if (file && file.size > 0) {
+                const safeName = sanitizeStorageFileName(file.name);
+                const targetFilePath = path.join(uploadDir, safeName);
+                const buffer = Buffer.from(await file.arrayBuffer());
+                await fs.promises.writeFile(targetFilePath, buffer);
+              }
+            }
+          } catch {}
         }
 
         const insertPayload: Record<string, unknown> = {
@@ -409,6 +460,7 @@ export async function POST(
           );
 
           // If a custom column is missing in the database table, retry with core schema columns
+          let retrySuccess = false;
           if (insertError.code === '42703') {
             console.warn('[PRIDE_REGISTRATION] Retrying with core schema columns fallback...');
             const corePayload: Record<string, unknown> = {
@@ -441,17 +493,56 @@ export async function POST(
               .from('pride_registrations')
               .insert(corePayload);
 
-            if (retryError) {
-              console.error('[PRIDE_REGISTRATION_RETRY_ERROR]', retryError);
-            } else {
+            if (!retryError) {
+              retrySuccess = true;
               console.log('[PRIDE_REGISTRATION_SUCCESS] Inserted with core columns');
+            } else {
+              console.error('[PRIDE_REGISTRATION_RETRY_ERROR]', retryError);
             }
+          }
+
+          if (!retrySuccess) {
+            // Database insert failed: Roll back uploaded files in Supabase Storage!
+            if (uploadedStoragePaths.length > 0) {
+              await deleteRegistrationFilesFromSupabase(
+                supabase,
+                uploadedStoragePaths,
+                DEFAULT_STORAGE_BUCKET
+              );
+            }
+
+            return NextResponse.json(
+              {
+                success: false,
+                error: `Gagal menyimpan data pendaftaran ke database: ${insertError.message}. Berkas yang diunggah telah dibatalkan secara aman.`,
+                code: 'DATABASE_INSERT_FAILED',
+              },
+              { status: 500 }
+            );
           }
         } else {
           console.log('[PRIDE_REGISTRATION_SUCCESS] Saved to Supabase:', registrationCode);
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('[SUPABASE_CLIENT_ERROR]', err);
+        if (uploadedStoragePaths.length > 0) {
+          try {
+            const supabase = createAdminClient();
+            await deleteRegistrationFilesFromSupabase(
+              supabase,
+              uploadedStoragePaths,
+              DEFAULT_STORAGE_BUCKET
+            );
+          } catch {}
+        }
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Terjadi kendala saat menghubungkan ke database Supabase: ${err?.message || err}.`,
+            code: 'SUPABASE_CONNECTION_ERROR',
+          },
+          { status: 500 }
+        );
       }
     }
 
