@@ -160,3 +160,27 @@ export function addSharedVisitor(visitor: Omit<PrideVisitorCheckIn, 'id' | 'tick
   visitors.unshift(newVisitor);
   return newVisitor;
 }
+
+export function deleteSharedRegistration(idOrCode: string): boolean {
+  const list = getSharedRegistrations();
+  const index = list.findIndex(
+    (item) => item.id === idOrCode || item.registration_code.toUpperCase() === idOrCode.toUpperCase()
+  );
+  if (index !== -1) {
+    list.splice(index, 1);
+    return true;
+  }
+  return false;
+}
+
+export function deleteSharedVisitor(idOrCode: string): boolean {
+  const visitors = getSharedVisitors();
+  const index = visitors.findIndex(
+    (item) => item.id === idOrCode || item.ticket_code.toUpperCase() === idOrCode.toUpperCase()
+  );
+  if (index !== -1) {
+    visitors.splice(index, 1);
+    return true;
+  }
+  return false;
+}

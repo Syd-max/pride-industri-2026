@@ -1,44 +1,51 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import type { PrideRegistration } from '@/types';
+
+// Helper for real-time text highlight
+function highlightMatch(text: string | undefined | null, query: string) {
+  if (!text) return '-';
+  if (!query.trim()) return text;
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(${escaped})`, 'gi');
+  const parts = text.split(regex);
+  return (
+    <>
+      {parts.map((part, i) =>
+        regex.test(part) ? (
+          <mark key={i} className="bg-amber-300 text-amber-950 px-1 py-0.5 rounded font-extrabold">
+            {part}
+          </mark>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+}
 
 export default function ParticipantsPage() {
   const [participants, setParticipants] = useState<PrideRegistration[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [compFilter, setCompFilter] = useState('all');
-  const [selectedParticipant, setSelectedParticipant] = useState<PrideRegistration | null>(null);
-  const [showGateQrModal, setShowGateQrModal] = useState(false);
 
-  // Helper for real-time yellow text highlighting on search match
-  const highlightMatch = (text: string, query: string) => {
-    if (!query || !text) return text;
-    const cleanQuery = query.trim();
-    if (!cleanQuery) return text;
-    const regex = new RegExp(`(${cleanQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-    const parts = text.split(regex);
-    return parts.map((part, i) =>
-      regex.test(part) ? (
-        <mark key={i} className="bg-amber-300 text-amber-950 font-extrabold px-0.5 rounded">
-          {part}
-        </mark>
-      ) : (
-        part
-      )
-    );
-  };
+  // Modals
+  const [selectedParticipant, setSelectedParticipant] = useState<PrideRegistration | null>(null);
+  const [recordToDelete, setRecordToDelete] = useState<PrideRegistration | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const fetchData = async () => {
     try {
       const res = await fetch('/api/admin/data');
       const json = await res.json();
       if (json.success) {
-        setParticipants(json.data);
+        setParticipants(json.data || []);
       }
     } catch (err) {
-      console.error(err);
+      console.error('Failed to fetch attendance data:', err);
     } finally {
       setLoading(false);
     }
@@ -46,12 +53,23 @@ export default function ParticipantsPage() {
 
   useEffect(() => {
     fetchData();
-    // Live polling every 12 seconds so admin sees scans in real time
     const interval = setInterval(fetchData, 12000);
     return () => clearInterval(interval);
   }, []);
 
-  // In Data Presensi: ONLY participants who have scanned QR Code at the gate (check_in_status === 'checked_in')
+  // Keyboard accessibility: Escape to close modals
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedParticipant(null);
+        setRecordToDelete(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // In Data Presensi: ONLY attendees who have verified gate check-in
   const checkedInList = participants.filter((p) => p.check_in_status === 'checked_in');
 
   const filtered = checkedInList.filter((p) => {
@@ -59,26 +77,18 @@ export default function ParticipantsPage() {
     const matchQuery =
       !q ||
       p.full_name.toLowerCase().includes(q) ||
-      p.email.toLowerCase().includes(q) ||
+      (p.email && p.email.toLowerCase().includes(q)) ||
       p.registration_code.toLowerCase().includes(q) ||
-      p.phone.includes(q);
+      (p.phone && p.phone.includes(q)) ||
+      (p.address && p.address.toLowerCase().includes(q));
 
-    const matchComp =
-      compFilter === 'all' || p.competition_id === compFilter;
-
+    const matchComp = compFilter === 'all' || p.competition_id === compFilter;
     return matchQuery && matchComp;
   });
 
-  // Toggle Check-in status manually (Admin Manage Presensi)
-  const handleToggleCheckIn = async (p: PrideRegistration) => {
-    const nextStatus =
-      p.check_in_status === 'checked_in' ? 'not_checked_in' : 'checked_in';
-    const confirmMsg =
-      nextStatus === 'checked_in'
-        ? `Tandai "${p.full_name}" sebagai HADIR di Braga City Walk secara manual?`
-        : `Batalkan status presensi hadir untuk "${p.full_name}"? Peserta akan dihapus dari Data Presensi.`;
-
-    if (!window.confirm(confirmMsg)) return;
+  // Toggle check-in status (cancel check-in)
+  const handleCancelCheckIn = async (p: PrideRegistration) => {
+    if (!window.confirm(`Batalkan status presensi hadir untuk "${p.full_name}"?`)) return;
 
     try {
       const res = await fetch('/api/admin/data', {
@@ -86,7 +96,7 @@ export default function ParticipantsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: p.id,
-          check_in_status: nextStatus,
+          check_in_status: 'not_checked_in',
         }),
       });
 
@@ -94,77 +104,94 @@ export default function ParticipantsPage() {
         setParticipants((prev) =>
           prev.map((item) =>
             item.id === p.id
-              ? {
-                  ...item,
-                  check_in_status: nextStatus,
-                  checked_in_at:
-                    nextStatus === 'checked_in'
-                      ? new Date().toISOString()
-                      : undefined,
-                }
+              ? { ...item, check_in_status: 'not_checked_in', checked_in_at: undefined }
               : item
           )
         );
-        if (selectedParticipant?.id === p.id) {
-          setSelectedParticipant((prev) =>
-            prev ? { ...prev, check_in_status: nextStatus } : null
-          );
-        }
+        setSelectedParticipant(null);
       }
     } catch {
-      alert('Gagal memperbarui status presensi.');
+      alert('Gagal membatalkan status presensi.');
+    }
+  };
+
+  // Safe Delete Action
+  const handleDeleteConfirm = async () => {
+    if (!recordToDelete) return;
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      const res = await fetch(`/api/admin/data?id=${encodeURIComponent(recordToDelete.id)}`, {
+        method: 'DELETE',
+      });
+      const json = await res.json();
+
+      if (!res.ok || !json.success) {
+        setDeleteError(json.error || 'Gagal menghapus data presensi.');
+        setIsDeleting(false);
+        return;
+      }
+
+      // Successfully deleted from database
+      setParticipants((prev) => prev.filter((item) => item.id !== recordToDelete.id));
+      if (selectedParticipant?.id === recordToDelete.id) {
+        setSelectedParticipant(null);
+      }
+      setRecordToDelete(null);
+    } catch (err) {
+      console.error('Delete error:', err);
+      setDeleteError('Terjadi kesalahan jaringan saat menghapus data.');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   // Export to CSV
   const exportToCSV = () => {
     const headers = [
-      'Kode Registrasi',
-      'Nama Peserta',
-      'Email',
-      'Telepon',
-      'Kompetisi',
-      'Status Presensi Gate',
-      'Waktu Scan Gate',
-      'Tanggal Daftar',
+      'No',
+      'Kode Registrasi / Tiket',
+      'Nama Lengkap',
+      'Kategori',
+      'Kontak / Asal',
+      'Waktu Presensi',
+      'Status',
     ];
 
-    const rows = filtered.map((p) => [
+    const rows = filtered.map((p, idx) => [
+      idx + 1,
       p.registration_code,
       `"${p.full_name.replace(/"/g, '""')}"`,
-      p.email,
-      `'${p.phone}`,
-      p.competition_id,
-      'Sudah Scan QR Gate',
-      p.checked_in_at ? new Date(p.checked_in_at).toLocaleString('id-ID') : 'Terverifikasi',
-      new Date(p.created_at).toLocaleString('id-ID'),
+      p.competition_id === 'desain-kemasan'
+        ? 'Desain Kemasan'
+        : p.competition_id === 'video-lokal'
+        ? 'Video 1 Menit'
+        : 'Pengunjung Umum',
+      `"${(p.competition_id === 'pengunjung-umum' ? p.address || p.phone : p.phone || '').replace(/"/g, '""')}"`,
+      p.checked_in_at ? new Date(p.checked_in_at).toLocaleString('id-ID') : 'Terverifikasi Gate',
+      'Hadir di Braga',
     ]);
 
     const csvContent =
       'data:text/csv;charset=utf-8,\uFEFF' +
-      [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
+      [headers.join(','), ...rows.map((e) => e.join(','))].join('\r\n');
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
     link.setAttribute(
       'download',
-      `PRIDE_2026_Data_Presensi_Gate_Braga_${new Date().toISOString().slice(0, 10)}.csv`
+      `PRIDE_2026_Data_Presensi_${new Date().toISOString().slice(0, 10)}.csv`
     );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const currentHost = typeof window !== 'undefined' ? window.location.origin : 'https://pride-industri-2026.vercel.app';
-  const gateCheckInUrl = `${currentHost}/check-in?gate=braga-city-walk&scanned=true`;
-  const qrCodeImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=${encodeURIComponent(
-    gateCheckInUrl
-  )}`;
-
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* ─── Top Header & Primary Actions ─── */}
+    <div className="space-y-6 animate-fade-in max-w-6xl mx-auto pb-12">
+      {/* ─── Top Header ─── */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
@@ -172,32 +199,15 @@ export default function ParticipantsPage() {
             Data Presensi
           </h1>
           <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
-            Data kehadiran resmi seluruh peserta yang telah berhasil melakukan scan barcode / QR Code di gate event Braga City Walk.
+            Data kehadiran resmi seluruh pengunjung dan peserta lomba yang telah check-in di gate Braga City Walk.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Button to open official Gate Barcode modal for visitors & participants to scan */}
-          <button
-            type="button"
-            onClick={() => setShowGateQrModal(true)}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all flex items-center gap-2 cursor-pointer"
-          >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <rect width="6" height="6" x="3" y="3" rx="1" />
-              <rect width="6" height="6" x="15" y="3" rx="1" />
-              <rect width="6" height="6" x="3" y="15" rx="1" />
-              <path d="M15 15h2v2h-2z" />
-              <path d="M21 15v6h-6" />
-              <path d="M21 21h-2v-2" />
-            </svg>
-            <span>Buka Barcode Gate Scan</span>
-          </button>
-
+        <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={exportToCSV}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 shadow-sm transition-all flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 shadow-2xs transition-all flex items-center gap-2 cursor-pointer"
           >
             <svg className="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -209,10 +219,10 @@ export default function ParticipantsPage() {
         </div>
       </div>
 
-      {/* ─── Sticky Locked Search & Filter Toolbar ─── */}
-      <div className="sticky top-16 sm:top-20 z-20 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-3 sm:p-4 shadow-sm flex flex-wrap items-center gap-3 text-xs mb-4">
-        {/* Search Input */}
-        <div className="flex-1 min-w-[260px]">
+      {/* ─── Search & Category Filter Toolbar ─── */}
+      <div className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-wrap items-center gap-3 text-xs">
+        {/* Real-time Search Input */}
+        <div className="flex-1 min-w-[240px]">
           <div className="relative flex items-center">
             <svg className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" />
@@ -222,7 +232,7 @@ export default function ParticipantsPage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Cari nama peserta, email, nomor HP, atau kode..."
+              placeholder="Cari nama, kode registrasi, atau nomor HP..."
               className="w-full text-xs py-2.5 rounded-xl bg-slate-50/70 focus:bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
               style={{ paddingLeft: '2.6rem', paddingRight: '2.25rem' }}
             />
@@ -242,14 +252,14 @@ export default function ParticipantsPage() {
           </div>
         </div>
 
-        {/* Competition Filter Dropdown Only (2 Lomba + Pengunjung) */}
+        {/* Category Filter */}
         <div className="w-full sm:w-auto">
           <select
             value={compFilter}
             onChange={(e) => setCompFilter(e.target.value)}
-            className="form-input form-select text-xs py-2.5 px-3.5 w-full sm:w-auto rounded-xl bg-slate-50/70 font-semibold text-slate-700 border-slate-200"
+            className="w-full sm:w-auto text-xs py-2.5 px-3.5 rounded-xl bg-slate-50/70 border border-slate-200 text-slate-700 font-bold focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
           >
-            <option value="all">Semua Kategori (Peserta & Pengunjung)</option>
+            <option value="all">Semua Kategori ({checkedInList.length})</option>
             <option value="desain-kemasan">Lomba Desain Kemasan</option>
             <option value="video-lokal">Lomba Video 1 Menit</option>
             <option value="pengunjung-umum">Pengunjung Festival (Umum)</option>
@@ -257,130 +267,209 @@ export default function ParticipantsPage() {
         </div>
 
         {/* Counter Badge */}
-        <div className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50/80 border border-emerald-200/90 text-[11px] font-bold text-emerald-800 whitespace-nowrap ml-auto">
+        <div className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-800 whitespace-nowrap ml-auto">
           <span>Menampilkan:</span>
           <span className="text-emerald-700 font-extrabold">{filtered.length}</span>
-          <span>dari {checkedInList.length} Kehadiran (Sudah Scan QR Gate)</span>
+          <span>dari {checkedInList.length} Kehadiran</span>
         </div>
       </div>
 
-      {/* ─── DIRECTORY TABLE (Clean, Spacious, Sticky Header, Scrollable Data) ─── */}
-      <div className="overflow-hidden bg-white border border-slate-200 shadow-sm rounded-2xl">
-        <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-270px)] w-full">
+      {/* ════════════════════════════════════════════════════════════════
+          MOBILE VIEW: VERTICAL CARD LIST (MANDATORY: NO HORIZONTAL SWIPING)
+          Tampilan ramping, teks terbaca jelas, tombol Detail & Hapus langsung terlihat
+          ════════════════════════════════════════════════════════════════ */}
+      <div className="md:hidden space-y-3">
+        {loading ? (
+          <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-xs text-slate-400">
+            Memuat data presensi gate...
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-xs text-slate-400">
+            {search || compFilter !== 'all'
+              ? 'Tidak ditemukan data presensi yang sesuai pencarian.'
+              : 'Belum ada data presensi yang tercatat di gate.'}
+          </div>
+        ) : (
+          filtered.map((p) => {
+            return (
+              <div
+                key={p.id}
+                className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-3 hover:border-slate-300 transition-colors"
+              >
+                {/* Header: Nama & Kode */}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-extrabold text-slate-900 text-sm truncate">
+                      {highlightMatch(p.full_name, search)}
+                    </div>
+                    <div className="font-mono text-[11px] text-slate-500 font-semibold mt-0.5">
+                      {highlightMatch(p.registration_code, search)}
+                    </div>
+                  </div>
+                  <span
+                    className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full shrink-0 border ${
+                      p.competition_id === 'desain-kemasan'
+                        ? 'bg-orange-50 text-orange-700 border-orange-200'
+                        : p.competition_id === 'video-lokal'
+                        ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+                        : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                    }`}
+                  >
+                    {p.competition_id === 'desain-kemasan'
+                      ? 'Desain Kemasan'
+                      : p.competition_id === 'video-lokal'
+                      ? 'Video 1 Menit'
+                      : 'Pengunjung'}
+                  </span>
+                </div>
+
+                {/* Sub-info: Waktu presensi & Status */}
+                <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+                  <span className="flex items-center gap-1.5 font-semibold text-emerald-700">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    Hadir di Gate
+                  </span>
+                  <span className="font-mono text-[11px] text-slate-500">
+                    {p.checked_in_at
+                      ? `${new Date(p.checked_in_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB`
+                      : 'Terverifikasi'}
+                  </span>
+                </div>
+
+                {/* Actions: Detail & Hapus (Directly visible, no swiping!) */}
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedParticipant(p)}
+                    className="w-full py-2 px-3 rounded-xl text-xs font-bold text-blue-600 bg-blue-50/80 hover:bg-blue-100 border border-blue-200 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <span>Detail</span>
+                    <span aria-hidden="true">→</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRecordToDelete(p);
+                      setDeleteError(null);
+                    }}
+                    className="w-full py-2 px-3 rounded-xl text-xs font-bold text-rose-600 bg-rose-50/80 hover:bg-rose-100 border border-rose-200 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <svg className="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                    <span>Hapus</span>
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* ════════════════════════════════════════════════════════════════
+          DESKTOP VIEW: COMPACT, ELEGANT TABLE (HIDDEN ON MOBILE)
+          ════════════════════════════════════════════════════════════════ */}
+      <div className="hidden md:block overflow-hidden bg-white border border-slate-200 shadow-2xs rounded-2xl">
+        <div className="overflow-x-auto w-full">
           <table className="w-full text-left border-collapse text-xs">
-            <thead className="sticky top-0 z-10 bg-slate-50 border-b border-slate-200 shadow-2xs">
-              <tr className="text-slate-600 font-bold uppercase tracking-wider text-[11px]">
-                <th className="py-3.5 px-5 min-w-[220px] whitespace-nowrap bg-slate-50">Kode Registrasi</th>
-                <th className="py-3.5 px-5 min-w-[240px] whitespace-nowrap bg-slate-50">Nama &amp; Identitas</th>
-                <th className="py-3.5 px-5 min-w-[150px] whitespace-nowrap bg-slate-50">Kategori</th>
-                <th className="py-3.5 px-5 min-w-[150px] whitespace-nowrap bg-slate-50">Kontak WhatsApp</th>
-                <th className="py-3.5 px-5 min-w-[200px] whitespace-nowrap bg-slate-50">Status Presensi Gate</th>
-                <th className="py-3.5 px-5 min-w-[110px] whitespace-nowrap bg-slate-50 text-right pr-6">Aksi Detail</th>
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+                <th className="py-3.5 px-5 min-w-[200px]">Kode Registrasi / Tiket</th>
+                <th className="py-3.5 px-5 min-w-[220px]">Nama Peserta / Pengunjung</th>
+                <th className="py-3.5 px-5 min-w-[150px]">Kategori</th>
+                <th className="py-3.5 px-5 min-w-[140px]">Waktu Presensi</th>
+                <th className="py-3.5 px-5 min-w-[180px] text-right pr-6">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-12 text-xs font-medium text-slate-400">
-                    Memuat data presensi peserta...
+                  <td colSpan={5} className="text-center py-12 text-xs font-medium text-slate-400">
+                    Memuat data presensi gate...
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-12 text-xs font-medium text-slate-400">
+                  <td colSpan={5} className="text-center py-12 text-xs font-medium text-slate-400">
                     {search || compFilter !== 'all'
-                      ? 'Tidak ditemukan data presensi yang sesuai dengan kriteria filter / pencarian.'
-                      : 'Belum ada data presensi. Peserta dan pengunjung akan otomatis muncul di sini setelah melakukan presensi QR code di Gate Event.'}
+                      ? 'Tidak ditemukan data presensi yang sesuai kriteria pencarian.'
+                      : 'Belum ada data presensi yang tercatat di gate.'}
                   </td>
                 </tr>
               ) : (
                 filtered.map((p) => {
                   return (
-                    <tr
-                      key={p.id}
-                      className="hover:bg-slate-50/80 transition-colors"
-                    >
-                      {/* Column 1: Kode Registrasi */}
+                    <tr key={p.id} className="hover:bg-slate-50/80 transition-colors">
+                      {/* Column 1: Kode */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
-                        <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200/90 inline-flex items-center gap-1.5 whitespace-nowrap">
+                        <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
                           {highlightMatch(p.registration_code, search)}
                         </span>
                       </td>
 
-                      {/* Column 2: Nama & Identitas */}
+                      {/* Column 2: Nama */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
-                        <div className="font-extrabold text-slate-900 text-sm whitespace-nowrap">
+                        <div className="font-extrabold text-slate-900 text-sm">
                           {highlightMatch(p.full_name, search)}
                         </div>
-                        {p.competition_id !== 'pengunjung-umum' && p.email && (
-                          <div className="text-[11px] text-slate-500 font-medium whitespace-nowrap">
-                            {highlightMatch(p.email, search)}
-                          </div>
-                        )}
                       </td>
 
                       {/* Column 3: Kategori */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
                         <span
-                          className={`inline-block px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap ${
+                          className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${
                             p.competition_id === 'desain-kemasan'
-                              ? 'bg-orange-50 text-orange-700 border border-orange-200'
+                              ? 'bg-orange-50 text-orange-700 border-orange-200'
                               : p.competition_id === 'video-lokal'
-                              ? 'bg-indigo-50 text-indigo-700 border border-indigo-200'
-                              : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                              ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+                              : 'bg-emerald-50 text-emerald-800 border-emerald-200'
                           }`}
                         >
                           {p.competition_id === 'desain-kemasan'
                             ? 'Desain Kemasan'
                             : p.competition_id === 'video-lokal'
                             ? 'Video 1 Menit'
-                            : 'Pengunjung Festival'}
+                            : 'Pengunjung'}
                         </span>
                       </td>
 
-                      {/* Column 4: Kontak WhatsApp */}
+                      {/* Column 4: Waktu Presensi */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
-                        {p.competition_id === 'pengunjung-umum' ? (
-                          <span className="text-slate-400 font-mono text-xs pl-2">-</span>
-                        ) : (
-                          <a
-                            href={`https://wa.me/62${p.phone.replace(/^0/, '')}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-mono text-xs text-slate-700 hover:text-emerald-600 font-semibold inline-flex items-center gap-1.5 transition-colors"
-                            title="Hubungi via WhatsApp"
-                          >
-                            <span>{highlightMatch(p.phone, search)}</span>
-                            <span className="text-[10px] text-emerald-600 font-bold">↗</span>
-                          </a>
-                        )}
+                        <span className="font-mono text-xs font-semibold text-slate-600">
+                          {p.checked_in_at
+                            ? `${new Date(p.checked_in_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB`
+                            : 'Hadir'}
+                        </span>
                       </td>
 
-                      {/* Column 5: Status Presensi (Semua di sini sudah scan QR) */}
-                      <td className="py-3.5 px-5 whitespace-nowrap">
-                        <button
-                          type="button"
-                          onClick={() => handleToggleCheckIn(p)}
-                          className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 border whitespace-nowrap bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100 shadow-2xs"
-                          title="Klik jika ingin membatalkan status presensi hadir"
-                        >
-                          <svg className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          <span>Sudah Scan QR Gate</span>
-                        </button>
-                      </td>
-
-                      {/* Column 6: Aksi Detail */}
+                      {/* Column 5: Aksi (Detail & Hapus) */}
                       <td className="py-3.5 px-5 text-right pr-6 whitespace-nowrap">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedParticipant(p)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-600 hover:bg-blue-50 border border-blue-200 transition-colors cursor-pointer inline-flex items-center gap-1 whitespace-nowrap"
-                        >
-                          <span>Detail</span>
-                          <span aria-hidden="true">→</span>
-                        </button>
+                        <div className="inline-flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedParticipant(p)}
+                            className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors cursor-pointer inline-flex items-center gap-1"
+                          >
+                            <span>Detail</span>
+                            <span aria-hidden="true">→</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setRecordToDelete(p);
+                              setDeleteError(null);
+                            }}
+                            className="px-2.5 py-1.5 rounded-lg text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors cursor-pointer inline-flex items-center gap-1"
+                            title="Hapus data presensi"
+                          >
+                            <svg className="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                            </svg>
+                            <span>Hapus</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -391,91 +480,9 @@ export default function ParticipantsPage() {
         </div>
       </div>
 
-      {/* ─── MODAL BARCODE GATE UNTUK DISCAN PENGUNJUNG & PESERTA ─── */}
-      {showGateQrModal && (
-        <div
-          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in-50 duration-200"
-          onClick={() => setShowGateQrModal(false)}
-        >
-          <div
-            className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-6 text-center animate-in zoom-in-95 duration-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="text-left">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-600">
-                  Gate Masuk Utama Braga
-                </span>
-                <h3 className="text-base font-extrabold text-slate-900">
-                  Barcode Presensi Festival
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowGateQrModal(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
-
-            {/* QR Barcode Image */}
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 inline-block mx-auto shadow-inner">
-              <div className="relative w-56 h-56 mx-auto bg-white p-2 rounded-xl">
-                <Image
-                  src={qrCodeImageUrl}
-                  alt="QR Code Presensi Gate PRIDE 2026"
-                  fill
-                  sizes="224px"
-                  className="object-contain"
-                  unoptimized
-                />
-              </div>
-              <p className="text-[11px] font-mono text-slate-500 mt-2 font-bold break-all">
-                {gateCheckInUrl}
-              </p>
-            </div>
-
-            {/* Instruction Explanation */}
-            <div className="p-3.5 rounded-xl bg-blue-50 border border-blue-100 text-left text-xs text-blue-900 space-y-1.5">
-              <div className="font-extrabold flex items-center gap-1.5">
-                <span>ℹ</span>
-                <span>Alur Saat Barcode Discan Pengunjung:</span>
-              </div>
-              <ol className="list-decimal list-inside space-y-1 text-[11px] text-blue-800 leading-relaxed">
-                <li>Pengunjung memindai barcode ini menggunakan kamera HP bawaan.</li>
-                <li>
-                  Muncul 2 pilihan terarah: <strong>Visitor Umum</strong> (1-klik masuk langsung) atau <strong>Visitor Peserta Lomba</strong> (masukkan kode registrasi).
-                </li>
-                <li>Peserta yang check-in otomatis tercatat <strong>Hadir di Lokasi</strong> di tabel direktori ini.</li>
-              </ol>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <a
-                href={gateCheckInUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 text-center transition-colors"
-              >
-                Buka Layar Gate di Tab Baru ↗
-              </a>
-              <button
-                type="button"
-                onClick={() => window.print()}
-                className="py-2.5 px-4 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
-              >
-                Cetak Barcode
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ─── Participant Detail Drawer Modal ─── */}
+      {/* ════════════════════════════════════════════════════════════════
+          DETAIL POPUP / MODAL (FULL RECORD)
+          ════════════════════════════════════════════════════════════════ */}
       {selectedParticipant && (
         <div
           className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in-50 duration-200"
@@ -498,6 +505,7 @@ export default function ParticipantsPage() {
                 type="button"
                 onClick={() => setSelectedParticipant(null)}
                 className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+                aria-label="Tutup popup detail"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <line x1="18" y1="6" x2="6" y2="18" />
@@ -509,37 +517,16 @@ export default function ParticipantsPage() {
             {/* Information Grid */}
             <div className="space-y-3 text-xs">
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                <span className="text-slate-500 font-medium">Status Presensi:</span>
-                <div className="flex items-center gap-2">
-                  <span className={`px-2.5 py-0.5 rounded-full font-bold ${
-                    selectedParticipant.check_in_status === 'checked_in'
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-slate-200 text-slate-700'
-                  }`}>
-                    {selectedParticipant.check_in_status === 'checked_in' ? (
-                      <span className="inline-flex items-center gap-1">
-                        <svg className="w-3 h-3 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Hadir di Braga</span>
-                      </span>
-                    ) : (
-                      'Belum Hadir'
-                    )}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => handleToggleCheckIn(selectedParticipant)}
-                    className="text-blue-600 hover:underline font-bold"
-                  >
-                    (Ubah)
-                  </button>
-                </div>
+                <span className="text-slate-500 font-medium">Status Kehadiran Gate:</span>
+                <span className="font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                  Hadir di Braga City Walk
+                </span>
               </div>
 
               {selectedParticipant.checked_in_at && (
                 <div className="p-3 rounded-xl bg-emerald-50/50 border border-emerald-100 flex justify-between items-center text-emerald-900">
-                  <span className="font-medium">Waktu Presensi Gate:</span>
+                  <span className="font-medium">Waktu Presensi:</span>
                   <span className="font-mono font-bold">
                     {new Date(selectedParticipant.checked_in_at).toLocaleString('id-ID')} WIB
                   </span>
@@ -549,24 +536,17 @@ export default function ParticipantsPage() {
               {selectedParticipant.competition_id === 'pengunjung-umum' ? (
                 <>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                    <span className="text-slate-500 font-medium">Tipe Presensi:</span>
-                    <span className="font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
-                      Pengunjung Umum Festival
-                    </span>
+                    <span className="text-slate-500 font-medium">Kategori:</span>
+                    <span className="font-bold text-slate-800">Pengunjung Festival (Umum)</span>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                    <span className="text-slate-500 font-medium">Nama Pengunjung:</span>
-                    <span className="font-bold text-slate-900 text-sm">{selectedParticipant.full_name}</span>
+                    <span className="text-slate-500 font-medium">Asal Domisili:</span>
+                    <span className="font-bold text-slate-800">{selectedParticipant.address || selectedParticipant.phone || 'Kota Bandung'}</span>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                    <span className="text-slate-500 font-medium">Asal Domisili / Kota:</span>
-                    <span className="font-bold text-slate-800 text-sm">{selectedParticipant.address || selectedParticipant.phone || 'Kota Bandung'}</span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                    <span className="text-slate-500 font-medium">Pintu Masuk Event:</span>
+                    <span className="text-slate-500 font-medium">Pintu Masuk:</span>
                     <span className="font-semibold text-slate-700">Gate Utama Braga City Walk</span>
                   </div>
                 </>
@@ -576,8 +556,8 @@ export default function ParticipantsPage() {
                     <span className="text-slate-500 font-medium">Kategori Lomba:</span>
                     <span className="font-bold text-slate-800">
                       {selectedParticipant.competition_id === 'desain-kemasan'
-                        ? 'Desain Kemasan Pangan Lokal'
-                        : 'Video Sinematik 1 Menit'}
+                        ? 'Lomba Desain Kemasan'
+                        : 'Lomba Video 1 Menit'}
                     </span>
                   </div>
 
@@ -587,7 +567,7 @@ export default function ParticipantsPage() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                    <span className="text-slate-500 font-medium">WhatsApp:</span>
+                    <span className="text-slate-500 font-medium">Nomor WhatsApp:</span>
                     <span className="font-mono font-bold text-slate-800">{selectedParticipant.phone}</span>
                   </div>
 
@@ -598,30 +578,95 @@ export default function ParticipantsPage() {
                     </div>
                   )}
 
-                  {selectedParticipant.video_url && (
+                  {selectedParticipant.video_title && (
                     <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                      <span className="text-slate-500 font-medium">Link Karya Video:</span>
-                      <a
-                        href={selectedParticipant.video_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-bold text-blue-600 hover:underline truncate max-w-[200px]"
-                      >
-                        Buka Link Karya ↗
-                      </a>
+                      <span className="text-slate-500 font-medium">Judul Karya Video:</span>
+                      <span className="font-bold text-slate-800">{selectedParticipant.video_title}</span>
                     </div>
                   )}
                 </>
               )}
             </div>
 
-            <button
-              type="button"
-              onClick={() => setSelectedParticipant(null)}
-              className="w-full py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
-            >
-              Tutup Jendela Detail
-            </button>
+            {/* Modal Bottom Actions */}
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => handleCancelCheckIn(selectedParticipant)}
+                className="py-2.5 px-4 rounded-xl text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 transition-colors cursor-pointer"
+              >
+                Batalkan Hadir
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedParticipant(null)}
+                className="flex-1 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+              >
+                Tutup Detail
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ════════════════════════════════════════════════════════════════
+          DELETE CONFIRMATION MODAL (SAFE DELETION)
+          ════════════════════════════════════════════════════════════════ */}
+      {recordToDelete && (
+        <div
+          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in-50 duration-200"
+          onClick={() => !isDeleting && setRecordToDelete(null)}
+        >
+          <div
+            className="bg-white rounded-3xl border border-slate-200 p-6 max-w-md w-full shadow-2xl space-y-5 animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 shrink-0">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-base font-extrabold text-slate-900">
+                  Hapus Data Presensi?
+                </h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Apakah Anda yakin ingin menghapus data presensi untuk{' '}
+                  <strong className="text-slate-800">{recordToDelete.full_name}</strong> (
+                  <span className="font-mono text-slate-700">{recordToDelete.registration_code}</span>)?
+                </p>
+              </div>
+            </div>
+
+            {deleteError && (
+              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-semibold">
+                {deleteError}
+              </div>
+            )}
+
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-[11px] text-slate-500">
+              Tindakan ini akan menghapus catatan presensi ini dari database.
+            </div>
+
+            <div className="flex items-center gap-3 pt-1">
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={() => setRecordToDelete(null)}
+                className="flex-1 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleDeleteConfirm}
+                className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+              >
+                {isDeleting ? 'Menghapus...' : 'Ya, Hapus Data'}
+              </button>
+            </div>
           </div>
         </div>
       )}
