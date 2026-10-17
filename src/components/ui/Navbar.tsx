@@ -21,16 +21,30 @@ export default function Navbar() {
 
   useEffect(() => {
     let lastScrolled = false;
+    let ticking = false;
+    let rafId: number | null = null;
+
     const onScroll = () => {
-      const isScrolled = window.scrollY > 20;
-      if (isScrolled !== lastScrolled) {
-        lastScrolled = isScrolled;
-        setScrolled(isScrolled);
+      if (!ticking) {
+        rafId = window.requestAnimationFrame(() => {
+          const isScrolled = window.scrollY > 20;
+          if (isScrolled !== lastScrolled) {
+            lastScrolled = isScrolled;
+            setScrolled(isScrolled);
+          }
+          ticking = false;
+          rafId = null;
+        });
+        ticking = true;
       }
     };
+
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   // Close menu on outside click (excluding the toggle button)

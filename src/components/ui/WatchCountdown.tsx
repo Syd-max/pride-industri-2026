@@ -80,12 +80,23 @@ export default function WatchCountdown() {
 
     // Pause timer when off-screen to preserve battery and CPU
     let observer: IntersectionObserver | null = null;
+    let isElementVisible = false;
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        stopTimer();
+      } else if (isElementVisible) {
+        startTimer();
+      }
+    };
+
     const el = containerRef.current;
     if (typeof IntersectionObserver !== 'undefined' && el) {
       observer = new IntersectionObserver(
         (entries) => {
           const entry = entries[0];
-          if (entry.isIntersecting) {
+          isElementVisible = entry.isIntersecting;
+          if (entry.isIntersecting && document.visibilityState !== 'hidden') {
             startTimer();
           } else {
             stopTimer();
@@ -95,12 +106,16 @@ export default function WatchCountdown() {
       );
       observer.observe(el);
     } else {
+      isElementVisible = true;
       startTimer();
     }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       stopTimer();
       if (observer) observer.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 

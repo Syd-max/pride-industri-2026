@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 2592000,
   },
+  serverExternalPackages: ['sharp'],
   turbopack: {
     rules: {
       "*.css": {

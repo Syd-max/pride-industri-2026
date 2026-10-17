@@ -15,7 +15,9 @@ import {
   sanitizeStorageFileName,
   buildRegistrationStoragePath,
   DEFAULT_STORAGE_BUCKET,
+  isConvertibleImage,
 } from '@/lib/storage';
+import { convertBufferToWebp } from '@/lib/server-image';
 import { getSharedRegistrations, addSharedRegistration } from '@/lib/store';
 import type { ApiResponse, RegistrationSuccessData, PrideRegistration } from '@/types';
 
@@ -426,6 +428,28 @@ export async function POST(
               console.log(
                 `[SUPABASE_STORAGE_SAVED] Successfully uploaded ${key} -> ${objectPath} (${file.size} bytes)`
               );
+
+              // AUTOMATIC WEBP CONVERSION: Generate optimized WebP derivative for web previews (preserves original intact)
+              if (isConvertibleImage(safeName, file.type)) {
+                try {
+                  const { buffer: webpBuf } = await convertBufferToWebp(buffer);
+                  if (webpBuf) {
+                    const parsed = path.parse(safeName);
+                    const webpName = `${parsed.name}.webp`;
+                    const webpPath = buildRegistrationStoragePath(registrationCode, webpName);
+                    await uploadRegistrationFileToSupabase(
+                      supabase,
+                      webpBuf,
+                      webpPath,
+                      'image/webp',
+                      DEFAULT_STORAGE_BUCKET
+                    );
+                    uploadedStoragePaths.push(webpPath);
+                  }
+                } catch (webpErr) {
+                  console.warn(`[WEBP_PIPELINE_WARN] Background WebP conversion skipped for ${safeName}:`, webpErr);
+                }
+              }
             }
           }
         }
@@ -441,6 +465,17 @@ export async function POST(
                 const targetFilePath = path.join(uploadDir, safeName);
                 const buffer = Buffer.from(await file.arrayBuffer());
                 await fs.promises.writeFile(targetFilePath, buffer);
+
+                // Local WebP derivative
+                if (isConvertibleImage(safeName, file.type)) {
+                  try {
+                    const { buffer: webpBuf } = await convertBufferToWebp(buffer);
+                    if (webpBuf) {
+                      const webpName = `${path.parse(safeName).name}.webp`;
+                      await fs.promises.writeFile(path.join(uploadDir, webpName), webpBuf);
+                    }
+                  } catch {}
+                }
               }
             }
           } catch {}

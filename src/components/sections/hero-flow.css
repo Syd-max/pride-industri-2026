@@ -66,6 +66,10 @@
   position: absolute;
   inset: -30px;
   background-image: url('/BRAGA_DE_VRIES_LANDMARK.jpg');
+  background-image: image-set(
+    url('/BRAGA_DE_VRIES_LANDMARK.webp') type('image/webp'),
+    url('/BRAGA_DE_VRIES_LANDMARK.jpg') type('image/jpeg')
+  );
   background-size: cover;
   background-position: center 32%;
   filter: blur(35px) brightness(0.32) saturate(1.15);
@@ -82,7 +86,7 @@
   background-image: 
     linear-gradient(180deg, rgba(7, 10, 19, 0.52) 0%, rgba(7, 10, 19, 0.16) 28%, rgba(7, 10, 19, 0.40) 65%, rgba(7, 10, 19, 0.94) 100%),
     radial-gradient(ellipse 90% 70% at 50% 32%, transparent 35%, rgba(7, 10, 19, 0.72) 100%),
-    url('/BRAGA_DE_VRIES_LANDMARK.jpg');
+    url('/BRAGA_DE_VRIES_LANDMARK.webp');
   background-repeat: no-repeat;
   background-position: center 30%;
   background-size: cover;

@@ -120,3 +120,12 @@ export async function downloadRegistrationFileFromSupabase(
     error: new Error(`Berkas "${safeName}" tidak ditemukan di Supabase Storage bucket "${bucketName}".`),
   };
 }
+
+export function isConvertibleImage(fileName: string, mimeType?: string): boolean {
+  if (mimeType && mimeType.startsWith('image/') && !mimeType.includes('svg')) {
+    return true;
+  }
+  const ext = fileName.toLowerCase().split('.').pop() || '';
+  return ['jpg', 'jpeg', 'png', 'webp', 'bmp', 'tiff'].includes(ext);
+}
+
