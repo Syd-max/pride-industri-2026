@@ -53,6 +53,10 @@ export default function AdminLayout({
     {
       label: 'Overview',
       href: '/admin',
+      iconColor: 'text-blue-600',
+      activeClass: 'bg-white text-blue-900 shadow-[0_1px_2px_rgba(37,99,235,0.14)] font-semibold border-b-2 border-blue-600',
+      hoverClass: 'hover:text-blue-700 hover:bg-white/60',
+      drawerActive: 'bg-blue-600 text-white font-semibold shadow-xs',
       icon: (
         <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect width="7" height="9" x="3" y="3" rx="1.5" />
@@ -65,6 +69,10 @@ export default function AdminLayout({
     {
       label: 'Data Presensi',
       href: '/admin/participants',
+      iconColor: 'text-emerald-600',
+      activeClass: 'bg-white text-emerald-900 shadow-[0_1px_2px_rgba(16,185,129,0.14)] font-semibold border-b-2 border-emerald-600',
+      hoverClass: 'hover:text-emerald-700 hover:bg-white/60',
+      drawerActive: 'bg-emerald-600 text-white font-semibold shadow-xs',
       icon: (
         <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
@@ -76,6 +84,10 @@ export default function AdminLayout({
     {
       label: 'Data Daftar Lomba',
       href: '/admin/registrations',
+      iconColor: 'text-violet-600',
+      activeClass: 'bg-white text-violet-900 shadow-[0_1px_2px_rgba(139,92,246,0.14)] font-semibold border-b-2 border-violet-600',
+      hoverClass: 'hover:text-violet-700 hover:bg-white/60',
+      drawerActive: 'bg-violet-600 text-white font-semibold shadow-xs',
       icon: (
         <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -89,6 +101,10 @@ export default function AdminLayout({
     {
       label: 'QR Code Generator',
       href: '/admin/qr-generator',
+      iconColor: 'text-amber-600',
+      activeClass: 'bg-white text-amber-900 shadow-[0_1px_2px_rgba(245,158,11,0.14)] font-semibold border-b-2 border-amber-500',
+      hoverClass: 'hover:text-amber-700 hover:bg-white/60',
+      drawerActive: 'bg-amber-600 text-white font-semibold shadow-xs',
       icon: (
         <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect width="6" height="6" x="3" y="3" rx="1" />
@@ -104,8 +120,11 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-[#f5f5f7] text-[#1d1d1f] flex flex-col antialiased">
-      {/* ─── LOCKED TOP NAVBAR (Apple Minimal Style) ─── */}
-      <header className="sticky top-0 z-40 bg-white/85 backdrop-blur-md border-b border-neutral-200/80 px-4 sm:px-6 h-16 flex items-center justify-between shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+      {/* ─── LOCKED TOP NAVBAR (With Subtle PRIDE Brand Accent) ─── */}
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-neutral-200/80 px-4 sm:px-6 h-16 flex items-center justify-between shadow-[0_1px_4px_rgba(0,0,0,0.03)] relative">
+        {/* Subtle PRIDE 2026 Brand Top Gradient Hairline */}
+        <div className="absolute top-0 inset-x-0 h-[2.5px] bg-gradient-to-r from-blue-600 via-emerald-500 via-amber-500 to-rose-500 pointer-events-none" />
+
         {/* Left Side: Hamburger Menu Button + PRIDE Logo + Desktop Nav */}
         <div className="flex items-center gap-3 sm:gap-4">
           {/* Hamburger Menu Toggle (Mobile & Tablet) */}
@@ -135,30 +154,40 @@ export default function AdminLayout({
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-semibold text-sm sm:text-base text-neutral-900 leading-none tracking-tight">
-                PRIDE 2026
-              </span>
-              <span className="text-[10px] text-neutral-500 uppercase tracking-wider font-medium mt-0.5">
-                Admin Console
-              </span>
+              <div className="flex items-center gap-1 leading-none">
+                <span className="font-bold text-sm sm:text-base text-neutral-900 tracking-tight">
+                  PRIDE
+                </span>
+                <span className="font-bold text-sm sm:text-base text-[#E51937] tracking-tight">
+                  2026
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="text-[10px] text-neutral-500 uppercase tracking-wider font-semibold">
+                  Admin Console
+                </span>
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" title="Sistem Aktif" />
+              </div>
             </div>
           </Link>
 
-          {/* Desktop Navigation Tabs (Apple Segmented Style) */}
-          <nav className="hidden md:flex items-center gap-1 ml-4 lg:ml-6 bg-neutral-100/80 p-1 rounded-xl border border-neutral-200/60" aria-label="Navigasi Utama Admin">
+          {/* Desktop Navigation Tabs (Apple Segmented Style with Brand Color Accents) */}
+          <nav className="hidden md:flex items-center gap-1 ml-4 lg:ml-6 bg-neutral-100/90 p-1 rounded-xl border border-neutral-200/70" aria-label="Navigasi Utama Admin">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium tracking-tight transition-all ${
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs tracking-tight transition-all cursor-pointer ${
                     isActive
-                      ? 'bg-white text-neutral-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)] font-semibold'
-                      : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
+                      ? item.activeClass
+                      : `text-neutral-600 ${item.hoverClass}`
                   }`}
                 >
-                  <span className={isActive ? 'text-neutral-900' : 'text-neutral-500'}>{item.icon}</span>
+                  <span className={isActive ? item.iconColor : 'text-neutral-400 group-hover:text-neutral-600'}>
+                    {item.icon}
+                  </span>
                   <span>{item.label}</span>
                 </Link>
               );
@@ -171,11 +200,12 @@ export default function AdminLayout({
           <Link
             href="/"
             target="_blank"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-neutral-600 hover:text-blue-600 hover:bg-blue-50/70 border border-transparent hover:border-blue-200/60 transition-colors"
             title="Lihat Website Publik"
           >
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
             <span>Web Publik</span>
-            <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-neutral-400 group-hover:text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
               <polyline points="15 3 21 3 21 9" />
               <line x1="10" y1="14" x2="21" y2="3" />
@@ -184,10 +214,10 @@ export default function AdminLayout({
           <button
             type="button"
             onClick={handleLogout}
-            className="px-3 py-1.5 rounded-xl text-xs font-medium text-neutral-700 hover:text-rose-600 hover:bg-rose-50/70 border border-neutral-200/80 hover:border-rose-200 transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-3 py-1.5 rounded-xl text-xs font-medium text-neutral-700 hover:text-rose-600 hover:bg-rose-50/80 border border-neutral-200/80 hover:border-rose-200 transition-colors flex items-center gap-1.5 cursor-pointer"
             title="Keluar dari Admin Portal"
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
               <polyline points="16 17 21 12 16 7" />
               <line x1="21" y1="12" x2="9" y2="12" />
@@ -249,7 +279,7 @@ export default function AdminLayout({
               </div>
 
               {/* Navigation Items */}
-              <nav className="space-y-1" aria-label="Navigasi Menu Utama">
+              <nav className="space-y-1.5" aria-label="Navigasi Menu Utama">
                 {navItems.map((item) => {
                   const isActive = pathname === item.href;
                   return (
@@ -257,13 +287,13 @@ export default function AdminLayout({
                       key={item.href}
                       href={item.href}
                       onClick={() => setMenuOpen(false)}
-                      className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-medium tracking-tight transition-all ${
+                      className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold tracking-tight transition-all ${
                         isActive
-                          ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                          ? item.drawerActive
                           : 'text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900'
                       }`}
                     >
-                      <span className={isActive ? 'text-white' : 'text-neutral-500'}>{item.icon}</span>
+                      <span className={isActive ? 'text-white' : item.iconColor}>{item.icon}</span>
                       <span>{item.label}</span>
                     </Link>
                   );
@@ -318,7 +348,7 @@ export default function AdminLayout({
       )}
 
       {/* ─── MAIN CONTENT AREA ─── */}
-      <main className="flex-1 w-full bg-[#f5f5f7] p-4 sm:p-6 md:p-8 min-w-0">
+      <main className="flex-1 w-full bg-[#f5f5f7] px-4 pb-8 sm:px-6 sm:pb-10 md:px-8 md:pb-12 pt-2 sm:pt-4 min-w-0">
         <div className="w-full max-w-[1360px] mx-auto">
           {children}
         </div>

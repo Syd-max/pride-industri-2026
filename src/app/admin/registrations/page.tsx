@@ -415,96 +415,112 @@ export default function RegistrationsPage() {
 
   return (
     <div className="space-y-6 animate-fade-in max-w-6xl mx-auto pb-12">
-      {/* ─── Top Header (Apple Minimal Style) ─── */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-neutral-200/80">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-semibold text-[#1d1d1f] tracking-tight">
-            Data Daftar Lomba
-          </h1>
-          <p className="text-xs sm:text-sm font-normal text-neutral-500 mt-1">
-            Data pendaftar kompetisi Desain Kemasan IKM dan Video 1 Menit PRIDE Industri 2026.
-          </p>
-        </div>
+      {/* ─── LOCKED STICKY CONTROL BAR (Header & Search Toolbar Pinned Below Navbar) ─── */}
+      <div className="sticky top-16 z-30 bg-[#f5f5f7]/95 backdrop-blur-md pt-1 pb-3 space-y-3 -mt-2">
+        {/* Top Header */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-neutral-200/80">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-semibold text-[#1d1d1f] tracking-tight">
+                Data Daftar Lomba
+              </h1>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-violet-50 text-violet-700 border border-violet-200/70 shadow-2xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" />
+                2 Kompetisi
+              </span>
+            </div>
+            <p className="text-xs font-normal text-neutral-500 mt-0.5 hidden sm:block">
+              Data pendaftar kompetisi Desain Kemasan IKM dan Video 1 Menit PRIDE Industri 2026.
+            </p>
+          </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={exportToSpreadsheet}
-            className="px-3.5 py-2 rounded-xl text-xs font-medium text-neutral-700 bg-white border border-neutral-200/80 hover:bg-neutral-50 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors flex items-center gap-2 cursor-pointer"
-          >
-            <svg className="w-3.5 h-3.5 text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="8" y1="13" x2="16" y2="13" />
-              <line x1="8" y1="17" x2="16" y2="17" />
-              <line x1="10" y1="9" x2="10" y2="9.01" />
-            </svg>
-            <span>Ekspor Spreadsheet</span>
-          </button>
-        </div>
-      </div>
-
-      {/* ─── Search & Dropdown Filter Toolbar (Apple Toolbar Style) ─── */}
-      <div className="p-3 sm:p-3.5 rounded-2xl bg-white border border-neutral-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-wrap items-center gap-3 text-xs">
-        {/* Search Input */}
-        <div className="flex-1 min-w-[240px]">
-          <div className="relative flex items-center">
-            <svg className="w-4 h-4 text-neutral-400 absolute left-3.5 pointer-events-none z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Cari nama peserta, email, HP, kode pendaftaran, atau brand..."
-              className="w-full text-xs py-2 rounded-xl bg-neutral-100/70 focus:bg-white border border-neutral-200/80 text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/10 transition-all"
-              style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
-            />
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 p-0.5 rounded cursor-pointer transition-colors"
-                title="Hapus pencarian"
-              >
-                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              </button>
-            )}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={exportToSpreadsheet}
+              className="px-3.5 py-2 rounded-xl text-xs font-medium text-neutral-700 bg-white border border-neutral-200/80 hover:bg-neutral-50 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors flex items-center gap-2 cursor-pointer"
+            >
+              <svg className="w-3.5 h-3.5 text-violet-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="8" y1="13" x2="16" y2="13" />
+                <line x1="8" y1="17" x2="16" y2="17" />
+                <line x1="10" y1="9" x2="10" y2="9.01" />
+              </svg>
+              <span>Ekspor Spreadsheet</span>
+            </button>
           </div>
         </div>
 
-        {/* Competition Category Filter */}
-        <div className="w-full sm:w-auto">
-          <select
-            value={compFilter}
-            onChange={(e) =>
-              setCompFilter(e.target.value as 'all' | 'desain-kemasan' | 'video-lokal')
-            }
-            className="w-full sm:w-auto text-xs py-2 px-3.5 rounded-xl bg-neutral-100/70 border border-neutral-200/80 text-neutral-700 font-medium focus:bg-white focus:outline-none focus:border-[#0071e3] transition-all cursor-pointer"
-          >
-            <option value="all">Semua Kategori Lomba</option>
-            <option value="desain-kemasan">Lomba Desain Kemasan</option>
-            <option value="video-lokal">Lomba Video 1 Menit</option>
-          </select>
-        </div>
+        {/* Search & Dropdown Filter Toolbar */}
+        <div className="p-2.5 sm:p-3 rounded-2xl bg-white border border-neutral-200/80 shadow-[0_2px_6px_rgba(0,0,0,0.04)] flex flex-wrap items-center gap-2.5 text-xs">
+          {/* Search Input */}
+          <div className="flex-1 min-w-[220px]">
+            <div className="relative flex items-center">
+              <svg className="w-4 h-4 text-neutral-400 absolute left-3.5 pointer-events-none z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Cari nama peserta, email, HP, kode pendaftaran, atau brand..."
+                className="w-full text-xs py-2 rounded-xl bg-neutral-100/70 focus:bg-white border border-neutral-200/80 text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/10 transition-all"
+                style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 p-0.5 rounded cursor-pointer transition-colors"
+                  title="Hapus pencarian"
+                >
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+              )}
+            </div>
+          </div>
 
-        {/* Status Filter */}
-        <div className="w-full sm:w-auto">
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full sm:w-auto text-xs py-2 px-3.5 rounded-xl bg-neutral-100/70 border border-neutral-200/80 text-neutral-700 font-medium focus:bg-white focus:outline-none focus:border-[#0071e3] transition-all cursor-pointer"
-          >
-            <option value="all">Semua Status</option>
-            <option value="confirmed">Terkonfirmasi</option>
-            <option value="finalist">Lolos Finalis</option>
-            <option value="pending">Menunggu Verifikasi</option>
-            <option value="disqualified">Didiskualifikasi</option>
-          </select>
+          {/* Competition Category Filter */}
+          <div className="w-full sm:w-auto">
+            <select
+              value={compFilter}
+              onChange={(e) =>
+                setCompFilter(e.target.value as 'all' | 'desain-kemasan' | 'video-lokal')
+              }
+              className="w-full sm:w-auto text-xs py-2 px-3.5 rounded-xl bg-neutral-100/70 border border-neutral-200/80 text-neutral-700 font-medium focus:bg-white focus:outline-none focus:border-[#0071e3] transition-all cursor-pointer"
+            >
+              <option value="all">Semua Kategori Lomba</option>
+              <option value="desain-kemasan">Lomba Desain Kemasan</option>
+              <option value="video-lokal">Lomba Video 1 Menit</option>
+            </select>
+          </div>
+
+          {/* Status Filter */}
+          <div className="w-full sm:w-auto">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full sm:w-auto text-xs py-2 px-3.5 rounded-xl bg-neutral-100/70 border border-neutral-200/80 text-neutral-700 font-medium focus:bg-white focus:outline-none focus:border-[#0071e3] transition-all cursor-pointer"
+            >
+              <option value="all">Semua Status</option>
+              <option value="confirmed">Terkonfirmasi</option>
+              <option value="finalist">Lolos Finalis</option>
+              <option value="pending">Menunggu Verifikasi</option>
+              <option value="disqualified">Didiskualifikasi</option>
+            </select>
+          </div>
+
+          {/* Counter Badge */}
+          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100/80 border border-neutral-200/60 text-[11px] font-medium text-neutral-600 whitespace-nowrap ml-auto">
+            <span>Menampilkan</span>
+            <span className="text-neutral-900 font-semibold">{filtered.length}</span>
+            <span>dari {registrations.filter((r) => r.competition_id !== 'pengunjung-umum').length} Pendaftar</span>
+          </div>
         </div>
       </div>
 
