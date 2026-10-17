@@ -57,41 +57,25 @@
 
 /* Subtle bottom horizon fade */
 .activities-stage::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 20px;
-  background: linear-gradient(to bottom, transparent, var(--deck-bg-page));
-  pointer-events: none;
-  z-index: 20;
+  display: none;
 }
 
 /* ─── Card Deck Container ─── */
 .activities-deck-container {
   position: relative;
   width: min(1200px, calc(100vw - 2 * clamp(14px, 3vw, 36px)));
-  height: calc(100vh - 108px);
-  max-height: 720px;
+  height: calc(100vh - 120px);
+  max-height: 700px;
   margin: 0 auto;
   z-index: 10;
 }
 
-@media (max-width: 768px) {
-  .activities-deck-container {
-    width: 100%;
-    height: calc(100dvh - 80px);
-    max-height: none;
-  }
-}
-
-/* Base Card Layer */
+/* Base Card Layer: Strictest absolute positioning to ensure 3D stacking */
 .activities-card {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
   border-radius: var(--deck-card-radius);
   overflow: hidden;
   transform-origin: top center;
@@ -141,26 +125,30 @@
 .theme-blue::before { background: #1652f0; }
 .theme-purple::before { background: #8b5cf6; }
 
-/* Default Stacking Order */
-.activities-card[data-index="0"] { z-index: 70; }
-.activities-card[data-index="1"] { z-index: 60; }
-.activities-card[data-index="2"] { z-index: 50; }
-.activities-card[data-index="3"] { z-index: 40; }
-.activities-card[data-index="4"] { z-index: 30; }
-.activities-card[data-index="5"] { z-index: 20; }
-.activities-card[data-index="6"] { z-index: 10; }
+/* Default Stacking Order & Initial Stack Offsets (Instant SSR Visibility) */
+.activities-card[data-index="0"] { z-index: 70; transform: translate3d(0, 0px, 0) scale(1); }
+.activities-card[data-index="1"] { z-index: 60; transform: translate3d(0, -18px, 0) scale(0.974); }
+.activities-card[data-index="2"] { z-index: 50; transform: translate3d(0, -36px, 0) scale(0.948); }
+.activities-card[data-index="3"] { z-index: 40; transform: translate3d(0, -54px, 0) scale(0.922); }
+.activities-card[data-index="4"] { z-index: 30; transform: translate3d(0, -72px, 0) scale(0.896); }
+.activities-card[data-index="5"] { z-index: 20; transform: translate3d(0, -90px, 0) scale(0.870); }
+.activities-card[data-index="6"] { z-index: 10; transform: translate3d(0, -99px, 0) scale(0.857); }
 
 /* ==========================================================================
    CARD 0: ELEGANT & AESTHETIC COVER CARD ("6 PROGRAM UNGGULAN")
    ========================================================================== */
 .deck-cover-card {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
   background: linear-gradient(145deg, #ffffff 0%, #fffbfc 55%, #fff1f2 100%);
   border: 1.5px solid #fecdd3;
-  padding: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  padding: clamp(20px, 3.2vh, 36px) clamp(24px, 3.8vw, 48px);
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: stretch !important;
 }
 
 .deck-cover-title {
@@ -428,9 +416,12 @@
    CARDS 1 TO 6: PLAYFUL & COLORFUL FESTIVAL CARDS
    ========================================================================== */
 .deck-festival-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 /* Playful Organic Background Shapes with Dynamic Floating Motion */

@@ -7,6 +7,7 @@ export default function ActivitiesDeckSection() {
   const scrollDriverRef = useRef<HTMLDivElement>(null);
   const deckContainerRef = useRef<HTMLDivElement>(null);
   const stepperTextRef = useRef<HTMLSpanElement>(null);
+  const hudRef = useRef<HTMLDivElement>(null);
   const activeCardIndexRef = useRef(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const autoPlayRafRef = useRef<number | null>(null);
@@ -209,15 +210,6 @@ export default function ActivitiesDeckSection() {
     if (!driver) return;
 
     let ticking = false;
-    let isInView = false;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        isInView = entries[0].isIntersecting;
-      },
-      { threshold: 0 }
-    );
-    observer.observe(driver);
 
     function getScrollProgress(): number {
       const rect = driver!.getBoundingClientRect();
@@ -227,8 +219,16 @@ export default function ActivitiesDeckSection() {
       return clamp(current / totalScroll, 0, 1);
     }
 
+    const updateHud = () => {
+      if (!hudRef.current) return;
+      const rect = driver!.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+      hudRef.current.classList.toggle('is-visible', inView);
+    };
+
     const onScroll = () => {
-      if (!isInView || autoPlayRafRef.current !== null || animationRafRef.current !== null) return;
+      updateHud();
+      if (autoPlayRafRef.current !== null || animationRafRef.current !== null) return;
       if (!ticking) {
         requestAnimationFrame(() => {
           updateDeck(getScrollProgress());
@@ -239,6 +239,7 @@ export default function ActivitiesDeckSection() {
     };
 
     const onResize = () => {
+      updateHud();
       if (autoPlayRafRef.current === null && animationRafRef.current === null) {
         updateDeck(getScrollProgress());
       }
@@ -247,11 +248,15 @@ export default function ActivitiesDeckSection() {
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize, { passive: true });
 
-    // Initial render call on mount
+    // Initial render calls on mount to guarantee perfect positioning
     updateDeck(getScrollProgress());
+    updateHud();
+    requestAnimationFrame(() => {
+      updateDeck(getScrollProgress());
+      updateHud();
+    });
 
     return () => {
-      observer.disconnect();
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
       stopAutoPlay();
@@ -990,7 +995,7 @@ export default function ActivitiesDeckSection() {
       </section>
 
       {/* Floating Interactive Controls (Bottom Right - Matching Ilia Delin reference) */}
-      <div className="demo-hud" role="region" aria-label="Kontrol Animasi Rangkaian">
+      <div className="demo-hud" ref={hudRef} role="region" aria-label="Kontrol Animasi Rangkaian">
         <button
           type="button"
           onClick={() => goToCard(Math.max(0, activeCardIndexRef.current - 1))}
