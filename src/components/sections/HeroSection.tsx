@@ -149,7 +149,8 @@ export default function HeroSection() {
     }
 
     // 2. MASTER TIMELINE CHOREOGRAPHY (p = 0.0 to 1.0)
-    // Zero dead-zones: Every scroll movement immediately triggers progressive feedback
+    // Smooth 5-phase camera choreography (Rise -> Zoom In -> Chat Play -> Zoom Out -> Settle)
+    // 100% GPU transform & opacity composition, zero forced layout reflow
     function updateTimeline(p: number) {
       const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
       let heroY = 0;
@@ -159,103 +160,140 @@ export default function HeroSection() {
       let browserOpacity = 1;
 
       if (isMobile) {
-        // Mobile choreography: Snappy entrance completed by p=0.10
-        if (p <= 0.10) {
-          const t = easeInOutCubic(mapRange(p, 0, 0.10, 0, 1));
+        // Mobile 5-Phase Camera Dynamics
+        const mobileTargetRise = (window.innerHeight || 700) * 0.84;
+        if (p <= 0.18) {
+          // Phase 1: Hero lifts out, Browser rises into center screen
+          const t = easeInOutCubic(mapRange(p, 0, 0.18, 0, 1));
           heroY = -280 * t;
           heroOpacity = Math.max(0, 1 - 1.25 * t);
-          browserY = -((window.innerHeight || 800) * 0.82) * t;
+          browserY = -mobileTargetRise * t;
           browserScale = 1;
-          browserOpacity = mapRange(p, 0.01, 0.05, 0, 1);
-        } else {
-          // Page 2: Helpdesk Mockup stays PINNED & 100% VISIBLE throughout the rest of scroll
+          browserOpacity = mapRange(p, 0.01, 0.06, 0, 1);
+        } else if (p <= 0.30) {
+          // Phase 2: Camera zooms in on Helpdesk (scale 1.0 -> 1.06)
+          const t = easeInOutCubic(mapRange(p, 0.18, 0.30, 0, 1));
           heroY = -340;
           heroOpacity = 0;
-          browserY = -((window.innerHeight || 800) * 0.82);
+          browserY = -mobileTargetRise + 10 * t;
+          browserScale = 1.0 + 0.06 * t;
+          browserOpacity = 1;
+        } else if (p <= 0.78) {
+          // Phase 3: Holding zoomed chat focus with subtle conversation follow drift
+          const drift = mapRange(p, 0.30, 0.78, 0, 1);
+          heroY = -340;
+          heroOpacity = 0;
+          browserY = -mobileTargetRise + 10 - 22 * drift;
+          browserScale = 1.06;
+          browserOpacity = 1;
+        } else if (p <= 0.90) {
+          // Phase 4: Camera zooms back out to full overview (scale 1.06 -> 1.0)
+          const t = easeInOutCubic(mapRange(p, 0.78, 0.90, 0, 1));
+          heroY = -340;
+          heroOpacity = 0;
+          browserY = -mobileTargetRise - 12 + 12 * t;
+          browserScale = 1.06 - 0.06 * t;
+          browserOpacity = 1;
+        } else {
+          // Phase 5: Settle cleanly for handover to next section
+          heroY = -340;
+          heroOpacity = 0;
+          browserY = -mobileTargetRise;
           browserScale = 1.0;
           browserOpacity = 1;
         }
 
         // Fade out mobile scroll cue as user scrolls
         if (scrollCueRef.current) {
-          scrollCueRef.current.style.opacity = String(Math.max(0, 1 - p * 20));
+          scrollCueRef.current.style.opacity = String(Math.max(0, 1 - p * 12));
         }
       } else {
-        // Desktop choreography
-        if (p <= 0.10) {
-          const t = easeInOutCubic(mapRange(p, 0, 0.10, 0, 1));
-          heroY = -340 * t;
-          heroOpacity = 1 - 0.95 * t;
+        // Desktop 5-Phase Camera Dynamics (Exact Adaptation from Reference)
+        if (p <= 0.18) {
+          // Phase 1: Hero ascends, Browser rises into center stage
+          const t = easeInOutCubic(mapRange(p, 0, 0.18, 0, 1));
+          heroY = -360 * t;
+          heroOpacity = Math.max(0, 1 - 1.15 * t);
           browserY = -560 * t;
           browserScale = 1;
           browserOpacity = 1;
-        } else {
-          // Helpdesk Mockup stays PINNED & 100% VISIBLE!
+        } else if (p <= 0.30) {
+          // Phase 2: Camera zooms in on Helpdesk chat (scale 1.0 -> 1.14)
+          const t = easeInOutCubic(mapRange(p, 0.18, 0.30, 0, 1));
+          heroY = -360 - 60 * t;
+          heroOpacity = 0;
+          browserY = -560 + 20 * t;
+          browserScale = 1.0 + 0.14 * t;
+          browserOpacity = 1;
+        } else if (p <= 0.78) {
+          // Phase 3: Holding zoomed chat focus with subtle tracking drift
+          const drift = mapRange(p, 0.30, 0.78, 0, 1);
           heroY = -420;
           heroOpacity = 0;
-          browserY = -560;
+          browserY = -540 - 24 * drift;
+          browserScale = 1.14;
+          browserOpacity = 1;
+        } else if (p <= 0.90) {
+          // Phase 4: Camera zooms back out to full overview (scale 1.14 -> 1.0)
+          const t = easeInOutCubic(mapRange(p, 0.78, 0.90, 0, 1));
+          heroY = -420;
+          heroOpacity = 0;
+          browserY = -564 + 14 * t;
+          browserScale = 1.14 - 0.14 * t;
+          browserOpacity = 1;
+        } else {
+          // Phase 5: Settle cleanly
+          heroY = -420;
+          heroOpacity = 0;
+          browserY = -550;
           browserScale = 1.0;
           browserOpacity = 1;
         }
       }
 
       if (heroSectionRef.current) {
-        heroSectionRef.current.style.transform = `translate3d(0, ${heroY}px, 0)`;
-        heroSectionRef.current.style.opacity = String(heroOpacity);
+        heroSectionRef.current.style.transform = `translate3d(0, ${heroY.toFixed(2)}px, 0)`;
+        heroSectionRef.current.style.opacity = String(heroOpacity.toFixed(3));
       }
 
       if (browserStageRef.current) {
-        browserStageRef.current.style.transform = `translate3d(0, ${browserY}px, 0) scale(${browserScale})`;
+        browserStageRef.current.style.transform = `translate3d(0, ${browserY.toFixed(2)}px, 0) scale(${browserScale.toFixed(4)})`;
         browserStageRef.current.style.opacity = String(browserOpacity);
       }
 
-      // Continuous Chat Sequence (Tightly paced: Every single scroll tick triggers the next state)
-      msg1Ref.current?.classList.add('shown');
-      msg2Ref.current?.classList.toggle('shown', p >= 0.08);
-      msg3Ref.current?.classList.toggle('shown', p >= 0.18);
-      msg4Ref.current?.classList.toggle('shown', p >= 0.28);
+      // Step-by-Step Interactive Chat Sequence (Matching Reference Cadence)
+      msg1Ref.current?.classList.toggle('shown', p >= 0.22);
+      msg2Ref.current?.classList.toggle('shown', p >= 0.30);
+      msg3Ref.current?.classList.toggle('shown', p >= 0.38);
+      msg4Ref.current?.classList.toggle('shown', p >= 0.46);
 
       // Simulated cursor hover & click on "Buka Formulir Pendaftaran"
-      const showCursor = p >= 0.35 && p <= 0.44;
-      const isPressing = p >= 0.39 && p <= 0.44;
+      const showCursor = p >= 0.50 && p <= 0.57;
+      const isPressing = p >= 0.53 && p <= 0.56;
       simCursorRef.current?.classList.toggle('active', showCursor);
       simCursorRef.current?.classList.toggle('pressing', isPressing);
       btnRepRef.current?.classList.toggle('clicked', isPressing);
 
-      // Immediate follow-up: Zero dead gap after click
-      msg5Ref.current?.classList.toggle('shown', p >= 0.44);
-      msg6Ref.current?.classList.toggle('shown', p >= 0.56);
-      msg7Ref.current?.classList.toggle('shown', p >= 0.68);
-      chatComposerRef.current?.classList.toggle('shown', p >= 0.80);
+      // Immediate follow-up after click: Confirmation & Handover
+      msg5Ref.current?.classList.toggle('shown', p >= 0.57);
+      msg6Ref.current?.classList.toggle('shown', p >= 0.63);
+      msg7Ref.current?.classList.toggle('shown', p >= 0.69);
+      chatComposerRef.current?.classList.toggle('shown', p >= 0.75);
 
-      // Automated vertical follow inside chat stream (Synchronous tracking without layout thrashing)
+      // Smooth proportional chat scroll without forced synchronous layout reflow
       if (chatMessagesRef.current) {
         const el = chatMessagesRef.current;
-        let targetEl: HTMLElement | null = null;
-        if (p >= 0.80 && msg7Ref.current) targetEl = msg7Ref.current;
-        else if (p >= 0.68 && msg7Ref.current) targetEl = msg7Ref.current;
-        else if (p >= 0.56 && msg6Ref.current) targetEl = msg6Ref.current;
-        else if (p >= 0.44 && msg5Ref.current) targetEl = msg5Ref.current;
-        else if (p >= 0.28 && msg4Ref.current) targetEl = msg4Ref.current;
-        else if (p >= 0.18 && msg3Ref.current) targetEl = msg3Ref.current;
-        else if (p >= 0.08 && msg2Ref.current) targetEl = msg2Ref.current;
-
-        if (targetEl !== lastFollowTarget) {
-          lastFollowTarget = targetEl;
-          if (targetEl) {
-            const targetOffset = targetEl.offsetTop + targetEl.offsetHeight - el.clientHeight + 16;
-            el.scrollTop = Math.max(0, targetOffset);
-          } else {
-            el.scrollTop = 0;
-          }
+        const maxScroll = el.scrollHeight - el.clientHeight;
+        if (maxScroll > 0) {
+          const scrollFactor = clamp((p - 0.48) / 0.28, 0, 1);
+          el.scrollTop = scrollFactor * maxScroll;
         }
       }
     }
 
-    // Scroll listener with off-screen pause via IntersectionObserver
-    let ticking = false;
+    // High-performance RAF scheduler: zero duplicate ticks, clean cleanup
+    let rafId: number | null = null;
     let isHeroInView = true;
-    let lastFollowTarget: HTMLElement | null = null;
 
     const heroObserver = new IntersectionObserver(
       (entries) => {
@@ -270,22 +308,26 @@ export default function HeroSection() {
 
     const handleScroll = () => {
       if (!isHeroInView) return;
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
+      if (rafId === null) {
+        rafId = window.requestAnimationFrame(() => {
           updateTimeline(getScrollProgress());
-          ticking = false;
+          rafId = null;
         });
-        ticking = true;
       }
     };
 
     const handleResize = () => {
-      lastFollowTarget = null;
       handleScroll();
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleResize, { passive: true });
+
+    // Initial render call on mount
+    updateTimeline(getScrollProgress());
+    window.requestAnimationFrame(() => {
+      updateTimeline(getScrollProgress());
+    });
 
     return () => {
       clearTimeout(t0);
@@ -297,6 +339,7 @@ export default function HeroSection() {
       clearTimeout(tSub);
       clearTimeout(tLogos);
       clearTimeout(tBrowser);
+      if (rafId !== null) cancelAnimationFrame(rafId);
       heroObserver.disconnect();
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
