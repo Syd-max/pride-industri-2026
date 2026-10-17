@@ -11,16 +11,16 @@
   --deck-card-radius-sm: 20px;
 }
 
-/* Scroll Driver: Responsive timeline for 7 cards (6 peel stages) */
+/* Scroll Driver: Extended timeline for 7 cards (6 peel stages) */
 .activities-scroll-driver {
-  height: 380vh;
+  height: 700vh;
   position: relative;
   width: 100%;
 }
 
 @media (max-width: 768px) {
   .activities-scroll-driver {
-    height: 300vh;
+    height: 550vh;
   }
 }
 
@@ -32,11 +32,11 @@
   height: 100vh;
   height: 100dvh;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   overflow: hidden;
   padding-top: 0;
-  padding-bottom: 0;
+  padding-bottom: clamp(18px, 3.5vh, 32px);
   padding-left: clamp(14px, 3vw, 36px);
   padding-right: clamp(14px, 3vw, 36px);
   background-color: var(--deck-bg-page);
@@ -71,11 +71,19 @@
 /* ─── Card Deck Container ─── */
 .activities-deck-container {
   position: relative;
-  width: 100%;
-  max-width: 1180px;
-  height: min(620px, calc(100vh - 120px));
+  width: min(1200px, calc(100vw - 2 * clamp(14px, 3vw, 36px)));
+  height: calc(100vh - 108px);
+  max-height: 720px;
   margin: 0 auto;
   z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .activities-deck-container {
+    width: 100%;
+    height: calc(100dvh - 80px);
+    max-height: none;
+  }
 }
 
 /* Base Card Layer */
@@ -91,12 +99,6 @@
   box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.08);
   user-select: none;
   contain: paint;
-}
-
-/* Match each stack layer to the viewport while preserving the deck's max width. */
-.activities-deck-container {
-  width: min(1180px, calc(100vw - 2 * clamp(14px, 3vw, 36px)));
-  height: min(620px, calc(100dvh - 2 * clamp(14px, 3vh, 32px)));
 }
 
 /* Keep the scroll-driven stack interactive only at its current and future layers. */
