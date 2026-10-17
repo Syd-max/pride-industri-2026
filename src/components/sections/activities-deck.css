@@ -32,11 +32,11 @@
   height: 100vh;
   height: 100dvh;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding-top: calc(72px + env(safe-area-inset-top, 0px));
-  padding-bottom: clamp(16px, 3vh, 32px);
+  padding-top: 0;
+  padding-bottom: 0;
   padding-left: clamp(14px, 3vw, 36px);
   padding-right: clamp(14px, 3vw, 36px);
   background-color: var(--deck-bg-page);
@@ -93,11 +93,13 @@
   contain: paint;
 }
 
-/* Smooth GPU hardware-accelerated transitions during button navigation & autoplay */
-.activities-deck-container.is-transitioning .activities-card {
-  transition: transform 0.52s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+/* Match each stack layer to the viewport while preserving the deck's max width. */
+.activities-deck-container {
+  width: min(1180px, calc(100vw - 2 * clamp(14px, 3vw, 36px)));
+  height: min(620px, calc(100dvh - 2 * clamp(14px, 3vh, 32px)));
 }
 
+/* Keep the scroll-driven stack interactive only at its current and future layers. */
 .activities-card.is-peeled {
   pointer-events: none !important;
 }
@@ -128,6 +130,7 @@
 }
 .deck-cover-card::before {
   background: linear-gradient(90deg, #e51937 0%, #009e49 20%, #f69321 40%, #ffb800 60%, #1652f0 80%, #8b5cf6 100%);
+  display: none;
 }
 .theme-red::before { background: #e51937; }
 .theme-green::before { background: #009e49; }
@@ -151,11 +154,36 @@
 .deck-cover-card {
   background: linear-gradient(145deg, #ffffff 0%, #fffbfc 55%, #fff1f2 100%);
   border: 1.5px solid #fecdd3;
-  padding: clamp(24px, 3.8vw, 44px) clamp(24px, 4.2vw, 52px);
+  padding: 24px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   position: relative;
+}
+
+.deck-cover-title {
+  max-width: 100%;
+  color: #0f172a;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(2.25rem, 6.4vw, 5.75rem);
+  font-weight: 750;
+  line-height: 1.04;
+  letter-spacing: -0.065em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.deck-cover-title > span,
+.deck-cover-title > strong {
+  color: #e51937;
+}
+
+.deck-cover-title > span {
+  font-weight: 900;
+}
+
+.deck-cover-title > strong {
+  font-weight: 850;
 }
 
 /* Playful Background Geometry Confetti */
@@ -720,15 +748,15 @@
    ========================================================================== */
 @media (max-width: 768px) {
   .activities-stage {
-    padding-top: calc(52px + env(safe-area-inset-top, 0px));
-    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    padding-top: 0;
+    padding-bottom: 0;
     padding-left: 14px;
     padding-right: 14px;
     justify-content: center;
   }
 
   .activities-deck-container {
-    width: 100%;
+    width: calc(100vw - 28px);
     height: min(560px, calc(100dvh - 84px));
     max-height: 580px;
     margin: 0 auto;
@@ -810,15 +838,15 @@
 
 @media (max-width: 480px) {
   .activities-stage {
-    padding-top: calc(48px + env(safe-area-inset-top, 0px));
-    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    padding-top: 0;
+    padding-bottom: 0;
     padding-left: 10px;
     padding-right: 10px;
     justify-content: center;
   }
 
   .activities-deck-container {
-    width: 100%;
+    width: calc(100vw - 20px);
     height: min(520px, calc(100dvh - 72px));
     max-height: 540px;
     margin: 0 auto;
@@ -938,6 +966,17 @@
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
   user-select: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+.demo-hud.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .demo-hud-btn {

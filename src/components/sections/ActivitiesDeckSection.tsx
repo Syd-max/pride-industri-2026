@@ -6,249 +6,290 @@ import './activities-deck.css';
 export default function ActivitiesDeckSection() {
   const scrollDriverRef = useRef<HTMLDivElement>(null);
   const deckContainerRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLElement>(null);
+  const hudRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLElement[]>([]);
   const stepperTextRef = useRef<HTMLSpanElement>(null);
   const activeCardIndexRef = useRef(0);
+  const lastActiveIndexRef = useRef(-1);
+  const scrollProgressRef = useRef(0);
+  const isPlayingRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isTransitioningRef = useRef(false);
+  const autoPlayFrameRef = useRef<number | null>(null);
+  const updateFrameRef = useRef<number | null>(null);
+  const navigationIdleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const navigationTargetRef = useRef<number | null>(null);
+  const driverTopRef = useRef(0);
+  const driverScrollRangeRef = useRef(0);
+  const totalCardsRef = useRef(0);
 
-  function clamp(val: number, min: number, max: number) {
+  const clamp = useCallback((val: number, min: number, max: number) => {
     return Math.max(min, Math.min(max, val));
-  }
-
-  // ─── Direct, Reliable Card Positioning Engine ───
-  const renderDeck = useCallback((targetIndex: number, options?: { immediate?: boolean }) => {
-    const container = deckContainerRef.current;
-    if (!container) return;
-
-    const cards = Array.from(container.querySelectorAll<HTMLElement>('.activities-card'));
-    cards.sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index));
-    const totalCards = cards.length;
-    if (totalCards === 0) return;
-
-    const clampedIndex = clamp(Math.round(targetIndex), 0, totalCards - 1);
-    activeCardIndexRef.current = clampedIndex;
-
-    // Update stepper HUD text immediately
-    if (stepperTextRef.current) {
-      stepperTextRef.current.textContent = clampedIndex === 0 ? 'Cover' : `0${clampedIndex} / 06`;
-    }
-
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
-    const PEEK_STEP_Y = isMobile ? 14 : 20;
-    const SCALE_STEP = isMobile ? 0.022 : 0.026;
-
-    // Enable hardware-accelerated CSS transition
-    if (!options?.immediate) {
-      container.classList.add('is-transitioning');
-      isTransitioningRef.current = true;
-      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
-      transitionTimeoutRef.current = setTimeout(() => {
-        container.classList.remove('is-transitioning');
-        isTransitioningRef.current = false;
-      }, 550);
-    } else {
-      container.classList.remove('is-transitioning');
-      isTransitioningRef.current = false;
-    }
-
-    cards.forEach((card, i) => {
-      // Base stacking order: Card 0 is 70, Card 6 is 10
-      card.style.zIndex = String((totalCards - i) * 10);
-
-      const isActive = i === clampedIndex;
-      card.classList.toggle('is-active', isActive);
-
-      if (i < clampedIndex) {
-        // Cards that have peeled down off the stage
-        card.style.transform = 'translate3d(0, 115%, 0) scale(1)';
-        card.style.pointerEvents = 'none';
-        card.classList.add('is-peeled');
-        card.classList.remove('is-stacked');
-        card.setAttribute('aria-hidden', 'true');
-      } else if (i === clampedIndex) {
-        // Active card at the front of stage
-        card.style.transform = 'translate3d(0, 0px, 0) scale(1)';
-        card.style.pointerEvents = 'auto';
-        card.classList.remove('is-peeled');
-        card.classList.remove('is-stacked');
-        card.setAttribute('aria-hidden', 'false');
-      } else {
-        // Cards waiting in the stack behind
-        const depth = Math.min(i - clampedIndex, 5);
-        const yOffset = -depth * PEEK_STEP_Y;
-        const scale = 1 - depth * SCALE_STEP;
-        card.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
-        card.style.pointerEvents = 'none';
-        card.classList.remove('is-peeled');
-        card.classList.add('is-stacked');
-        card.setAttribute('aria-hidden', 'true');
-      }
-    });
   }, []);
+
+  const renderDeck = useCallback((progress: number) => {
+    const cards = cardsRef.current;
+    if (cards.length === 0) return;
+
+    const stageProgress = clamp(progress, 0, cards.length - 1);
+    const activeIndex = Math.min(cards.length - 1, Math.floor(stageProgress + 0.01));
+    const isMobile = window.innerWidth <= 768;
+    const peekStep = isMobile ? 14 : 20;
+    const scaleStep = isMobile ? 0.022 : 0.026;
+
+    scrollProgressRef.current = stageProgress;
+    activeCardIndexRef.current = activeIndex;
+
+    if (lastActiveIndexRef.current !== activeIndex) {
+      lastActiveIndexRef.current = activeIndex;
+      if (stepperTextRef.current) {
+        stepperTextRef.current.textContent = activeIndex === 0 ? 'Cover' : `0${activeIndex} / 06`;
+      }
+      cards.forEach((card, index) => {
+        const isActive = index === activeIndex;
+        card.classList.toggle('is-active', isActive);
+        card.classList.toggle('is-peeled', index < activeIndex);
+        card.classList.toggle('is-stacked', index > activeIndex);
+        card.setAttribute('aria-hidden', String(index < activeIndex));
+      });
+    }
+    const isHudVisible = stageProgress > 0.015;
+    if (hudRef.current?.classList.contains('is-visible') !== isHudVisible) {
+      hudRef.current?.classList.toggle('is-visible', isHudVisible);
+    }
+
+    cards.forEach((card, index) => {
+      const phase = stageProgress - index;
+      let transform: string;
+
+      if (index < stageProgress) {
+        const peel = clamp(phase, 0, 1);
+        const easedPeel = peel * peel * (3 - 2 * peel);
+        transform = `translate3d(0, ${(easedPeel * -115).toFixed(2)}%, 0) scale(1)`;
+      } else {
+        const depth = Math.max(0, index - stageProgress);
+        const visibleDepth = Math.min(depth, 6);
+        const yOffset = -visibleDepth * peekStep;
+        const scale = 1 - visibleDepth * scaleStep;
+        transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+      }
+
+      card.style.transform = transform;
+
+    });
+  }, [clamp]);
 
   const stopAutoPlay = useCallback(() => {
+    isPlayingRef.current = false;
     setIsPlaying(false);
-    if (autoPlayTimerRef.current) {
-      clearInterval(autoPlayTimerRef.current);
-      autoPlayTimerRef.current = null;
+    if (autoPlayFrameRef.current !== null) {
+      cancelAnimationFrame(autoPlayFrameRef.current);
+      autoPlayFrameRef.current = null;
     }
   }, []);
 
-  const startAutoPlay = useCallback(() => {
-    stopAutoPlay();
-    setIsPlaying(true);
-    autoPlayTimerRef.current = setInterval(() => {
-      const next = (activeCardIndexRef.current + 1) % 7;
-      renderDeck(next);
-    }, 3600);
-  }, [stopAutoPlay, renderDeck]);
-
-  const toggleAutoPlay = () => {
-    if (isPlaying) {
-      stopAutoPlay();
-    } else {
-      startAutoPlay();
-    }
-  };
-
   const goToCard = useCallback((targetIndex: number) => {
-    // If autoplay is running, reset its timer so user gets full reading duration
-    if (isPlaying) {
-      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
-      autoPlayTimerRef.current = setInterval(() => {
-        const next = (activeCardIndexRef.current + 1) % 7;
-        renderDeck(next);
-      }, 3600);
+    if (isPlayingRef.current) stopAutoPlay();
+
+    const driver = scrollDriverRef.current;
+    const totalScroll = driverScrollRangeRef.current;
+    if (!driver || totalScroll <= 0) return;
+
+    const lastIndex = Math.max(0, totalCardsRef.current - 1);
+    const target = clamp(targetIndex, 0, lastIndex);
+    navigationTargetRef.current = target;
+    if (navigationIdleTimerRef.current) clearTimeout(navigationIdleTimerRef.current);
+    window.scrollTo({
+      top: driverTopRef.current + (target / lastIndex) * totalScroll,
+      behavior: 'smooth',
+    });
+    navigationIdleTimerRef.current = setTimeout(() => {
+      navigationTargetRef.current = null;
+      navigationIdleTimerRef.current = null;
+    }, 1800);
+  }, [clamp, stopAutoPlay]);
+
+  const toggleAutoPlay = useCallback(() => {
+    if (isPlayingRef.current) {
+      stopAutoPlay();
+      return;
     }
-    renderDeck(targetIndex);
-  }, [isPlaying, renderDeck]);
 
-  // Touch & Swipe Support for Mobile
-  useEffect(() => {
-    const container = deckContainerRef.current;
-    if (!container) return;
+    isPlayingRef.current = true;
+    setIsPlaying(true);
+    const startedAt = performance.now();
+    const totalDuration = 18000;
+    const lastIndex = Math.max(0, totalCardsRef.current - 1);
+    const initialProgress = scrollProgressRef.current;
+    if (updateFrameRef.current !== null) {
+      cancelAnimationFrame(updateFrameRef.current);
+      updateFrameRef.current = null;
+    }
 
-    let touchStartX = 0;
-    let touchStartY = 0;
+    const tick = (now: number) => {
+      const elapsed = now - startedAt;
+      const t = clamp(elapsed / totalDuration, 0, 1);
+      let progress: number;
+      if (t < 0.42) {
+        const forward = t / 0.42;
+        const eased = forward < 0.5
+          ? 4 * forward * forward * forward
+          : 1 - Math.pow(-2 * forward + 2, 3) / 2;
+        progress = initialProgress + (lastIndex - initialProgress) * eased;
+      } else if (t < 0.52) {
+        progress = 6;
+      } else if (t < 0.94) {
+        const reverse = (t - 0.52) / 0.42;
+        const eased = reverse < 0.5
+          ? 4 * reverse * reverse * reverse
+          : 1 - Math.pow(-2 * reverse + 2, 3) / 2;
+        progress = lastIndex * (1 - eased);
+      } else {
+        progress = 0;
+      }
 
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
+      const totalScroll = driverScrollRangeRef.current;
+      if (totalScroll > 0) {
+        window.scrollTo(0, driverTopRef.current + (progress / lastIndex) * totalScroll);
+      }
+      renderDeck(progress);
+
+      if (t < 1) {
+        autoPlayFrameRef.current = requestAnimationFrame(tick);
+      } else {
+        autoPlayFrameRef.current = null;
+        isPlayingRef.current = false;
+        setIsPlaying(false);
+      }
     };
 
-    const onTouchEnd = (e: TouchEvent) => {
-      const touchEndX = e.changedTouches[0].clientX;
-      const touchEndY = e.changedTouches[0].clientY;
-      const dx = touchEndX - touchStartX;
-      const dy = touchEndY - touchStartY;
+    autoPlayFrameRef.current = requestAnimationFrame(tick);
+  }, [clamp, renderDeck, stopAutoPlay]);
 
-      // Only trigger if horizontal swipe is dominant and exceeds threshold
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
-        if (dx < 0) {
-          // Swipe left -> next card
-          if (activeCardIndexRef.current < 6) {
-            goToCard(activeCardIndexRef.current + 1);
-          }
-        } else {
-          // Swipe right -> prev card
-          if (activeCardIndexRef.current > 0) {
-            goToCard(activeCardIndexRef.current - 1);
-          }
+  useEffect(() => {
+    const driver = scrollDriverRef.current;
+    const deck = deckContainerRef.current;
+    const stage = stageRef.current;
+    if (!driver || !deck || !stage) return;
+
+    cardsRef.current = Array.from(deck.querySelectorAll<HTMLElement>('.activities-card'))
+      .sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index));
+    totalCardsRef.current = cardsRef.current.length;
+
+    const measureScrollRange = () => {
+      driverTopRef.current = driver.getBoundingClientRect().top + window.scrollY;
+      driverScrollRangeRef.current = Math.max(0, driver.offsetHeight - stage.getBoundingClientRect().height);
+    };
+    measureScrollRange();
+    const resizeObserver = new ResizeObserver(measureScrollRange);
+    resizeObserver.observe(driver);
+    resizeObserver.observe(stage);
+    if (driver.parentElement) resizeObserver.observe(driver.parentElement);
+
+    const updateFromScroll = () => {
+      updateFrameRef.current = null;
+      if (isPlayingRef.current) return;
+      const range = driverScrollRangeRef.current;
+      if (range <= 0) return;
+      const rawProgress = (window.scrollY - driverTopRef.current) / range;
+      renderDeck(clamp(rawProgress, 0, 1) * (totalCardsRef.current - 1));
+
+      if (navigationTargetRef.current !== null && Math.abs(scrollProgressRef.current - navigationTargetRef.current) < 0.025) {
+        navigationTargetRef.current = null;
+        if (navigationIdleTimerRef.current) {
+          clearTimeout(navigationIdleTimerRef.current);
+          navigationIdleTimerRef.current = null;
         }
       }
     };
 
-    container.addEventListener('touchstart', onTouchStart, { passive: true });
-    container.addEventListener('touchend', onTouchEnd, { passive: true });
+    function scheduleUpdate() {
+      if (updateFrameRef.current === null && !isPlayingRef.current) {
+        updateFrameRef.current = requestAnimationFrame(updateFromScroll);
+      }
+    }
 
-    return () => {
-      container.removeEventListener('touchstart', onTouchStart);
-      container.removeEventListener('touchend', onTouchEnd);
+    const stopAutoPlayOnUserInput = () => {
+      if (!isPlayingRef.current) return;
+      stopAutoPlay();
     };
-  }, [goToCard]);
-
-  // Keyboard Arrow Support
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const driver = scrollDriverRef.current;
-      if (!driver) return;
+    const onResize = () => {
+      measureScrollRange();
+      scheduleUpdate();
+    };
+    const onScrollEnd = () => {
+      navigationTargetRef.current = null;
+      if (navigationIdleTimerRef.current) {
+        clearTimeout(navigationIdleTimerRef.current);
+        navigationIdleTimerRef.current = null;
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'ArrowRight' && event.key !== 'ArrowDown' && event.key !== 'ArrowLeft' && event.key !== 'ArrowUp') return;
       const rect = driver.getBoundingClientRect();
       if (rect.top > window.innerHeight || rect.bottom < 0) return;
 
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        if (activeCardIndexRef.current < 6) {
-          e.preventDefault();
-          goToCard(activeCardIndexRef.current + 1);
-        }
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        if (activeCardIndexRef.current > 0) {
-          e.preventDefault();
-          goToCard(activeCardIndexRef.current - 1);
-        }
-      }
+      event.preventDefault();
+      stopAutoPlayOnUserInput();
+      const base = navigationTargetRef.current ?? (event.key === 'ArrowRight' || event.key === 'ArrowDown'
+        ? Math.floor(scrollProgressRef.current)
+        : Math.ceil(scrollProgressRef.current));
+      const direction = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1 : -1;
+      goToCard(base + direction);
+    };
+    const onWheel = () => {
+      stopAutoPlayOnUserInput();
+      navigationTargetRef.current = null;
+    };
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const onTouchStart = (event: TouchEvent) => {
+      touchStartX = event.touches[0].clientX;
+      touchStartY = event.touches[0].clientY;
+      stopAutoPlayOnUserInput();
+      navigationTargetRef.current = null;
+    };
+    const onTouchEnd = (event: TouchEvent) => {
+      const dx = event.changedTouches[0].clientX - touchStartX;
+      const dy = event.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) <= 40 || Math.abs(dx) <= Math.abs(dy)) return;
+
+      const base = navigationTargetRef.current ?? (dx < 0
+        ? Math.floor(scrollProgressRef.current)
+        : Math.ceil(scrollProgressRef.current));
+      goToCard(base + (dx < 0 ? 1 : -1));
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToCard]);
-
-  // Scroll listener that scrubs through cards when scrolling through the section
-  useEffect(() => {
-    const driver = scrollDriverRef.current;
-    if (!driver) return;
-
-    let ticking = false;
-    let isIntersecting = false;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        isIntersecting = entries[0].isIntersecting;
-      },
-      { threshold: 0.05 }
-    );
-    observer.observe(driver);
-
-    const onScroll = () => {
-      if (!isIntersecting || isTransitioningRef.current) return;
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const rect = driver.getBoundingClientRect();
-          const totalScroll = driver.offsetHeight - window.innerHeight;
-          if (totalScroll <= 0) {
-            ticking = false;
-            return;
-          }
-          const current = -rect.top;
-          if (current >= 0 && current <= totalScroll) {
-            const progress = clamp(current / totalScroll, 0, 1);
-            const targetIdx = Math.min(6, Math.floor(progress * 6.99));
-            if (targetIdx !== activeCardIndexRef.current) {
-              renderDeck(targetIdx, { immediate: false });
-            }
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    // Initial setup on mount
-    renderDeck(0, { immediate: true });
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
+    window.addEventListener('wheel', onWheel, { passive: true });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    driver.addEventListener('touchend', onTouchEnd, { passive: true });
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('scrollend', onScrollEnd);
+    const initialProgress = driverScrollRangeRef.current > 0
+      ? ((window.scrollY - driverTopRef.current) / driverScrollRangeRef.current) * (totalCardsRef.current - 1)
+      : 0;
+    renderDeck(clamp(initialProgress, 0, 1) * 6);
 
     return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', onScroll);
-      stopAutoPlay();
-      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+      resizeObserver.disconnect();
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('touchstart', onTouchStart);
+      driver.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('scrollend', onScrollEnd);
+      if (updateFrameRef.current !== null) cancelAnimationFrame(updateFrameRef.current);
+      if (autoPlayFrameRef.current !== null) cancelAnimationFrame(autoPlayFrameRef.current);
+      if (navigationIdleTimerRef.current) clearTimeout(navigationIdleTimerRef.current);
     };
-  }, [renderDeck, stopAutoPlay]);
+  }, [clamp, goToCard, renderDeck, stopAutoPlay]);
 
   return (
     <div className="activities-scroll-driver" id="programUnggulan" ref={scrollDriverRef}>
-      <section className="activities-stage" aria-label="6 Program Unggulan PRIDE 2026">
+      <section className="activities-stage" ref={stageRef} aria-label="6 Program Unggulan PRIDE 2026">
 
         {/* 7-Card Stack Deck Container: Cover (0) + 6 Programs (1..6) */}
         <div className="activities-deck-container" ref={deckContainerRef}>
@@ -258,136 +299,10 @@ export default function ActivitiesDeckSection() {
               Simple, clean centerpiece: "6 PROGRAM UNGGULAN"
               ════════════════════════════════════════════════════════════════ */}
           <section className="activities-card deck-cover-card" data-index="0">
-            {/* Playful Colorful Background Accents */}
-            <div className="deck-cover-decorations" aria-hidden="true">
-              <div className="decor-circle decor-red" />
-              <div className="decor-circle decor-yellow" />
-              <div className="decor-circle decor-blue" />
-              <div className="decor-circle decor-green" />
-              <div className="decor-circle decor-orange" />
-            </div>
-
-            {/* Top Bar: Clean & Balanced */}
-            <div className="deck-cover-top">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200">
-                <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
-                <span>Rangkaian Acara Festival</span>
-              </div>
-              <div className="deck-cover-venue-pill">
-                <svg className="w-3.5 h-3.5 text-rose-600 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                </svg>
-                <span>Braga City Walk · 27–28 Nov 2026</span>
-              </div>
-            </div>
-
-            {/* Center Focal Point: Pure & Bold "6 PROGRAM UNGGULAN" */}
-            <div className="deck-cover-hero">
-              <div className="deck-cover-badge-row">
-                <span className="deck-cover-kicker">PRIDE INDUSTRI KOTA BANDUNG 2026</span>
-              </div>
-
-              <div className="deck-cover-title-group">
-                <span className="deck-cover-large-number">6</span>
-                <h2 className="deck-cover-main-title">
-                  <span>PROGRAM</span>
-                  <span className="deck-title-highlight">UNGGULAN</span>
-                </h2>
-              </div>
-
-              <p className="deck-cover-subtitle">
-                Eksplorasi panggung fesyen wastra, kompetisi kreatif, apresiasi kepatuhan industri, hingga fasilitasi legalitas halal dan pesta seni budaya. Klik kategori untuk langsung membuka kartu program.
-              </p>
-
-              {/* Interactive Clickable Program Chips: Direct Jump to Card */}
-              <div className="deck-cover-palette-row" aria-label="6 Kategori Program Festival">
-                <button
-                  type="button"
-                  onClick={() => goToCard(1)}
-                  className="palette-chip chip-red cursor-pointer"
-                  title="Buka Kartu 01: Fesyen & Wastra"
-                >
-                  ✦ Fesyen
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(2)}
-                  className="palette-chip chip-green cursor-pointer"
-                  title="Buka Kartu 02: Desain Kemasan"
-                >
-                  ✦ Kemasan
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(3)}
-                  className="palette-chip chip-orange cursor-pointer"
-                  title="Buka Kartu 03: Video 1 Menit"
-                >
-                  ✦ Video 1 Menit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(4)}
-                  className="palette-chip chip-yellow cursor-pointer"
-                  title="Buka Kartu 04: Gala SIINAS"
-                >
-                  ✦ Gala SIINAS
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(5)}
-                  className="palette-chip chip-blue cursor-pointer"
-                  title="Buka Kartu 05: Halal & SNI"
-                >
-                  ✦ Halal &amp; SNI
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(6)}
-                  className="palette-chip chip-purple cursor-pointer"
-                  title="Buka Kartu 06: Seni Budaya"
-                >
-                  ✦ Seni Budaya
-                </button>
-              </div>
-            </div>
-
-            {/* Footer Bar: Scroll Prompt & Quick Tour Button */}
-            <div className="deck-cover-footer flex flex-wrap items-center justify-between gap-3">
-              <div className="deck-cover-scroll-indicator">
-                <span className="scroll-arrow-box">
-                  <svg className="w-4 h-4 animate-bounce text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 5v14M19 12l-7 7-7-7"/>
-                  </svg>
-                </span>
-                <span className="font-semibold text-slate-700 text-xs sm:text-sm">
-                  Scroll ke bawah untuk membuka kartu program ↓
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={toggleAutoPlay}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 transition-transform active:scale-95 shadow-sm cursor-pointer"
-                >
-                  <span>{isPlaying ? '⏸ Jeda' : '▶ Putar Animasi'}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToCard(1)}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold bg-rose-600 text-white hover:bg-rose-700 transition-transform active:scale-95 shadow-sm cursor-pointer"
-                >
-                  <span>Buka Program →</span>
-                </button>
-              </div>
-            </div>
+            <h2 className="deck-cover-title">
+              <span>6</span> Program <strong>Unggulan</strong>
+            </h2>
           </section>
-
-          {/* ════════════════════════════════════════════════════════════════
-              LAYER 1 (Card 1): FASHION SHOW RUNWAY
-              Theme: Vibrant Red (#E51937)
-              ════════════════════════════════════════════════════════════════ */}
           <article className="activities-card deck-festival-card theme-red" data-index="1">
             <div className="deck-card-decorations" aria-hidden="true">
               <div className="decor-blob decor-blob-1" />
@@ -905,10 +820,10 @@ export default function ActivitiesDeckSection() {
       </section>
 
       {/* Floating Interactive Controls (Bottom Right - Matching Ilia Delin reference) */}
-      <div className="demo-hud" role="region" aria-label="Kontrol Animasi Rangkaian">
+      <div className="demo-hud" ref={hudRef} role="region" aria-label="Kontrol Animasi Rangkaian">
         <button
           type="button"
-          onClick={() => goToCard(Math.max(0, activeCardIndexRef.current - 1))}
+          onClick={() => goToCard(Math.max(0, (navigationTargetRef.current ?? activeCardIndexRef.current) - 1))}
           className="demo-hud-arrow"
           aria-label="Kartu program sebelumnya"
           title="Program sebelumnya"
@@ -928,7 +843,7 @@ export default function ActivitiesDeckSection() {
         </div>
         <button
           type="button"
-          onClick={() => goToCard(Math.min(6, activeCardIndexRef.current + 1))}
+          onClick={() => goToCard(Math.min(totalCardsRef.current - 1, (navigationTargetRef.current ?? activeCardIndexRef.current) + 1))}
           className="demo-hud-arrow"
           aria-label="Kartu program berikutnya"
           title="Program berikutnya"
