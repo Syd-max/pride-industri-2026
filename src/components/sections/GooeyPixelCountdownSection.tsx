@@ -687,14 +687,14 @@ export default function GooeyPixelCountdownSection() {
       <svg className="pride-svg-defs" aria-hidden="true">
         <defs>
           <filter id="pride-liquid-goo" x="-30%" y="-30%" width="160%" height="160%" colorInterpolationFilters="sRGB">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="11" result="blur" />
             <feColorMatrix
               in="blur"
               mode="matrix"
               values="1 0 0 0 0  
                       0 1 0 0 0  
                       0 0 1 0 0  
-                      0 0 0 24 -10"
+                      0 0 0 26 -11"
               result="goo"
             />
             <feComposite in="SourceGraphic" in2="goo" operator="atop" />
@@ -724,24 +724,24 @@ export default function GooeyPixelCountdownSection() {
             <div className="cluster-anchor">
               <div className="goo-layer">
                 {/* 4 Main Blobs */}
-                <div className="goo-rect main-rect" data-row="0" style={{ left: '40px', top: '0px', width: '430px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '70px', width: '330px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '140px', width: '350px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '210px', width: '490px', height: '74px' }} />
+                <div className="goo-rect main-rect" data-row="0" style={{ left: '48px', top: '0px', width: '440px', height: '78px' }} />
+                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '72px', width: '330px', height: '78px' }} />
+                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '144px', width: '340px', height: '78px' }} />
+                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '216px', width: '500px', height: '78px' }} />
 
                 {/* 5 Satellite Blobs */}
-                <div className="goo-rect sat-rect" data-sat="top1" style={{ left: '30px', top: '0px', width: '300px', height: '66px' }} />
-                <div className="goo-rect sat-rect" data-sat="top2" style={{ left: '120px', top: '0px', width: '320px', height: '62px' }} />
-                <div className="goo-rect sat-rect" data-sat="left" style={{ left: '0px', top: '74px', width: '200px', height: '64px' }} />
-                <div className="goo-rect sat-rect" data-sat="right" style={{ left: '190px', top: '146px', width: '250px', height: '64px' }} />
-                <div className="goo-rect sat-rect" data-sat="bottom" style={{ left: '20px', top: '216px', width: '360px', height: '70px' }} />
+                <div className="goo-rect sat-rect" data-sat="top1" style={{ left: '20px', top: '0px', width: '320px', height: '68px' }} />
+                <div className="goo-rect sat-rect" data-sat="top2" style={{ left: '110px', top: '0px', width: '340px', height: '64px' }} />
+                <div className="goo-rect sat-rect" data-sat="left" style={{ left: '0px', top: '76px', width: '210px', height: '66px' }} />
+                <div className="goo-rect sat-rect" data-sat="right" style={{ left: '180px', top: '150px', width: '260px', height: '66px' }} />
+                <div className="goo-rect sat-rect" data-sat="bottom" style={{ left: '10px', top: '220px', width: '370px', height: '72px' }} />
               </div>
 
               <div className="text-layer">
-                <div className="goo-text-row" data-row="0" style={{ left: '58px', top: '12px' }}>KARYA LOKAL</div>
-                <div className="goo-text-row" data-row="1" style={{ left: '18px', top: '82px' }}>IKM KOTA</div>
-                <div className="goo-text-row" data-row="2" style={{ left: '18px', top: '152px' }}>BANDUNG</div>
-                <div className="goo-text-row" data-row="3" style={{ left: '18px', top: '222px' }}>INOVASI NYATA</div>
+                <div className="goo-text-row" data-row="0" style={{ left: '68px', top: '12px' }}>KARYA LOKAL</div>
+                <div className="goo-text-row" data-row="1" style={{ left: '20px', top: '84px' }}>IKM KOTA</div>
+                <div className="goo-text-row" data-row="2" style={{ left: '20px', top: '156px' }}>BANDUNG</div>
+                <div className="goo-text-row" data-row="3" style={{ left: '20px', top: '228px' }}>INOVASI NYATA</div>
               </div>
             </div>
           </div>
@@ -751,24 +751,24 @@ export default function GooeyPixelCountdownSection() {
             <div className="cluster-anchor">
               <div className="goo-layer">
                 {/* 4 Main Blobs */}
-                <div className="goo-rect main-rect" data-row="0" style={{ left: '50px', top: '0px', width: '340px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '70px', width: '560px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '140px', width: '530px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '210px', width: '470px', height: '74px' }} />
+                <div className="goo-rect main-rect" data-row="0" style={{ left: '48px', top: '0px', width: '350px', height: '78px' }} />
+                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '72px', width: '620px', height: '78px' }} />
+                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '144px', width: '610px', height: '78px' }} />
+                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '216px', width: '550px', height: '78px' }} />
 
                 {/* 5 Satellite Blobs */}
-                <div className="goo-rect sat-rect" data-sat="top1" style={{ left: '25px', top: '0px', width: '280px', height: '66px' }} />
-                <div className="goo-rect sat-rect" data-sat="top2" style={{ left: '110px', top: '0px', width: '350px', height: '62px' }} />
-                <div className="goo-rect sat-rect" data-sat="left" style={{ left: '0px', top: '74px', width: '230px', height: '64px' }} />
-                <div className="goo-rect sat-rect" data-sat="right" style={{ left: '210px', top: '146px', width: '270px', height: '64px' }} />
-                <div className="goo-rect sat-rect" data-sat="bottom" style={{ left: '15px', top: '216px', width: '390px', height: '70px' }} />
+                <div className="goo-rect sat-rect" data-sat="top1" style={{ left: '20px', top: '0px', width: '300px', height: '68px' }} />
+                <div className="goo-rect sat-rect" data-sat="top2" style={{ left: '120px', top: '0px', width: '360px', height: '64px' }} />
+                <div className="goo-rect sat-rect" data-sat="left" style={{ left: '0px', top: '76px', width: '220px', height: '66px' }} />
+                <div className="goo-rect sat-rect" data-sat="right" style={{ left: '220px', top: '150px', width: '300px', height: '66px' }} />
+                <div className="goo-rect sat-rect" data-sat="bottom" style={{ left: '10px', top: '220px', width: '380px', height: '72px' }} />
               </div>
 
               <div className="text-layer">
                 <div className="goo-text-row" data-row="0" style={{ left: '68px', top: '12px' }}>THE NEXT</div>
-                <div className="goo-text-row" data-row="1" style={{ left: '18px', top: '82px' }}>CREATIVE CHAPTER</div>
-                <div className="goo-text-row" data-row="2" style={{ left: '18px', top: '152px' }}>FESYEN &amp; KULINER</div>
-                <div className="goo-text-row" data-row="3" style={{ left: '18px', top: '222px' }}>27–28 NOV 2026</div>
+                <div className="goo-text-row" data-row="1" style={{ left: '20px', top: '84px' }}>CREATIVE CHAPTER</div>
+                <div className="goo-text-row" data-row="2" style={{ left: '20px', top: '156px' }}>FESYEN &amp; KULINER</div>
+                <div className="goo-text-row" data-row="3" style={{ left: '20px', top: '228px' }}>27–28 NOV 2026</div>
               </div>
             </div>
           </div>

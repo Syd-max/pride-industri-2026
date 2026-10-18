@@ -163,19 +163,19 @@
 /* Cluster Anchor — Base layout coordinate box */
 .cluster-anchor {
   position: relative;
-  width: 580px;
-  height: 330px;
+  width: 640px;
+  height: 310px;
   will-change: transform;
 }
 
-/* Layer 1: Filtered Metaball Liquid Shapes */
+/* Layer 1: Filtered Metaball Liquid Shapes (Perfect 1:1 coordinate match with text) */
 .goo-layer {
   position: absolute;
-  inset: -140px;
-  padding: 140px;
+  inset: 0;
   filter: url(#pride-liquid-goo);
   -webkit-filter: url(#pride-liquid-goo);
   will-change: transform;
+  pointer-events: none;
 }
 
 /* Layer 2: Ultra-Crisp Sharp Typography on top */
@@ -196,11 +196,11 @@
 /* Text Rows (Bold Editorial Typography) */
 .goo-text-row {
   position: absolute;
-  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: 58px;
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 52px;
   font-weight: 800;
   line-height: 1;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
   white-space: nowrap;
   user-select: none;
   will-change: transform, opacity;
