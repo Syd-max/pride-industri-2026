@@ -65,8 +65,11 @@ export default function AboutSection() {
     >
       {/* ── AMBIENT MOON BLUR TRANSITION (Efek Bulan Nonjol) ── */}
       <div className="moon-blur-transition" aria-hidden="true">
-        {/* Seamless dark-to-light gradient bridge */}
+        {/* Seamless multi-stop eased gradient bridge */}
         <div className="moon-transition-gradient" />
+
+        {/* Full-width atmospheric moonlight wash */}
+        <div className="moon-ambient-wash" />
 
         {/* Protruding Moon Blur Dome (The "Blur Nonjol Efek Bulan") */}
         <div className="moon-blur-dome" />
@@ -79,7 +82,7 @@ export default function AboutSection() {
       <div 
         className="absolute inset-0 pointer-events-none opacity-40" 
         style={{
-          top: '120px',
+          top: '240px',
           backgroundImage: 'radial-gradient(#94a3b8 0.75px, transparent 0.75px)',
           backgroundSize: '24px 24px',
           maskImage: 'radial-gradient(ellipse 70% 60% at 50% 25%, black 15%, transparent 75%)',
@@ -87,7 +90,7 @@ export default function AboutSection() {
         }} 
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-2 sm:pt-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-4 sm:pt-6">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 relative">

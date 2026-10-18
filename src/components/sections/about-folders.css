@@ -437,16 +437,16 @@
 }
 
 /* ─── AMBIENT MOON BLUR TRANSITION (Efek Bulan Nonjol) ──────────────────────
-   Seamless celestial bridge from dark countdown stage (#070a13)
-   to pristine white About section (#ffffff).
-   Anti-AI-slop: Zero harsh vector cuts, zero striped artifacts.
-   Pure, organic, feathered atmospheric moonlight ("blur nonjol").
+   Continuous, seamless celestial gradient bridge connecting dark countdown
+   stage (#070a13) into pristine white About section (#ffffff).
+   Zero visible contrast seam: multi-stop perceptual easing, expansive height,
+   full-width atmospheric wash, and luminous moon blur dome.
 ─────────────────────────────────────────────────────────────────────────────── */
 .moon-blur-transition {
   position: relative;
   z-index: 10;
   width: 100%;
-  height: clamp(100px, 14vw, 160px);
+  height: clamp(200px, 28vw, 320px);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -455,73 +455,97 @@
   pointer-events: none;
 }
 
-/* 1. Seamless background gradient: melts #070a13 into #ffffff */
+/* 1. Multi-stop Perceptual Eased Gradient:
+   Melts #070a13 smoothly into #ffffff without any visible contrast seam or muddy gray band */
 .moon-transition-gradient {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
     #070a13 0%,
-    rgba(7, 10, 19, 0.92) 20%,
-    rgba(15, 23, 42, 0.45) 55%,
-    rgba(255, 255, 255, 0.85) 85%,
+    rgba(7, 10, 19, 0.99) 10%,
+    rgba(8, 13, 26, 0.95) 20%,
+    rgba(11, 18, 36, 0.88) 30%,
+    rgba(15, 25, 50, 0.76) 40%,
+    rgba(22, 36, 68, 0.60) 50%,
+    rgba(36, 54, 94, 0.42) 60%,
+    rgba(65, 88, 136, 0.26) 70%,
+    rgba(115, 142, 190, 0.14) 80%,
+    rgba(180, 202, 236, 0.06) 90%,
+    rgba(238, 244, 252, 0.01) 96%,
     #ffffff 100%
   );
 }
 
-/* 2. The Protruding Moon Blur Dome ("Blur Nonjol")
-   A luminous elliptical core radiating brilliant moonlight,
-   celestial blue, and warm amber into the gap */
+/* 2. Full-Width Ambient Atmospheric Wash:
+   Softly blankets the left and right flanks with moonlight haze,
+   ensuring the sides never show an abrupt dark-to-light contrast cut */
+.moon-ambient-wash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 90% 70% at 50% 50%,
+    rgba(22, 82, 240, 0.22) 0%,
+    rgba(147, 197, 253, 0.15) 35%,
+    rgba(245, 158, 11, 0.09) 65%,
+    transparent 88%
+  );
+  filter: blur(50px);
+}
+
+/* 3. The Protruding Moon Blur Dome ("Blur Nonjol")
+   Luminous elliptical core radiating brilliant moonlight white,
+   celestial blue, and warm amber */
 .moon-blur-dome {
   position: absolute;
-  top: 45%;
+  top: 48%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(850px, 92vw);
-  height: clamp(120px, 16vw, 190px);
+  width: min(1080px, 96vw);
+  height: clamp(160px, 20vw, 240px);
   border-radius: 50%;
   background: radial-gradient(
     ellipse 65% 55% at 50% 50%,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(191, 219, 254, 0.70) 22%,
-    rgba(37, 99, 235, 0.35) 45%,
-    rgba(245, 158, 11, 0.18) 65%,
-    transparent 80%
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(191, 219, 254, 0.72) 20%,
+    rgba(37, 99, 235, 0.38) 42%,
+    rgba(245, 158, 11, 0.18) 64%,
+    transparent 82%
   );
-  filter: blur(36px);
+  filter: blur(40px);
   will-change: transform;
 }
 
-/* 3. Soft Diffuse Moonlight Crescent (Feathered, curved optical crest)
-   Creates the subtle, convex "moon rim" curve WITHOUT any harsh SVG lines */
+/* 4. Soft Diffuse Moonlight Crescent (Feathered, curved optical crest) */
 .moon-diffuse-crescent {
   position: absolute;
-  top: 40%;
+  top: 44%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(920px, 96vw);
-  height: clamp(110px, 14vw, 170px);
+  width: min(1120px, 98vw);
+  height: clamp(140px, 18vw, 210px);
   border-radius: 50%;
-  border-top: 3px solid rgba(255, 255, 255, 0.75);
+  border-top: 2.5px solid rgba(255, 255, 255, 0.7);
   box-shadow: 
-    0 -6px 20px rgba(255, 255, 255, 0.6),
-    0 -14px 40px rgba(59, 130, 246, 0.4),
-    0 -28px 70px rgba(245, 158, 11, 0.2);
-  filter: blur(8px);
+    0 -8px 24px rgba(255, 255, 255, 0.55),
+    0 -16px 45px rgba(59, 130, 246, 0.35),
+    0 -32px 75px rgba(245, 158, 11, 0.16);
+  filter: blur(10px);
 }
 
 @media (max-width: 640px) {
   .moon-blur-transition {
-    height: 90px;
+    height: clamp(150px, 24vh, 200px);
   }
   .moon-blur-dome {
-    height: 100px;
-    filter: blur(24px);
+    height: 130px;
+    filter: blur(28px);
   }
   .moon-diffuse-crescent {
-    height: 90px;
-    filter: blur(5px);
+    height: 110px;
+    filter: blur(6px);
     border-top-width: 2px;
   }
 }
+
 
