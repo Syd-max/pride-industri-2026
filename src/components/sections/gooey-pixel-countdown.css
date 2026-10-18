@@ -548,32 +548,6 @@
   }
 }
 
-/* Bottom Ambient Horizon Glow (Harmonizes with Moon Transition) */
-.countdown-bottom-horizon-glow {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(880px, 92vw);
-  height: 90px;
-  background: radial-gradient(
-    ellipse 60% 70% at 50% 100%,
-    rgba(22, 82, 240, 0.20) 0%,
-    rgba(245, 158, 11, 0.12) 45%,
-    transparent 80%
-  );
-  filter: blur(32px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-@media (max-width: 640px) {
-  .countdown-bottom-horizon-glow {
-    height: 60px;
-    filter: blur(20px);
-  }
-}
-
 /* Reduced Motion Mode */
 @media (prefers-reduced-motion: reduce) {
   .gooey-pixel-stage {

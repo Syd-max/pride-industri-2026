@@ -60,60 +60,26 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="relative pt-0 pb-6 sm:pb-8 lg:py-16 bg-white overflow-hidden"
+      className="relative pt-0 pb-6 sm:pb-8 lg:pb-16 bg-white overflow-hidden"
       aria-label="Tentang PRIDE Industri 2026"
     >
-      {/* ── MOON HORIZON TRANSITION (Efek Bulan Nonjol) ── */}
-      <div className="moon-horizon-transition" aria-hidden="true">
-        {/* Atmospheric Radial Blur Glow (The "Blur Nonjol") */}
-        <div className="moon-horizon-glow" />
+      {/* ── AMBIENT MOON BLUR TRANSITION (Efek Bulan Nonjol) ── */}
+      <div className="moon-blur-transition" aria-hidden="true">
+        {/* Seamless dark-to-light gradient bridge */}
+        <div className="moon-transition-gradient" />
 
-        {/* Curved Moon Horizon SVG with Specular Rim */}
-        <svg
-          viewBox="0 0 1440 120"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="none"
-          className="moon-horizon-svg"
-        >
-          <defs>
-            {/* Specular Rim Gradient: Brilliant Moon White at center apex, fading to soft celestial blue and transparent flanks */}
-            <linearGradient id="moonRimStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-              <stop offset="22%" stopColor="#93c5fd" stopOpacity="0.45" />
-              <stop offset="50%" stopColor="#ffffff" stopOpacity="0.95" />
-              <stop offset="78%" stopColor="#fde68a" stopOpacity="0.45" />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-            </linearGradient>
+        {/* Protruding Moon Blur Dome (The "Blur Nonjol Efek Bulan") */}
+        <div className="moon-blur-dome" />
 
-            {/* Subtle Lunar Surface Gradient (crisp white) */}
-            <linearGradient id="moonSurfaceGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#ffffff" />
-              <stop offset="100%" stopColor="#ffffff" />
-            </linearGradient>
-          </defs>
-
-          {/* Convex arched moon surface: bulges upward into the dark navy sky */}
-          <path
-            d="M 0,120 L 0,85 C 400,0 1040,0 1440,85 L 1440,120 Z"
-            fill="url(#moonSurfaceGradient)"
-          />
-
-          {/* 2.5px Specular Crest Line along the Moon Rim */}
-          <path
-            d="M 0,85 C 400,0 1040,0 1440,85"
-            stroke="url(#moonRimStroke)"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
-        </svg>
+        {/* Soft Diffuse Moonlight Crescent (No harsh cuts, pure feathered horizon light) */}
+        <div className="moon-diffuse-crescent" />
       </div>
 
       {/* Background Architectural Accent: Subtle Blueprint Dot Grid & Ambient Warm Mesh */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-40" 
         style={{
-          top: '90px',
+          top: '120px',
           backgroundImage: 'radial-gradient(#94a3b8 0.75px, transparent 0.75px)',
           backgroundSize: '24px 24px',
           maskImage: 'radial-gradient(ellipse 70% 60% at 50% 25%, black 15%, transparent 75%)',
@@ -121,7 +87,7 @@ export default function AboutSection() {
         }} 
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-4 sm:pt-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-2 sm:pt-4">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 relative">
