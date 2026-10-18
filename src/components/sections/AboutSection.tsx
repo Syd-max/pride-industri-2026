@@ -68,14 +68,17 @@ export default function AboutSection() {
         {/* Seamless multi-stop eased gradient bridge */}
         <div className="moon-transition-gradient" />
 
-        {/* Full-width atmospheric moonlight wash */}
-        <div className="moon-ambient-wash" />
+        {/* Masked Moon Glow Cluster (fades to strictly 0% opacity at top & bottom borders) */}
+        <div className="moon-glow-cluster">
+          {/* Full-width atmospheric moonlight wash */}
+          <div className="moon-ambient-wash" />
 
-        {/* Protruding Moon Blur Dome (The "Blur Nonjol Efek Bulan") */}
-        <div className="moon-blur-dome" />
+          {/* Protruding Moon Blur Dome (The "Blur Nonjol Efek Bulan") */}
+          <div className="moon-blur-dome" />
 
-        {/* Soft Diffuse Moonlight Crescent (No harsh cuts, pure feathered horizon light) */}
-        <div className="moon-diffuse-crescent" />
+          {/* Soft Diffuse Moonlight Crescent (No harsh cuts, pure feathered horizon light) */}
+          <div className="moon-diffuse-crescent" />
+        </div>
       </div>
 
       {/* Background Architectural Accent: Subtle Blueprint Dot Grid & Ambient Warm Mesh */}

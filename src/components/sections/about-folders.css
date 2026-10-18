@@ -456,28 +456,55 @@
 }
 
 /* 1. Multi-stop Perceptual Eased Gradient:
-   Melts #070a13 smoothly into #ffffff without any visible contrast seam or muddy gray band */
+   Holds pure #070a13 for the top 16% so it seamlessly connects to countdown stage,
+   then gently melts into #ffffff with zero visible contrast boundary */
 .moon-transition-gradient {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
     #070a13 0%,
-    rgba(7, 10, 19, 0.99) 10%,
-    rgba(8, 13, 26, 0.95) 20%,
-    rgba(11, 18, 36, 0.88) 30%,
-    rgba(15, 25, 50, 0.76) 40%,
-    rgba(22, 36, 68, 0.60) 50%,
-    rgba(36, 54, 94, 0.42) 60%,
-    rgba(65, 88, 136, 0.26) 70%,
-    rgba(115, 142, 190, 0.14) 80%,
-    rgba(180, 202, 236, 0.06) 90%,
-    rgba(238, 244, 252, 0.01) 96%,
+    #070a13 16%,
+    rgba(7, 10, 19, 0.98) 26%,
+    rgba(8, 13, 26, 0.92) 36%,
+    rgba(11, 18, 36, 0.80) 46%,
+    rgba(16, 26, 52, 0.62) 56%,
+    rgba(28, 44, 80, 0.42) 66%,
+    rgba(56, 78, 122, 0.25) 75%,
+    rgba(110, 136, 184, 0.13) 84%,
+    rgba(180, 202, 236, 0.05) 92%,
+    rgba(240, 246, 253, 0.01) 97%,
     #ffffff 100%
   );
 }
 
-/* 2. Full-Width Ambient Atmospheric Wash:
+/* 2. Moon Glow Cluster Wrapper:
+   CRITICAL ALPHA MASK — Guarantees that any blurred light strictly fades to 0% opacity
+   at the top and bottom bounds (0% and 100%). Eliminates any horizontal cut line or seam! */
+.moon-glow-cluster {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 24%,
+    black 76%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 24%,
+    black 76%,
+    transparent 100%
+  );
+}
+
+/* 3. Full-Width Ambient Atmospheric Wash:
    Softly blankets the left and right flanks with moonlight haze,
    ensuring the sides never show an abrupt dark-to-light contrast cut */
 .moon-ambient-wash {
@@ -493,7 +520,7 @@
   filter: blur(50px);
 }
 
-/* 3. The Protruding Moon Blur Dome ("Blur Nonjol")
+/* 4. The Protruding Moon Blur Dome ("Blur Nonjol")
    Luminous elliptical core radiating brilliant moonlight white,
    celestial blue, and warm amber */
 .moon-blur-dome {
@@ -516,7 +543,7 @@
   will-change: transform;
 }
 
-/* 4. Soft Diffuse Moonlight Crescent (Feathered, curved optical crest) */
+/* 5. Soft Diffuse Moonlight Crescent (Feathered, curved optical crest) */
 .moon-diffuse-crescent {
   position: absolute;
   top: 44%;
