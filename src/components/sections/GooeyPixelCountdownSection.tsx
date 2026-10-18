@@ -841,6 +841,9 @@ export default function GooeyPixelCountdownSection() {
             </div>
           </div>
         </div>
+
+        {/* Bottom Ambient Horizon Glow (Harmonizes with Moon Transition) */}
+        <div className="countdown-bottom-horizon-glow" aria-hidden="true" />
       </div>
     </div>
   );
