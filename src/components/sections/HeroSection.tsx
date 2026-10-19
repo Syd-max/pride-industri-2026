@@ -59,6 +59,11 @@ function KriyaIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
 export default function HeroSection() {
   const heroSectionRef = useRef<HTMLElement>(null);
   const heroLogoRef = useRef<HTMLDivElement>(null);
+  const badgeKulinerRef = useRef<HTMLDivElement>(null);
+  const badgeFesyenRef = useRef<HTMLDivElement>(null);
+  const badgeKriyaRef = useRef<HTMLDivElement>(null);
+  const badgeKemasanRef = useRef<HTMLDivElement>(null);
+  const badgeVideoRef = useRef<HTMLDivElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
   const headlineBlockRef = useRef<HTMLDivElement>(null);
   const heroLogosRef = useRef<HTMLDivElement>(null);
@@ -70,6 +75,13 @@ export default function HeroSection() {
       heroLogoRef.current?.classList.add('visible');
     }, 60);
 
+    // Floating cursor badges (Desktop)
+    const tBadge1 = setTimeout(() => badgeKulinerRef.current?.classList.add('visible'), 160);
+    const tBadge2 = setTimeout(() => badgeFesyenRef.current?.classList.add('visible'), 240);
+    const tBadge3 = setTimeout(() => badgeKriyaRef.current?.classList.add('visible'), 320);
+    const tBadge4 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 400);
+    const tBadge5 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 480);
+
     // Organizer Logos right below PRIDE Logo
     const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 220);
 
@@ -79,6 +91,11 @@ export default function HeroSection() {
 
     return () => {
       clearTimeout(t0);
+      clearTimeout(tBadge1);
+      clearTimeout(tBadge2);
+      clearTimeout(tBadge3);
+      clearTimeout(tBadge4);
+      clearTimeout(tBadge5);
       clearTimeout(tLogos);
       clearTimeout(tHeadline);
       clearTimeout(tSub);
@@ -97,7 +114,7 @@ export default function HeroSection() {
 
         {/* Hero Section */}
         <section className="flow-hero-section pride-hero" id="heroSection" ref={heroSectionRef}>
-          {/* 1. Logo PRIDE: elemen terbesar & fokus utama */}
+          {/* 1. Logo PRIDE: elemen terbesar & fokus utama dengan floating highlight badges */}
           <div className="pride-logo hero-logo-wrap hero-logo event-logo" ref={heroLogoRef}>
             {/* Ambient Warm Backlight */}
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,184,0,0.3)_0%,_rgba(229,25,55,0.15)_50%,_transparent_70%)] blur-2xl pointer-events-none" />
@@ -110,6 +127,41 @@ export default function HeroSection() {
               sizes="(max-width: 640px) 90vw, (max-width: 1024px) 580px, 680px"
               className="object-contain"
             />
+
+            {/* Floating Cursor Tag: Fesyen Binaan (Top-Left) — Desktop Only (md and up) */}
+            <div className="cursor-badge badge-fesyen hidden md:inline-flex" ref={badgeFesyenRef}>
+              <FesyenIcon className="w-3.5 h-3.5 text-blue-200" />
+              <span>Fesyen Binaan</span>
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
+
+            {/* Floating Cursor Tag: Kuliner Lokal (Top-Right) — Desktop Only (md and up) */}
+            <div className="cursor-badge badge-kuliner hidden md:inline-flex" ref={badgeKulinerRef}>
+              <KulinerIcon className="w-3.5 h-3.5 text-orange-200" />
+              <span>Kuliner Lokal</span>
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
+
+            {/* Floating Cursor Tag: Kriya & Kerajinan (Mid-Left) — Desktop Only (md and up) */}
+            <div className="cursor-badge badge-kriya hidden md:inline-flex" ref={badgeKriyaRef}>
+              <KriyaIcon className="w-3.5 h-3.5 text-purple-200" />
+              <span>Kriya &amp; Kerajinan</span>
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
+
+            {/* Floating Cursor Tag: Video 1 Menit (Bottom-Left) — Desktop Only (md and up) */}
+            <div className="cursor-badge badge-video hidden md:inline-flex" ref={badgeVideoRef}>
+              <VideoIcon className="w-3.5 h-3.5 text-rose-200" />
+              <span>Lomba Video 1 Menit</span>
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
+
+            {/* Floating Cursor Tag: Desain Kemasan (Bottom-Right) — Desktop Only (md and up) */}
+            <div className="cursor-badge badge-kemasan hidden md:inline-flex" ref={badgeKemasanRef}>
+              <KemasanIcon className="w-3.5 h-3.5 text-emerald-200" />
+              <span>Lomba Desain Kemasan</span>
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
           </div>
 
           {/* 2. Highlights: mobile only (di bawah logo PRIDE) */}
