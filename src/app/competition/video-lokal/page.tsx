@@ -432,9 +432,9 @@ export default function VideoLokalPage() {
               </div>
             </div>
 
-            {/* Simple Next Steps Note (Revisi 5) */}
+            {/* Simple Next Steps Note */}
             <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/90 text-xs text-slate-600 text-center max-w-md mx-auto leading-relaxed">
-              Simpan kode pendaftaran ini. Pengumuman pemenang pada <span className="font-bold text-slate-900">28 November 2026</span> di Braga City Walk.
+              Simpan kode ini untuk check in
             </div>
 
             <div className="pt-2">
