@@ -327,16 +327,21 @@ export default function ActivitiesDeckSection() {
 
   return (
     <div className="activities-scroll-driver" id="programUnggulan" ref={scrollDriverRef}>
-      <section className="activities-stage" aria-label="6 Program Unggulan PRIDE 2026">
+      <section className="activities-stage" aria-label="Tujuan Kegiatan PRIDE 2026">
 
-        {/* 7-Card Stack Deck Container: Cover (0) + 6 Programs (1..6) */}
+        {/* 7-Card Stack Deck Container: Cover (0) + 6 Tujuan Kegiatan (1..6) */}
         <div className="activities-deck-container" ref={deckContainerRef}>
 
           {/* ════════════════════════════════════════════════════════════════
-              LAYER 0 (Frontmost): ELEGANT & AESTHETIC COVER CARD
-              Simple, clean centerpiece: "6 PROGRAM UNGGULAN"
+              LAYER 0 (Frontmost): COVER CARD ("TUJUAN KEGIATAN")
+              Centerpiece with bespoke Editorial Font Mix
               ════════════════════════════════════════════════════════════════ */}
-          <section className="activities-card deck-cover-card" data-index="0">
+          <section
+            className="activities-card deck-cover-card"
+            data-index="0"
+            onClick={() => goToCard(1)}
+            style={{ cursor: 'pointer' }}
+          >
             {/* Playful Colorful Background Accents */}
             <div className="deck-cover-decorations" aria-hidden="true">
               <div className="decor-circle decor-red" />
@@ -346,286 +351,174 @@ export default function ActivitiesDeckSection() {
               <div className="decor-circle decor-orange" />
             </div>
 
-            {/* Center Focal Point: Simple & Elegant Mixed Font Title */}
+            {/* Center Focal Point: Simple & Aesthetic Font Mix Title */}
             <div className="deck-cover-center">
               <h2 className="deck-cover-mix-title">
-                <div className="deck-mix-main-row">
-                  <span className="deck-mix-num">6</span>
-                  <span className="deck-mix-sans">PROGRAM</span>
-                </div>
-                <span className="deck-mix-serif">Unggulan</span>
+                <span className="deck-mix-sans">TUJUAN</span>
+                <span className="deck-mix-serif">Kegiatan</span>
               </h2>
             </div>
           </section>
-          <article className="activities-card deck-festival-card theme-red" data-index="1">
+
+          {/* ════════════════════════════════════════════════════════════════
+              LAYER 1 (Card 1): 01. Meningkatkan Eksposur IKM
+              Theme: Red (#e51937)
+              ════════════════════════════════════════════════════════════════ */}
+          <article
+            className="activities-card deck-festival-card theme-red"
+            data-index="1"
+            onClick={() => goToCard(2)}
+            style={{ cursor: 'pointer' }}
+          >
             <div className="deck-card-decorations" aria-hidden="true">
               <div className="decor-blob decor-blob-1" />
               <div className="decor-blob decor-blob-2" />
               <div className="decor-ring" />
             </div>
 
-            <div className="deck-card-inner">
-              <header className="deck-card-header">
-                <div className="deck-header-left">
-                  <span className="deck-card-number">01 / 06</span>
-                  <span className="deck-header-pill">FESYEN &amp; WASTRA NUSANTARA</span>
+            <div className="deck-card-inner-centered">
+              <div className="deck-goal-mix-block">
+                <div className="deck-goal-top-row">
+                  <span className="deck-goal-num">01.</span>
+                  <span className="deck-goal-verb">Meningkatkan</span>
                 </div>
-              </header>
-
-              <div className="deck-card-body deck-card-body-simple">
-                <h3 className="deck-card-title">Peragaan Busana Wastra Kontemporer</h3>
+                <h3 className="deck-goal-subject">Eksposur IKM</h3>
               </div>
-
-              <footer className="deck-card-footer">
-                <div className="deck-footer-actions">
-                  <button
-                    type="button"
-                    onClick={() => goToCard(0)}
-                    className="deck-nav-btn"
-                    title="Kembali ke Cover"
-                  >
-                    ← Cover
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => goToCard(2)}
-                    className="deck-nav-btn deck-nav-primary"
-                    title="Lanjut ke Program 02"
-                  >
-                    02 Kemasan →
-                  </button>
-                </div>
-              </footer>
             </div>
           </article>
 
           {/* ════════════════════════════════════════════════════════════════
-              LAYER 2 (Card 2): LOMBA DESAIN KEMASAN IKM
-              Theme: Emerald Green (#009E49)
+              LAYER 2 (Card 2): 02. Membangun Ruang Interaksi
+              Theme: Emerald Green (#009e49)
               ════════════════════════════════════════════════════════════════ */}
-          <article className="activities-card deck-festival-card theme-green" data-index="2">
+          <article
+            className="activities-card deck-festival-card theme-green"
+            data-index="2"
+            onClick={() => goToCard(3)}
+            style={{ cursor: 'pointer' }}
+          >
             <div className="deck-card-decorations" aria-hidden="true">
               <div className="decor-blob decor-blob-1" />
               <div className="decor-blob decor-blob-2" />
               <div className="decor-ring" />
             </div>
 
-            <div className="deck-card-inner">
-              <header className="deck-card-header">
-                <div className="deck-header-left">
-                  <span className="deck-card-number">02 / 06</span>
-                  <span className="deck-header-pill">INOVASI ECO-PACKAGING IKM</span>
+            <div className="deck-card-inner-centered">
+              <div className="deck-goal-mix-block">
+                <div className="deck-goal-top-row">
+                  <span className="deck-goal-num">02.</span>
+                  <span className="deck-goal-verb">Membangun</span>
                 </div>
-              </header>
-
-              <div className="deck-card-body deck-card-body-simple">
-                <h3 className="deck-card-title">Showcase &amp; Penjurian Terbuka Desain Kemasan</h3>
+                <h3 className="deck-goal-subject">Ruang Interaksi</h3>
               </div>
-
-              <footer className="deck-card-footer">
-                <div className="deck-footer-actions">
-                  <button
-                    type="button"
-                    onClick={() => goToCard(1)}
-                    className="deck-nav-btn"
-                    title="Kembali ke 01 Fesyen"
-                  >
-                    ← 01 Fesyen
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => goToCard(3)}
-                    className="deck-nav-btn deck-nav-primary"
-                    title="Lanjut ke Program 03"
-                  >
-                    03 Video →
-                  </button>
-                </div>
-              </footer>
             </div>
           </article>
 
           {/* ════════════════════════════════════════════════════════════════
-              LAYER 3 (Card 3): LOMBA VIDEO 1 MENIT BRAGA
-              Theme: Warm Orange (#F69321)
+              LAYER 3 (Card 3): 03. Mendorong Kolaborasi
+              Theme: Warm Orange (#f69321)
               ════════════════════════════════════════════════════════════════ */}
-          <article className="activities-card deck-festival-card theme-orange" data-index="3">
+          <article
+            className="activities-card deck-festival-card theme-orange"
+            data-index="3"
+            onClick={() => goToCard(4)}
+            style={{ cursor: 'pointer' }}
+          >
             <div className="deck-card-decorations" aria-hidden="true">
               <div className="decor-blob decor-blob-1" />
               <div className="decor-blob decor-blob-2" />
               <div className="decor-ring" />
             </div>
 
-            <div className="deck-card-inner">
-              <header className="deck-card-header">
-                <div className="deck-header-left">
-                  <span className="deck-card-number">03 / 06</span>
-                  <span className="deck-header-pill">KREATIVITAS VISUAL VERTIKAL</span>
+            <div className="deck-card-inner-centered">
+              <div className="deck-goal-mix-block">
+                <div className="deck-goal-top-row">
+                  <span className="deck-goal-num">03.</span>
+                  <span className="deck-goal-verb">Mendorong</span>
                 </div>
-              </header>
-
-              <div className="deck-card-body deck-card-body-simple">
-                <h3 className="deck-card-title">Hunting Konten &amp; Screening Video 1 Menit</h3>
+                <h3 className="deck-goal-subject">Kolaborasi</h3>
               </div>
-
-              <footer className="deck-card-footer">
-                <div className="deck-footer-actions">
-                  <button
-                    type="button"
-                    onClick={() => goToCard(2)}
-                    className="deck-nav-btn"
-                    title="Kembali ke 02 Kemasan"
-                  >
-                    ← 02 Kemasan
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => goToCard(4)}
-                    className="deck-nav-btn deck-nav-primary"
-                    title="Lanjut ke Program 04"
-                  >
-                    04 Pitching →
-                  </button>
-                </div>
-              </footer>
             </div>
           </article>
 
           {/* ════════════════════════════════════════════════════════════════
-              LAYER 4 (Card 4): BUSINESS MATCHING & PITCHING PROGRAM KEMILAU
-              Theme: Golden Yellow (#FFB800)
+              LAYER 4 (Card 4): 04. Mendorong Akses Pasar dan Transaksi
+              Theme: Golden Yellow (#ffb800)
               ════════════════════════════════════════════════════════════════ */}
-          <article className="activities-card deck-festival-card theme-yellow" data-index="4">
+          <article
+            className="activities-card deck-festival-card theme-yellow"
+            data-index="4"
+            onClick={() => goToCard(5)}
+            style={{ cursor: 'pointer' }}
+          >
             <div className="deck-card-decorations" aria-hidden="true">
               <div className="decor-blob decor-blob-1" />
               <div className="decor-blob decor-blob-2" />
               <div className="decor-ring" />
             </div>
 
-            <div className="deck-card-inner">
-              <header className="deck-card-header">
-                <div className="deck-header-left">
-                  <span className="deck-card-number">04 / 06</span>
-                  <span className="deck-header-pill">TEMU BISNIS &amp; KEMITRAAN</span>
+            <div className="deck-card-inner-centered">
+              <div className="deck-goal-mix-block">
+                <div className="deck-goal-top-row">
+                  <span className="deck-goal-num">04.</span>
+                  <span className="deck-goal-verb">Mendorong</span>
                 </div>
-              </header>
-
-              <div className="deck-card-body deck-card-body-simple">
-                <h3 className="deck-card-title">Business Matching &amp; Pitching IKM Kemilau</h3>
+                <h3 className="deck-goal-subject">Akses Pasar dan Transaksi</h3>
               </div>
-
-              <footer className="deck-card-footer">
-                <div className="deck-footer-actions">
-                  <button
-                    type="button"
-                    onClick={() => goToCard(3)}
-                    className="deck-nav-btn"
-                    title="Kembali ke 03 Video"
-                  >
-                    ← 03 Video
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => goToCard(5)}
-                    className="deck-nav-btn deck-nav-primary"
-                    title="Lanjut ke Program 05"
-                  >
-                    05 Sertifikat →
-                  </button>
-                </div>
-              </footer>
             </div>
           </article>
 
           {/* ════════════════════════════════════════════════════════════════
-              LAYER 5 (Card 5): PENYERAHAN SERTIFIKAT MUTU, HALAL & KEMILAU
-              Theme: Royal Bandung Blue (#1652F0)
+              LAYER 5 (Card 5): 05. Mengapresiasi Kreativitas dan Inovasi
+              Theme: Royal Bandung Blue (#1652f0)
               ════════════════════════════════════════════════════════════════ */}
-          <article className="activities-card deck-festival-card theme-blue" data-index="5">
+          <article
+            className="activities-card deck-festival-card theme-blue"
+            data-index="5"
+            onClick={() => goToCard(6)}
+            style={{ cursor: 'pointer' }}
+          >
             <div className="deck-card-decorations" aria-hidden="true">
               <div className="decor-blob decor-blob-1" />
               <div className="decor-blob decor-blob-2" />
               <div className="decor-ring" />
             </div>
 
-            <div className="deck-card-inner">
-              <header className="deck-card-header">
-                <div className="deck-header-left">
-                  <span className="deck-card-number">05 / 06</span>
-                  <span className="deck-header-pill">STANDARISASI &amp; MUTU IKM</span>
+            <div className="deck-card-inner-centered">
+              <div className="deck-goal-mix-block">
+                <div className="deck-goal-top-row">
+                  <span className="deck-goal-num">05.</span>
+                  <span className="deck-goal-verb">Mengapresiasi</span>
                 </div>
-              </header>
-
-              <div className="deck-card-body deck-card-body-simple">
-                <h3 className="deck-card-title">Penyerahan Sertifikat Uji Mutu, Halal &amp; Kelas Online KEMILAU</h3>
+                <h3 className="deck-goal-subject">Kreativitas dan Inovasi</h3>
               </div>
-
-              <footer className="deck-card-footer">
-                <div className="deck-footer-actions">
-                  <button
-                    type="button"
-                    onClick={() => goToCard(4)}
-                    className="deck-nav-btn"
-                    title="Kembali ke 04 Pitching"
-                  >
-                    ← 04 Pitching
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => goToCard(6)}
-                    className="deck-nav-btn deck-nav-primary"
-                    title="Lanjut ke Program 06"
-                  >
-                    06 Seni →
-                  </button>
-                </div>
-              </footer>
             </div>
           </article>
 
           {/* ════════════════════════════════════════════════════════════════
-              LAYER 6 (Card 6): PANGGUNG SENI BUDAYA & MUSIK ETNIK
-              Theme: Creative Purple (#8B5CF6)
+              LAYER 6 (Card 6): 06. Meningkatkan Awareness Industri Kota Bandung
+              Theme: Creative Purple (#8b5cf6)
               ════════════════════════════════════════════════════════════════ */}
-          <article className="activities-card deck-festival-card theme-purple" data-index="6">
+          <article
+            className="activities-card deck-festival-card theme-purple"
+            data-index="6"
+            onClick={() => goToCard(0)}
+            style={{ cursor: 'pointer' }}
+          >
             <div className="deck-card-decorations" aria-hidden="true">
               <div className="decor-blob decor-blob-1" />
               <div className="decor-blob decor-blob-2" />
               <div className="decor-ring" />
             </div>
 
-            <div className="deck-card-inner">
-              <header className="deck-card-header">
-                <div className="deck-header-left">
-                  <span className="deck-card-number">06 / 06</span>
-                  <span className="deck-header-pill">SENI BUDAYA &amp; MUSIK ETNIK</span>
+            <div className="deck-card-inner-centered">
+              <div className="deck-goal-mix-block">
+                <div className="deck-goal-top-row">
+                  <span className="deck-goal-num">06.</span>
+                  <span className="deck-goal-verb">Meningkatkan</span>
                 </div>
-              </header>
-
-              <div className="deck-card-body deck-card-body-simple">
-                <h3 className="deck-card-title">Panggung Seni Budaya &amp; Pertunjukan Musik Etnik</h3>
+                <h3 className="deck-goal-subject">Awareness Industri Kota Bandung</h3>
               </div>
-
-              <footer className="deck-card-footer">
-                <div className="deck-footer-actions">
-                  <button
-                    type="button"
-                    onClick={() => goToCard(5)}
-                    className="deck-nav-btn"
-                    title="Kembali ke 05 Sertifikat"
-                  >
-                    ← 05 Sertifikat
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => goToCard(0)}
-                    className="deck-nav-btn deck-nav-primary"
-                    title="Kembali ke Awal (Cover)"
-                  >
-                    ↺ Ulang ke Cover
-                  </button>
-                </div>
-              </footer>
             </div>
           </article>
 
