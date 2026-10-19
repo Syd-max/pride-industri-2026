@@ -536,3 +536,65 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ========================================================
+   Desktop: enlarge the main event logo & partner logo
+   ======================================================== */
+@media (min-width: 769px) {
+  .hero-logo-wrap,
+  .hero-logo,
+  .event-logo {
+    height: clamp(120px, 12vw, 190px);
+    width: clamp(260px, 26vw, 420px);
+    max-width: 90vw;
+  }
+
+  /* Keep badges comfortably on the outer shoulders of the logo without overlapping */
+  .badge-fesyen {
+    top: 10px;
+    left: -24px;
+  }
+
+  .badge-kuliner {
+    top: 10px;
+    right: -24px;
+  }
+
+  .badge-kriya {
+    top: 50%;
+    left: -36px;
+    transform: translateY(-50%);
+  }
+
+  .badge-video {
+    bottom: 8px;
+    left: -20px;
+  }
+
+  .badge-kemasan {
+    bottom: 8px;
+    right: -20px;
+  }
+
+  /* Organization / partner logo */
+  .hero-organizer-card,
+  .organization-logo,
+  .partner-logo {
+    padding: clamp(6px, 1vh, 10px) clamp(16px, 2vw, 24px);
+    max-width: clamp(220px, 24vw, 320px);
+  }
+
+  .organizer-gov-img {
+    height: clamp(22px, 2.5vw, 32px);
+    width: auto;
+  }
+
+  .organizer-tactlink-img {
+    height: clamp(20px, 2.2vw, 28px);
+    width: auto;
+  }
+
+  .organizer-divider {
+    height: clamp(14px, 1.8vw, 20px);
+  }
+}

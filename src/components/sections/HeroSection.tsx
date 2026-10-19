@@ -115,7 +115,7 @@ export default function HeroSection() {
         {/* Hero Section */}
         <section className="flow-hero-section" id="heroSection" ref={heroSectionRef}>
           {/* Official Logo Placed Full In Front with Corner Badges */}
-          <div className="hero-logo-wrap" ref={heroLogoRef}>
+          <div className="hero-logo-wrap hero-logo event-logo" ref={heroLogoRef}>
             {/* Ambient Warm Backlight */}
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,184,0,0.3)_0%,_rgba(229,25,55,0.15)_50%,_transparent_70%)] blur-2xl pointer-events-none" />
 
@@ -165,7 +165,7 @@ export default function HeroSection() {
           </div>
 
           {/* Official Organizers & Partners Logo Bar */}
-          <div className="hero-organizer-card" ref={heroLogosRef}>
+          <div className="hero-organizer-card organization-logo partner-logo" ref={heroLogosRef}>
             <div className="hero-organizer-inner">
               <div className="organizer-gov-wrap">
                 <Image
