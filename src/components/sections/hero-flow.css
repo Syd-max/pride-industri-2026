@@ -172,16 +172,16 @@
   z-index: 2;
 }
 
-/* Floating Interactive Cursor Badges (Desktop HL: Fesyen, Kuliner, Kriya, Video, Kemasan) */
+/* Floating Interactive Cursor Badges (Desktop HL: Fesyen, Kuliner, Kriya, Video, Kemasan — Floating Outside Logo) */
 .cursor-badge {
   position: absolute;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
+  gap: 5px;
+  padding: 3.5px 9px;
   border-radius: 9999px;
   font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
   letter-spacing: -0.01em;
   color: #ffffff;
@@ -222,37 +222,40 @@
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
 }
 
-/* Fesyen Badge */
+/* 1. Fesyen Badge (Top-Left Shoulder — Outside Logo) */
 .badge-fesyen {
   background: var(--flow-blue-accent);
-  top: clamp(6px, 1.2vh, 14px);
-  left: -20px;
+  top: 3%;
+  right: calc(100% + 14px);
+  left: auto;
 }
 .badge-fesyen svg {
-  bottom: -7px;
+  bottom: -6px;
   right: -5px;
   fill: var(--flow-blue-accent);
   transform: rotate(135deg);
 }
 
-/* Kuliner Badge */
+/* 2. Kuliner Badge (Top-Right Shoulder — Outside Logo) */
 .badge-kuliner {
   background: var(--flow-orange-accent);
-  top: clamp(6px, 1.2vh, 14px);
-  right: -20px;
+  top: 3%;
+  left: calc(100% + 14px);
+  right: auto;
 }
 .badge-kuliner svg {
-  bottom: -7px;
+  bottom: -6px;
   left: -5px;
   fill: var(--flow-orange-accent);
   transform: rotate(-135deg);
 }
 
-/* Kriya & Kerajinan Badge */
+/* 3. Kriya & Kerajinan Badge (Mid-Left Shoulder — Outside Logo) */
 .badge-kriya {
   background: #9333ea;
-  top: 50%;
-  left: -28px;
+  top: 48%;
+  right: calc(100% + 18px);
+  left: auto;
   transform: translateY(-50%) scale(0.65);
 }
 .badge-kriya.visible {
@@ -262,36 +265,38 @@
   transform: translateY(-50%) scale(1.08) !important;
 }
 .badge-kriya svg {
-  top: -7px;
+  top: -6px;
   right: -5px;
   fill: #9333ea;
   transform: rotate(45deg);
 }
 
-/* Video 1 Menit Badge */
+/* 4. Video 1 Menit Badge (Bottom-Left Shoulder — Outside Logo) */
 .badge-video {
   background: var(--flow-rose-accent);
-  bottom: clamp(6px, 1vh, 12px);
-  left: -16px;
+  bottom: 3%;
+  right: calc(100% + 14px);
+  left: auto;
 }
 .badge-video svg {
-  bottom: -6px;
+  top: -6px;
   right: -5px;
   fill: var(--flow-rose-accent);
-  transform: rotate(135deg);
+  transform: rotate(45deg);
 }
 
-/* Desain Kemasan Badge */
+/* 5. Desain Kemasan Badge (Bottom-Right Shoulder — Outside Logo) */
 .badge-kemasan {
   background: var(--flow-green-accent);
-  bottom: clamp(6px, 1vh, 12px);
-  right: -16px;
+  bottom: 3%;
+  left: calc(100% + 14px);
+  right: auto;
 }
 .badge-kemasan svg {
-  top: -7px;
+  top: -6px;
   left: -5px;
   fill: var(--flow-green-accent);
-  transform: rotate(-15deg);
+  transform: rotate(-45deg);
 }
 
 /* 2. HIGHLIGHTS — MOBILE ONLY */
@@ -586,35 +591,40 @@
     display: none !important;
   }
 
-  /* Desktop Floating Cursor Badges */
+  /* Desktop Floating Cursor Badges (Positioned cleanly outside the PRIDE logo) */
   .cursor-badge {
     display: inline-flex !important;
   }
 
   .badge-fesyen {
-    top: 8px;
-    left: -22px;
+    top: 3%;
+    right: calc(100% + 14px);
+    left: auto;
   }
 
   .badge-kuliner {
-    top: 8px;
-    right: -22px;
+    top: 3%;
+    left: calc(100% + 14px);
+    right: auto;
   }
 
   .badge-kriya {
-    top: 50%;
-    left: -30px;
+    top: 48%;
+    right: calc(100% + 18px);
+    left: auto;
     transform: translateY(-50%);
   }
 
   .badge-video {
-    bottom: 6px;
-    left: -16px;
+    bottom: 3%;
+    right: calc(100% + 14px);
+    left: auto;
   }
 
   .badge-kemasan {
-    bottom: 6px;
-    right: -16px;
+    bottom: 3%;
+    left: calc(100% + 14px);
+    right: auto;
   }
 
   .pride-hero,
