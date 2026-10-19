@@ -59,28 +59,16 @@ function KriyaIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
 export default function HeroSection() {
   const heroSectionRef = useRef<HTMLElement>(null);
   const heroLogoRef = useRef<HTMLDivElement>(null);
-  const badgeKulinerRef = useRef<HTMLDivElement>(null);
-  const badgeFesyenRef = useRef<HTMLDivElement>(null);
-  const badgeKriyaRef = useRef<HTMLDivElement>(null);
-  const badgeKemasanRef = useRef<HTMLDivElement>(null);
-  const badgeVideoRef = useRef<HTMLDivElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
   const headlineBlockRef = useRef<HTMLDivElement>(null);
   const heroLogosRef = useRef<HTMLDivElement>(null);
   const scrollCueRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // 1. INTRO ENTRANCE SEQUENCE (Fast, smooth & crisp)
+    // Entrance sequence
     const t0 = setTimeout(() => {
       heroLogoRef.current?.classList.add('visible');
     }, 60);
-
-    // Floating cursor badges (Desktop)
-    const tBadge1 = setTimeout(() => badgeKulinerRef.current?.classList.add('visible'), 160);
-    const tBadge2 = setTimeout(() => badgeFesyenRef.current?.classList.add('visible'), 240);
-    const tBadge3 = setTimeout(() => badgeKriyaRef.current?.classList.add('visible'), 320);
-    const tBadge4 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 400);
-    const tBadge5 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 480);
 
     // Organizer Logos right below PRIDE Logo
     const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 220);
@@ -91,11 +79,6 @@ export default function HeroSection() {
 
     return () => {
       clearTimeout(t0);
-      clearTimeout(tBadge1);
-      clearTimeout(tBadge2);
-      clearTimeout(tBadge3);
-      clearTimeout(tBadge4);
-      clearTimeout(tBadge5);
       clearTimeout(tLogos);
       clearTimeout(tHeadline);
       clearTimeout(tSub);
@@ -113,59 +96,48 @@ export default function HeroSection() {
         </div>
 
         {/* Hero Section */}
-        <section className="flow-hero-section hero-content hero-inner" id="heroSection" ref={heroSectionRef}>
-          {/* Official Logo Placed Full In Front with Corner Badges */}
-          <div className="hero-logo-wrap hero-logo event-logo" ref={heroLogoRef}>
+        <section className="flow-hero-section pride-hero" id="heroSection" ref={heroSectionRef}>
+          {/* 1. Logo PRIDE: elemen terbesar & fokus utama */}
+          <div className="pride-logo hero-logo-wrap hero-logo event-logo" ref={heroLogoRef}>
             {/* Ambient Warm Backlight */}
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,184,0,0.3)_0%,_rgba(229,25,55,0.15)_50%,_transparent_70%)] blur-2xl pointer-events-none" />
 
             <Image
               src="/LOGO_PRIDE_INDUSTRI.png"
-              alt="Logo Resmi PRIDE Industri 2026"
+              alt="PRIDE Industri 2026"
               fill
               priority
               sizes="(max-width: 640px) 90vw, (max-width: 1024px) 580px, 680px"
               className="object-contain"
             />
-
-            {/* Floating Cursor Tag: Fesyen Binaan (Top-Left) — Desktop Only (md and up) */}
-            <div className="cursor-badge badge-fesyen hidden md:inline-flex" ref={badgeFesyenRef}>
-              <FesyenIcon className="w-3.5 h-3.5 text-blue-200" />
-              <span>Fesyen Binaan</span>
-              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
-            </div>
-
-            {/* Floating Cursor Tag: Kuliner Lokal (Top-Right) — Desktop Only (md and up) */}
-            <div className="cursor-badge badge-kuliner hidden md:inline-flex" ref={badgeKulinerRef}>
-              <KulinerIcon className="w-3.5 h-3.5 text-orange-200" />
-              <span>Kuliner Lokal</span>
-              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
-            </div>
-
-            {/* Floating Cursor Tag: Kriya & Kerajinan (Mid-Left) — Desktop Only (md and up) */}
-            <div className="cursor-badge badge-kriya hidden md:inline-flex" ref={badgeKriyaRef}>
-              <KriyaIcon className="w-3.5 h-3.5 text-purple-200" />
-              <span>Kriya &amp; Kerajinan</span>
-              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
-            </div>
-
-            {/* Floating Cursor Tag: Video 1 Menit (Bottom-Left) — Desktop Only (md and up) */}
-            <div className="cursor-badge badge-video hidden md:inline-flex" ref={badgeVideoRef}>
-              <VideoIcon className="w-3.5 h-3.5 text-rose-200" />
-              <span>Lomba Video 1 Menit</span>
-              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
-            </div>
-
-            {/* Floating Cursor Tag: Desain Kemasan (Bottom-Right) — Desktop Only (md and up) */}
-            <div className="cursor-badge badge-kemasan hidden md:inline-flex" ref={badgeKemasanRef}>
-              <KemasanIcon className="w-3.5 h-3.5 text-emerald-200" />
-              <span>Lomba Desain Kemasan</span>
-              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
-            </div>
           </div>
 
-          {/* Official Organizers & Partners Logo Bar */}
-          <div className="hero-organizer-card organization-logo partner-logo" ref={heroLogosRef}>
+          {/* 2. Highlights: mobile only (di bawah logo PRIDE) */}
+          <div className="pride-highlights hero-mobile-categories-row md:hidden">
+            <span className="mob-chip mob-chip-fesyen">
+              <FesyenIcon className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+              <span>Fesyen Binaan</span>
+            </span>
+            <span className="mob-chip mob-chip-kuliner">
+              <KulinerIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>Kuliner Lokal</span>
+            </span>
+            <span className="mob-chip mob-chip-kriya">
+              <KriyaIcon className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+              <span>Kriya &amp; Seni</span>
+            </span>
+            <span className="mob-chip mob-chip-video">
+              <VideoIcon className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+              <span>Video 1 Menit</span>
+            </span>
+            <span className="mob-chip mob-chip-kemasan">
+              <KemasanIcon className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span>Desain Kemasan</span>
+            </span>
+          </div>
+
+          {/* 3. Logo instansi: tepat di bawah logo PRIDE / highlights, ukuran lebih kecil */}
+          <div className="pride-institution-logo hero-organizer-card organization-logo partner-logo" ref={heroLogosRef}>
             <div className="hero-organizer-inner">
               <div className="organizer-gov-wrap">
                 <Image
@@ -193,43 +165,21 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Clean Dedicated Mobile Category Chips Row (md:hidden) */}
-          <div className="hero-mobile-categories-row md:hidden">
-            <span className="mob-chip mob-chip-fesyen">
-              <FesyenIcon className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-              <span>Fesyen Binaan</span>
-            </span>
-            <span className="mob-chip mob-chip-kuliner">
-              <KulinerIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span>Kuliner Lokal</span>
-            </span>
-            <span className="mob-chip mob-chip-kriya">
-              <KriyaIcon className="w-3.5 h-3.5 text-purple-400 shrink-0" />
-              <span>Kriya &amp; Seni</span>
-            </span>
-            <span className="mob-chip mob-chip-video">
-              <VideoIcon className="w-3.5 h-3.5 text-rose-400 shrink-0" />
-              <span>Video 1 Menit</span>
-            </span>
-            <span className="mob-chip mob-chip-kemasan">
-              <KemasanIcon className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              <span>Desain Kemasan</span>
-            </span>
-          </div>
-
-          {/* Headline Block */}
-          <div className="headline-block hero-title event-title" ref={headlineBlockRef}>
-            <h1 className="hero-title-clean">
+          {/* 4. Judul dan tanggal */}
+          <div className="pride-event-heading headline-block hero-title event-title" ref={headlineBlockRef}>
+            <h1 className="pride-event-title hero-title-clean">
               Pagelaran Ragam Inovasi <span className="title-amp">&amp;</span> Eksistensi
             </h1>
 
-            <p className="hero-subtitle-clean" ref={heroSubtitleRef}>
-              27–28 Nov 2026
+            <p className="pride-event-date hero-subtitle-clean" ref={heroSubtitleRef}>
+              27–28 November 2026
             </p>
           </div>
 
-          {/* Countdown Clock */}
-          <CompactHeroCountdown />
+          {/* 5. Countdown: paling bawah, ukuran compact dan tidak mendominasi */}
+          <div className="pride-countdown">
+            <CompactHeroCountdown />
+          </div>
 
           {/* Scroll Cue Indicator */}
           <div className="mobile-scroll-cue" ref={scrollCueRef}>
