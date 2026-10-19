@@ -108,10 +108,10 @@ export default function DesainKemasanPage() {
       setDesignFile(null);
       return;
     }
-    const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
+    const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
     if (file.size > MAX_SIZE) {
       setDesignError(
-        `File "${file.name}" berukuran ${formatFileSize(file.size)}, melebihi batas maksimal 5 MB. File tidak dapat dimasukkan.`
+        `File "${file.name}" berukuran ${formatFileSize(file.size)}, melebihi batas maksimal 10 MB. File tidak dapat dimasukkan.`
       );
       if (designInputRef.current) designInputRef.current.value = '';
       setDesignFile(null);
@@ -242,7 +242,7 @@ export default function DesainKemasanPage() {
       }
     } else if (currentStep === 3) {
       if (!designFile) {
-        setStepError('Upload file karya desain kemasan dalam format PDF (maks. 5 MB) wajib diunggah.');
+        setStepError('Upload file karya desain kemasan dalam format PDF (maks. 10 MB) wajib diunggah.');
         return;
       }
       if (designError) {
@@ -525,8 +525,8 @@ export default function DesainKemasanPage() {
               </p>
             </div>
 
-            {/* Download Buttons: Compact single-row pills */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {/* Download Buttons: Compact pills */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <a
                 href="/template-desain-kemasan.pdf"
                 download
@@ -538,7 +538,7 @@ export default function DesainKemasanPage() {
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" y1="15" x2="12" y2="3" />
                   </svg>
-                  <span className="truncate">Format Template Desain (PDF)</span>
+                  <span className="truncate">Format Template (PDF)</span>
                 </span>
                 <span className="text-[11px] text-blue-600 font-medium shrink-0 ml-2">Unduh ↗</span>
               </a>
@@ -553,9 +553,26 @@ export default function DesainKemasanPage() {
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                     <polyline points="14 2 14 8 20 8" />
                   </svg>
-                  <span className="truncate">Juknis &amp; Format Pakta (PDF)</span>
+                  <span className="truncate">Juknis &amp; Pakta (PDF)</span>
                 </span>
                 <span className="text-[11px] text-slate-600 font-medium shrink-0 ml-2">Unduh ↗</span>
+              </a>
+
+              <a
+                href="https://bit.ly/PRIDE2026LogodanVisualAssets"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:bg-slate-50 transition-colors shadow-2xs text-xs font-semibold text-slate-800"
+              >
+                <span className="flex items-center gap-2 min-w-0">
+                  <svg className="w-4 h-4 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                    <path d="M2 12h20" />
+                  </svg>
+                  <span className="truncate">Logo &amp; Aset Visual</span>
+                </span>
+                <span className="text-[11px] text-emerald-600 font-medium shrink-0 ml-2">Buka ↗</span>
               </a>
             </div>
           <div className="space-y-6">
@@ -868,14 +885,14 @@ export default function DesainKemasanPage() {
 
                   <div className="space-y-5 pt-1">
 
-                    {/* ─── 9. Upload file karya desain kemasan (PDF, maks 5 MB, wajib) ─── */}
+                    {/* ─── 9. Upload file karya desain kemasan (PDF, maks 10 MB, wajib) ─── */}
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <label className="text-xs font-bold text-slate-800 block">
                           9. File Karya Desain Kemasan <span className="text-blue-600">*</span>
                         </label>
                         <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                          PDF · Maks 5 MB
+                          PDF · Maks 10 MB
                         </span>
                       </div>
 
