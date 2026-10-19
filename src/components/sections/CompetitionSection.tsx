@@ -173,11 +173,10 @@ export default function CompetitionSection() {
               <span>Kompetisi Resmi PRIDE 2026</span>
             </div>
             <h2 className="ticket-main-title">
-              Dua Ajang Kreasi &amp; Inovasi Industri
+              Lomba Desain Kemasan &amp; Video
             </h2>
             <p className="ticket-main-desc">
-              Terbuka untuk umum WNI. Tunjukkan karya desain kemasan ramah lingkungan
-              terbaik atau video sinematik 60 detik untuk mengangkat produk IKM Kota Bandung.
+              Kompetisi yang mendorong inovasi dan kualitas produk IKM/UMKM. Terbuka untuk Mahasiswa/i, Siswa/i &amp; Umum.
             </p>
           </div>
 
@@ -198,7 +197,7 @@ export default function CompetitionSection() {
                 onClick={() => handleToggle('hadiah')}
                 className={`toggle-btn ${viewMode === 'hadiah' ? 'active' : ''}`}
               >
-                Hadiah Tunai
+                Hadiah &amp; Trofi
               </button>
               <button
                 ref={btnBenefitRef}
@@ -206,7 +205,7 @@ export default function CompetitionSection() {
                 onClick={() => handleToggle('benefit')}
                 className={`toggle-btn ${viewMode === 'benefit' ? 'active' : ''}`}
               >
-                Benefit Juara
+                Sertifikat &amp; Benefit
               </button>
             </div>
           </div>
@@ -233,40 +232,40 @@ export default function CompetitionSection() {
                 onPointerMove={handlePointerMove}
                 onPointerUp={finishDrag}
                 onPointerCancel={finishDrag}
-                title="Tarik atau klik untuk mengelupas antara Hadiah Tunai & Benefit"
+                title="Tarik atau klik untuk mengelupas antara Hadiah &amp; Benefit"
               >
                 {/* Corner Curl Invite */}
                 <div ref={cornerCurlRef} className="corner-curl" />
 
-                {/* Underneath Layer: BENEFIT (Silver/Ice Blue Foil) */}
+                {/* Underneath Layer: BENEFIT & PEMBINAAN (Silver/Ice Blue Foil) */}
                 <div className="sticker-face sticker-benefit-base">
                   <div className="sticker-top-row">
                     <span>FASILITAS JUARA</span>
-                    <span className="save-badge">GOLDEN PASS</span>
+                    <span className="save-badge">PROGRAM RESMI</span>
                   </div>
                   <div className="sticker-main-row">
-                    <span className="sticker-price">Piala</span>
+                    <span className="sticker-price">Sertifikat</span>
                     <div className="sticker-unit">
-                      <strong>Walikota Bandung</strong>
-                      <span>+ Promosi Resmi Pemkot</span>
+                      <strong>&amp; Pembinaan IKM</strong>
+                      <span>Disdagin Kota Bandung</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Top Peelable Layer: HADIAH TUNAI (Gold Metallic Foil) */}
+                {/* Top Peelable Layer: HADIAH & TROFI (Gold Metallic Foil) */}
                 <div
                   ref={stickerTopRef}
                   className="sticker-face sticker-hadiah-top"
                 >
                   <div className="sticker-top-row">
-                    <span>TOTAL HADIAH</span>
+                    <span>APRESIASI JUARA</span>
                     <span className="save-badge">KLIK / KELUPAS BENEFIT ↗</span>
                   </div>
                   <div className="sticker-main-row">
-                    <span className="sticker-price">Rp 2,25 Jt</span>
+                    <span className="sticker-price">Hadiah</span>
                     <div className="sticker-unit">
-                      <strong>Uang Tunai</strong>
-                      <span>Juara I, II &amp; III</span>
+                      <strong>&amp; Trofi Juara</strong>
+                      <span>Kategori Juara I, II &amp; III</span>
                     </div>
                   </div>
                 </div>
@@ -277,7 +276,7 @@ export default function CompetitionSection() {
 
               <p className="ticket-schedule-note">
                 {viewMode === 'benefit'
-                  ? 'Showcase video di panggung utama festival'
+                  ? 'Showcase video & fasilitasi pembinaan IKM'
                   : 'Shooting 27–28 Nov 2026 di Braga City Walk'}
               </p>
 
@@ -302,7 +301,7 @@ export default function CompetitionSection() {
                   <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  <span>Juara I: Rp 1.000.000 · Juara II: Rp 750.000 · Juara III: Rp 500.000</span>
+                  <span>Peserta: Terbuka untuk Mahasiswa/i, Siswa/i &amp; Umum</span>
                 </li>
                 <li>
                   <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -364,23 +363,23 @@ export default function CompetitionSection() {
               <div className="price-block">
                 <div className="price-amount-wrap">
                   <div className="price-roller">
-                    <span>Rp 2,25 Jt</span>
+                    <span>Hadiah</span>
                     <span>Sertifikat</span>
                   </div>
                 </div>
                 <div className="price-meta">
                   <strong>
-                    {viewMode === 'benefit' ? '+ Binaan IKM' : 'Total Hadiah'}
+                    {viewMode === 'benefit' ? '+ Pembinaan IKM' : '& Trofi Juara'}
                   </strong>
                   <span>
-                    {viewMode === 'benefit' ? 'Disdagin Kota Bandung' : 'Juara 1 s.d 3'}
+                    {viewMode === 'benefit' ? 'Disdagin Kota Bandung' : 'Kategori Juara I, II & III'}
                   </span>
                 </div>
               </div>
 
               <p className="ticket-schedule-note">
                 {viewMode === 'benefit'
-                  ? 'Fasilitasi HKI & promosi kurasi ekspor'
+                  ? 'Fasilitasi pembinaan IKM & promosi karya'
                   : 'Pendaftaran 21 Okt – 21 Nov 2026 · Gratis'}
               </p>
 
@@ -405,7 +404,7 @@ export default function CompetitionSection() {
                   <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  <span>Juara I: Rp 1.000.000 · Juara II: Rp 750.000 · Juara III: Rp 500.000</span>
+                  <span>Peserta: Terbuka untuk Mahasiswa/i, Siswa/i &amp; Umum</span>
                 </li>
                 <li>
                   <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

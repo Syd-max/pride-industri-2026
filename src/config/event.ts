@@ -50,10 +50,7 @@ export const EVENT_CONFIG = {
       theme: 'Inovasi Desain Kemasan Ramah Lingkungan untuk Produk Kuliner Berbahan Dasar Lokal',
       category: 'Kuliner',
       prize: {
-        total: 2_250_000,
-        first: 1_000_000,
-        second: 750_000,
-        third: 500_000,
+        description: 'Hadiah, Trofi & Sertifikat Pembinaan Disdagin Kota Bandung',
       },
       schedule: {
         registrationOpen: new Date('2026-10-21T00:00:00+07:00'),
@@ -72,10 +69,7 @@ export const EVENT_CONFIG = {
       theme: 'Karya Lokal, Cerita Lokal',
       categories: ['Fesyen', 'Kuliner', 'Kriya', 'PRIDE Industri 2026'],
       prize: {
-        total: 2_250_000,
-        first: 1_000_000,
-        second: 750_000,
-        third: 500_000,
+        description: 'Hadiah, Trofi & Sertifikat Pembinaan Disdagin Kota Bandung',
       },
       schedule: {
         // [PROVISIONAL] No specific registration open date in documents — using event dates

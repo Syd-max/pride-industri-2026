@@ -289,9 +289,9 @@
 
 .price-amount-wrap {
   font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: clamp(34px, 3.2vw, 42px);
+  font-size: clamp(26px, 2.6vw, 34px);
   font-weight: 800;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
   line-height: 1;
   display: inline-flex;
   align-items: baseline;
@@ -383,7 +383,7 @@
   z-index: 1;
 }
 
-/* Top Peelable Layer: HADIAH TUNAI (Gold Metallic Foil) */
+/* Top Peelable Layer: HADIAH & TROFI (Gold Metallic Foil) */
 .sticker-hadiah-top {
   background: linear-gradient(132deg, #fef08a 0%, #facc15 45%, #fde047 75%, #eab308 100%);
   color: #1c1917;
@@ -437,10 +437,11 @@
 
 .sticker-price {
   font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 38px;
+  font-size: clamp(24px, 2.6vw, 32px);
   font-weight: 800;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .sticker-unit {
