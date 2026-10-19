@@ -1,9 +1,12 @@
 /* ─── PRIDE Industri 2026 — Interactive Hero & Scroll Flow ──────────────────
-   Choreographed 25-Second Timeline Experience
-   Derived from User Reference Animation & Official Proposal Information
+   Responsive Hero / Countdown Layout (Centered, Consistent Gaps, Proportional)
 ─────────────────────────────────────────────────────────────────────────────── */
 
 :root {
+  --hero-gap: clamp(10px, 1.8vh, 18px);
+  --hero-padding-x: clamp(16px, 4vw, 48px);
+  --hero-padding-y: clamp(16px, 3vh, 32px);
+
   --flow-white: #ffffff;
   --flow-text-dark: #111827;
   --flow-text-muted: #6b7280;
@@ -20,36 +23,33 @@
   --flow-system-blue-text: #2563eb;
 }
 
-/* Hero Container — Dedicated Landing View that fills viewport across all screens */
+/* Main hero stage */
 .scroll-stage {
-  height: 100vh;
-  height: 100dvh;
-  min-height: 560px;
-  position: relative;
   width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  position: relative;
   background-color: #070a13;
-  overflow: hidden;
 }
 
-/* Hero Viewport Container — Full Height & Balanced across ALL screens */
+/* Hero Viewport Container — Centered composition, clearing fixed navbar */
 .flow-viewport {
-  position: relative;
   width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  min-height: 560px;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding-top: calc(72px + env(safe-area-inset-top, 0px));
-  padding-bottom: max(14px, calc(8px + 1vh + env(safe-area-inset-bottom, 0px)));
-  padding-left: clamp(12px, 3vw, 24px);
-  padding-right: clamp(12px, 3vw, 24px);
-  background-color: #070a13;
-  z-index: 20;
+  justify-content: center;
   box-sizing: border-box;
-  overflow: hidden;
+  padding:
+    max(calc(68px + var(--hero-padding-y)), calc(68px + env(safe-area-inset-top, 0px)))
+    var(--hero-padding-x)
+    max(var(--hero-padding-y), env(safe-area-inset-bottom, 0px));
+  z-index: 20;
 }
 
 /* Scenic Braga Landmark Background Wrapper (Full Coverage, Crisp & Balanced) */
@@ -61,7 +61,7 @@
   background-color: #070a13;
 }
 
-/* Ambient wide-bleed layer: soft atmospheric extension matching sky and heritage facade */
+/* Ambient wide-bleed layer */
 .scenic-bg-ambient {
   position: absolute;
   inset: -30px;
@@ -113,63 +113,36 @@
   }
 }
 
-/* Hero Content Area — Full Height, Proportional & Spanned across ALL screens */
+/* Inner content wrapper — Clean centered flex column with consistent gap */
 .flow-hero-section {
-  position: relative;
-  z-index: 10;
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  text-align: center;
-  max-width: 960px;
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-  padding: 0;
+  justify-content: center;
+  gap: var(--hero-gap);
+  min-width: 0;
   box-sizing: border-box;
+  text-align: center;
+  position: relative;
+  z-index: 10;
   will-change: transform, opacity;
 }
 
-/* Three Semantic Vertical Zones (Top, Mid, Bottom) */
-.hero-top-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  gap: clamp(4px, 0.8vh, 10px);
-  flex-shrink: 0;
-}
-
-.hero-mid-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  flex-shrink: 0;
-}
-
-.hero-bottom-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  gap: clamp(4px, 1vh, 10px);
-  flex-shrink: 0;
-}
-
-/* Official Logo in front — Scaled gracefully to fill device proportions */
+/* Event Logo Wrapper */
 .hero-logo-wrap {
   position: relative;
-  width: clamp(270px, min(88vw, 52vh), 560px);
-  height: clamp(140px, min(44vw, 25vh), 270px);
-  margin: 0 auto;
+  width: clamp(240px, min(75vw, 36vh), 420px);
+  height: clamp(120px, min(36vw, 18vh), 190px);
+  margin: 0;
   filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.85));
   animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   flex-shrink: 0;
 }
 
-/* Floating Cursor Badges (Positioned snugly around logo shoulders on tablet/desktop) */
+/* Floating Cursor Badges (Desktop & Tablets > 768px) */
 .cursor-badge {
   position: absolute;
   display: inline-flex;
@@ -194,7 +167,7 @@
   height: 12px;
 }
 
-/* Fesyen Binaan Badge (Upper-left shoulder of logo) */
+/* Fesyen Binaan Badge */
 .badge-fesyen {
   background: var(--flow-blue-accent);
   top: clamp(14px, 2.5vh, 26px);
@@ -207,7 +180,7 @@
   transform: rotate(75deg);
 }
 
-/* Kuliner Lokal Badge (Upper-right shoulder of logo) */
+/* Kuliner Lokal Badge */
 .badge-kuliner {
   background: var(--flow-orange-accent);
   top: clamp(14px, 2.5vh, 26px);
@@ -220,7 +193,7 @@
   transform: rotate(-145deg);
 }
 
-/* Kriya & Kerajinan Badge (Mid-left shoulder of logo) */
+/* Kriya & Kerajinan Badge */
 .badge-kriya {
   background: #9333ea;
   top: 50%;
@@ -234,7 +207,7 @@
   transform: rotate(45deg);
 }
 
-/* Video 1 Menit Badge (Lower-left flank of logo) */
+/* Video 1 Menit Badge */
 .badge-video {
   background: var(--flow-rose-accent);
   bottom: clamp(6px, 1vh, 12px);
@@ -247,7 +220,7 @@
   transform: rotate(135deg);
 }
 
-/* Desain Kemasan Badge (Lower-right flank of logo) */
+/* Desain Kemasan Badge */
 .badge-kemasan {
   background: var(--flow-green-accent);
   bottom: clamp(6px, 1vh, 12px);
@@ -282,91 +255,21 @@
   }
 }
 
-/* Human Editorial Headline Block — Dynamic Sizing for All Screens */
-.headline-block {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: 0 auto;
-  width: 100%;
-  max-width: clamp(340px, min(92vw, 54vh), 580px);
-  padding: clamp(8px, 1.3vh, 13px) clamp(14px, 2.2vw, 24px);
-  background: rgba(7, 10, 19, 0.8);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 14px;
-  box-shadow: 
-    0 16px 40px -10px rgba(0, 0, 0, 0.8),
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
-  animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-  flex-shrink: 0;
-}
-
-.headline-block.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.hero-title-clean {
-  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: clamp(15.5px, min(4.2vw, 2.3vh), 23px);
-  font-weight: 900;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-  text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.9),
-    0 6px 20px rgba(0, 0, 0, 0.95);
-  margin: 0;
-}
-
-.title-amp {
-  display: inline-block;
-  color: #f59e0b;
-  font-style: italic;
-  font-weight: 700;
-  padding: 0 4px;
-}
-
-.hero-subtitle-clean {
-  color: #93c5fd;
-  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: clamp(11.5px, min(3vw, 1.5vh), 14px);
-  line-height: 1.3;
-  margin: 3px auto 0;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.95),
-    0 4px 12px rgba(0, 0, 0, 0.9);
-  animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
-  transition: all 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.hero-subtitle-clean.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* Official Organizers & Partners Logo Bar */
 .hero-organizer-card {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
-  padding: clamp(4px, 0.7vh, 8px) clamp(14px, 2vw, 24px);
+  margin: 0;
+  padding: clamp(3px, 0.5vh, 6px) clamp(12px, 1.8vw, 20px);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.9);
   border-radius: 9999px;
   box-shadow: 
-    0 10px 28px rgba(0, 0, 0, 0.28),
-    0 2px 6px rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(0, 0, 0, 0.04);
+    0 8px 24px rgba(0, 0, 0, 0.28),
+    0 2px 6px rgba(0, 0, 0, 0.12);
   animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
   transition: 
     opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
@@ -404,7 +307,7 @@
 }
 
 .organizer-gov-img {
-  height: clamp(19px, 2.5vh, 28px);
+  height: clamp(18px, 2.2vh, 24px);
   width: auto;
   object-fit: contain;
   display: block;
@@ -412,13 +315,13 @@
 
 .organizer-divider {
   width: 1.5px;
-  height: clamp(14px, 1.8vh, 18px);
+  height: clamp(12px, 1.6vh, 16px);
   background: rgba(15, 23, 42, 0.18);
   border-radius: 1px;
 }
 
 .organizer-tactlink-img {
-  height: clamp(17px, 2.3vh, 26px);
+  height: clamp(16px, 2vh, 22px);
   width: auto;
   object-fit: contain;
   display: block;
@@ -429,10 +332,10 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: clamp(4px, 1vw, 7px);
+  gap: 5px;
   width: 100%;
-  max-width: min(94vw, 380px);
-  margin: 0 auto;
+  max-width: min(94vw, 360px);
+  margin: 0;
   z-index: 2;
   box-sizing: border-box;
   animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
@@ -444,9 +347,9 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: clamp(3px, 0.6vh, 5px) clamp(7px, 1.2vw, 10px);
+  padding: 3px 8px;
   border-radius: 999px;
-  font-size: clamp(9.5px, 1.1vh, 10.5px);
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: -0.01em;
   background: rgba(15, 23, 42, 0.7);
@@ -460,7 +363,76 @@
   box-sizing: border-box;
 }
 
-/* Scroll Cue Indicator — Positioned cleanly at bottom edge */
+/* Headline Block */
+.headline-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 0;
+  width: 100%;
+  max-width: clamp(320px, 48vw, 560px);
+  padding: clamp(6px, 1vh, 10px) clamp(14px, 2vw, 22px);
+  background: rgba(7, 10, 19, 0.8);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  box-shadow: 
+    0 16px 40px -10px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  flex-shrink: 0;
+}
+
+.headline-block.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.hero-title-clean {
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: clamp(15px, 2.2vw, 22px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  text-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.9),
+    0 6px 20px rgba(0, 0, 0, 0.95);
+  margin: 0;
+}
+
+.title-amp {
+  display: inline-block;
+  color: #f59e0b;
+  font-style: italic;
+  font-weight: 700;
+  padding: 0 4px;
+}
+
+.hero-subtitle-clean {
+  color: #93c5fd;
+  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
+  font-size: clamp(11.5px, 1.2vw, 13.5px);
+  line-height: 1.3;
+  margin: 2px auto 0;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.95),
+    0 4px 12px rgba(0, 0, 0, 0.9);
+  animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  transition: all 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-subtitle-clean.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scroll Cue Indicator */
 .mobile-scroll-cue {
   display: flex;
   justify-content: center;
@@ -474,10 +446,10 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: clamp(3px, 0.6vh, 6px) clamp(12px, 1.8vw, 16px);
-  font-size: clamp(10px, 1.2vh, 11.5px);
+  padding: 3px 12px;
+  font-size: 10.5px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.7);
   background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -494,8 +466,25 @@
   transform: translateY(1px);
 }
 
-/* Hide floating cursor badges on narrow mobile screens (md:hidden handles chips) */
+/* Avoid unexpected sizing and overflow */
+.flow-viewport *,
+.flow-hero-section * {
+  box-sizing: border-box;
+}
+
+.flow-viewport img,
+.flow-hero-section img {
+  max-width: 100%;
+}
+
+/* Tablet */
 @media (max-width: 768px) {
+  :root {
+    --hero-gap: clamp(10px, 1.8vh, 16px);
+    --hero-padding-x: 16px;
+    --hero-padding-y: 20px;
+  }
+
   .cursor-badge,
   .badge-fesyen,
   .badge-kuliner,
@@ -513,25 +502,31 @@
   }
 }
 
-/* Safety Fallback for Very Short Screens (e.g. mobile landscape or height < 560px) */
-@media (max-height: 560px) {
+/* Small mobile */
+@media (max-width: 480px) {
+  :root {
+    --hero-gap: 10px;
+    --hero-padding-x: 14px;
+    --hero-padding-y: 16px;
+  }
+
+  .hero-logo-wrap {
+    width: clamp(220px, 78vw, 300px);
+    height: clamp(110px, 38vw, 150px);
+  }
+}
+
+/* Short screens: reduce spacing to prevent overflow and allow natural scroll */
+@media (max-height: 650px) {
+  :root {
+    --hero-gap: 8px;
+    --hero-padding-y: 10px;
+  }
+
   .scroll-stage,
   .flow-viewport {
     height: auto !important;
     min-height: 100vh !important;
-    overflow-y: visible !important;
-  }
-
-  .flow-viewport {
-    padding-top: 72px !important;
-    padding-bottom: 24px !important;
-    justify-content: flex-start !important;
-  }
-
-  .flow-hero-section {
-    height: auto !important;
-    justify-content: flex-start !important;
-    gap: 12px !important;
   }
 }
 
