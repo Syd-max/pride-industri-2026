@@ -248,57 +248,47 @@ export default function ProgramSection() {
           </p>
 
           {/* Apple-style Segmented Day Switcher */}
-          <div className="mt-8 sm:mt-10 inline-flex flex-col sm:flex-row p-1.5 rounded-2xl sm:rounded-full bg-slate-200/75 border border-slate-300/80 shadow-inner gap-1.5 w-full sm:w-auto font-[family-name:var(--font-poppins)]">
+          <div className="mt-5 sm:mt-8 grid grid-cols-2 p-1 sm:p-1.5 rounded-xl sm:rounded-full bg-slate-200/75 border border-slate-300/80 shadow-inner gap-1 w-full max-w-xs sm:max-w-none sm:w-auto sm:inline-flex sm:flex-row font-[family-name:var(--font-poppins)] mx-auto">
             {/* Day 1 Switcher */}
             <button
               type="button"
               onClick={() => setActiveDay('day1')}
-              className={`px-6 py-2.5 rounded-xl sm:rounded-full text-left sm:text-center transition-all cursor-pointer flex items-center justify-between sm:justify-center gap-3 ${
+              className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-full text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
                 activeDay === 'day1'
-                  ? 'bg-white text-slate-900 shadow-sm'
+                  ? 'bg-white text-slate-900 shadow-xs sm:shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <div className="flex flex-col sm:items-center leading-tight">
-                <span className="text-xs sm:text-sm font-extrabold tracking-wide uppercase">
-                  DAY 1
-                </span>
-                <span className="text-[11px] sm:text-xs font-medium tracking-tight text-slate-600 mt-0.5">
-                  Jumat, 27 Nov 2026
-                </span>
-              </div>
-              {activeDay === 'day1' && (
-                <span className="sm:hidden w-2 h-2 rounded-full bg-blue-600" />
-              )}
+              <span className="text-[11px] sm:text-sm font-extrabold tracking-wide uppercase">
+                DAY 1
+              </span>
+              <span className="text-[10px] sm:text-xs font-medium tracking-tight text-slate-500 sm:text-slate-600 mt-0.5">
+                Jumat, 27 Nov 2026
+              </span>
             </button>
 
             {/* Day 2 Switcher */}
             <button
               type="button"
               onClick={() => setActiveDay('day2')}
-              className={`px-6 py-2.5 rounded-xl sm:rounded-full text-left sm:text-center transition-all cursor-pointer flex items-center justify-between sm:justify-center gap-3 ${
+              className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-full text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
                 activeDay === 'day2'
-                  ? 'bg-white text-slate-900 shadow-sm'
+                  ? 'bg-white text-slate-900 shadow-xs sm:shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <div className="flex flex-col sm:items-center leading-tight">
-                <span className="text-xs sm:text-sm font-extrabold tracking-wide uppercase">
-                  DAY 2
-                </span>
-                <span className="text-[11px] sm:text-xs font-medium tracking-tight text-slate-600 mt-0.5">
-                  Sabtu, 28 Nov 2026
-                </span>
-              </div>
-              {activeDay === 'day2' && (
-                <span className="sm:hidden w-2 h-2 rounded-full bg-blue-600" />
-              )}
+              <span className="text-[11px] sm:text-sm font-extrabold tracking-wide uppercase">
+                DAY 2
+              </span>
+              <span className="text-[10px] sm:text-xs font-medium tracking-tight text-slate-500 sm:text-slate-600 mt-0.5">
+                Sabtu, 28 Nov 2026
+              </span>
             </button>
           </div>
         </div>
 
         {/* ─── Apple-Inspired Visual Timeline Spine & Schedule Cards ─── */}
-        <div className="relative space-y-6 sm:space-y-8">
+        <div className="relative space-y-2.5 sm:space-y-6">
           
           {/* Continuous vertical timeline connector (Desktop only) */}
           <div
@@ -310,10 +300,10 @@ export default function ProgramSection() {
             return (
               <div
                 key={item.id}
-                className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-7 group"
+                className="relative flex flex-col sm:flex-row items-stretch sm:items-start sm:gap-7 group"
               >
-                {/* Left Column: Sequence Number (Tanpa Jam, Murni Susunan Acara) */}
-                <div className="w-full sm:w-[92px] flex-shrink-0 pt-1 flex items-center sm:items-end justify-between sm:justify-start sm:flex-col gap-0.5 border-b sm:border-b-0 pb-2 sm:pb-0 border-slate-200/60">
+                {/* Desktop-only: Left Column Sequence Number */}
+                <div className="hidden sm:flex sm:w-[92px] flex-shrink-0 pt-1 flex-col items-end gap-0.5">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400">
                     SESI
                   </span>
@@ -322,7 +312,7 @@ export default function ProgramSection() {
                   </div>
                 </div>
 
-                {/* Center Timeline Node Bead (Desktop only) */}
+                {/* Desktop-only: Center Timeline Node Bead */}
                 <div
                   className="hidden sm:flex items-center justify-center relative z-10 flex-shrink-0 pt-2"
                   aria-hidden="true"
@@ -332,21 +322,34 @@ export default function ProgramSection() {
                   />
                 </div>
 
-                {/* Right Column: Clean & Refined Rundown Card */}
-                <div className="flex-1 w-full bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-[0_2px_12px_rgba(15,23,42,0.03)] hover:border-slate-300 hover:shadow-[0_8px_24px_-6px_rgba(15,23,42,0.05)] transition-all">
-                  <div className="flex flex-col gap-2">
-                    <div>
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide border ${item.theme.badgeBg} ${item.theme.badgeText} ${item.theme.badgeBorder}`}
-                      >
-                        <span className={`w-1.5 h-1.5 rounded-full ${item.theme.dotColor}`} />
-                        <span>{item.category}</span>
+                {/* Rundown Card (Mobile: compact integrated card; Desktop: spacious card) */}
+                <div className="flex-1 w-full bg-white rounded-xl sm:rounded-3xl p-3 sm:p-6 border border-slate-200/90 shadow-[0_2px_8px_rgba(15,23,42,0.03)] sm:shadow-[0_2px_12px_rgba(15,23,42,0.03)] hover:border-slate-300 hover:shadow-[0_8px_24px_-6px_rgba(15,23,42,0.05)] transition-all">
+                  <div className="flex items-center sm:items-start gap-3 sm:gap-4">
+                    {/* Mobile-only: Compact SESI Badge */}
+                    <div className="sm:hidden flex flex-col items-center justify-center w-11 h-11 rounded-lg bg-slate-100/90 border border-slate-200/80 shrink-0 text-center">
+                      <span className="text-[7.5px] font-mono font-bold uppercase tracking-wider text-slate-400 leading-none">
+                        SESI
+                      </span>
+                      <span className="text-base font-black font-mono text-slate-900 leading-tight mt-0.5 group-hover:text-blue-600 transition-colors">
+                        {item.step}
                       </span>
                     </div>
 
-                    <h3 className="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight leading-snug">
-                      {item.title}
-                    </h3>
+                    {/* Content: Badge & Title */}
+                    <div className="flex-1 min-w-0 flex flex-col gap-1 sm:gap-2">
+                      <div>
+                        <span
+                          className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[9.5px] sm:text-[11px] font-bold tracking-wide border ${item.theme.badgeBg} ${item.theme.badgeText} ${item.theme.badgeBorder}`}
+                        >
+                          <span className={`w-1.5 h-1.5 rounded-full ${item.theme.dotColor}`} />
+                          <span>{item.category}</span>
+                        </span>
+                      </div>
+
+                      <h3 className="text-[13.5px] sm:text-xl font-extrabold text-slate-900 tracking-tight leading-snug">
+                        {item.title}
+                      </h3>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -363,9 +366,9 @@ export default function ProgramSection() {
         </div>
 
         {/* Bottom Helpful Note */}
-        <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-2 p-3 sm:px-6 rounded-2xl bg-white border border-slate-200/80 text-xs text-slate-500 shadow-2xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+        <div className="mt-8 sm:mt-12 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-xl sm:rounded-2xl bg-white border border-slate-200/80 text-[11px] sm:text-xs text-slate-500 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
             <span>
               Seluruh sesi pameran publik &amp; panggung di <strong>Braga City Walk</strong> terbuka gratis tanpa tiket masuk.
             </span>
