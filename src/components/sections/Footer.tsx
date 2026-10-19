@@ -46,9 +46,7 @@ export default function Footer() {
 
             {/* Description */}
             <p className="text-xs sm:text-sm text-slate-300 font-medium max-w-xl leading-relaxed">
-              Pagelaran Ragam Inovasi dan Eksistensi — Merayakan Daya Cipta dan
-              Kemandirian Industri Kecil dan Menengah (IKM) binaan Kota Bandung
-              melalui pameran produk unggulan, fashion runway, talkshow industri, dan penyerahan sertifikat mutu.
+              Pagelaran Ragam Inovasi dan Eksistensi (PRIDE) Industri 2026 merupakan festival perayaan kreativitas, inovasi, dan kemandirian Industri Kecil dan Menengah (IKM) binaan Kota Bandung.
             </p>
 
             {/* Event Dates & Venues Badge */}

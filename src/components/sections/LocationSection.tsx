@@ -40,29 +40,17 @@ export default function LocationSection() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 mb-3 shadow-xs">
             <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-            Lokasi &amp; Peta Venue Resmi
+            Lokasi Venue
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Panggung Utama di Koridor Heritage Braga
+            Braga City Walk Bandung
           </h2>
-          <p className="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Seluruh rangkaian kegiatan festival, pameran produk IKM binaan, business matching, talkshow, fashion show, hingga awarding diselenggarakan di Braga City Walk Bandung.
+          <p className="mt-2 text-xs sm:text-sm text-slate-600">
+            Pusat seluruh rangkaian kegiatan festival PRIDE Industri 2026.
           </p>
-
-          {/* Quick Schedule Badge Capsules */}
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white text-slate-800 border border-slate-200/90 shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-blue-600" />
-              <span>Jum&apos;at, 27 Nov: 13:30 – 21:00 WIB</span>
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white text-slate-800 border border-slate-200/90 shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-600" />
-              <span>Sabtu, 28 Nov: 10:00 – 21:00 WIB</span>
-            </span>
-          </div>
         </div>
 
         {/* ─── Apple Maps Master Container ─── */}
@@ -213,20 +201,9 @@ export default function LocationSection() {
             {/* Venue Headline & Quick Actions Bar */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border bg-blue-50 text-blue-700 border-blue-200">
-                    {VENUE.badge}
-                  </span>
-                  <span className="text-xs text-slate-500 font-medium">
-                    {VENUE.schedule}
-                  </span>
-                </div>
                 <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                   {VENUE.name}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
-                  {VENUE.role}
-                </p>
               </div>
 
               {/* Action Buttons: Direct to Google Maps & Copy Address */}
