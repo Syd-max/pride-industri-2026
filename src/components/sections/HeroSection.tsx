@@ -56,14 +56,6 @@ function KriyaIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
   );
 }
 
-function SparkleIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-    </svg>
-  );
-}
-
 export default function HeroSection() {
   const heroSectionRef = useRef<HTMLElement>(null);
   const heroLogoRef = useRef<HTMLDivElement>(null);
@@ -83,17 +75,19 @@ export default function HeroSection() {
       heroLogoRef.current?.classList.add('visible');
     }, 60);
 
-    // Floating cursor badges
+    // Floating cursor badges (Desktop)
     const tBadge1 = setTimeout(() => badgeKulinerRef.current?.classList.add('visible'), 160);
     const tBadge2 = setTimeout(() => badgeFesyenRef.current?.classList.add('visible'), 240);
     const tBadge3 = setTimeout(() => badgeKriyaRef.current?.classList.add('visible'), 320);
     const tBadge4 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 400);
     const tBadge5 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 480);
 
-    // Headline Card, Subtitle & Organizer Logos
-    const tHeadline = setTimeout(() => headlineBlockRef.current?.classList.add('visible'), 540);
-    const tSub = setTimeout(() => heroSubtitleRef.current?.classList.add('visible'), 620);
-    const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 700);
+    // Organizer Logos right below PRIDE Logo
+    const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 220);
+
+    // Clean Editorial Headline & Subtitle
+    const tHeadline = setTimeout(() => headlineBlockRef.current?.classList.add('visible'), 380);
+    const tSub = setTimeout(() => heroSubtitleRef.current?.classList.add('visible'), 480);
 
     return () => {
       clearTimeout(t0);
@@ -102,9 +96,9 @@ export default function HeroSection() {
       clearTimeout(tBadge3);
       clearTimeout(tBadge4);
       clearTimeout(tBadge5);
+      clearTimeout(tLogos);
       clearTimeout(tHeadline);
       clearTimeout(tSub);
-      clearTimeout(tLogos);
     };
   }, []);
 
@@ -170,59 +164,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Clean Dedicated Mobile Category Chips Row (md:hidden) */}
-          <div className="hero-mobile-categories-row md:hidden">
-            <span className="mob-chip mob-chip-fesyen">
-              <FesyenIcon className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-              <span>Fesyen Binaan</span>
-            </span>
-            <span className="mob-chip mob-chip-kuliner">
-              <KulinerIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span>Kuliner Lokal</span>
-            </span>
-            <span className="mob-chip mob-chip-kriya">
-              <KriyaIcon className="w-3.5 h-3.5 text-purple-400 shrink-0" />
-              <span>Kriya &amp; Seni</span>
-            </span>
-            <span className="mob-chip mob-chip-video">
-              <VideoIcon className="w-3.5 h-3.5 text-rose-400 shrink-0" />
-              <span>Video 1 Menit</span>
-            </span>
-            <span className="mob-chip mob-chip-kemasan">
-              <KemasanIcon className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              <span>Desain Kemasan</span>
-            </span>
-          </div>
-
-          {/* Clean, Elegant Headline Title with Enhanced Visual Styling & Smooth Entrance */}
-          <div className="headline-block" ref={headlineBlockRef}>
-            {/* Top Specular Shimmer Line */}
-            <div className="headline-glow-ambient" />
-
-            {/* Event Category Tag Pill — Sleek, Responsive, Single-Line Capsule */}
-            <div className="headline-tag-pill">
-              <SparkleIcon className="tag-sparkle-icon" />
-              <span className="tag-text">
-                <span className="hidden sm:inline">Festival Industri Kreatif &amp; Seni Kota Bandung</span>
-                <span className="sm:hidden">Festival Industri Kreatif</span>
-              </span>
-              <span className="tag-dot">•</span>
-              <span className="tag-location">27–28 Nov 2026</span>
-            </div>
-
-            <h1 className="hero-title-clean">
-              Pagelaran Ragam Inovasi <span className="title-amp">&amp;</span> Eksistensi
-            </h1>
-
-            <p className="hero-subtitle-clean" ref={heroSubtitleRef}>
-              Merayakan kebangkitan industri kreatif Kota Bandung: pameran produk fesyen, kuliner, dan kriya binaan, panggung apresiasi seni, serta kompetisi bergengsi di Braga City Walk.
-            </p>
-          </div>
-
-          {/* Real-Time Live Dot-Matrix Countdown (Compact & Integrated into Page Awal) */}
-          <CompactHeroCountdown />
-
-          {/* Official Organizers & Partners Logo Bar */}
+          {/* REVISI 1: Official Organizers & Partners Logo Bar — Directly below PRIDE Logo */}
           <div className="hero-organizer-card" ref={heroLogosRef}>
             <div className="hero-organizer-inner">
               <div className="organizer-gov-wrap">
@@ -250,6 +192,50 @@ export default function HeroSection() {
               </div>
             </div>
           </div>
+
+          {/* Clean Dedicated Mobile Category Chips Row (md:hidden) */}
+          <div className="hero-mobile-categories-row md:hidden">
+            <span className="mob-chip mob-chip-fesyen">
+              <FesyenIcon className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+              <span>Fesyen Binaan</span>
+            </span>
+            <span className="mob-chip mob-chip-kuliner">
+              <KulinerIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>Kuliner Lokal</span>
+            </span>
+            <span className="mob-chip mob-chip-kriya">
+              <KriyaIcon className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+              <span>Kriya &amp; Seni</span>
+            </span>
+            <span className="mob-chip mob-chip-video">
+              <VideoIcon className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+              <span>Video 1 Menit</span>
+            </span>
+            <span className="mob-chip mob-chip-kemasan">
+              <KemasanIcon className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span>Desain Kemasan</span>
+            </span>
+          </div>
+
+          {/* REVISI 2: Clean Human Editorial Headline (Zero AI Slop, Elegant & Minimalist) */}
+          <div className="headline-block" ref={headlineBlockRef}>
+            <div className="headline-kicker-human">
+              <span>Festival Industri Kreatif &amp; Seni Kota Bandung</span>
+              <span className="kicker-dot" />
+              <span className="kicker-date">27–28 Nov 2026</span>
+            </div>
+
+            <h1 className="hero-title-clean">
+              Pagelaran Ragam Inovasi <span className="title-amp">&amp;</span> Eksistensi
+            </h1>
+
+            <p className="hero-subtitle-clean" ref={heroSubtitleRef}>
+              Merayakan kebangkitan industri kreatif Kota Bandung: pameran produk fesyen, kuliner, dan kriya binaan, panggung apresiasi seni, serta kompetisi bergengsi di Braga City Walk.
+            </p>
+          </div>
+
+          {/* REVISI 3: Real-Time Live Gambar 4 Launch Countdown */}
+          <CompactHeroCountdown />
 
           {/* Clean Scroll Cue Indicator (Inviting exploration to About section) */}
           <div className="mobile-scroll-cue" ref={scrollCueRef}>

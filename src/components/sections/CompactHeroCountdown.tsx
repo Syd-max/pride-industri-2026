@@ -3,103 +3,6 @@
 import { useState, useEffect } from 'react';
 import './compact-hero-countdown.css';
 
-/* ============================================================
-   5x7 BITMAP FONT MATRIX ENGINE FOR DIGITS '0' THROUGH '9'
-   Standard Industrial 5x7 LED / Dot-Matrix Display Pattern
-   ============================================================ */
-const FONT_5X7: Record<string, string[]> = {
-  '0': [
-    "01110",
-    "10001",
-    "10011",
-    "10101",
-    "11001",
-    "10001",
-    "01110"
-  ],
-  '1': [
-    "00100",
-    "01100",
-    "00100",
-    "00100",
-    "00100",
-    "00100",
-    "01110"
-  ],
-  '2': [
-    "01110",
-    "10001",
-    "00001",
-    "00110",
-    "01000",
-    "10000",
-    "11111"
-  ],
-  '3': [
-    "11110",
-    "00001",
-    "00001",
-    "01110",
-    "00001",
-    "10001",
-    "01110"
-  ],
-  '4': [
-    "00010",
-    "00110",
-    "01010",
-    "10010",
-    "11111",
-    "00010",
-    "00010"
-  ],
-  '5': [
-    "11111",
-    "10000",
-    "11110",
-    "00001",
-    "00001",
-    "10001",
-    "01110"
-  ],
-  '6': [
-    "01110",
-    "10000",
-    "10000",
-    "11110",
-    "10001",
-    "10001",
-    "01110"
-  ],
-  '7': [
-    "11111",
-    "00001",
-    "00010",
-    "00100",
-    "01000",
-    "01000",
-    "01000"
-  ],
-  '8': [
-    "01110",
-    "10001",
-    "10001",
-    "01110",
-    "10001",
-    "10001",
-    "01110"
-  ],
-  '9': [
-    "01110",
-    "10001",
-    "10001",
-    "01111",
-    "00001",
-    "00001",
-    "01110"
-  ]
-};
-
 const EVENT_TARGET_MS = new Date('2026-11-27T08:00:00+07:00').getTime();
 
 interface TimeValues {
@@ -129,16 +32,16 @@ function calculateTimeLeft(): TimeValues {
 export default function CompactHeroCountdown() {
   const [timeLeft, setTimeLeft] = useState<TimeValues>({
     hari: '38',
-    jam: '15',
-    menit: '21',
-    detik: '14'
+    jam: '14',
+    menit: '09',
+    detik: '48',
   });
 
   useEffect(() => {
-    // Immediate calculation
+    // Initial live calculation
     setTimeLeft(calculateTimeLeft());
 
-    // Live 1-second interval ticker (pure real-time countdown, no scroll needed)
+    // Continuous 1-second interval live ticker
     const interval = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
@@ -146,67 +49,56 @@ export default function CompactHeroCountdown() {
     return () => clearInterval(interval);
   }, []);
 
-  const metrics = [
-    { key: 'hari' as const, label: 'HARI', val: timeLeft.hari, isDetik: false },
-    { key: 'jam' as const, label: 'JAM', val: timeLeft.jam, isDetik: false },
-    { key: 'menit' as const, label: 'MENIT', val: timeLeft.menit, isDetik: false },
-    { key: 'detik' as const, label: 'DETIK', val: timeLeft.detik, isDetik: true },
+  const timeUnits = [
+    { key: 'hari', label: 'HARI', value: timeLeft.hari },
+    { key: 'jam', label: 'JAM', value: timeLeft.jam },
+    { key: 'menit', label: 'MENIT', value: timeLeft.menit },
+    { key: 'detik', label: 'DETIK', value: timeLeft.detik },
   ];
 
   return (
-    <div className="compact-countdown-wrap" aria-label="Hitung Mundur PRIDE Industri 2026">
-      <div className="compact-countdown-card">
-        {/* Top Header — Human Editorial Design */}
-        <div className="compact-header-bar">
-          <div className="compact-header-left">
-            <span className="compact-human-badge">Hitung Mundur</span>
-            <span className="compact-human-sub">Menuju PRIDE Industri 2026</span>
-          </div>
-          <div className="compact-header-right">
-            <span className="compact-human-venue">Braga City Walk · 27–28 Nov 2026</span>
-          </div>
+    <div className="launch-countdown-container" aria-label="Menghitung Mundur PRIDE Industri">
+      {/* Top Header Row */}
+      <div className="launch-header-row">
+        {/* Left Stepped Geometric Bars */}
+        <div className="launch-stepped-bars-left" aria-hidden="true">
+          <span className="step-bar step-1" />
+          <span className="step-bar step-2" />
+          <span className="step-bar step-3" />
         </div>
 
-        {/* 4 Matrix Columns: HARI, JAM, MENIT, DETIK */}
-        <div className="compact-matrix-grid">
-          {metrics.map((m) => (
-            <div
-              key={m.key}
-              className={`compact-stat-cell ${m.isDetik ? 'compact-cell-detik' : ''}`}
-            >
-              <span className="compact-stat-title">{m.label}</span>
+        {/* Right Header Text: Menghitung Mundur / PRIDE INDUSTRI */}
+        <div className="launch-header-text">
+          <span className="launch-label-lead">Menghitung Mundur</span>
+          <span className="launch-label-target">PRIDE INDUSTRI</span>
+        </div>
+      </div>
 
-              <div className="compact-matrix-word">
-                {m.val.split('').map((digit, digitIdx) => {
-                  const pattern = FONT_5X7[digit] || FONT_5X7['0'];
-                  return (
-                    <div key={digitIdx} className="compact-matrix-char">
-                      {pattern.map((rowStr, r) =>
-                        rowStr.split('').map((bit, c) => (
-                          <span
-                            key={`${r}-${c}`}
-                            className={`compact-pixel-dot ${bit === '1' ? 'on' : ''}`}
-                          />
-                        ))
-                      )}
-                    </div>
-                  );
-                })}
+      {/* Main 4-Column Digits Display Box */}
+      <div className="launch-digits-box">
+        {timeUnits.map((unit) => (
+          <div key={unit.key} className="launch-stat-col">
+            <div className="launch-number-wrap">
+              <span className="launch-number-val">{unit.value}</span>
+              <div className="launch-unit-ribbon">
+                <span className="launch-unit-text">{unit.label}</span>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
 
-        {/* Card Footer */}
-        <div className="compact-footer-bar">
-          <div className="compact-footer-left">
-            <span>Braga City Walk &amp; Koridor Braga</span>
-            <span>•</span>
-            <span>Festival &amp; Awarding IKM Binaan</span>
-          </div>
-          <div className="compact-footer-right">
-            <span>Disdagin Kota Bandung</span>
-          </div>
+      {/* Bottom Footer Row */}
+      <div className="launch-footer-row">
+        <span className="launch-footer-tagline">
+          in mean time you can do whatever you want
+        </span>
+        {/* Right Stepped Blue Geometric Bars */}
+        <div className="launch-stepped-bars-right" aria-hidden="true">
+          <span className="step-bar-blue step-b1" />
+          <span className="step-bar-blue step-b2" />
+          <span className="step-bar-blue step-b3" />
+          <span className="step-bar-blue step-b4" />
         </div>
       </div>
     </div>

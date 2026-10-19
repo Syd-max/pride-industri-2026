@@ -1,245 +1,227 @@
-/* ─── Compact Dot-Matrix Real-Time Countdown for Hero Section ───
-   Integrated into Page Awal (Hero View)
-   Pure Real-Time Live Clock Engine (Anti-AI Slop, Editorial Human Design)
+/* ─── PRIDE Industri 2026 — Real-Time Launch Countdown ─────────────────────
+   Reference: Elegant Human Design / Minimalist Industrial Launch Clock (Gambar 4)
+   Features: Angled blue ribbons, geometric stepped bars, bold typography
 ─────────────────────────────────────────────────────────────────────────────── */
 
-.compact-countdown-wrap {
+.launch-countdown-container {
   width: 100%;
-  max-width: 660px;
-  margin: 6px auto 10px;
-  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  max-width: 580px;
+  margin: 14px auto 10px;
+  padding: 16px 20px 14px;
+  background-color: #0b0d13;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(16, 20, 30, 0.95) 0%, rgba(9, 11, 17, 0.98) 100%);
+  background-size: 8px 8px, 100% 100%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  box-shadow: 
+    0 24px 50px -12px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  position: relative;
   user-select: none;
+  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
 }
 
-/* Card Shell */
-.compact-countdown-card {
-  width: 100%;
-  background: rgba(11, 17, 32, 0.88);
-  backdrop-filter: blur(28px) saturate(140%);
-  -webkit-backdrop-filter: blur(28px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 18px;
-  box-shadow: 
-    0 16px 44px -10px rgba(0, 0, 0, 0.75),
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
-  overflow: hidden;
+/* ─── Top Bar ─── */
+.launch-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+/* Left Stepped Geometric Bars */
+.launch-stepped-bars-left {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+  padding-top: 2px;
+}
+
+.step-bar {
+  width: 5px;
+  background: #475569;
+  border-radius: 1px;
+}
+
+.step-bar.step-1 { height: 8px; }
+.step-bar.step-2 { height: 14px; }
+.step-bar.step-3 { height: 20px; }
+
+/* Right Header Typography */
+.launch-header-text {
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  align-items: flex-end;
+  text-align: right;
+  line-height: 1.2;
 }
 
-.compact-countdown-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 
-    0 20px 52px -10px rgba(0, 0, 0, 0.82),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-}
-
-/* Card Header — Human Editorial Design */
-.compact-header-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.compact-header-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.compact-human-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  border-radius: 9999px;
-  background: rgba(37, 99, 235, 0.18);
-  border: 1px solid rgba(96, 165, 250, 0.35);
-  color: #93c5fd;
-  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.compact-human-sub {
-  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: #e2e8f0;
-  letter-spacing: -0.01em;
-}
-
-.compact-header-right {
-  display: flex;
-  align-items: center;
-}
-
-.compact-human-venue {
+.launch-label-lead {
   font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   color: #94a3b8;
 }
 
-/* 4-Column Matrix Grid */
-.compact-matrix-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  width: 100%;
+.launch-label-target {
+  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
+  font-size: 13.5px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-transform: uppercase;
 }
 
-.compact-stat-cell {
-  padding: 16px 12px 14px;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+/* ─── Main Digits Display Box ─── */
+.launch-digits-box {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: #06070a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 16px 12px 16px;
+  margin: 6px 0 10px;
+  align-items: center;
+  justify-items: center;
+  gap: 6px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.launch-stat-col {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  transition: background-color 0.2s ease;
+  width: 100%;
 }
 
-.compact-stat-cell:last-child {
-  border-right: none;
-}
-
-.compact-stat-cell:hover {
-  background-color: rgba(255, 255, 255, 0.02);
-}
-
-.compact-stat-title {
-  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: #94a3b8;
-}
-
-/* 5x7 Dot-Matrix Digits */
-.compact-matrix-word {
-  display: flex;
+.launch-number-wrap {
+  position: relative;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  padding: 0 4px;
 }
 
-.compact-matrix-char {
-  display: grid;
-  grid-template-columns: repeat(5, 4px);
-  grid-template-rows: repeat(7, 4px);
-  gap: 1.5px;
+/* Big Bold Numbers */
+.launch-number-val {
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: clamp(34px, 4.6vw, 54px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #f8fafc;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  font-variant-numeric: tabular-nums;
 }
 
-.compact-pixel-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 1px;
-  background-color: rgba(255, 255, 255, 0.06);
-  transition: background-color 0.08s linear;
+/* Angled Royal Blue Ribbon at Bottom-Left */
+.launch-unit-ribbon {
+  position: absolute;
+  bottom: -4px;
+  left: -8px;
+  background: #1652f0;
+  padding: 2.5px 7px;
+  border-radius: 2px;
+  transform: skewX(-14deg);
+  box-shadow: 0 3px 10px rgba(22, 82, 240, 0.45);
+  z-index: 2;
 }
 
-.compact-pixel-dot.on {
-  background-color: #ffffff;
-  box-shadow: 0 0 2px rgba(255, 255, 255, 0.9);
+.launch-unit-text {
+  display: inline-block;
+  transform: skewX(14deg);
+  font-family: var(--font-plus-jakarta), sans-serif;
+  font-size: clamp(9px, 1.05vw, 10.5px);
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
 }
 
-/* Detik (Seconds) Column Emphasis — Warm Amber Glow */
-.compact-cell-detik .compact-pixel-dot.on {
-  background-color: #fbbf24;
-  box-shadow: 0 0 2px rgba(251, 191, 36, 0.9);
-}
-
-.compact-cell-detik .compact-stat-title {
-  color: #fbbf24;
-}
-
-/* Card Bottom Metadata */
-.compact-footer-bar {
+/* ─── Bottom Row ─── */
+.launch-footer-row {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  padding: 8px 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.015);
+  padding-top: 4px;
+}
+
+.launch-footer-tagline {
   font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: 10.5px;
-  color: #64748b;
-}
-
-.compact-footer-left {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.compact-footer-right {
-  color: #94a3b8;
+  font-size: 11px;
   font-weight: 500;
+  color: #64748b;
+  letter-spacing: 0.04em;
+  text-align: left;
 }
 
-/* Responsive adjustments */
+/* Right Stepped Blue Geometric Bars */
+.launch-stepped-bars-right {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+}
+
+.step-bar-blue {
+  width: 5px;
+  background: #1652f0;
+  border-radius: 1px;
+}
+
+.step-bar-blue.step-b1 { height: 20px; }
+.step-bar-blue.step-b2 { height: 15px; }
+.step-bar-blue.step-b3 { height: 11px; }
+.step-bar-blue.step-b4 { height: 7px; }
+
+/* ─── Responsive Styles ─── */
 @media (max-width: 640px) {
-  .compact-countdown-wrap {
+  .launch-countdown-container {
     max-width: 100%;
-    margin: 4px auto 8px;
+    margin: 8px auto 6px;
+    padding: 12px 14px 10px;
+    border-radius: 12px;
   }
 
-  .compact-header-bar {
-    padding: 8px 12px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-
-  .compact-header-left {
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-
-  .compact-human-sub {
-    font-size: 11px;
-  }
-
-  .compact-human-venue {
+  .launch-header-text {
     font-size: 10px;
   }
 
-  .compact-stat-cell {
-    padding: 12px 4px 10px;
-    gap: 6px;
+  .launch-label-target {
+    font-size: 12px;
   }
 
-  .compact-matrix-char {
-    grid-template-columns: repeat(5, 3.2px);
-    grid-template-rows: repeat(7, 3.2px);
-    gap: 1px;
-  }
-
-  .compact-pixel-dot {
-    width: 3.2px;
-    height: 3.2px;
-  }
-
-  .compact-matrix-word {
-    gap: 3px;
-  }
-
-  .compact-stat-title {
-    font-size: 9px;
-  }
-
-  .compact-footer-bar {
-    padding: 6px 12px;
-    flex-direction: column;
-    align-items: flex-start;
+  .launch-digits-box {
+    padding: 12px 6px 14px;
+    margin: 6px 0 8px;
     gap: 2px;
+  }
+
+  .launch-number-val {
+    font-size: clamp(26px, 7vw, 36px);
+  }
+
+  .launch-unit-ribbon {
+    bottom: -3px;
+    left: -4px;
+    padding: 1.5px 5px;
+  }
+
+  .launch-unit-text {
+    font-size: 8px;
+  }
+
+  .launch-footer-tagline {
     font-size: 9.5px;
+  }
+
+  .step-bar, .step-bar-blue {
+    width: 3.5px;
   }
 }
