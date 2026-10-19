@@ -36,7 +36,7 @@
   }
 }
 
-/* Hero Viewport Container — Full Height, Centered & Balanced */
+/* Hero Viewport Container — Full Height, Centered & Balanced across ALL screens */
 .flow-viewport {
   position: relative;
   width: 100%;
@@ -45,10 +45,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding-bottom: 40px;
+  justify-content: center;
+  padding-top: max(88px, calc(72px + 2vh));
+  padding-bottom: max(20px, calc(14px + 1.5vh));
+  padding-left: 20px;
+  padding-right: 20px;
   background-color: #070a13;
   z-index: 20;
+  box-sizing: border-box;
 }
 
 /* Scenic Braga Landmark Background Wrapper (Full Coverage, Crisp & Balanced) */
@@ -112,43 +116,43 @@
   }
 }
 
-/* Hero Content Area — Clean alignment with navbar, positioned gracefully lower */
+/* Hero Content Area — Clean alignment with navbar, centered & balanced across all screens */
 .flow-hero-section {
   position: relative;
   z-index: 10;
-  margin-top: clamp(80px, 10vh, 104px);
-  margin-bottom: 24px;
+  margin: auto 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   max-width: 960px;
   width: 100%;
-  padding: 0 20px;
+  padding: 0;
+  box-sizing: border-box;
   will-change: transform, opacity;
 }
 
-/* Official Logo in front — ENLARGED, MAJESTIC & PROMINENT */
+/* Official Logo in front — Scaled gracefully to fit all viewports without overflowing */
 .hero-logo-wrap {
   position: relative;
   width: 100%;
-  max-width: clamp(520px, 56vw, 610px);
-  height: clamp(280px, 33vh, 330px);
-  margin: 0 auto 8px;
-  filter: drop-shadow(0 20px 48px rgba(0, 0, 0, 0.85));
+  max-width: clamp(380px, 46vw, 530px);
+  height: clamp(160px, 23vh, 235px);
+  margin: 0 auto clamp(4px, 0.8vh, 8px);
+  filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.85));
   animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Floating Cursor Badges (Positioned snugly around the prominent logo) */
+/* Floating Cursor Badges (Positioned snugly around logo shoulders, never hitting navbar) */
 .cursor-badge {
   position: absolute;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
+  padding: 5px 12px;
   border-radius: 999px;
   color: #ffffff;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 800;
   letter-spacing: 0.01em;
   text-transform: none;
@@ -160,19 +164,19 @@
 
 .cursor-badge svg {
   position: absolute;
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
 }
 
 /* Fesyen Binaan Badge (Upper-left shoulder of logo) */
 .badge-fesyen {
   background: var(--flow-blue-accent);
-  top: 14px;
-  left: -20px;
+  top: clamp(18px, 3vh, 28px);
+  left: -12px;
 }
 .badge-fesyen svg {
-  top: -8px;
-  right: -6px;
+  top: -7px;
+  right: -5px;
   fill: var(--flow-blue-accent);
   transform: rotate(75deg);
 }
@@ -180,12 +184,12 @@
 /* Kuliner Lokal Badge (Upper-right shoulder of logo) */
 .badge-kuliner {
   background: var(--flow-orange-accent);
-  top: 14px;
-  right: -20px;
+  top: clamp(18px, 3vh, 28px);
+  right: -12px;
 }
 .badge-kuliner svg {
-  bottom: -7px;
-  left: -6px;
+  bottom: -6px;
+  left: -5px;
   fill: var(--flow-orange-accent);
   transform: rotate(-145deg);
 }
@@ -194,12 +198,12 @@
 .badge-kriya {
   background: #9333ea;
   top: 50%;
-  left: -28px;
+  left: -20px;
   transform: translateY(-50%);
 }
 .badge-kriya svg {
-  top: -8px;
-  right: -6px;
+  top: -7px;
+  right: -5px;
   fill: #9333ea;
   transform: rotate(45deg);
 }
@@ -207,12 +211,12 @@
 /* Video 1 Menit Badge (Lower-left flank of logo) */
 .badge-video {
   background: var(--flow-rose-accent);
-  bottom: 12px;
-  left: -16px;
+  bottom: clamp(6px, 1vh, 12px);
+  left: -10px;
 }
 .badge-video svg {
-  bottom: -7px;
-  right: -6px;
+  bottom: -6px;
+  right: -5px;
   fill: var(--flow-rose-accent);
   transform: rotate(135deg);
 }
@@ -220,12 +224,12 @@
 /* Desain Kemasan Badge (Lower-right flank of logo) */
 .badge-kemasan {
   background: var(--flow-green-accent);
-  bottom: 12px;
-  right: -16px;
+  bottom: clamp(6px, 1vh, 12px);
+  right: -10px;
 }
 .badge-kemasan svg {
-  top: -8px;
-  left: -6px;
+  top: -7px;
+  left: -5px;
   fill: var(--flow-green-accent);
   transform: rotate(-15deg);
 }
@@ -259,16 +263,16 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin: 10px auto 12px;
-  max-width: 680px;
-  padding: 16px 28px 18px;
+  margin: clamp(4px, 0.6vh, 8px) auto clamp(6px, 0.8vh, 10px);
+  max-width: clamp(420px, 50vw, 620px);
+  padding: clamp(8px, 1.2vh, 12px) clamp(18px, 2.2vw, 26px);
   background: rgba(7, 10, 19, 0.78);
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 18px;
+  border-radius: 14px;
   box-shadow: 
-    0 20px 48px -10px rgba(0, 0, 0, 0.8),
+    0 16px 40px -10px rgba(0, 0, 0, 0.8),
     0 0 0 1px rgba(255, 255, 255, 0.06) inset;
   animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 }
@@ -289,7 +293,7 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #fbbf24;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
 }
 
@@ -308,9 +312,9 @@
 
 .hero-title-clean {
   font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: clamp(20px, 2.7vw, 32px);
+  font-size: clamp(17px, 2.2vw, 24px);
   font-weight: 900;
-  line-height: 1.25;
+  line-height: 1.2;
   letter-spacing: -0.02em;
   color: #ffffff;
   text-shadow: 
@@ -330,9 +334,9 @@
 .hero-subtitle-clean {
   color: #93c5fd;
   font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: clamp(14px, 1.5vw, 17px);
-  line-height: 1.4;
-  margin: 6px auto 0;
+  font-size: clamp(12.5px, 1.3vw, 14.5px);
+  line-height: 1.3;
+  margin: 3px auto 0;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-shadow: 
@@ -352,16 +356,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 8px auto 6px;
-  padding: 6px 22px;
+  margin: clamp(4px, 0.6vh, 6px) auto;
+  padding: clamp(4px, 0.5vh, 6px) clamp(16px, 2vw, 22px);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.9);
   border-radius: 9999px;
   box-shadow: 
-    0 12px 32px rgba(0, 0, 0, 0.28),
-    0 2px 8px rgba(0, 0, 0, 0.12),
+    0 10px 28px rgba(0, 0, 0, 0.28),
+    0 2px 6px rgba(0, 0, 0, 0.12),
     0 0 0 1px rgba(0, 0, 0, 0.04);
   animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
   transition: 
@@ -375,8 +379,8 @@
 .hero-organizer-card:hover {
   transform: translateY(-2px) scale(1.01);
   box-shadow: 
-    0 18px 40px rgba(0, 0, 0, 0.34),
-    0 4px 14px rgba(0, 0, 0, 0.16);
+    0 14px 34px rgba(0, 0, 0, 0.34),
+    0 3px 10px rgba(0, 0, 0, 0.16);
 }
 
 .hero-organizer-card.visible {
@@ -388,7 +392,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: clamp(8px, 1.2vw, 12px);
 }
 
 .organizer-gov-wrap,
@@ -399,7 +403,7 @@
 }
 
 .organizer-gov-img {
-  height: 34px;
+  height: clamp(24px, 3.2vh, 30px);
   width: auto;
   object-fit: contain;
   display: block;
@@ -407,198 +411,109 @@
 
 .organizer-divider {
   width: 1.5px;
-  height: 24px;
+  height: clamp(16px, 2.2vh, 20px);
   background: rgba(15, 23, 42, 0.18);
   border-radius: 1px;
 }
 
 .organizer-tactlink-img {
-  height: 32px;
+  height: clamp(22px, 3vh, 28px);
   width: auto;
   object-fit: contain;
   display: block;
 }
 
-@media (max-width: 640px) {
-  .flow-viewport {
-    height: auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-    justify-content: flex-start;
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  }
+/* Dedicated Mobile Category Chips Row (md:hidden) */
+.hero-mobile-categories-row {
+  display: none;
+}
 
-  .flow-hero-section {
-    height: auto;
-    min-height: auto;
-    margin: 0;
-    padding: calc(64px + env(safe-area-inset-top, 0px)) 14px 16px;
-    max-width: 100vw;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 4px;
-    box-sizing: border-box;
+/* Scroll Cue Indicator */
+.mobile-scroll-cue {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: clamp(2px, 0.5vh, 6px);
+  margin-bottom: 0;
+  z-index: 10;
+}
+
+.scroll-cue-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.scroll-cue-pill:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(1px);
+}
+
+/* ─── COMPACT LAPTOP SCREENS (Screen Height <= 740px, e.g. 1366x768 & scaled 1080p) ─── */
+@media (min-width: 769px) and (max-height: 740px) {
+  .flow-viewport {
+    padding-top: max(78px, calc(68px + 1.5vh));
+    padding-bottom: 12px;
   }
 
   .hero-logo-wrap {
-    width: min(86vw, 320px);
-    height: min(45vw, 170px);
-    max-width: 330px;
-    margin: 0 auto;
-    filter: drop-shadow(0 14px 32px rgba(0, 0, 0, 0.85));
-    position: relative;
-    flex-shrink: 0;
+    height: clamp(140px, 21vh, 175px);
+    max-width: 420px;
+    margin-bottom: 4px;
   }
 
-  /* Dedicated Mobile Category Chips Row (Natural, cohesive Apple-style glass pills) */
-  .hero-mobile-categories-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 6px 6px;
-    width: 100%;
-    max-width: min(94vw, 340px);
-    margin: 4px auto 8px;
-    z-index: 2;
-    box-sizing: border-box;
-    animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
-  }
-
-  .mob-chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    padding: 5px 10px;
-    border-radius: 999px;
+  .cursor-badge {
+    padding: 3px 10px;
     font-size: 10.5px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    background: rgba(15, 23, 42, 0.65);
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), 0 1px 0 rgba(255, 255, 255, 0.08) inset;
-    color: #f8fafc;
-    white-space: nowrap;
-    text-align: center;
-    box-sizing: border-box;
   }
 
-  .mob-chip-fesyen,
-  .mob-chip-kuliner,
-  .mob-chip-kriya,
-  .mob-chip-video,
-  .mob-chip-kemasan {
-    background: rgba(15, 23, 42, 0.65);
-    color: #f8fafc;
-    border-color: rgba(255, 255, 255, 0.16);
-  }
-
-  .headline-block {
-    width: 100%;
-    max-width: min(94vw, 420px);
-    margin: 8px auto;
-    padding: 12px 16px 14px;
-    background: rgba(7, 10, 19, 0.82);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .headline-kicker-human {
-    font-size: clamp(9px, 2.5vw, 10.5px);
-    gap: 6px;
-    margin-bottom: 6px;
-  }
-
-  .hero-title-clean {
-    font-size: clamp(17px, 4.6vw, 21px);
-    line-height: 1.25;
-    letter-spacing: -0.01em;
-    font-weight: 800;
-  }
-
-  .hero-subtitle-clean {
-    font-size: clamp(13px, 3.4vw, 15px);
-    line-height: 1.4;
-    margin-top: 5px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: #93c5fd;
+  .badge-fesyen,
+  .badge-kuliner {
+    top: 14px;
   }
 
   .hero-organizer-card {
-    padding: 4px 14px;
-    margin: 6px auto 4px;
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.96);
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.32),
-      0 2px 6px rgba(0, 0, 0, 0.12);
-    flex-shrink: 0;
-  }
-
-  .hero-organizer-inner {
-    gap: 10px;
+    padding: 3px 14px;
+    margin: 3px auto;
   }
 
   .organizer-gov-img {
     height: 22px;
-    width: auto;
-  }
-
-  .organizer-divider {
-    height: 16px;
   }
 
   .organizer-tactlink-img {
     height: 20px;
-    width: auto;
   }
 
-  .scroll-cue-pill {
-    margin-top: 0;
-    margin-bottom: 4px;
-    padding: 6px 14px;
-    font-size: 11px;
-    flex-shrink: 0;
+  .headline-block {
+    padding: 6px 16px;
+    margin: 3px auto 5px;
   }
 
+  .hero-title-clean {
+    font-size: 18px;
+  }
 
-@media (min-width: 769px) and (max-width: 1100px) {
-  .flow-viewport {
-    justify-content: center;
+  .hero-subtitle-clean {
+    font-size: 12px;
+    margin-top: 2px;
   }
-  .flow-hero-section {
-    margin: auto 0;
-    padding: calc(64px + 1vh) 16px 20px;
-    gap: 12px;
-  }
-  .hero-logo-wrap {
-    width: min(80vw, 480px);
-    height: clamp(200px, 28vh, 260px);
-    margin: 0 auto;
-  }
-  .badge-fesyen { left: -10px; top: 12px; }
-  .badge-kuliner { right: -10px; top: 12px; }
-  .badge-video { left: -8px; bottom: 8px; }
-  .badge-kemasan { right: -8px; bottom: 8px; }
-
 }
 
-/* ─── FINAL BULLETPROOF MOBILE OVERRIDES (Mobile First Priority) ─────────────── */
+/* ─── MOBILE & SMALL TABLETS (max-width: 768px) ─── */
 @media (max-width: 768px) {
   .flow-viewport {
     height: auto !important;
@@ -607,8 +522,10 @@
     width: 100vw !important;
     max-width: 100% !important;
     justify-content: flex-start !important;
-    padding-top: env(safe-area-inset-top, 0px) !important;
-    padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-top: calc(72px + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
     overflow-x: hidden !important;
     overflow-y: visible !important;
     background-color: #070a13 !important;
@@ -618,23 +535,34 @@
     height: auto !important;
     min-height: auto !important;
     margin: 0 !important;
-    padding: calc(64px + env(safe-area-inset-top, 0px)) 16px calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+    padding: 0 !important;
     max-width: 100vw !important;
     width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: flex-start !important;
-    gap: 6px !important;
+    gap: 4px !important;
     box-sizing: border-box !important;
     background: transparent !important;
   }
 
-  /* Force hide all floating cursor badges on mobile — zero overlap, zero duplicates */
+  .hero-logo-wrap {
+    width: min(84vw, 290px);
+    height: min(42vw, 145px);
+    max-width: 300px;
+    margin: 0 auto;
+    filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.85));
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  /* Force hide all floating cursor badges on mobile — zero overlap */
   .cursor-badge,
   .hero-logo-wrap .cursor-badge,
   .badge-fesyen,
   .badge-kuliner,
+  .badge-kriya,
   .badge-video,
   .badge-kemasan {
     display: none !important;
@@ -643,7 +571,105 @@
     pointer-events: none !important;
   }
 
-  /* Ensure browser mockup stage is visible & interactive on mobile Page 2 */
+  /* Dedicated Mobile Category Chips Row */
+  .hero-mobile-categories-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    max-width: min(94vw, 340px);
+    margin: 3px auto 6px;
+    z-index: 2;
+    box-sizing: border-box;
+    animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+  }
+
+  .mob-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    color: #f8fafc;
+    white-space: nowrap;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .headline-block {
+    width: 100%;
+    max-width: min(94vw, 380px);
+    margin: 4px auto 6px;
+    padding: 8px 14px 10px;
+    background: rgba(7, 10, 19, 0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+    flex-shrink: 0;
+  }
+
+  .hero-title-clean {
+    font-size: clamp(16px, 4.4vw, 19px);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    font-weight: 800;
+  }
+
+  .hero-subtitle-clean {
+    font-size: clamp(12px, 3.2vw, 13.5px);
+    line-height: 1.35;
+    margin-top: 3px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #93c5fd;
+  }
+
+  .hero-organizer-card {
+    padding: 4px 12px;
+    margin: 4px auto;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
+    flex-shrink: 0;
+  }
+
+  .hero-organizer-inner {
+    gap: 8px;
+  }
+
+  .organizer-gov-img {
+    height: 20px;
+    width: auto;
+  }
+
+  .organizer-divider {
+    height: 14px;
+  }
+
+  .organizer-tactlink-img {
+    height: 18px;
+    width: auto;
+  }
+
+  .scroll-cue-pill {
+    margin-top: 0;
+    margin-bottom: 2px;
+    padding: 4px 12px;
+    font-size: 10.5px;
+    flex-shrink: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
