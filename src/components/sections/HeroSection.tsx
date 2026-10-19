@@ -113,7 +113,7 @@ export default function HeroSection() {
         </div>
 
         {/* Hero Section */}
-        <section className="flow-hero-section" id="heroSection" ref={heroSectionRef}>
+        <section className="flow-hero-section hero-content hero-inner" id="heroSection" ref={heroSectionRef}>
           {/* Official Logo Placed Full In Front with Corner Badges */}
           <div className="hero-logo-wrap hero-logo event-logo" ref={heroLogoRef}>
             {/* Ambient Warm Backlight */}
@@ -218,7 +218,7 @@ export default function HeroSection() {
           </div>
 
           {/* Headline Block */}
-          <div className="headline-block" ref={headlineBlockRef}>
+          <div className="headline-block hero-title event-title" ref={headlineBlockRef}>
             <h1 className="hero-title-clean">
               Pagelaran Ragam Inovasi <span className="title-amp">&amp;</span> Eksistensi
             </h1>

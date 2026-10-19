@@ -149,43 +149,46 @@ export default function Footer() {
               href="https://maps.google.com/?q=Braga+City+Walk+Bandung"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center transition-all hover:scale-105 group cursor-pointer filter drop-shadow-md hover:drop-shadow-lg"
+              className="inline-flex items-center transition-all hover:scale-105 group cursor-pointer filter drop-shadow-sm hover:drop-shadow-md"
               title="Braga Citywalk - Official Venue Partner"
             >
               <Image
                 src="/LOGO_BRAGA_CITYWALK_LAYER.png"
                 alt="Braga Citywalk"
-                width={100}
-                height={40}
-                className="h-8 sm:h-9 w-auto object-contain"
+                width={70}
+                height={28}
+                style={{ height: '28px', width: 'auto', maxHeight: '28px' }}
+                className="object-contain"
               />
             </a>
 
             {/* RRD Organizer */}
             <div
-              className="inline-flex items-center transition-all hover:scale-105 filter drop-shadow-md hover:drop-shadow-lg"
+              className="inline-flex items-center transition-all hover:scale-105 filter drop-shadow-sm hover:drop-shadow-md"
               title="PT Rahman Ramadhan Diandra (RRD Organizer)"
             >
               <Image
                 src="/LOGO_RRD_ORGANIZER.png"
                 alt="RRD Organizer"
-                width={140}
-                height={40}
-                className="h-8 sm:h-9 w-auto object-contain"
+                width={120}
+                height={28}
+                style={{ height: '28px', width: 'auto', maxHeight: '28px' }}
+                className="object-contain"
               />
             </div>
 
             {/* NXG Institute */}
             <div
-              className="inline-flex items-center transition-all hover:scale-105 filter drop-shadow-md hover:drop-shadow-lg"
+              className="inline-flex items-center transition-all hover:scale-105 filter drop-shadow-sm hover:drop-shadow-md"
               title="NXG Institute"
             >
               <Image
                 src="/LOGO_NXG_INSTITUTE.png"
                 alt="NXG Institute"
-                width={140}
-                height={40}
-                className="h-7 sm:h-8 w-auto object-contain"
+                width={120}
+                height={28}
+                style={{ height: '28px', width: 'auto', maxHeight: '28px' }}
+                className="object-contain"
               />
             </div>
           </div>

@@ -114,6 +114,8 @@
 }
 
 /* Inner content wrapper — Clean centered flex column with consistent gap */
+.hero-content,
+.hero-inner,
 .flow-hero-section {
   width: 100%;
   max-width: 1000px;
@@ -122,7 +124,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--hero-gap);
+  padding: clamp(16px, 3vh, 32px) 20px;
+  gap: clamp(12px, 1.8vh, 20px);
   min-width: 0;
   box-sizing: border-box;
   text-align: center;
@@ -131,12 +134,17 @@
   will-change: transform, opacity;
 }
 
-/* Event Logo Wrapper */
+/* 1. Main PRIDE Logo */
+.hero-logo,
+.event-logo,
 .hero-logo-wrap {
+  order: 1;
   position: relative;
-  width: clamp(240px, min(75vw, 36vh), 420px);
-  height: clamp(120px, min(36vw, 18vh), 190px);
-  margin: 0;
+  width: clamp(200px, 26vw, 360px);
+  aspect-ratio: 1200 / 710;
+  height: auto;
+  max-width: 80vw;
+  margin: 0 auto;
   filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.85));
   animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   flex-shrink: 0;
@@ -255,12 +263,18 @@
   }
 }
 
-/* Official Organizers & Partners Logo Bar */
+/* 2. Institution logo */
+.organization-logo,
+.partner-logo,
 .hero-organizer-card {
+  order: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0;
+  margin: 0 auto;
+  width: auto;
+  max-width: min(85vw, 300px);
+  height: clamp(36px, 4.5vw, 52px);
   padding: clamp(3px, 0.5vh, 6px) clamp(12px, 1.8vw, 20px);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
@@ -276,7 +290,6 @@
     transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.3s ease;
   z-index: 10;
-  max-width: 95%;
   flex-shrink: 0;
 }
 
@@ -363,16 +376,19 @@
   box-sizing: border-box;
 }
 
-/* Headline Block */
+/* 3. Event title & Headline Block */
+.hero-title,
+.event-title,
 .headline-block {
+  order: 3;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin: 0;
+  margin: 0 auto;
   width: 100%;
-  max-width: clamp(320px, 48vw, 560px);
+  max-width: 800px;
   padding: clamp(6px, 1vh, 10px) clamp(14px, 2vw, 22px);
   background: rgba(7, 10, 19, 0.8);
   backdrop-filter: blur(20px) saturate(140%);
@@ -393,11 +409,13 @@
 
 .hero-title-clean {
   font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: clamp(15px, 2.2vw, 22px);
+  font-size: clamp(1.25rem, 2.8vw, 2.2rem);
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: -0.02em;
   color: #ffffff;
+  text-align: center;
+  text-wrap: balance;
   text-shadow: 
     0 2px 4px rgba(0, 0, 0, 0.9),
     0 6px 20px rgba(0, 0, 0, 0.95);
@@ -477,12 +495,40 @@
   max-width: 100%;
 }
 
-/* Tablet */
+/* Tablet & Mobile */
 @media (max-width: 768px) {
   :root {
-    --hero-gap: clamp(10px, 1.8vh, 16px);
+    --hero-gap: 14px;
     --hero-padding-x: 16px;
     --hero-padding-y: 20px;
+  }
+
+  .hero-content,
+  .hero-inner,
+  .flow-hero-section {
+    gap: 14px;
+    padding: 20px 16px;
+  }
+
+  .hero-logo,
+  .event-logo,
+  .hero-logo-wrap {
+    width: clamp(160px, 48vw, 240px);
+  }
+
+  .organization-logo,
+  .partner-logo,
+  .hero-organizer-card {
+    width: auto;
+    max-width: min(85vw, 240px);
+    height: 40px;
+    padding: 3px 12px;
+  }
+
+  .hero-title,
+  .event-title,
+  .hero-title-clean {
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
   }
 
   .cursor-badge,
@@ -500,19 +546,73 @@
   .hero-mobile-categories-row {
     display: none !important;
   }
+
+  .hero-logo,
+  .event-logo,
+  .hero-logo-wrap {
+    width: clamp(200px, 26vw, 360px);
+    height: auto;
+    max-width: 80vw;
+  }
+
+  /* Keep badges comfortably on the outer shoulders of the logo without overlapping */
+  .badge-fesyen {
+    top: 6px;
+    left: -20px;
+  }
+
+  .badge-kuliner {
+    top: 6px;
+    right: -20px;
+  }
+
+  .badge-kriya {
+    top: 48%;
+    left: -28px;
+    transform: translateY(-50%);
+  }
+
+  .badge-video {
+    bottom: 4px;
+    left: -16px;
+  }
+
+  .badge-kemasan {
+    bottom: 4px;
+    right: -16px;
+  }
+
+  /* Organization / partner logo */
+  .organization-logo,
+  .partner-logo,
+  .hero-organizer-card {
+    width: auto;
+    max-width: min(85vw, 300px);
+    height: clamp(36px, 4.5vw, 52px);
+    padding: clamp(4px, 0.6vh, 6px) clamp(14px, 1.8vw, 20px);
+  }
+
+  .organizer-gov-img {
+    height: clamp(20px, 2.2vw, 28px);
+    width: auto;
+  }
+
+  .organizer-tactlink-img {
+    height: clamp(18px, 2vw, 24px);
+    width: auto;
+  }
+
+  .organizer-divider {
+    height: clamp(14px, 1.6vw, 18px);
+  }
 }
 
 /* Small mobile */
 @media (max-width: 480px) {
   :root {
-    --hero-gap: 10px;
+    --hero-gap: 12px;
     --hero-padding-x: 14px;
     --hero-padding-y: 16px;
-  }
-
-  .hero-logo-wrap {
-    width: clamp(220px, 78vw, 300px);
-    height: clamp(110px, 38vw, 150px);
   }
 }
 
@@ -534,67 +634,5 @@
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-/* ========================================================
-   Desktop: enlarge the main event logo & partner logo
-   ======================================================== */
-@media (min-width: 769px) {
-  .hero-logo-wrap,
-  .hero-logo,
-  .event-logo {
-    height: clamp(120px, 12vw, 190px);
-    width: clamp(260px, 26vw, 420px);
-    max-width: 90vw;
-  }
-
-  /* Keep badges comfortably on the outer shoulders of the logo without overlapping */
-  .badge-fesyen {
-    top: 10px;
-    left: -24px;
-  }
-
-  .badge-kuliner {
-    top: 10px;
-    right: -24px;
-  }
-
-  .badge-kriya {
-    top: 50%;
-    left: -36px;
-    transform: translateY(-50%);
-  }
-
-  .badge-video {
-    bottom: 8px;
-    left: -20px;
-  }
-
-  .badge-kemasan {
-    bottom: 8px;
-    right: -20px;
-  }
-
-  /* Organization / partner logo */
-  .hero-organizer-card,
-  .organization-logo,
-  .partner-logo {
-    padding: clamp(6px, 1vh, 10px) clamp(16px, 2vw, 24px);
-    max-width: clamp(220px, 24vw, 320px);
-  }
-
-  .organizer-gov-img {
-    height: clamp(22px, 2.5vw, 32px);
-    width: auto;
-  }
-
-  .organizer-tactlink-img {
-    height: clamp(20px, 2.2vw, 28px);
-    width: auto;
-  }
-
-  .organizer-divider {
-    height: clamp(14px, 1.8vw, 20px);
   }
 }

@@ -1,12 +1,14 @@
 /* ─── PRIDE Industri 2026 — Real-Time Launch Countdown ─────────────────────
-   Responsive Industrial Launch Clock
+   Responsive Industrial Launch Clock (Compact & Non-Dominating)
 ─────────────────────────────────────────────────────────────────────────────── */
 
-.launch-countdown-container {
-  width: 100%;
-  max-width: 560px;
-  margin: 0;
-  padding: clamp(8px, 1.2vh, 13px) clamp(12px, 1.8vw, 18px) clamp(6px, 1vh, 10px);
+.launch-countdown-container,
+.countdown,
+.countdown-container {
+  order: 4;
+  width: min(100%, 400px);
+  margin: 0 auto;
+  padding: clamp(8px, 1.2vh, 12px) clamp(12px, 1.6vw, 16px) clamp(6px, 1vh, 10px);
   background-color: #0b0d13;
   background-image: 
     radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
@@ -37,7 +39,7 @@
   display: flex;
   align-items: flex-end;
   gap: 3px;
-  height: clamp(14px, 2vh, 18px);
+  height: clamp(12px, 1.6vh, 15px);
   padding-top: 2px;
 }
 
@@ -47,9 +49,9 @@
   border-radius: 1px;
 }
 
-.step-bar.step-1 { height: 6px; }
-.step-bar.step-2 { height: 11px; }
-.step-bar.step-3 { height: 16px; }
+.step-bar.step-1 { height: 5px; }
+.step-bar.step-2 { height: 9px; }
+.step-bar.step-3 { height: 13px; }
 
 /* Right Header Typography */
 .launch-header-text {
@@ -62,7 +64,7 @@
 
 .launch-label-lead {
   font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: clamp(9px, 1vw, 10.5px);
+  font-size: clamp(8.5px, 0.9vw, 10px);
   font-weight: 500;
   letter-spacing: 0.04em;
   color: #94a3b8;
@@ -70,7 +72,7 @@
 
 .launch-label-target {
   font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: clamp(11px, 1.2vw, 12.5px);
+  font-size: clamp(10px, 1.1vw, 11.5px);
   font-weight: 900;
   letter-spacing: 0.08em;
   color: #ffffff;
@@ -84,21 +86,23 @@
   background: #06070a;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
-  padding: clamp(6px, 1.2vw, 12px) 4px;
+  padding: clamp(6px, 1vw, 10px) 4px;
   margin: clamp(2px, 0.4vh, 4px) 0;
   align-items: center;
-  gap: clamp(6px, 2vw, 16px);
+  gap: clamp(6px, 1vw, 12px);
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
   box-sizing: border-box;
 }
 
-.launch-stat-col {
+.launch-stat-col,
+.countdown-item {
   min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 3px;
+  padding: 8px 4px;
   box-sizing: border-box;
   width: 100%;
 }
@@ -111,10 +115,11 @@
   position: relative;
 }
 
-/* Big Bold Numbers — Fully Visible, Tabular Nums */
-.launch-number-val {
+/* Compact Bold Numbers — Fully Visible, Tabular Nums */
+.launch-number-val,
+.countdown-number {
   font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: clamp(1.25rem, 4vw, 2.5rem);
+  font-size: clamp(1rem, 1.8vw, 1.5rem);
   line-height: 1;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
@@ -128,12 +133,12 @@
 .launch-unit-meta {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
 }
 
 .launch-unit-diamond {
-  width: clamp(5px, 0.8vw, 7px);
-  height: clamp(5px, 0.8vw, 7px);
+  width: clamp(4px, 0.7vw, 6px);
+  height: clamp(4px, 0.7vw, 6px);
   background: #1652f0;
   transform: rotate(45deg);
   border-radius: 1px;
@@ -141,9 +146,10 @@
   flex-shrink: 0;
 }
 
-.launch-unit-label {
+.launch-unit-label,
+.countdown-label {
   font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: clamp(0.625rem, 1.5vw, 0.875rem);
+  font-size: clamp(0.625rem, 0.9vw, 0.8rem);
   line-height: 1.3;
   font-weight: 750;
   letter-spacing: 0.06em;
@@ -168,7 +174,7 @@
   display: flex;
   align-items: flex-end;
   gap: 3px;
-  height: clamp(12px, 1.6vh, 15px);
+  height: clamp(10px, 1.4vh, 13px);
 }
 
 .step-bar-blue {
@@ -177,26 +183,26 @@
   border-radius: 1px;
 }
 
-.step-bar-blue.step-b1 { height: 15px; }
-.step-bar-blue.step-b2 { height: 11px; }
-.step-bar-blue.step-b3 { height: 7px; }
-.step-bar-blue.step-b4 { height: 4px; }
+.step-bar-blue.step-b1 { height: 13px; }
+.step-bar-blue.step-b2 { height: 10px; }
+.step-bar-blue.step-b3 { height: 6px; }
+.step-bar-blue.step-b4 { height: 3px; }
 
-/* Tablet */
+/* Tablet & Mobile */
 @media (max-width: 768px) {
-  .launch-countdown-container {
-    max-width: 440px;
+  .launch-countdown-container,
+  .countdown,
+  .countdown-container {
+    width: min(100%, 340px);
   }
-}
 
-/* Small mobile */
-@media (max-width: 480px) {
   .launch-digits-box {
     gap: 6px;
-    padding: 8px 2px;
+    padding: 6px 2px;
   }
 
-  .launch-number-val {
-    font-size: clamp(1.125rem, 5.5vw, 1.625rem);
+  .launch-number-val,
+  .countdown-number {
+    font-size: clamp(1rem, 4vw, 1.35rem);
   }
 }

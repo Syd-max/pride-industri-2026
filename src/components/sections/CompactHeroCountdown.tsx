@@ -57,7 +57,7 @@ export default function CompactHeroCountdown() {
   ];
 
   return (
-    <div className="launch-countdown-container" aria-label="Menghitung Mundur PRIDE Industri">
+    <div className="launch-countdown-container countdown countdown-container" aria-label="Menghitung Mundur PRIDE Industri">
       {/* Top Header Row */}
       <div className="launch-header-row">
         {/* Left Stepped Geometric Bars */}
@@ -77,12 +77,12 @@ export default function CompactHeroCountdown() {
       {/* Main 4-Column Digits Display Box — Gambar 5 Unobstructed Digits */}
       <div className="launch-digits-box">
         {timeUnits.map((unit) => (
-          <div key={unit.key} className="launch-stat-col">
+          <div key={unit.key} className="launch-stat-col countdown-item">
             <div className="launch-col-inner">
-              <span className="launch-number-val">{unit.value}</span>
+              <span className="launch-number-val countdown-number">{unit.value}</span>
               <div className="launch-unit-meta">
                 <span className="launch-unit-diamond" aria-hidden="true" />
-                <span className="launch-unit-label">{unit.label}</span>
+                <span className="launch-unit-label countdown-label">{unit.label}</span>
               </div>
             </div>
           </div>
