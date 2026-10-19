@@ -370,52 +370,14 @@ export default function ActivitiesDeckSection() {
                   <span className="deck-card-number">01 / 06</span>
                   <span className="deck-header-pill">FESYEN &amp; WASTRA NUSANTARA</span>
                 </div>
-                <div className="deck-header-venue">
-                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                  </svg>
-                  <span>27 Nov · Main Runway Braga</span>
-                </div>
               </header>
 
-              <div className="deck-card-body">
-                <div className="deck-hero-content">
-                  <div className="deck-icon-badge">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <span className="deck-kicker-tag">Panggung 20+ Desainer Binaan</span>
-                    <h3 className="deck-card-title">Peragaan Busana Wastra Kontemporer</h3>
-                  </div>
-                </div>
-
-                <div className="deck-feature-tags">
-                  <span className="deck-tag-chip">✦ Ready-to-Wear Wastra</span>
-                  <span className="deck-tag-chip">✦ Motif Kain Khas Bandung</span>
-                  <span className="deck-tag-chip">✦ 20+ Desainer Muda</span>
-                  <span className="deck-tag-chip">✦ Business Matching Kurator</span>
-                </div>
-
-                <p className="deck-card-desc">
-                  Peragaan busana siap pakai (ready-to-wear) karya 20+ desainer fesyen binaan Disdagin Kota Bandung. Menampilkan eksplorasi motif khas dan kain nusantara berstandar internasional, dilengkapi sesi temu bisnis langsung bersama kurator dan pembeli potensial.
-                </p>
+              <div className="deck-card-body deck-card-body-simple">
+                <h3 className="deck-card-title">Peragaan Busana Wastra Kontemporer</h3>
               </div>
 
               <footer className="deck-card-footer">
-                <div className="deck-footer-meta">
-                  <span className="inline-flex items-center gap-1.5 font-medium">
-                    <svg className="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <span>15:30 — 17:30 WIB</span>
-                  </span>
-                  <span className="footer-meta-sep">•</span>
-                  <span>Main Runway Stage Braga</span>
-                </div>
-                <div className="flex items-center gap-2">
+                <div className="deck-footer-actions">
                   <button
                     type="button"
                     onClick={() => goToCard(0)}
@@ -454,55 +416,14 @@ export default function ActivitiesDeckSection() {
                   <span className="deck-card-number">02 / 06</span>
                   <span className="deck-header-pill">INOVASI ECO-PACKAGING IKM</span>
                 </div>
-                <div className="deck-header-venue">
-                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                  </svg>
-                  <span>28 Nov · Expo Braga</span>
-                </div>
               </header>
 
-              <div className="deck-card-body">
-                <div className="deck-hero-content">
-                  <div className="deck-icon-badge">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m7.5 4.27 9 5.15"/>
-                      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
-                      <path d="m3.3 7 8.7 5 8.7-5"/>
-                      <path d="M12 22V12"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <span className="deck-kicker-tag">Standarisasi Kemasan Siap Ritel</span>
-                    <h3 className="deck-card-title">Showcase &amp; Penjurian Terbuka Desain Kemasan</h3>
-                  </div>
-                </div>
-
-                <div className="deck-feature-tags">
-                  <span className="deck-tag-chip">✦ Kemasan Ramah Lingkungan</span>
-                  <span className="deck-tag-chip">✦ Olahan Pangan Lokal Bandung</span>
-                  <span className="deck-tag-chip">✦ Kurasi Rumah Kemasan</span>
-                  <span className="deck-tag-chip">✦ Standar Ritel &amp; Ekspor</span>
-                </div>
-
-                <p className="deck-card-desc">
-                  Pameran fisik dan presentasi langsung karya mockup 3D kemasan ramah lingkungan produk kuliner olahan pangan lokal binaan Bandung. Finalis memaparkan konsep di hadapan dewan juri ahli serta kurator Rumah Kemasan untuk kesiapan pasar ritel modern dan ekspor.
-                </p>
+              <div className="deck-card-body deck-card-body-simple">
+                <h3 className="deck-card-title">Showcase &amp; Penjurian Terbuka Desain Kemasan</h3>
               </div>
 
               <footer className="deck-card-footer">
-                <div className="deck-footer-meta">
-                  <span className="inline-flex items-center gap-1.5 font-medium">
-                    <svg className="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <span>10:00 — 16:30 WIB</span>
-                  </span>
-                  <span className="footer-meta-sep">•</span>
-                  <span>Area Pameran Braga City Walk</span>
-                </div>
-                <div className="flex items-center gap-2">
+                <div className="deck-footer-actions">
                   <button
                     type="button"
                     onClick={() => goToCard(1)}
@@ -541,53 +462,14 @@ export default function ActivitiesDeckSection() {
                   <span className="deck-card-number">03 / 06</span>
                   <span className="deck-header-pill">KREATIVITAS VISUAL VERTIKAL</span>
                 </div>
-                <div className="deck-header-venue">
-                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                  </svg>
-                  <span>27–28 Nov · Braga City Walk</span>
-                </div>
               </header>
 
-              <div className="deck-card-body">
-                <div className="deck-hero-content">
-                  <div className="deck-icon-badge">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/>
-                      <rect x="2" y="6" width="14" height="12" rx="2"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <span className="deck-kicker-tag">Kompetisi Kreator Reels &amp; TikTok</span>
-                    <h3 className="deck-card-title">Hunting Konten &amp; Screening Video 1 Menit</h3>
-                  </div>
-                </div>
-
-                <div className="deck-feature-tags">
-                  <span className="deck-tag-chip">✦ Video Vertikal 60 Detik</span>
-                  <span className="deck-tag-chip">✦ Eksplorasi Koridor Braga</span>
-                  <span className="deck-tag-chip">✦ Angkat Produk IKM Lokal</span>
-                  <span className="deck-tag-chip">✦ Tayang di Videotron Utama</span>
-                </div>
-
-                <p className="deck-card-desc">
-                  Ratusan kreator visual mengabadikan dinamika produk IKM, kearifan lokal, dan atmosfer festival di koridor bersejarah Jalan Braga dalam format video vertikal 60 detik. Karya-karya kurasi terbaik ditayangkan langsung di videotron panggung utama festival.
-                </p>
+              <div className="deck-card-body deck-card-body-simple">
+                <h3 className="deck-card-title">Hunting Konten &amp; Screening Video 1 Menit</h3>
               </div>
 
               <footer className="deck-card-footer">
-                <div className="deck-footer-meta">
-                  <span className="inline-flex items-center gap-1.5 font-medium">
-                    <svg className="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <span>Screening 28 Nov · 16:00 WIB</span>
-                  </span>
-                  <span className="footer-meta-sep">•</span>
-                  <span>Videotron Braga City Walk</span>
-                </div>
-                <div className="flex items-center gap-2">
+                <div className="deck-footer-actions">
                   <button
                     type="button"
                     onClick={() => goToCard(2)}
@@ -626,53 +508,14 @@ export default function ActivitiesDeckSection() {
                   <span className="deck-card-number">04 / 06</span>
                   <span className="deck-header-pill">TEMU BISNIS &amp; KEMITRAAN</span>
                 </div>
-                <div className="deck-header-venue">
-                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                  </svg>
-                  <span>28 Nov · Braga City Walk</span>
-                </div>
               </header>
 
-              <div className="deck-card-body">
-                <div className="deck-hero-content">
-                  <div className="deck-icon-badge">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <span className="deck-kicker-tag">Pitching 20 IKM Unggulan ke Calon Mitra &amp; Investor</span>
-                    <h3 className="deck-card-title">Business Matching &amp; Pitching IKM Kemilau</h3>
-                  </div>
-                </div>
-
-                <div className="deck-feature-tags">
-                  <span className="deck-tag-chip">✦ 20 IKM Kemilau Terpilih</span>
-                  <span className="deck-tag-chip">✦ 3 Sektor Industri Unggulan</span>
-                  <span className="deck-tag-chip">✦ Pitching Mitra &amp; Investor</span>
-                  <span className="deck-tag-chip">✦ Workshop &amp; Konsultasi Ahli</span>
-                </div>
-
-                <p className="deck-card-desc">
-                  20 IKM program KEMILAU binaan Disdagin terpilih dari 3 sektor industri (Fesyen, Kuliner, Kriya) melakukan pitching kurasi di hadapan calon mitra bisnis, agregator, dan investor untuk memperluas penetrasi pasar, akses pembiayaan, serta kolaborasi strategis.
-                </p>
+              <div className="deck-card-body deck-card-body-simple">
+                <h3 className="deck-card-title">Business Matching &amp; Pitching IKM Kemilau</h3>
               </div>
 
               <footer className="deck-card-footer">
-                <div className="deck-footer-meta">
-                  <span className="inline-flex items-center gap-1.5 font-medium">
-                    <svg className="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <span>10:00 — 12:30 WIB</span>
-                  </span>
-                  <span className="footer-meta-sep">•</span>
-                  <span>Area Business Matching · Braga City Walk</span>
-                </div>
-                <div className="flex items-center gap-2">
+                <div className="deck-footer-actions">
                   <button
                     type="button"
                     onClick={() => goToCard(3)}
@@ -711,53 +554,14 @@ export default function ActivitiesDeckSection() {
                   <span className="deck-card-number">05 / 06</span>
                   <span className="deck-header-pill">STANDARISASI &amp; MUTU IKM</span>
                 </div>
-                <div className="deck-header-venue">
-                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                  </svg>
-                  <span>27 Nov · Main Stage Braga</span>
-                </div>
               </header>
 
-              <div className="deck-card-body">
-                <div className="deck-hero-content">
-                  <div className="deck-icon-badge">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
-                      <path d="m9 12 2 2 4-4"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <span className="deck-kicker-tag">Fasilitasi Standarisasi &amp; Jaminan Mutu Usaha</span>
-                    <h3 className="deck-card-title">Penyerahan Sertifikat Uji Mutu, Halal &amp; Kelas Online KEMILAU</h3>
-                  </div>
-                </div>
-
-                <div className="deck-feature-tags">
-                  <span className="deck-tag-chip">✦ 46 Sertifikat Uji Mutu</span>
-                  <span className="deck-tag-chip">✦ 25 Sertifikat Halal Resmi</span>
-                  <span className="deck-tag-chip">✦ 93 Sertifikat Kelas KEMILAU</span>
-                  <span className="deck-tag-chip">✦ Konsultasi Legalitas IKM</span>
-                </div>
-
-                <p className="deck-card-desc">
-                  Seremonial penyerahan simbolis sertifikat legalitas dan jaminan mutu: 46 sertifikat hasil Uji Mutu laboratorium, 25 sertifikat Halal, serta 93 sertifikat kelulusan Kelas Online Program KEMILAU dari Disdagin Kota Bandung.
-                </p>
+              <div className="deck-card-body deck-card-body-simple">
+                <h3 className="deck-card-title">Penyerahan Sertifikat Uji Mutu, Halal &amp; Kelas Online KEMILAU</h3>
               </div>
 
               <footer className="deck-card-footer">
-                <div className="deck-footer-meta">
-                  <span className="inline-flex items-center gap-1.5 font-medium">
-                    <svg className="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <span>14:15 — 15:15 WIB</span>
-                  </span>
-                  <span className="footer-meta-sep">•</span>
-                  <span>Main Stage Braga City Walk</span>
-                </div>
-                <div className="flex items-center gap-2">
+                <div className="deck-footer-actions">
                   <button
                     type="button"
                     onClick={() => goToCard(4)}
@@ -796,54 +600,14 @@ export default function ActivitiesDeckSection() {
                   <span className="deck-card-number">06 / 06</span>
                   <span className="deck-header-pill">SENI BUDAYA &amp; MUSIK ETNIK</span>
                 </div>
-                <div className="deck-header-venue">
-                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                  </svg>
-                  <span>27–28 Nov · Main Stage Braga</span>
-                </div>
               </header>
 
-              <div className="deck-card-body">
-                <div className="deck-hero-content">
-                  <div className="deck-icon-badge">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M9 18V5l12-2v13"/>
-                      <circle cx="6" cy="18" r="3"/>
-                      <circle cx="18" cy="16" r="3"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <span className="deck-kicker-tag">Pesta Seni Budaya &amp; Harmoni Tradisi</span>
-                    <h3 className="deck-card-title">Panggung Seni Budaya &amp; Pertunjukan Musik Etnik</h3>
-                  </div>
-                </div>
-
-                <div className="deck-feature-tags">
-                  <span className="deck-tag-chip">✦ Rampak Kendang Sunda</span>
-                  <span className="deck-tag-chip">✦ Perkusi Etnik Interaktif</span>
-                  <span className="deck-tag-chip">✦ Musik Tradisi Kontemporer</span>
-                  <span className="deck-tag-chip">✦ Apresiasi Talenta Bandung</span>
-                </div>
-
-                <p className="deck-card-desc">
-                  Perayaan puncak kebudayaan khas Sunda yang menyatukan harmoni musik tradisi perkusi etnik Jawa Barat, atraksi rampak kendang, serta kolaborasi talenta seni muda Kota Bandung. Mengiringi kemeriahan eksibisi industri kreatif dan belanja sepanjang koridor heritage Jalan Braga.
-                </p>
+              <div className="deck-card-body deck-card-body-simple">
+                <h3 className="deck-card-title">Panggung Seni Budaya &amp; Pertunjukan Musik Etnik</h3>
               </div>
 
               <footer className="deck-card-footer">
-                <div className="deck-footer-meta">
-                  <span className="inline-flex items-center gap-1.5 font-medium">
-                    <svg className="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <span>18:30 — 21:00 WIB</span>
-                  </span>
-                  <span className="footer-meta-sep">•</span>
-                  <span>Main Stage Braga City Walk</span>
-                </div>
-                <div className="flex items-center gap-2">
+                <div className="deck-footer-actions">
                   <button
                     type="button"
                     onClick={() => goToCard(5)}

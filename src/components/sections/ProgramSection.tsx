@@ -22,7 +22,6 @@ interface ScheduleItem {
 
 export default function ProgramSection() {
   const [activeDay, setActiveDay] = useState<'day1' | 'day2'>('day1');
-  const [expandedIds, setExpandedIds] = useState<string[]>([]);
 
   const scheduleDay1: ScheduleItem[] = [
     {
@@ -220,12 +219,6 @@ export default function ProgramSection() {
   const currentSchedule = activeDay === 'day1' ? scheduleDay1 : scheduleDay2;
   const filteredSchedule = currentSchedule;
 
-  const toggleItem = (id: string) => {
-    setExpandedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
-
   return (
     <section
       id="program"
@@ -255,26 +248,23 @@ export default function ProgramSection() {
           </p>
 
           {/* Apple-style Segmented Day Switcher */}
-          <div className="mt-8 sm:mt-10 inline-flex flex-col sm:flex-row p-1.5 rounded-2xl sm:rounded-full bg-slate-200/75 border border-slate-300/80 shadow-inner gap-1.5 w-full sm:w-auto">
+          <div className="mt-8 sm:mt-10 inline-flex flex-col sm:flex-row p-1.5 rounded-2xl sm:rounded-full bg-slate-200/75 border border-slate-300/80 shadow-inner gap-1.5 w-full sm:w-auto font-[family-name:var(--font-poppins)]">
             {/* Day 1 Switcher */}
             <button
               type="button"
-              onClick={() => {
-                setActiveDay('day1');
-                setExpandedIds([]);
-              }}
-              className={`px-5 py-3 rounded-xl sm:rounded-full text-left sm:text-center transition-all cursor-pointer flex items-center justify-between sm:justify-center gap-3 ${
+              onClick={() => setActiveDay('day1')}
+              className={`px-6 py-2.5 rounded-xl sm:rounded-full text-left sm:text-center transition-all cursor-pointer flex items-center justify-between sm:justify-center gap-3 ${
                 activeDay === 'day1'
-                  ? 'bg-white text-slate-900 shadow-sm font-black'
-                  : 'text-slate-600 hover:text-slate-900 font-semibold'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <div className="flex flex-col sm:items-center">
-                <span className="text-xs sm:text-sm tracking-tight">
-                  Hari 1 · Jum&apos;at, 27 Nov 2026
+              <div className="flex flex-col sm:items-center leading-tight">
+                <span className="text-xs sm:text-sm font-extrabold tracking-wide uppercase">
+                  DAY 1
                 </span>
-                <span className="text-[10px] text-slate-500 font-mono font-normal">
-                  Braga City Walk Bandung
+                <span className="text-[11px] sm:text-xs font-medium tracking-tight text-slate-600 mt-0.5">
+                  Jumat, 27 Nov 2026
                 </span>
               </div>
               {activeDay === 'day1' && (
@@ -285,22 +275,19 @@ export default function ProgramSection() {
             {/* Day 2 Switcher */}
             <button
               type="button"
-              onClick={() => {
-                setActiveDay('day2');
-                setExpandedIds([]);
-              }}
-              className={`px-5 py-3 rounded-xl sm:rounded-full text-left sm:text-center transition-all cursor-pointer flex items-center justify-between sm:justify-center gap-3 ${
+              onClick={() => setActiveDay('day2')}
+              className={`px-6 py-2.5 rounded-xl sm:rounded-full text-left sm:text-center transition-all cursor-pointer flex items-center justify-between sm:justify-center gap-3 ${
                 activeDay === 'day2'
-                  ? 'bg-white text-slate-900 shadow-sm font-black'
-                  : 'text-slate-600 hover:text-slate-900 font-semibold'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <div className="flex flex-col sm:items-center">
-                <span className="text-xs sm:text-sm tracking-tight">
-                  Hari 2 · Sabtu, 28 Nov 2026
+              <div className="flex flex-col sm:items-center leading-tight">
+                <span className="text-xs sm:text-sm font-extrabold tracking-wide uppercase">
+                  DAY 2
                 </span>
-                <span className="text-[10px] text-slate-500 font-mono font-normal">
-                  Braga City Walk Bandung
+                <span className="text-[11px] sm:text-xs font-medium tracking-tight text-slate-600 mt-0.5">
+                  Sabtu, 28 Nov 2026
                 </span>
               </div>
               {activeDay === 'day2' && (
@@ -320,8 +307,6 @@ export default function ProgramSection() {
           />
 
           {filteredSchedule.map((item) => {
-            const isExpanded = expandedIds.includes(item.id);
-
             return (
               <div
                 key={item.id}
@@ -347,110 +332,22 @@ export default function ProgramSection() {
                   />
                 </div>
 
-                {/* Right Column: Apple-Style Refined Card */}
-                <div className={`flex-1 w-full bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 border transition-all ${
-                  isExpanded
-                    ? 'border-blue-200 shadow-[0_12px_32px_-8px_rgba(15,23,42,0.08)] ring-1 ring-blue-100'
-                    : 'border-slate-200/90 shadow-[0_2px_12px_rgba(15,23,42,0.03)] hover:border-slate-300 hover:shadow-[0_8px_24px_-6px_rgba(15,23,42,0.05)]'
-                }`}>
-                  {/* Card Top Metadata: Category Pill + Location Pill */}
-                  <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
-                    <div className="flex items-center gap-2">
+                {/* Right Column: Clean & Refined Rundown Card */}
+                <div className="flex-1 w-full bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-[0_2px_12px_rgba(15,23,42,0.03)] hover:border-slate-300 hover:shadow-[0_8px_24px_-6px_rgba(15,23,42,0.05)] transition-all">
+                  <div className="flex flex-col gap-2">
+                    <div>
                       <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide border ${item.theme.badgeBg} ${item.theme.badgeText} ${item.theme.badgeBorder}`}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide border ${item.theme.badgeBg} ${item.theme.badgeText} ${item.theme.badgeBorder}`}
                       >
                         <span className={`w-1.5 h-1.5 rounded-full ${item.theme.dotColor}`} />
                         <span>{item.category}</span>
                       </span>
                     </div>
 
-                    <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-50 px-3 py-1 rounded-xl border border-slate-200/70">
-                      <svg className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                        <circle cx="12" cy="10" r="3"/>
-                      </svg>
-                      <span>{item.location}</span>
-                    </div>
-                  </div>
-
-                  {/* Card Main Title + Accordion Toggle Header */}
-                  <div
-                    onClick={() => toggleItem(item.id)}
-                    className="flex items-start sm:items-center justify-between gap-3 mt-3 cursor-pointer group/title select-none"
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        toggleItem(item.id);
-                      }
-                    }}
-                    aria-expanded={isExpanded}
-                  >
-                    <h3 className="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight group-hover/title:text-blue-600 transition-colors leading-snug">
+                    <h3 className="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight leading-snug">
                       {item.title}
                     </h3>
-
-                    {/* Chevron Toggle Button with Down/Up > < Arrow */}
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleItem(item.id);
-                      }}
-                      aria-label={isExpanded ? `Tutup detail ${item.title}` : `Buka detail ${item.title}`}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                        isExpanded
-                          ? 'bg-blue-50 text-blue-700 border border-blue-200/90 shadow-2xs hover:bg-blue-100'
-                          : 'bg-slate-100/90 text-slate-700 border border-slate-200/90 hover:bg-slate-200/80 hover:text-slate-900'
-                      }`}
-                    >
-                      <span className="text-[11px] font-mono font-bold uppercase tracking-wider">
-                        {isExpanded ? 'Tutup' : 'Buka'}
-                      </span>
-                      <svg
-                        className={`w-3.5 h-3.5 transition-transform duration-300 ${
-                          isExpanded ? 'rotate-180 text-blue-600' : 'rotate-0 text-slate-500'
-                        }`}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="6 9 12 15 18 9" />
-                      </svg>
-                    </button>
                   </div>
-
-                  {/* Accordion Detail: Only shown when opened (isExpanded = true) */}
-                  {isExpanded && (
-                    <div className="pt-2 animate-in fade-in slide-in-from-top-1 duration-200">
-                      {/* Card Description */}
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mt-2">
-                        {item.desc}
-                      </p>
-
-                      {/* Highlight Checkpoints Chips */}
-                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-4 pt-3 border-t border-slate-100">
-                        <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider mr-1">
-                          Sorotan:
-                        </span>
-                        {item.highlights.map((h, hIdx) => (
-                          <span
-                            key={hIdx}
-                            className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-50 border border-slate-200/80 px-2.5 py-0.5 rounded-lg"
-                          >
-                            <svg className="w-2.5 h-2.5 text-blue-500 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-                            </svg>
-                            <span>{h}</span>
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             );

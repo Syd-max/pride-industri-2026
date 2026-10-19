@@ -267,12 +267,6 @@ export default function CompetitionSection() {
                 <div ref={peelFlapRef} className="peel-flap" />
               </div>
 
-              <p className="ticket-schedule-note">
-                {viewMode === 'benefit'
-                  ? 'Apresiasi & panggung kejuaraan festival'
-                  : 'Shooting 27–28 Nov 2026 di Braga City Walk'}
-              </p>
-
               <Link
                 href="/competition/video-lokal"
                 className="btn-register-ticket"
@@ -361,12 +355,6 @@ export default function CompetitionSection() {
                   </div>
                 </div>
               </div>
-
-              <p className="ticket-schedule-note">
-                {viewMode === 'benefit'
-                  ? 'Apresiasi & panggung kejuaraan festival'
-                  : 'Pendaftaran 21 Okt – 21 Nov 2026 · Gratis'}
-              </p>
 
               <Link
                 href="/competition/desain-kemasan"

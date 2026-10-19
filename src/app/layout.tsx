@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Playfair_Display, Inter, Caveat, Plus_Jakarta_Sans } from 'next/font/google';
+import { Playfair_Display, Inter, Caveat, Plus_Jakarta_Sans, Poppins } from 'next/font/google';
 import './globals.css';
 
 const playfair = Playfair_Display({
@@ -28,6 +28,13 @@ const plusJakarta = Plus_Jakarta_Sans({
   variable: '--font-plus-jakarta',
   display: 'swap',
   weight: ['400', '500', '600', '700', '800'],
+});
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  variable: '--font-poppins',
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800', '900'],
 });
 
 export const metadata: Metadata = {
@@ -98,7 +105,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={`${playfair.variable} ${inter.variable} ${caveat.variable} ${plusJakarta.variable}`}>
+    <html lang="id" className={`${playfair.variable} ${inter.variable} ${caveat.variable} ${plusJakarta.variable} ${poppins.variable}`}>
       <body>
         {children}
       </body>
