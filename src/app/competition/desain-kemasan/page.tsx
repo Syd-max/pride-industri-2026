@@ -22,6 +22,20 @@ function inferContentType(file: File): string {
   }
 }
 
+const INSTITUTION_OPTIONS = [
+  'Pemerintah / Instansi Pemerintah',
+  'Dinas / Badan / Lembaga Pemerintah',
+  'Perusahaan Swasta',
+  'UMKM / IKM',
+  'Perguruan Tinggi',
+  'Sekolah',
+  'Komunitas / Organisasi',
+  'Yayasan / Lembaga Nonprofit',
+  'Wirausaha / Usaha Mandiri',
+  'Umum / Perorangan',
+  'Lainnya',
+];
+
 const FORM_STEPS = [
   { step: 1, title: 'Data Diri', subtitle: 'Identitas peserta & alamat' },
   { step: 2, title: 'Info Produk & Desain', subtitle: 'Merek & bahan lokal' },
@@ -35,9 +49,11 @@ export default function DesainKemasanPage() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [stepError, setStepError] = useState<string | null>(null);
 
-  // ─── Section 1: Data Diri Peserta ───
+  // ─── Section 1: Data Diri Peserta (Revisi 1: Identik dengan form Lomba Video) ───
   const [fullName, setFullName] = useState('');
   const [address, setAddress] = useState('');
+  const [institution, setInstitution] = useState('');
+  const [customInstitution, setCustomInstitution] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
 
@@ -100,7 +116,7 @@ export default function DesainKemasanPage() {
     return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
   };
 
-  // ─── File Handlers with Strict Size Limits ───
+  // ─── File Handlers with Strict Size Limits (Revisi 4) ───
   const handleDesignFileChange = (file: File | null) => {
     setDesignError(null);
     setStepError(null);
@@ -108,10 +124,10 @@ export default function DesainKemasanPage() {
       setDesignFile(null);
       return;
     }
-    const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
+    const MAX_SIZE = 7 * 1024 * 1024; // 7 MB (Revisi 4)
     if (file.size > MAX_SIZE) {
       setDesignError(
-        `File "${file.name}" berukuran ${formatFileSize(file.size)}, melebihi batas maksimal 10 MB. File tidak dapat dimasukkan.`
+        `File "${file.name}" berukuran ${formatFileSize(file.size)}, melebihi batas maksimal 7 MB. Berkas tidak dapat diunggah.`
       );
       if (designInputRef.current) designInputRef.current.value = '';
       setDesignFile(null);
@@ -127,10 +143,10 @@ export default function DesainKemasanPage() {
       setMasterFile(null);
       return;
     }
-    const MAX_SIZE = 15 * 1024 * 1024; // 15 MB
+    const MAX_SIZE = 8 * 1024 * 1024; // 8 MB (Revisi 4)
     if (file.size > MAX_SIZE) {
       setMasterError(
-        `Master file "${file.name}" berukuran ${formatFileSize(file.size)}, melebihi batas maksimal 15 MB.`
+        `Master file "${file.name}" berukuran ${formatFileSize(file.size)}, melebihi batas maksimal 8 MB. Berkas tidak dapat diunggah.`
       );
       if (masterInputRef.current) masterInputRef.current.value = '';
       setMasterFile(null);
@@ -141,40 +157,29 @@ export default function DesainKemasanPage() {
 
   const handlePaktaFileChange = (file: File | null) => {
     setPaktaError(null);
-    setStepError(null);
-    if (!file) {
-      setPaktaFile(null);
-      return;
-    }
-    const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
-    if (file.size > MAX_SIZE) {
-      setPaktaError(
-        `File Pakta Integritas "${file.name}" berukuran ${formatFileSize(file.size)}, melebihi batas maksimal 5 MB.`
-      );
-      if (paktaInputRef.current) paktaInputRef.current.value = '';
-      setPaktaFile(null);
-      return;
-    }
-    setPaktaFile(file);
-  };
-
-  const handlePersetujuanFileChange = (file: File | null) => {
     setPersetujuanError(null);
     setStepError(null);
     if (!file) {
+      setPaktaFile(null);
       setPersetujuanFile(null);
       return;
     }
-    const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
+    const MAX_SIZE = 2 * 1024 * 1024; // 2 MB (Revisi 4: Section Pakta Integritas & Surat Pernyataan disatukan)
     if (file.size > MAX_SIZE) {
-      setPersetujuanError(
-        `File Surat Pernyataan "${file.name}" berukuran ${formatFileSize(file.size)}, melebihi batas maksimal 5 MB.`
+      setPaktaError(
+        `Dokumen "${file.name}" berukuran ${formatFileSize(file.size)}, melebihi batas maksimal 2 MB. Berkas tidak dapat diunggah.`
       );
-      if (persetujuanInputRef.current) persetujuanInputRef.current.value = '';
+      if (paktaInputRef.current) paktaInputRef.current.value = '';
+      setPaktaFile(null);
       setPersetujuanFile(null);
       return;
     }
+    setPaktaFile(file);
     setPersetujuanFile(file);
+  };
+
+  const handlePersetujuanFileChange = (file: File | null) => {
+    handlePaktaFileChange(file);
   };
 
   const handleTactlinkQrChange = (file: File | null) => {
@@ -216,7 +221,15 @@ export default function DesainKemasanPage() {
         return;
       }
       if (!address.trim() || address.trim().length < 5) {
-        setStepError('Alamat lengkap wajib diisi sesuai dokumen Pakta Integritas.');
+        setStepError('Alamat rumah lengkap wajib diisi minimal 5 karakter.');
+        return;
+      }
+      if (!institution) {
+        setStepError('Silakan pilih instansi / asal peserta dari daftar dropdown.');
+        return;
+      }
+      if (institution === 'Lainnya' && (!customInstitution.trim() || customInstitution.trim().length < 2)) {
+        setStepError('Silakan tuliskan nama instansi / asal Anda secara manual.');
         return;
       }
       if (!phone.trim() || phone.trim().length < 8) {
@@ -242,27 +255,23 @@ export default function DesainKemasanPage() {
       }
     } else if (currentStep === 3) {
       if (!designFile) {
-        setStepError('Upload file karya desain kemasan dalam format PDF (maks. 10 MB) wajib diunggah.');
+        setStepError('Upload file karya desain kemasan dalam format PDF (maks. 7 MB) wajib diunggah.');
         return;
       }
-      if (designError) {
-        setStepError(designError);
+      if (designError || designFile.size > 7 * 1024 * 1024) {
+        setStepError(designError || 'Ukuran file karya desain kemasan melebihi batas 7 MB.');
+        return;
+      }
+      if (masterFile && masterFile.size > 8 * 1024 * 1024) {
+        setStepError(masterError || 'Ukuran master file desain melebihi batas 8 MB.');
         return;
       }
       if (!paktaFile) {
-        setStepError('Upload Pakta Integritas yang telah diisi dan ditandatangani wajib diunggah.');
+        setStepError('Upload Dokumen Pakta Integritas & Surat Pernyataan wajib diunggah.');
         return;
       }
-      if (paktaError) {
-        setStepError(paktaError);
-        return;
-      }
-      if (!persetujuanFile) {
-        setStepError('Upload Surat Pernyataan Persetujuan yang telah diisi dan ditandatangani wajib diunggah.');
-        return;
-      }
-      if (persetujuanError) {
-        setStepError(persetujuanError);
+      if (paktaError || paktaFile.size > 2 * 1024 * 1024) {
+        setStepError(paktaError || 'Ukuran dokumen Pakta Integritas & Surat Pernyataan melebihi batas 2 MB.');
         return;
       }
     } else if (currentStep === 4) {
@@ -372,6 +381,7 @@ export default function DesainKemasanPage() {
         competition_id: 'desain-kemasan',
         full_name: fullName.trim(),
         address: address.trim(),
+        institution: institution === 'Lainnya' ? customInstitution.trim() : institution,
         phone: phone.trim(),
         email: email.trim().toLowerCase(),
         brand_name: brandName.trim(),
@@ -504,6 +514,11 @@ export default function DesainKemasanPage() {
               </div>
             </div>
 
+            {/* Simple Next Steps Note */}
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/90 text-xs text-slate-600 text-center max-w-md mx-auto leading-relaxed">
+              Simpan kode ini untuk check in
+            </div>
+
             <div className="pt-2">
               <Link
                 href="/"
@@ -515,66 +530,13 @@ export default function DesainKemasanPage() {
           </div>
         ) : (
           <>
-            {/* Page Title & Context Header */}
-            <div className="pt-1 space-y-1.5">
+            {/* Page Title */}
+            <div className="pt-1">
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
                 Pendaftaran Desain Kemasan IKM
               </h1>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Inovasi Eco-Packaging Produk Kuliner &amp; Olahan Pangan Lokal Kota Bandung. Pendaftaran 100% gratis.
-              </p>
             </div>
 
-            {/* Download Buttons: Compact pills */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              <a
-                href="/template-desain-kemasan.pdf"
-                download
-                className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:bg-slate-50 transition-colors shadow-2xs text-xs font-semibold text-slate-800"
-              >
-                <span className="flex items-center gap-2 min-w-0">
-                  <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
-                  </svg>
-                  <span className="truncate">Format Template (PDF)</span>
-                </span>
-                <span className="text-[11px] text-blue-600 font-medium shrink-0 ml-2">Unduh ↗</span>
-              </a>
-
-              <a
-                href="/syarat-desain-kemasan.pdf"
-                download
-                className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:bg-slate-50 transition-colors shadow-2xs text-xs font-semibold text-slate-800"
-              >
-                <span className="flex items-center gap-2 min-w-0">
-                  <svg className="w-4 h-4 text-slate-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                  </svg>
-                  <span className="truncate">Juknis &amp; Pakta (PDF)</span>
-                </span>
-                <span className="text-[11px] text-slate-600 font-medium shrink-0 ml-2">Unduh ↗</span>
-              </a>
-
-              <a
-                href="https://bit.ly/PRIDE2026LogodanVisualAssets"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:bg-slate-50 transition-colors shadow-2xs text-xs font-semibold text-slate-800"
-              >
-                <span className="flex items-center gap-2 min-w-0">
-                  <svg className="w-4 h-4 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-                    <path d="M2 12h20" />
-                  </svg>
-                  <span className="truncate">Logo &amp; Aset Visual</span>
-                </span>
-                <span className="text-[11px] text-emerald-600 font-medium shrink-0 ml-2">Buka ↗</span>
-              </a>
-            </div>
           <div className="space-y-6">
 
             {/* ════════════════════════════════════════════════════════════════
@@ -598,7 +560,7 @@ export default function DesainKemasanPage() {
                 />
               </div>
 
-              {/* Stepper Buttons (Quick Jump to visited steps) */}
+              {/* Stepper Buttons (Revisi 2: Tulisan jelas dan kontras tinggi) */}
               <div className="grid grid-cols-5 gap-1.5 sm:gap-2 pt-1">
                 {FORM_STEPS.map((s) => {
                   const isCompleted = s.step < currentStep;
@@ -616,13 +578,13 @@ export default function DesainKemasanPage() {
                           ? 'bg-blue-600 text-white shadow-xs font-black'
                           : isCompleted
                           ? 'bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold cursor-pointer'
-                          : 'bg-slate-50 text-slate-400 font-medium cursor-not-allowed opacity-60'
+                          : 'bg-slate-100/90 border border-slate-200 text-slate-700 font-bold cursor-not-allowed'
                       }`}
                     >
-                      <div className="text-[11px] sm:text-xs leading-none">
+                      <div className={`text-[11px] sm:text-xs leading-none ${isActive ? 'text-white' : isCompleted ? 'text-blue-700' : 'text-slate-800 font-bold'}`}>
                         {isCompleted ? '✓' : s.step}
                       </div>
-                      <div className="text-[10px] hidden sm:block truncate mt-0.5">
+                      <div className={`text-[10px] hidden sm:block truncate mt-0.5 ${isActive ? 'text-white' : isCompleted ? 'text-blue-700' : 'text-slate-700 font-semibold'}`}>
                         {s.title}
                       </div>
                     </button>
@@ -676,55 +638,103 @@ export default function DesainKemasanPage() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-                    {/* 1. Nama lengkap */}
                     <div className="space-y-1.5 sm:col-span-2">
                       <label htmlFor="full_name" className="text-xs font-bold text-slate-700 block">
-                        Nama Lengkap (Sesuai KTP) <span className="text-blue-600">*</span>
+                        Nama Lengkap <span className="text-blue-600">*</span>
                       </label>
                       <input
                         id="full_name"
                         type="text"
                         required
-                        placeholder="Contoh: Muhammad Irsyad"
+                        placeholder="Nama lengkap peserta atau ketua tim"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition-all"
                       />
                     </div>
 
-                    {/* 2. Alamat lengkap */}
                     <div className="space-y-1.5 sm:col-span-2">
                       <label htmlFor="address" className="text-xs font-bold text-slate-700 block">
-                        Alamat Lengkap (Wajib sesuai dokumen Pakta Integritas) <span className="text-blue-600">*</span>
+                        Alamat Rumah <span className="text-blue-600">*</span>
                       </label>
                       <textarea
                         id="address"
-                        rows={2}
                         required
-                        placeholder="Jalan, RT/RW, Kelurahan, Kecamatan, Kota Bandung"
+                        rows={2}
+                        placeholder="Alamat domisili / tempat tinggal lengkap"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition-all resize-none"
                       />
                     </div>
 
-                    {/* 3. Nomor HP / WhatsApp */}
+                    <div className="space-y-1.5 sm:col-span-2">
+                      <label htmlFor="institution" className="text-xs font-bold text-slate-700 block">
+                        Instansi / Asal Peserta <span className="text-blue-600">*</span>
+                      </label>
+                      <div className="relative">
+                        <select
+                          id="institution"
+                          required
+                          value={institution}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setInstitution(val);
+                            if (val !== 'Lainnya') {
+                              setCustomInstitution('');
+                            }
+                          }}
+                          className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition-all appearance-none cursor-pointer pr-10 text-slate-800"
+                        >
+                          <option value="" disabled>Pilih Instansi / Asal Peserta...</option>
+                          {INSTITUTION_OPTIONS.map((opt) => (
+                            <option key={opt} value={opt}>
+                              {opt}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="absolute inset-y-0 right-0 flex items-center px-3.5 pointer-events-none text-slate-400">
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* Manual text input appears when "Lainnya" is selected */}
+                      {institution === 'Lainnya' && (
+                        <div className="pt-2 animate-in fade-in duration-200">
+                          <label htmlFor="custom_institution" className="text-[11px] font-semibold text-slate-600 block mb-1">
+                            Tuliskan Nama Instansi / Asal Anda <span className="text-blue-600">*</span>
+                          </label>
+                          <input
+                            id="custom_institution"
+                            type="text"
+                            required
+                            placeholder="Tuliskan nama instansi secara manual"
+                            value={customInstitution}
+                            onChange={(e) => setCustomInstitution(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-white border border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                            autoFocus
+                          />
+                        </div>
+                      )}
+                    </div>
+
                     <div className="space-y-1.5">
                       <label htmlFor="phone" className="text-xs font-bold text-slate-700 block">
-                        Nomor HP / WhatsApp Aktif <span className="text-blue-600">*</span>
+                        Nomor WhatsApp Aktif <span className="text-blue-600">*</span>
                       </label>
                       <input
                         id="phone"
                         type="tel"
                         required
-                        placeholder="081234567890"
+                        placeholder="08xxxxxxxxxx"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition-all"
                       />
                     </div>
 
-                    {/* 4. Alamat email */}
                     <div className="space-y-1.5">
                       <label htmlFor="email" className="text-xs font-bold text-slate-700 block">
                         Alamat Email Aktif <span className="text-blue-600">*</span>
@@ -885,14 +895,14 @@ export default function DesainKemasanPage() {
 
                   <div className="space-y-5 pt-1">
 
-                    {/* ─── 9. Upload file karya desain kemasan (PDF, maks 10 MB, wajib) ─── */}
+                    {/* ─── 9. Upload file karya desain kemasan (PDF, maks 7 MB, wajib) ─── */}
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <label className="text-xs font-bold text-slate-800 block">
                           9. File Karya Desain Kemasan <span className="text-blue-600">*</span>
                         </label>
                         <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                          PDF · Maks 10 MB
+                          PDF · Maks 7 MB
                         </span>
                       </div>
 
@@ -965,7 +975,7 @@ export default function DesainKemasanPage() {
                           10. Master File Desain
                         </label>
                         <span className="text-[10px] text-slate-500 font-semibold bg-slate-100 px-2 py-0.5 rounded">
-                          Opsional · Maks 15 MB
+                          Opsional · Maks 8 MB
                         </span>
                       </div>
 
@@ -1028,14 +1038,14 @@ export default function DesainKemasanPage() {
                       </div>
                     </div>
 
-                    {/* ─── 11. Upload Pakta Integritas (wajib, maks 5 MB) ─── */}
+                    {/* ─── 11. Upload Pakta Integritas & Surat Pernyataan (wajib, maks 2 MB - Revisi 4) ─── */}
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <label className="text-xs font-bold text-slate-800 block">
-                          11. Pakta Integritas Bertanda Tangan <span className="text-blue-600">*</span>
+                          11. Dokumen Pakta Integritas &amp; Surat Pernyataan <span className="text-blue-600">*</span>
                         </label>
                         <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                          PDF / Gambar · Maks 5 MB
+                          PDF / Gambar · Maks 2 MB
                         </span>
                       </div>
 
@@ -1088,80 +1098,10 @@ export default function DesainKemasanPage() {
                         ) : (
                           <div className="space-y-1">
                             <div className="text-xs font-bold text-slate-700">
-                              Pilih dokumen Pakta Integritas
+                              Pilih dokumen Pakta Integritas &amp; Surat Pernyataan
                             </div>
                             <div className="text-[11px] text-slate-400">
-                              Format PDF, JPG, atau PNG bertanda tangan
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* ─── 12. Upload Surat Pernyataan Persetujuan (wajib, maks 5 MB) ─── */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <label className="text-xs font-bold text-slate-800 block">
-                          12. Surat Pernyataan Persetujuan <span className="text-blue-600">*</span>
-                        </label>
-                        <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                          PDF / Gambar · Maks 5 MB
-                        </span>
-                      </div>
-
-                      {persetujuanError && (
-                        <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-medium">
-                          {persetujuanError}
-                        </div>
-                      )}
-
-                      <div
-                        onClick={() => persetujuanInputRef.current?.click()}
-                        className={`p-4 rounded-2xl border-2 border-dashed text-center transition-all cursor-pointer ${
-                          persetujuanFile
-                            ? 'border-emerald-300 bg-emerald-50/40 text-emerald-900'
-                            : 'border-slate-300 bg-slate-50/50 hover:bg-slate-50 hover:border-blue-400 text-slate-600'
-                        }`}
-                      >
-                        <input
-                          ref={persetujuanInputRef}
-                          type="file"
-                          accept=".pdf,.jpg,.jpeg,.png,.docx"
-                          onChange={(e) => handlePersetujuanFileChange(e.target.files?.[0] || null)}
-                          className="hidden"
-                        />
-
-                        {persetujuanFile ? (
-                          <div className="flex items-center justify-between gap-3 text-left">
-                            <div className="flex items-center gap-3 min-w-0">
-                              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                  <polyline points="20 6 9 17 4 12" />
-                                </svg>
-                              </div>
-                              <div className="min-w-0">
-                                <div className="text-xs font-bold text-slate-900 truncate">{persetujuanFile.name}</div>
-                                <div className="text-[11px] text-emerald-700 font-semibold">{formatFileSize(persetujuanFile.size)}</div>
-                              </div>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handlePersetujuanFileChange(null);
-                              }}
-                              className="px-2.5 py-1 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800"
-                            >
-                              Ganti
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="space-y-1">
-                            <div className="text-xs font-bold text-slate-700">
-                              Pilih dokumen Surat Pernyataan
-                            </div>
-                            <div className="text-[11px] text-slate-400">
-                              Format PDF, JPG, atau PNG bertanda tangan
+                              Format PDF, JPG, atau PNG bertanda tangan (Maks. 2 MB)
                             </div>
                           </div>
                         )}
@@ -1555,8 +1495,8 @@ export default function DesainKemasanPage() {
                         </>
                       ) : (
                         <>
-                          <span>Kirim Formulir Pendaftaran Desain Kemasan</span>
-                          <span>✓</span>
+                          <span>Kirim Pendaftaran</span>
+                          <span aria-hidden="true">→</span>
                         </>
                       )}
                     </button>

@@ -106,6 +106,7 @@ export async function POST(
       const productName = sanitizeString(body.product_name);
       const brandName = sanitizeString(body.brand_name);
       const address = sanitizeString(body.address);
+      const institution = sanitizeString(body.institution || '');
       const localIngredients = sanitizeString(body.local_ingredients);
       const designConcept = sanitizeString(body.design_concept || body.description || '');
       const designFileName = sanitizeString(
@@ -118,8 +119,34 @@ export async function POST(
         uploadedFiles['pakta_integritas_file']?.name || body.pakta_integritas_file_name || ''
       );
       const persetujuanFileName = sanitizeString(
-        uploadedFiles['surat_persetujuan_file']?.name || body.surat_persetujuan_file_name || ''
+        uploadedFiles['surat_persetujuan_file']?.name || body.surat_persetujuan_file_name || paktaFileName || ''
       );
+
+      // File Size Validations (Revisi 4)
+      if (uploadedFiles['design_file'] && uploadedFiles['design_file'].size > 7 * 1024 * 1024) {
+        return NextResponse.json(
+          { success: false, error: 'Ukuran file karya desain kemasan melebihi batas maksimal 7 MB.' },
+          { status: 400 }
+        );
+      }
+      if (uploadedFiles['master_file'] && uploadedFiles['master_file'].size > 8 * 1024 * 1024) {
+        return NextResponse.json(
+          { success: false, error: 'Ukuran master file desain melebihi batas maksimal 8 MB.' },
+          { status: 400 }
+        );
+      }
+      if (uploadedFiles['pakta_integritas_file'] && uploadedFiles['pakta_integritas_file'].size > 2 * 1024 * 1024) {
+        return NextResponse.json(
+          { success: false, error: 'Ukuran dokumen pakta integritas & surat pernyataan melebihi batas maksimal 2 MB.' },
+          { status: 400 }
+        );
+      }
+      if (uploadedFiles['surat_persetujuan_file'] && uploadedFiles['surat_persetujuan_file'].size > 2 * 1024 * 1024) {
+        return NextResponse.json(
+          { success: false, error: 'Ukuran dokumen pakta integritas & surat pernyataan melebihi batas maksimal 2 MB.' },
+          { status: 400 }
+        );
+      }
 
       if (!productName || !brandName || !address) {
         return NextResponse.json(
@@ -177,6 +204,7 @@ export async function POST(
         product_name: productName,
         brand_name: brandName,
         address,
+        institution,
         local_ingredients: localIngredients,
         design_concept: designConcept,
         design_file_name: designFileName,
@@ -535,6 +563,7 @@ export async function POST(
             };
 
             if (specificData.address) corePayload.address = specificData.address;
+            if (specificData.institution) corePayload.institution = specificData.institution;
             if (specificData.product_name) corePayload.product_name = specificData.product_name;
             if (specificData.brand_name) corePayload.brand_name = specificData.brand_name;
             if (specificData.local_ingredients) corePayload.local_ingredients = specificData.local_ingredients;
