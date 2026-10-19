@@ -31,6 +31,20 @@ function inferContentType(file: File): string {
   return 'application/octet-stream';
 }
 
+const INSTITUTION_OPTIONS = [
+  'Pemerintah / Instansi Pemerintah',
+  'Dinas / Badan / Lembaga Pemerintah',
+  'Perusahaan Swasta',
+  'UMKM / IKM',
+  'Perguruan Tinggi',
+  'Sekolah',
+  'Komunitas / Organisasi',
+  'Yayasan / Lembaga Nonprofit',
+  'Wirausaha / Usaha Mandiri',
+  'Umum / Perorangan',
+  'Lainnya',
+];
+
 export default function VideoLokalPage() {
   // ─── Step Navigation State ───
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -39,6 +53,7 @@ export default function VideoLokalPage() {
   // ─── Section 1: Data Diri ───
   const [fullName, setFullName] = useState('');
   const [institution, setInstitution] = useState('');
+  const [customInstitution, setCustomInstitution] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
 
@@ -142,8 +157,12 @@ export default function VideoLokalPage() {
         setStepError('Nama lengkap wajib diisi minimal 3 karakter.');
         return;
       }
-      if (!institution.trim() || institution.trim().length < 2) {
-        setStepError('Instansi / asal peserta wajib diisi.');
+      if (!institution) {
+        setStepError('Silakan pilih instansi / asal peserta dari daftar dropdown.');
+        return;
+      }
+      if (institution === 'Lainnya' && (!customInstitution.trim() || customInstitution.trim().length < 2)) {
+        setStepError('Silakan tuliskan nama instansi / asal peserta secara manual.');
         return;
       }
       if (!phone.trim() || phone.trim().length < 8) {
@@ -261,11 +280,15 @@ export default function VideoLokalPage() {
 
       setUploadProgress('Menyimpan data registrasi...');
 
+      const resolvedInstitution = institution === 'Lainnya'
+        ? (customInstitution.trim() || 'Lainnya')
+        : institution.trim();
+
       const payload = {
         registration_code: regCode,
         competition_id: 'video-lokal',
         full_name: fullName.trim(),
-        institution: institution.trim(),
+        institution: resolvedInstitution,
         phone: phone.trim(),
         email: email.trim().toLowerCase(),
         video_category: videoCategory,
@@ -296,7 +319,7 @@ export default function VideoLokalPage() {
         registration_code: json.data?.registration_code || regCode,
         full_name: fullName.trim(),
         email: email.trim().toLowerCase(),
-        institution: institution.trim(),
+        institution: resolvedInstitution,
         category: videoCategory,
         video_title: videoTitle.trim(),
       });
@@ -417,30 +440,11 @@ export default function VideoLokalPage() {
         ) : (
           <>
             {/* Page Title & Context Header */}
-            <div className="pt-1 space-y-1.5">
+            <div className="pt-1">
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
                 Pendaftaran Lomba Video 1 Menit
               </h1>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                &ldquo;Karya Lokal, Cerita Lokal: Mengangkat Eksistensi IKM Kota Bandung&rdquo; · Pendaftaran 100% gratis.
-              </p>
             </div>
-
-            {/* Technical Guide Pill */}
-            <a
-              href="/syarat-video-lokal.pdf"
-              download
-              className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:bg-slate-50 transition-colors shadow-2xs text-xs font-semibold text-slate-800"
-            >
-              <span className="flex items-center gap-2 min-w-0">
-                <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                </svg>
-                <span className="truncate">Juknis &amp; Panduan Lomba Video (PDF)</span>
-              </span>
-              <span className="text-[11px] text-blue-600 font-medium shrink-0 ml-2">Unduh ↗</span>
-            </a>
           <div className="space-y-6">
 
             {/* ════════════════════════════════════════════════════════════════
@@ -544,7 +548,7 @@ export default function VideoLokalPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                     <div className="space-y-1.5 sm:col-span-2">
                       <label htmlFor="full_name" className="text-xs font-bold text-slate-700 block">
-                        Nama Lengkap (Sesuai KTP / Pelajar) <span className="text-blue-600">*</span>
+                        Nama Lengkap <span className="text-blue-600">*</span>
                       </label>
                       <input
                         id="full_name"
@@ -561,15 +565,52 @@ export default function VideoLokalPage() {
                       <label htmlFor="institution" className="text-xs font-bold text-slate-700 block">
                         Instansi / Asal Peserta <span className="text-blue-600">*</span>
                       </label>
-                      <input
-                        id="institution"
-                        type="text"
-                        required
-                        placeholder="Universitas, sekolah, komunitas, atau umum"
-                        value={institution}
-                        onChange={(e) => setInstitution(e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition-all"
-                      />
+                      <div className="relative">
+                        <select
+                          id="institution"
+                          required
+                          value={institution}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setInstitution(val);
+                            if (val !== 'Lainnya') {
+                              setCustomInstitution('');
+                            }
+                          }}
+                          className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition-all appearance-none cursor-pointer pr-10 text-slate-800"
+                        >
+                          <option value="" disabled>Pilih Instansi / Asal Peserta...</option>
+                          {INSTITUTION_OPTIONS.map((opt) => (
+                            <option key={opt} value={opt}>
+                              {opt}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="absolute inset-y-0 right-0 flex items-center px-3.5 pointer-events-none text-slate-400">
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* Manual text input appears when "Lainnya" is selected */}
+                      {institution === 'Lainnya' && (
+                        <div className="pt-2 animate-in fade-in duration-200">
+                          <label htmlFor="custom_institution" className="text-[11px] font-semibold text-slate-600 block mb-1">
+                            Tuliskan Nama Instansi / Asal Anda <span className="text-blue-600">*</span>
+                          </label>
+                          <input
+                            id="custom_institution"
+                            type="text"
+                            required
+                            placeholder="Tuliskan nama instansi secara manual"
+                            value={customInstitution}
+                            onChange={(e) => setCustomInstitution(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-white border border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                            autoFocus
+                          />
+                        </div>
+                      )}
                     </div>
 
                     <div className="space-y-1.5">
