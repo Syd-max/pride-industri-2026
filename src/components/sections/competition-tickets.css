@@ -365,11 +365,12 @@
   position: absolute;
   inset: 0;
   border-radius: 12px;
-  padding: 12px 16px;
+  padding: 14px 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* Underneath Layer: BENEFIT (Silver/Ice Blue Foil) */
@@ -410,7 +411,7 @@
   align-items: center;
   justify-content: space-between;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -432,12 +433,12 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-top: -4px;
+  margin-top: 2px;
 }
 
 .sticker-price {
   font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: clamp(24px, 2.6vw, 32px);
+  font-size: clamp(30px, 3.2vw, 38px);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -480,23 +481,9 @@
   will-change: left, transform, width, opacity;
 }
 
-/* Top-left invitation corner dog-ear curl when resting at 0% or 100% */
+/* Corner curl disabled to ensure zero text occlusion */
 .corner-curl {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 24px;
-  height: 24px;
-  z-index: 6;
-  pointer-events: none;
-  background: linear-gradient(135deg, #1e40af 48%, #fef08a 50%, #eab308 100%);
-  border-bottom-right-radius: 7px;
-  box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
-  transition: transform 0.25s ease, opacity 0.25s ease;
-}
-
-.sticker-stage:hover .corner-curl {
-  transform: scale(1.22);
+  display: none !important;
 }
 
 /* Schedule / Benefit Subtitle Note & CTA Button */

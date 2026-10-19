@@ -36,17 +36,31 @@ export default function CompetitionSection() {
     const progress = clamp(p, 0, 1);
     peelProgressRef.current = progress;
 
-    if (!stickerTopRef.current || !peelFlapRef.current || !cornerCurlRef.current) return;
+    if (!stickerTopRef.current || !peelFlapRef.current) return;
+
+    if (progress <= 0.001) {
+      stickerTopRef.current.style.clipPath = 'none';
+      peelFlapRef.current.style.opacity = '0';
+      if (cornerCurlRef.current) cornerCurlRef.current.style.opacity = '0';
+      return;
+    }
+
+    if (progress >= 0.999) {
+      stickerTopRef.current.style.clipPath = 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)';
+      peelFlapRef.current.style.opacity = '0';
+      if (cornerCurlRef.current) cornerCurlRef.current.style.opacity = '0';
+      return;
+    }
 
     // Clip top gold sticker from left to right as it peels open
     const cutPercent = progress * 104;
-    const topCut = clamp(cutPercent + 6, 0, 100);
-    const bottomCut = clamp(cutPercent - 6, 0, 100);
+    const topCut = clamp(cutPercent + 2, 0, 100);
+    const bottomCut = clamp(cutPercent - 2, 0, 100);
 
     stickerTopRef.current.style.clipPath = `polygon(${topCut}% 0%, 100% 0%, 100% 100%, ${bottomCut}% 100%)`;
 
-    // Show 3D curling backside flap while mid-peel (between 0.02 and 0.96)
-    if (progress > 0.02 && progress < 0.96) {
+    // Show 3D curling backside flap while mid-peel (between 0.03 and 0.96)
+    if (progress > 0.03 && progress < 0.96) {
       const stageWidth = stickerStageRef.current?.offsetWidth || 280;
       const flapX = progress * stageWidth - 26;
       const flapWidth = 32 + Math.sin(progress * Math.PI) * 26;
@@ -55,18 +69,8 @@ export default function CompetitionSection() {
       peelFlapRef.current.style.width = `${flapWidth}px`;
       peelFlapRef.current.style.left = `${flapX}px`;
       peelFlapRef.current.style.transform = `rotateZ(${6 - progress * 12}deg) scaleY(1.02)`;
-      cornerCurlRef.current.style.opacity = '0';
     } else {
       peelFlapRef.current.style.opacity = '0';
-      cornerCurlRef.current.style.opacity = '1';
-
-      if (progress >= 0.96) {
-        cornerCurlRef.current.style.background =
-          'linear-gradient(135deg, #1e40af 48%, #ffffff 50%, #bfdbfe 100%)';
-      } else {
-        cornerCurlRef.current.style.background =
-          'linear-gradient(135deg, #1e40af 48%, #fef08a 50%, #eab308 100%)';
-      }
     }
   }, []);
 
@@ -197,7 +201,7 @@ export default function CompetitionSection() {
                 onClick={() => handleToggle('hadiah')}
                 className={`toggle-btn ${viewMode === 'hadiah' ? 'active' : ''}`}
               >
-                Hadiah &amp; Trofi
+                Hadiah
               </button>
               <button
                 ref={btnBenefitRef}
@@ -205,7 +209,7 @@ export default function CompetitionSection() {
                 onClick={() => handleToggle('benefit')}
                 className={`toggle-btn ${viewMode === 'benefit' ? 'active' : ''}`}
               >
-                Sertifikat &amp; Benefit
+                Juara
               </button>
             </div>
           </div>
@@ -232,41 +236,30 @@ export default function CompetitionSection() {
                 onPointerMove={handlePointerMove}
                 onPointerUp={finishDrag}
                 onPointerCancel={finishDrag}
-                title="Tarik atau klik untuk mengelupas antara Hadiah &amp; Benefit"
+                title="Tarik atau klik untuk mengelupas stiker"
               >
-                {/* Corner Curl Invite */}
-                <div ref={cornerCurlRef} className="corner-curl" />
-
-                {/* Underneath Layer: BENEFIT & PEMBINAAN (Silver/Ice Blue Foil) */}
+                {/* Underneath Layer: JUARA (Silver/Ice Blue Foil) */}
                 <div className="sticker-face sticker-benefit-base">
                   <div className="sticker-top-row">
-                    <span>FASILITAS JUARA</span>
+                    <span>APRESIASI LOMBA</span>
                     <span className="save-badge">PROGRAM RESMI</span>
                   </div>
                   <div className="sticker-main-row">
-                    <span className="sticker-price">Sertifikat</span>
-                    <div className="sticker-unit">
-                      <strong>&amp; Pembinaan IKM</strong>
-                      <span>Disdagin Kota Bandung</span>
-                    </div>
+                    <span className="sticker-price">Juara</span>
                   </div>
                 </div>
 
-                {/* Top Peelable Layer: HADIAH & TROFI (Gold Metallic Foil) */}
+                {/* Top Peelable Layer: HADIAH (Gold Metallic Foil) */}
                 <div
                   ref={stickerTopRef}
                   className="sticker-face sticker-hadiah-top"
                 >
                   <div className="sticker-top-row">
-                    <span>APRESIASI JUARA</span>
-                    <span className="save-badge">KLIK / KELUPAS BENEFIT ↗</span>
+                    <span>APRESIASI LOMBA</span>
+                    <span className="save-badge">KLIK / KELUPAS ↗</span>
                   </div>
                   <div className="sticker-main-row">
                     <span className="sticker-price">Hadiah</span>
-                    <div className="sticker-unit">
-                      <strong>&amp; Trofi Juara</strong>
-                      <span>Kategori Juara I, II &amp; III</span>
-                    </div>
                   </div>
                 </div>
 
@@ -276,7 +269,7 @@ export default function CompetitionSection() {
 
               <p className="ticket-schedule-note">
                 {viewMode === 'benefit'
-                  ? 'Showcase video & fasilitasi pembinaan IKM'
+                  ? 'Apresiasi & panggung kejuaraan festival'
                   : 'Shooting 27–28 Nov 2026 di Braga City Walk'}
               </p>
 
@@ -364,22 +357,14 @@ export default function CompetitionSection() {
                 <div className="price-amount-wrap">
                   <div className="price-roller">
                     <span>Hadiah</span>
-                    <span>Sertifikat</span>
+                    <span>Juara</span>
                   </div>
-                </div>
-                <div className="price-meta">
-                  <strong>
-                    {viewMode === 'benefit' ? '+ Pembinaan IKM' : '& Trofi Juara'}
-                  </strong>
-                  <span>
-                    {viewMode === 'benefit' ? 'Disdagin Kota Bandung' : 'Kategori Juara I, II & III'}
-                  </span>
                 </div>
               </div>
 
               <p className="ticket-schedule-note">
                 {viewMode === 'benefit'
-                  ? 'Fasilitasi pembinaan IKM & promosi karya'
+                  ? 'Apresiasi & panggung kejuaraan festival'
                   : 'Pendaftaran 21 Okt – 21 Nov 2026 · Gratis'}
               </p>
 

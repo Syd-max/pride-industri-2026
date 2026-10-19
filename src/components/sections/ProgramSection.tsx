@@ -4,9 +4,7 @@ import { useState } from 'react';
 
 interface ScheduleItem {
   id: string;
-  startTime: string;
-  endTime: string;
-  duration: string;
+  step: string;
   title: string;
   location: string;
   venueKey: 'braga';
@@ -29,14 +27,12 @@ export default function ProgramSection() {
   const scheduleDay1: ScheduleItem[] = [
     {
       id: 'd1-1',
-      startTime: '13:30',
-      endTime: '14:15 WIB',
-      duration: '45 Menit',
-      title: 'Art Performance — Sunda Fusion',
+      step: '01',
+      category: 'Art Performance',
+      title: 'Sunda Fusion',
       location: 'Main Stage · Braga City Walk',
       venueKey: 'braga',
-      desc: 'Pertunjukan seni pembuka perpaduan harmoni Sunda kontemporer dan musik etnik modern menyemarakkan pembukaan PRIDE Industri 2026.',
-      category: 'Art Performance',
+      desc: 'Pertunjukan seni pembuka perpaduan harmoni musik etnik Sunda kontemporer dan instrumen modern menyemarakkan pembukaan resmi PRIDE Industri 2026.',
       theme: {
         badgeBg: 'bg-rose-50',
         badgeText: 'text-rose-700',
@@ -48,14 +44,12 @@ export default function ProgramSection() {
     },
     {
       id: 'd1-2',
-      startTime: '14:15',
-      endTime: '15:15 WIB',
-      duration: '60 Menit',
-      title: 'Pride Appreciation — Penyerahan Sertifikat Kelulusan Program 2026',
+      step: '02',
+      category: 'Pride Appreciation',
+      title: 'Penyerahan Sertifikat Kelulusan Program 2026',
       location: 'Main Stage · Braga City Walk',
       venueKey: 'braga',
       desc: 'Seremonial simbolis penyerahan sertifikat jaminan mutu dan kelulusan program Disdagin: 46 Sertifikat Uji Mutu, 25 Sertifikat Halal, dan 93 Sertifikat Kelas Online Program KEMILAU.',
-      category: 'Pride Appreciation',
       theme: {
         badgeBg: 'bg-emerald-50',
         badgeText: 'text-emerald-700',
@@ -63,18 +57,16 @@ export default function ProgramSection() {
         dotColor: 'bg-emerald-600',
         accentRing: 'ring-emerald-100',
       },
-      highlights: ['46 Sertifikat Uji Mutu', '25 Sertifikat Halal', '93 Sertifikat Online KEMILAU'],
+      highlights: ['46 Sertifikat Uji Mutu', '25 Sertifikat Halal', '93 Sertifikat Kelas Online KEMILAU'],
     },
     {
       id: 'd1-3',
-      startTime: '15:15',
-      endTime: '16:30 WIB',
-      duration: '75 Menit',
-      title: 'Innovation Walk — Peninjauan Booth Showcase Kemasan IKM & Workshop',
+      step: '03',
+      category: 'Innovation Walk',
+      title: 'Peninjauan Booth - Showcase Kemasan IKM',
       location: 'Atrium & Koridor Braga City Walk',
       venueKey: 'braga',
-      desc: 'Kunjungan resmi peninjauan booth pameran showcase hasil pendampingan desain kemasan IKM binaan Disdagin, live corner interaktif penangkap momen, dan workshop practical industry experience.',
-      category: 'Innovation Walk',
+      desc: 'Peninjauan booth pameran showcase hasil pendampingan desain kemasan IKM binaan Disdagin Kota Bandung serta display produk inovasi lokal.',
       theme: {
         badgeBg: 'bg-blue-50',
         badgeText: 'text-blue-700',
@@ -82,18 +74,33 @@ export default function ProgramSection() {
         dotColor: 'bg-blue-600',
         accentRing: 'ring-blue-100',
       },
-      highlights: ['Showcase Kemasan IKM Binaan', 'Live Corner Interaktif', 'Workshop & Consultation Corner'],
+      highlights: ['Showcase Kemasan IKM Binaan', 'Pameran Produk Lokal', 'Inovasi Kemasan Ramah Lingkungan'],
     },
     {
       id: 'd1-4',
-      startTime: '16:30',
-      endTime: '18:00 WIB',
-      duration: '90 Menit',
-      title: 'Pride Inspiration Stage — Talkshow Pelaku Industri (2 Sesi)',
+      step: '04',
+      category: 'Innovation Walk',
+      title: 'Peninjauan Booth - Workshop Industry Experience',
+      location: 'Area Workshop & Booth · Braga City Walk',
+      venueKey: 'braga',
+      desc: 'Peninjauan booth interaktif workshop industry experience dan consultation corner bersama praktisi ahli dan mitra industri Kota Bandung.',
+      theme: {
+        badgeBg: 'bg-teal-50',
+        badgeText: 'text-teal-700',
+        badgeBorder: 'border-teal-200/80',
+        dotColor: 'bg-teal-600',
+        accentRing: 'ring-teal-100',
+      },
+      highlights: ['Workshop Industry Experience', 'Consultation Corner', 'Pendampingan Praktis'],
+    },
+    {
+      id: 'd1-5',
+      step: '05',
+      category: 'Pride Inspiration Stage',
+      title: 'Talkshow Inovasi',
       location: 'Main Stage · Braga City Walk',
       venueKey: 'braga',
-      desc: 'Talkshow inspiratif bersama praktisi dan pimpinan industri membahas dinamika perkembangan industri Kota Bandung serta strategi inovasi packaging & display produk IKM/UMKM.',
-      category: 'Inspiration Stage',
+      desc: 'Talkshow pelaku industri bersama praktisi membahas dinamika perkembangan industri Kota Bandung serta strategi inovasi packaging & display (2 sesi).',
       theme: {
         badgeBg: 'bg-purple-50',
         badgeText: 'text-purple-700',
@@ -101,37 +108,16 @@ export default function ProgramSection() {
         dotColor: 'bg-purple-600',
         accentRing: 'ring-purple-100',
       },
-      highlights: ['Sesi 1: Perkembangan Industri', 'Sesi 2: Packaging & Display', 'Praktisi & Ahli Industri'],
-    },
-    {
-      id: 'd1-5',
-      startTime: '18:00',
-      endTime: '19:00 WIB',
-      duration: '60 Menit',
-      title: 'Rehat Maghrib, Live Corner & Temu Jejaring IKM',
-      location: 'Area Pameran & Booth Kuliner · Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Jeda petang untuk sholat Maghrib, eksplorasi kuliner lokal binaan di booth pameran, serta temu jejaring santai antar pelaku usaha.',
-      category: 'Rehat & Live Corner',
-      theme: {
-        badgeBg: 'bg-slate-100',
-        badgeText: 'text-slate-700',
-        badgeBorder: 'border-slate-200/80',
-        dotColor: 'bg-slate-500',
-        accentRing: 'ring-slate-100',
-      },
-      highlights: ['Eksplorasi Kuliner Olahan', 'Live Corner Momen Acara', 'Coffee Break & Jejaring'],
+      highlights: ['Perkembangan Industri Bandung', 'Packaging & Display (2 Sesi)', 'Narasumber & Praktisi Ahli'],
     },
     {
       id: 'd1-6',
-      startTime: '19:00',
-      endTime: '21:00 WIB',
-      duration: '120 Menit',
-      title: 'Presentasi Finalis — Lomba Desain Kemasan & Video Kreatif',
+      step: '06',
+      category: 'Presentasi Finalis',
+      title: 'Lomba Desain',
       location: 'Main Stage · Braga City Walk',
       venueKey: 'braga',
-      desc: 'Pemutaran dan presentasi langsung karya finalis Lomba Desain Kemasan dan Lomba Video Kreatif di hadapan dewan juri ahli dan audiens publik.',
-      category: 'Kompetisi Inovasi',
+      desc: 'Presentasi langsung karya inovasi finalis Lomba Desain Kemasan dan pemutaran karya video kreatif di hadapan dewan juri ahli dan audiens festival.',
       theme: {
         badgeBg: 'bg-amber-50',
         badgeText: 'text-amber-800',
@@ -139,21 +125,19 @@ export default function ProgramSection() {
         dotColor: 'bg-amber-600',
         accentRing: 'ring-amber-100',
       },
-      highlights: ['Presentasi Karya Finalis', 'Screening Video 1 Menit', 'Penjurian Terbuka'],
+      highlights: ['Presentasi Finalis Kemasan', 'Screening Video 1 Menit', 'Penjurian Terbuka'],
     },
   ];
 
   const scheduleDay2: ScheduleItem[] = [
     {
       id: 'd2-1',
-      startTime: '10:00',
-      endTime: '12:30 WIB',
-      duration: '150 Menit',
-      title: 'Pride Innovation Challenge — Business Matching (Pitching) Program KEMILAU',
+      step: '01',
+      category: 'Pride Innovation Challenge',
+      title: 'Business Matching',
       location: 'Area Business Matching · Braga City Walk',
       venueKey: 'braga',
       desc: '20 IKM program KEMILAU terpilih dari 3 sektor industri (Fesyen, Kuliner, Kriya) melakukan pitching eksklusif di hadapan calon mitra bisnis, agregator, dan investor.',
-      category: 'Business Matching',
       theme: {
         badgeBg: 'bg-amber-50',
         badgeText: 'text-amber-800',
@@ -165,33 +149,12 @@ export default function ProgramSection() {
     },
     {
       id: 'd2-2',
-      startTime: '12:30',
-      endTime: '13:30 WIB',
-      duration: '60 Menit',
-      title: 'Rehat Dzuhur, Live Corner & Showcase Pameran Produk',
-      location: 'Atrium & Koridor Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Istirahat sholat Dzuhur, interaksi Live Corner penangkap cerita event, serta kunjungan terbuka showcase pameran produk hasil pendampingan kemasan IKM.',
-      category: 'Rehat & Pameran',
-      theme: {
-        badgeBg: 'bg-slate-100',
-        badgeText: 'text-slate-700',
-        badgeBorder: 'border-slate-200/80',
-        dotColor: 'bg-slate-500',
-        accentRing: 'ring-slate-100',
-      },
-      highlights: ['Pameran Produk Kemasan', 'Live Corner Momen Acara', 'Konsultasi Mitra'],
-    },
-    {
-      id: 'd2-3',
-      startTime: '13:30',
-      endTime: '15:00 WIB',
-      duration: '90 Menit',
-      title: 'Pride Inspiration Stage — Branding Produk & Strategi Pasar Ritel',
+      step: '02',
+      category: 'Pride Inspiration Stage',
+      title: 'Branding Produk',
       location: 'Main Stage · Braga City Walk',
       venueKey: 'braga',
-      desc: 'Sesi edukasi praktis mengenai branding produk, diferensiasi kemasan siap ritel modern, dan strategi penetrasi pasar komersial bagi pelaku IKM.',
-      category: 'Inspiration Stage',
+      desc: 'Sesi inspirasi dan edukasi praktis mengenai strategi branding produk lokal, identitas visual merek, serta kesiapan menembus pasar ritel modern.',
       theme: {
         badgeBg: 'bg-teal-50',
         badgeText: 'text-teal-700',
@@ -199,18 +162,16 @@ export default function ProgramSection() {
         dotColor: 'bg-teal-600',
         accentRing: 'ring-teal-100',
       },
-      highlights: ['Branding Produk Lokal', 'Kesiapan Ritel Modern', 'Tanya Jawab Langsung'],
+      highlights: ['Strategi Branding Produk', 'Identitas Visual Merek', 'Kesiapan Pasar Ritel'],
     },
     {
-      id: 'd2-4',
-      startTime: '15:00',
-      endTime: '17:30 WIB',
-      duration: '150 Menit',
-      title: 'Pride Fashion Show — Pergelaran Karya Pelatihan Fashion Disdagin',
+      id: 'd2-3',
+      step: '03',
+      category: 'Pride Fashion Show',
+      title: 'Pergelaran Karya Pelatihan Fashion Disdagin',
       location: 'Main Runway Stage · Braga City Walk',
       venueKey: 'braga',
-      desc: 'Peragaan busana spektakuler karya peserta Pelatihan Desain Fashion Binaan Disdagin Kota Bandung: Kelas Intermediate (15 IKM) & Advance (18 IKM).',
-      category: 'Pride Fashion Show',
+      desc: 'Peragaan busana spektakuler hasil karya peserta Pelatihan Desain Fashion Binaan Disdagin Kota Bandung: Kelas Intermediate (15 IKM) & Advance (18 IKM).',
       theme: {
         badgeBg: 'bg-purple-50',
         badgeText: 'text-purple-700',
@@ -221,15 +182,13 @@ export default function ProgramSection() {
       highlights: ['Kelas Intermediate: 15 IKM', 'Kelas Advance: 18 IKM', 'Runway Desain Kontemporer'],
     },
     {
-      id: 'd2-5',
-      startTime: '17:30',
-      endTime: '19:00 WIB',
-      duration: '90 Menit',
-      title: 'Pride Inspiration Stage — Industri Experience & Potensi Kreatif Bandung',
+      id: 'd2-4',
+      step: '04',
+      category: 'Pride Inspiration Stage',
+      title: 'Industry Experience',
       location: 'Main Stage & Exhibition Area · Braga City Walk',
       venueKey: 'braga',
-      desc: 'Program interaktif Industri Experience untuk memperkenalkan keunggulan serta daya saing ekosistem industri kreatif Kota Bandung kepada masyarakat luas.',
-      category: 'Industri Experience',
+      desc: 'Kegiatan interaktif ini menjadi salah satu daya tarik utama untuk memperkenalkan potensi dan ragam industri kreatif Kota Bandung kepada masyarakat luas.',
       theme: {
         badgeBg: 'bg-blue-50',
         badgeText: 'text-blue-700',
@@ -237,18 +196,16 @@ export default function ProgramSection() {
         dotColor: 'bg-blue-600',
         accentRing: 'ring-blue-100',
       },
-      highlights: ['Industri Experience Interaktif', 'Kreativitas Generasi Muda', 'Koneksi Komunitas'],
+      highlights: ['Potensi Industri Kreatif Bandung', 'Interaksi Praktis IKM', 'Koneksi Komunitas'],
     },
     {
-      id: 'd2-6',
-      startTime: '19:00',
-      endTime: '21:00 WIB',
-      duration: '120 Menit',
-      title: 'Closing Ceremony — Pengumuman Juara Desain & Pembagian Sertifikat',
+      id: 'd2-5',
+      step: '05',
+      category: 'Closing Ceremony',
+      title: 'Pengumuman Juara Desain, Pembagian Sertifikat',
       location: 'Main Stage · Braga City Walk',
       venueKey: 'braga',
-      desc: 'Malam puncak penutupan PRIDE Industri 2026: pengumuman pemenang Lomba Desain Kemasan & Video Kreatif, penyerahan hadiah, pembagian sertifikat, serta selebrasi penutupan resmi.',
-      category: 'Closing Ceremony',
+      desc: 'Malam puncak penutupan PRIDE Industri 2026: pengumuman pemenang lomba desain, penyerahan apresiasi kejuaraan, pembagian sertifikat, serta selebrasi penutupan resmi.',
       theme: {
         badgeBg: 'bg-emerald-50',
         badgeText: 'text-emerald-700',
@@ -256,7 +213,7 @@ export default function ProgramSection() {
         dotColor: 'bg-emerald-600',
         accentRing: 'ring-emerald-100',
       },
-      highlights: ['Pengumuman Juara Lomba', 'Penyerahan Hadiah & Trofi', 'Selebrasi Penutupan Resmi'],
+      highlights: ['Pengumuman Juara Desain', 'Penyerahan Apresiasi', 'Pembagian Sertifikat'],
     },
   ];
 
@@ -268,11 +225,6 @@ export default function ProgramSection() {
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
-
-  const googleCalUrlDay1 =
-    'https://calendar.google.com/calendar/render?action=TEMPLATE&text=PRIDE+Industri+2026+-+Hari+1&dates=20261127T063000Z/20261127T140000Z&details=Hari+1+PRIDE+Industri+2026+di+Braga+City+Walk.+Opening,+Sunda+Fusion,+Fashion+Show,+Presentasi+Finalis.&location=Braga+City+Walk,+Bandung';
-  const googleCalUrlDay2 =
-    'https://calendar.google.com/calendar/render?action=TEMPLATE&text=PRIDE+Industri+2026+-+Hari+2&dates=20261128T030000Z/20261128T140000Z&details=Hari+2+PRIDE+Industri+2026+di+Braga+City+Walk.+Business+Matching,+Fashion+Show,+Closing+Ceremony.&location=Braga+City+Walk,+Bandung';
 
   return (
     <section
@@ -296,10 +248,10 @@ export default function ProgramSection() {
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-            Jadwal Rangkaian Acara
+            Susunan Rangkaian Acara
           </h2>
           <p className="mt-3 text-sm sm:text-base text-slate-600 max-w-xl mx-auto leading-relaxed">
-            Panduan waktu lengkap per jam selama 2 hari festival di Braga City Walk Bandung.
+            Susunan resmi agenda kegiatan festival selama 2 hari di Braga City Walk Bandung.
           </p>
 
           {/* Apple-style Segmented Day Switcher */}
@@ -322,7 +274,7 @@ export default function ProgramSection() {
                   Hari 1 · Jum&apos;at, 27 Nov 2026
                 </span>
                 <span className="text-[10px] text-slate-500 font-mono font-normal">
-                  13:30 – 21:00 WIB · Braga City Walk
+                  Braga City Walk Bandung
                 </span>
               </div>
               {activeDay === 'day1' && (
@@ -348,7 +300,7 @@ export default function ProgramSection() {
                   Hari 2 · Sabtu, 28 Nov 2026
                 </span>
                 <span className="text-[10px] text-slate-500 font-mono font-normal">
-                  10:00 – 21:00 WIB · Braga City Walk
+                  Braga City Walk Bandung
                 </span>
               </div>
               {activeDay === 'day2' && (
@@ -363,7 +315,7 @@ export default function ProgramSection() {
           
           {/* Continuous vertical timeline connector (Desktop only) */}
           <div
-            className="hidden sm:block absolute left-[148px] top-6 bottom-6 w-[2px] bg-slate-200/90 pointer-events-none"
+            className="hidden sm:block absolute left-[106px] top-6 bottom-6 w-[2px] bg-slate-200/90 pointer-events-none"
             aria-hidden="true"
           />
 
@@ -373,22 +325,15 @@ export default function ProgramSection() {
             return (
               <div
                 key={item.id}
-                className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-8 group"
+                className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-7 group"
               >
-                {/* Left Column: Prominent Large Time Anchor (Instant visual scan) */}
-                <div className="w-full sm:w-[130px] flex-shrink-0 pt-1 flex flex-wrap sm:flex-col justify-between sm:justify-start items-baseline sm:items-end gap-1.5 border-b sm:border-b-0 pb-2 sm:pb-0 border-slate-200/60">
-                  <div className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900 leading-none group-hover:text-blue-600 transition-colors">
-                    {item.startTime}
-                  </div>
-                  <div className="text-[11px] font-mono font-medium text-slate-500 whitespace-nowrap">
-                    s/d {item.endTime}
-                  </div>
-                  <div className="inline-flex items-center gap-1 font-mono text-[10px] font-bold text-slate-600 bg-slate-100/90 px-2 py-0.5 rounded-md mt-0.5 whitespace-nowrap">
-                    <svg className="w-2.5 h-2.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <circle cx="12" cy="12" r="10"/>
-                      <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <span>{item.duration}</span>
+                {/* Left Column: Sequence Number (Tanpa Jam, Murni Susunan Acara) */}
+                <div className="w-full sm:w-[92px] flex-shrink-0 pt-1 flex items-center sm:items-end justify-between sm:justify-start sm:flex-col gap-0.5 border-b sm:border-b-0 pb-2 sm:pb-0 border-slate-200/60">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400">
+                    SESI
+                  </span>
+                  <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-slate-900 leading-none group-hover:text-blue-600 transition-colors">
+                    {item.step}
                   </div>
                 </div>
 
