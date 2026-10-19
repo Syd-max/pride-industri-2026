@@ -602,7 +602,7 @@ export default function ActivitiesDeckSection() {
                     className="deck-nav-btn deck-nav-primary"
                     title="Lanjut ke Program 04"
                   >
-                    04 SIINAS →
+                    04 Pitching →
                   </button>
                 </div>
               </footer>
@@ -610,7 +610,7 @@ export default function ActivitiesDeckSection() {
           </article>
 
           {/* ════════════════════════════════════════════════════════════════
-              LAYER 4 (Card 4): MALAM GALA APRESIASI INDUSTRI SIINAS
+              LAYER 4 (Card 4): BUSINESS MATCHING & PITCHING PROGRAM KEMILAU
               Theme: Golden Yellow (#FFB800)
               ════════════════════════════════════════════════════════════════ */}
           <article className="activities-card deck-festival-card theme-yellow" data-index="4">
@@ -624,13 +624,13 @@ export default function ActivitiesDeckSection() {
               <header className="deck-card-header">
                 <div className="deck-header-left">
                   <span className="deck-card-number">04 / 06</span>
-                  <span className="deck-header-pill">MALAM PENGANUGERAHAN</span>
+                  <span className="deck-header-pill">TEMU BISNIS &amp; KEMITRAAN</span>
                 </div>
                 <div className="deck-header-venue">
                   <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
                   </svg>
-                  <span>28 Nov · The Papandayan</span>
+                  <span>28 Nov · Braga City Walk</span>
                 </div>
               </header>
 
@@ -638,29 +638,25 @@ export default function ActivitiesDeckSection() {
                 <div className="deck-hero-content">
                   <div className="deck-icon-badge">
                     <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-                      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-                      <path d="M4 22h16"/>
-                      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
-                      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
-                      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
                     </svg>
                   </div>
                   <div>
-                    <span className="deck-kicker-tag">Apresiasi Kepatuhan Industri Nasional</span>
-                    <h3 className="deck-card-title">Malam Anugerah &amp; Temu Kemitraan SIINAS</h3>
+                    <span className="deck-kicker-tag">Pitching 20 IKM Unggulan ke Calon Mitra &amp; Investor</span>
+                    <h3 className="deck-card-title">Business Matching &amp; Pitching IKM Kemilau</h3>
                   </div>
                 </div>
 
                 <div className="deck-feature-tags">
-                  <span className="deck-tag-chip">✦ 200 IKM Tertib SIINAS</span>
-                  <span className="deck-tag-chip">✦ Dihadiri Walikota Bandung</span>
-                  <span className="deck-tag-chip">✦ Gala Dinner Formal</span>
-                  <span className="deck-tag-chip">✦ Temu Kemitraan Usaha</span>
+                  <span className="deck-tag-chip">✦ 20 IKM Kemilau Terpilih</span>
+                  <span className="deck-tag-chip">✦ 3 Sektor Industri Unggulan</span>
+                  <span className="deck-tag-chip">✦ Pitching Mitra &amp; Investor</span>
+                  <span className="deck-tag-chip">✦ Workshop &amp; Konsultasi Ahli</span>
                 </div>
 
                 <p className="deck-card-desc">
-                  Malam gala kehormatan penganugerahan penghargaan bagi 200 pelaku industri dan IKM binaan Kota Bandung yang tertib dan berdedikasi dalam pelaporan Sistem Informasi Industri Nasional (SIINAS), dirangkai makan malam formal bersama jajaran pimpinan daerah dan asosiasi usaha.
+                  20 IKM program KEMILAU binaan Disdagin terpilih dari 3 sektor industri (Fesyen, Kuliner, Kriya) melakukan pitching kurasi di hadapan calon mitra bisnis, agregator, dan investor untuk memperluas penetrasi pasar, akses pembiayaan, serta kolaborasi strategis.
                 </p>
               </div>
 
@@ -671,10 +667,10 @@ export default function ActivitiesDeckSection() {
                       <circle cx="12" cy="12" r="10"/>
                       <polyline points="12 6 12 12 16 14"/>
                     </svg>
-                    <span>19:00 — 21:00 WIB</span>
+                    <span>10:00 — 12:30 WIB</span>
                   </span>
                   <span className="footer-meta-sep">•</span>
-                  <span>Grand Ballroom Hotel Papandayan</span>
+                  <span>Area Business Matching · Braga City Walk</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -691,7 +687,7 @@ export default function ActivitiesDeckSection() {
                     className="deck-nav-btn deck-nav-primary"
                     title="Lanjut ke Program 05"
                   >
-                    05 Halal →
+                    05 Sertifikat →
                   </button>
                 </div>
               </footer>
@@ -699,7 +695,7 @@ export default function ActivitiesDeckSection() {
           </article>
 
           {/* ════════════════════════════════════════════════════════════════
-              LAYER 5 (Card 5): PENYERAHAN 100 SERTIFIKAT HALAL & SNI
+              LAYER 5 (Card 5): PENYERAHAN SERTIFIKAT MUTU, HALAL & KEMILAU
               Theme: Royal Bandung Blue (#1652F0)
               ════════════════════════════════════════════════════════════════ */}
           <article className="activities-card deck-festival-card theme-blue" data-index="5">
@@ -713,13 +709,13 @@ export default function ActivitiesDeckSection() {
               <header className="deck-card-header">
                 <div className="deck-header-left">
                   <span className="deck-card-number">05 / 06</span>
-                  <span className="deck-header-pill">STANDARISASI &amp; LEGALITAS</span>
+                  <span className="deck-header-pill">STANDARISASI &amp; MUTU IKM</span>
                 </div>
                 <div className="deck-header-venue">
                   <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
                   </svg>
-                  <span>28 Nov · Main Stage Braga</span>
+                  <span>27 Nov · Main Stage Braga</span>
                 </div>
               </header>
 
@@ -732,20 +728,20 @@ export default function ActivitiesDeckSection() {
                     </svg>
                   </div>
                   <div>
-                    <span className="deck-kicker-tag">Fasilitasi Legalitas &amp; Jaminan Mutu Usaha</span>
-                    <h3 className="deck-card-title">Penyerahan 100 Sertifikat Halal &amp; 3 Standar Mutu SNI</h3>
+                    <span className="deck-kicker-tag">Fasilitasi Standarisasi &amp; Jaminan Mutu Usaha</span>
+                    <h3 className="deck-card-title">Penyerahan Sertifikat Uji Mutu, Halal &amp; Kelas Online KEMILAU</h3>
                   </div>
                 </div>
 
                 <div className="deck-feature-tags">
-                  <span className="deck-tag-chip">✦ 100 Sertifikat Halal Gratis</span>
-                  <span className="deck-tag-chip">✦ 3 Standar SNI IKM</span>
-                  <span className="deck-tag-chip">✦ 100 Uji Laboratorium Mutu</span>
-                  <span className="deck-tag-chip">✦ Konsultasi Legalitas Usaha</span>
+                  <span className="deck-tag-chip">✦ 46 Sertifikat Uji Mutu</span>
+                  <span className="deck-tag-chip">✦ 25 Sertifikat Halal Resmi</span>
+                  <span className="deck-tag-chip">✦ 93 Sertifikat Kelas KEMILAU</span>
+                  <span className="deck-tag-chip">✦ Konsultasi Legalitas IKM</span>
                 </div>
 
                 <p className="deck-card-desc">
-                  Seremonial penyerahan simbolis 100 Sertifikat Halal gratis, 3 SNI, dan fasilitasi uji laboratorium mutu IKM dari Disdagin Kota Bandung. Peserta dan pengunjung juga dapat berkonsultasi langsung mengenai pengurusan NIB, izin edar BPOM, dan legalitas industri di booth pelayanan terpadu.
+                  Seremonial penyerahan simbolis sertifikat legalitas dan jaminan mutu: 46 sertifikat hasil Uji Mutu laboratorium, 25 sertifikat Halal, serta 93 sertifikat kelulusan Kelas Online Program KEMILAU dari Disdagin Kota Bandung.
                 </p>
               </div>
 
@@ -756,7 +752,7 @@ export default function ActivitiesDeckSection() {
                       <circle cx="12" cy="12" r="10"/>
                       <polyline points="12 6 12 12 16 14"/>
                     </svg>
-                    <span>14:00 — 17:30 WIB</span>
+                    <span>14:15 — 15:15 WIB</span>
                   </span>
                   <span className="footer-meta-sep">•</span>
                   <span>Main Stage Braga City Walk</span>
@@ -766,9 +762,9 @@ export default function ActivitiesDeckSection() {
                     type="button"
                     onClick={() => goToCard(4)}
                     className="deck-nav-btn"
-                    title="Kembali ke 04 SIINAS"
+                    title="Kembali ke 04 Pitching"
                   >
-                    ← 04 SIINAS
+                    ← 04 Pitching
                   </button>
                   <button
                     type="button"
@@ -852,9 +848,9 @@ export default function ActivitiesDeckSection() {
                     type="button"
                     onClick={() => goToCard(5)}
                     className="deck-nav-btn"
-                    title="Kembali ke 05 Halal"
+                    title="Kembali ke 05 Sertifikat"
                   >
-                    ← 05 Halal
+                    ← 05 Sertifikat
                   </button>
                   <button
                     type="button"

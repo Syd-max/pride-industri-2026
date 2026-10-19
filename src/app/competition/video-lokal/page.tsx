@@ -401,7 +401,7 @@ export default function VideoLokalPage() {
               <ul className="list-disc list-inside space-y-1 text-slate-600 pl-0.5">
                 <li>Bawa smartphone dan kartu identitas saat shooting di Braga (27–28 Nov 2026).</li>
                 <li>Gunakan aplikasi TactLink Anda untuk check-in dan bertukar kontak digital.</li>
-                <li>Pengumuman pemenang pada Malam Penganugerahan di Ballroom The Papandayan.</li>
+                <li>Pengumuman pemenang pada Closing Ceremony &amp; Awarding di Main Stage Braga City Walk (28 Nov 2026).</li>
               </ul>
             </div>
 

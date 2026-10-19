@@ -172,8 +172,8 @@
 /* Fesyen Binaan Badge (Upper-left shoulder of logo) */
 .badge-fesyen {
   background: var(--flow-blue-accent);
-  top: 18px;
-  left: -18px;
+  top: 14px;
+  left: -20px;
 }
 .badge-fesyen svg {
   top: -8px;
@@ -185,8 +185,8 @@
 /* Kuliner Lokal Badge (Upper-right shoulder of logo) */
 .badge-kuliner {
   background: var(--flow-orange-accent);
-  top: 18px;
-  right: -18px;
+  top: 14px;
+  right: -20px;
 }
 .badge-kuliner svg {
   bottom: -7px;
@@ -195,11 +195,25 @@
   transform: rotate(-145deg);
 }
 
+/* Kriya & Kerajinan Badge (Mid-left shoulder of logo) */
+.badge-kriya {
+  background: #9333ea;
+  top: 50%;
+  left: -28px;
+  transform: translateY(-50%);
+}
+.badge-kriya svg {
+  top: -8px;
+  right: -6px;
+  fill: #9333ea;
+  transform: rotate(45deg);
+}
+
 /* Video 1 Menit Badge (Lower-left flank of logo) */
 .badge-video {
   background: var(--flow-rose-accent);
   bottom: 12px;
-  left: -14px;
+  left: -16px;
 }
 .badge-video svg {
   bottom: -7px;
@@ -212,7 +226,7 @@
 .badge-kemasan {
   background: var(--flow-green-accent);
   bottom: 12px;
-  right: -14px;
+  right: -16px;
 }
 .badge-kemasan svg {
   top: -8px;
@@ -487,11 +501,12 @@
 
   /* Dedicated Mobile Category Chips Row (Natural, cohesive Apple-style glass pills) */
   .hero-mobile-categories-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 6px 8px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 6px;
     width: 100%;
-    max-width: min(88vw, 310px);
+    max-width: min(94vw, 340px);
     margin: 4px auto 8px;
     z-index: 2;
     box-sizing: border-box;
@@ -502,10 +517,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 6px 12px;
+    gap: 5px;
+    padding: 5px 10px;
     border-radius: 999px;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 600;
     letter-spacing: -0.01em;
     background: rgba(15, 23, 42, 0.65);
@@ -516,12 +531,12 @@
     color: #f8fafc;
     white-space: nowrap;
     text-align: center;
-    width: 100%;
     box-sizing: border-box;
   }
 
   .mob-chip-fesyen,
   .mob-chip-kuliner,
+  .mob-chip-kriya,
   .mob-chip-video,
   .mob-chip-kemasan {
     background: rgba(15, 23, 42, 0.65);

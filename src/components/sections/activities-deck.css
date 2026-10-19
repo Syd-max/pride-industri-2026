@@ -411,7 +411,7 @@
 .theme-orange .deck-kicker-tag { color: #c2410c; }
 .theme-orange .deck-tag-chip { background: #ffffff; color: #9a3412; border: 1px solid #fed7aa; }
 
-/* Theme 4: Golden Yellow (Malam Gala SIINAS) */
+/* Theme 4: Golden Yellow (Business Matching Program KEMILAU) */
 .theme-yellow {
   background: linear-gradient(145deg, #ffffff 0%, #fefce8 50%, #fef9c3 100%);
   border: 1.5px solid #fef08a;
@@ -424,7 +424,7 @@
 .theme-yellow .deck-kicker-tag { color: #a16207; }
 .theme-yellow .deck-tag-chip { background: #ffffff; color: #854d0e; border: 1px solid #fef08a; }
 
-/* Theme 5: Royal Blue (Sertifikasi Halal & SNI) */
+/* Theme 5: Royal Blue (Penyerahan Sertifikat Uji Mutu, Halal & KEMILAU) */
 .theme-blue {
   background: linear-gradient(145deg, #ffffff 0%, #eff6ff 50%, #dbeafe 100%);
   border: 1.5px solid #bfdbfe;

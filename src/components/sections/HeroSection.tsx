@@ -45,6 +45,16 @@ function KemasanIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
   );
 }
 
+function KriyaIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2L2 7l10 5 10-5-10-5z" />
+      <path d="M2 17l10 5 10-5" />
+      <path d="M2 12l10 5 10-5" />
+    </svg>
+  );
+}
+
 function SparkleIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -58,6 +68,7 @@ export default function HeroSection() {
   const heroLogoRef = useRef<HTMLDivElement>(null);
   const badgeKulinerRef = useRef<HTMLDivElement>(null);
   const badgeFesyenRef = useRef<HTMLDivElement>(null);
+  const badgeKriyaRef = useRef<HTMLDivElement>(null);
   const badgeKemasanRef = useRef<HTMLDivElement>(null);
   const badgeVideoRef = useRef<HTMLDivElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
@@ -74,13 +85,14 @@ export default function HeroSection() {
     // Floating cursor badges
     const tBadge1 = setTimeout(() => badgeKulinerRef.current?.classList.add('visible'), 160);
     const tBadge2 = setTimeout(() => badgeFesyenRef.current?.classList.add('visible'), 240);
-    const tBadge3 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 320);
-    const tBadge4 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 400);
+    const tBadge3 = setTimeout(() => badgeKriyaRef.current?.classList.add('visible'), 320);
+    const tBadge4 = setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 400);
+    const tBadge5 = setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 480);
 
     // Headline Card, Subtitle & Organizer Logos
-    const tHeadline = setTimeout(() => headlineBlockRef.current?.classList.add('visible'), 480);
-    const tSub = setTimeout(() => heroSubtitleRef.current?.classList.add('visible'), 580);
-    const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 680);
+    const tHeadline = setTimeout(() => headlineBlockRef.current?.classList.add('visible'), 540);
+    const tSub = setTimeout(() => heroSubtitleRef.current?.classList.add('visible'), 620);
+    const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 700);
 
     return () => {
       clearTimeout(t0);
@@ -88,6 +100,7 @@ export default function HeroSection() {
       clearTimeout(tBadge2);
       clearTimeout(tBadge3);
       clearTimeout(tBadge4);
+      clearTimeout(tBadge5);
       clearTimeout(tHeadline);
       clearTimeout(tSub);
       clearTimeout(tLogos);
@@ -106,7 +119,7 @@ export default function HeroSection() {
 
         {/* Hero Section — TIDY, SPACIOUS & ELEGANT */}
         <section className="flow-hero-section" id="heroSection" ref={heroSectionRef}>
-          {/* Official Logo Placed Full In Front with 4 Corner Badges */}
+          {/* Official Logo Placed Full In Front with Corner Badges */}
           <div className="hero-logo-wrap" ref={heroLogoRef}>
             {/* Ambient Warm Backlight */}
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,184,0,0.3)_0%,_rgba(229,25,55,0.15)_50%,_transparent_70%)] blur-2xl pointer-events-none" />
@@ -134,9 +147,16 @@ export default function HeroSection() {
               <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
             </div>
 
+            {/* Floating Cursor Tag: Kriya & Kerajinan (Mid-Left) — Desktop Only (md and up) */}
+            <div className="cursor-badge badge-kriya hidden md:inline-flex" ref={badgeKriyaRef}>
+              <KriyaIcon className="w-3.5 h-3.5 text-purple-200" />
+              <span>Kriya &amp; Kerajinan</span>
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
+
             {/* Floating Cursor Tag: Video 1 Menit (Bottom-Left) — Desktop Only (md and up) */}
             <div className="cursor-badge badge-video hidden md:inline-flex" ref={badgeVideoRef}>
-              <VideoIcon className="w-3.5 h-3.5 text-purple-200" />
+              <VideoIcon className="w-3.5 h-3.5 text-rose-200" />
               <span>Lomba Video 1 Menit</span>
               <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
             </div>
@@ -159,8 +179,12 @@ export default function HeroSection() {
               <KulinerIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               <span>Kuliner Lokal</span>
             </span>
+            <span className="mob-chip mob-chip-kriya">
+              <KriyaIcon className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+              <span>Kriya &amp; Seni</span>
+            </span>
             <span className="mob-chip mob-chip-video">
-              <VideoIcon className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+              <VideoIcon className="w-3.5 h-3.5 text-rose-400 shrink-0" />
               <span>Video 1 Menit</span>
             </span>
             <span className="mob-chip mob-chip-kemasan">
@@ -190,7 +214,7 @@ export default function HeroSection() {
             </h1>
 
             <p className="hero-subtitle-clean" ref={heroSubtitleRef}>
-              Merayakan kebangkitan industri kreatif Kota Bandung: pameran produk fesyen &amp; kuliner binaan, panggung apresiasi seni, dan kompetisi bergengsi di Jalan Braga &amp; Hotel Papandayan.
+              Merayakan kebangkitan industri kreatif Kota Bandung: pameran produk fesyen, kuliner, dan kriya binaan, panggung apresiasi seni, serta kompetisi bergengsi di Braga City Walk.
             </p>
           </div>
 

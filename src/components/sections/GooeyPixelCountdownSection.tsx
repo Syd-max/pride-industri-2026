@@ -833,7 +833,7 @@ export default function GooeyPixelCountdownSection() {
               <div className="countdown-footer-left">
                 <span>Braga City Walk &amp; Koridor Jalan Braga</span>
                 <span>•</span>
-                <span>Malam Penganugerahan SIINAS</span>
+                <span>Festival &amp; Awarding IKM Binaan</span>
               </div>
               <div className="countdown-footer-right">
                 <span>Disdagin Kota Bandung</span>

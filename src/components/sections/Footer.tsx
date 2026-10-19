@@ -48,7 +48,7 @@ export default function Footer() {
             <p className="text-xs sm:text-sm text-slate-300 font-medium max-w-xl leading-relaxed">
               Pagelaran Ragam Inovasi dan Eksistensi — Merayakan Daya Cipta dan
               Kemandirian Industri Kecil dan Menengah (IKM) binaan Kota Bandung
-              melalui pameran produk unggulan, fashion runway, dan malam apresiasi pelaporan SIINAS.
+              melalui pameran produk unggulan, fashion runway, talkshow industri, dan penyerahan sertifikat mutu.
             </p>
 
             {/* Event Dates & Venues Badge */}
@@ -58,8 +58,8 @@ export default function Footer() {
                 <span>27–28 Nov 2026 · Braga City Walk Bandung</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/90 text-slate-200 border border-slate-700/80 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                <span>28 Nov 2026 · Ballroom Hotel The Papandayan</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span>Jum&apos;at 13:30–21:00 &amp; Sabtu 10:00–21:00 WIB</span>
               </span>
             </div>
 

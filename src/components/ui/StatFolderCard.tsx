@@ -63,7 +63,7 @@ export default function StatFolderCard({
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       animFrameRef.current = requestAnimationFrame(step);
     } else {
-      // For string like "SIINAS": subtle letter scramble roll
+      // For non-numeric text: subtle letter scramble roll
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       const original = number;
       let iterations = 0;
