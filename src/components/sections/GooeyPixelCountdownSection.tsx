@@ -336,10 +336,10 @@ export default function GooeyPixelCountdownSection() {
       const e = exitSpread;
 
       const rowOffsets = [
-        { x: -12 * s - 16 * e, y: -16 * s - 30 * e },
-        { x: 18 * s - 24 * e, y: 8 * s - 16 * e },
-        { x: -16 * s + 18 * e, y: 12 * s + 10 * e },
-        { x: 14 * s - 18 * e, y: 22 * s + 32 * e },
+        { x: -12 * s - 16 * e, y: -16 * s - 26 * e },
+        { x: 14 * s - 18 * e, y: -6 * s - 10 * e },
+        { x: -14 * s + 16 * e, y: 6 * s + 10 * e },
+        { x: 12 * s - 16 * e, y: 16 * s + 26 * e },
       ];
 
       sceneObj.mainRects.forEach((rect, idx) => {
@@ -707,15 +707,15 @@ export default function GooeyPixelCountdownSection() {
       {/* Hidden SVG Definitions for Liquid Gooey Filter */}
       <svg className="pride-svg-defs" aria-hidden="true">
         <defs>
-          <filter id="pride-liquid-goo" x="-30%" y="-30%" width="160%" height="160%" colorInterpolationFilters="sRGB">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="11" result="blur" />
+          <filter id="pride-liquid-goo" x="-20%" y="-20%" width="140%" height="140%" colorInterpolationFilters="sRGB">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="blur" />
             <feColorMatrix
               in="blur"
               mode="matrix"
               values="1 0 0 0 0  
                       0 1 0 0 0  
                       0 0 1 0 0  
-                      0 0 0 26 -11"
+                      0 0 0 19 -8"
               result="goo"
             />
             <feComposite in="SourceGraphic" in2="goo" operator="atop" />
@@ -744,25 +744,18 @@ export default function GooeyPixelCountdownSection() {
           <div className="gooey-scene gooey-scene-1" ref={scene1Ref}>
             <div className="cluster-anchor">
               <div className="goo-layer">
-                {/* 4 Main Blobs */}
-                <div className="goo-rect main-rect" data-row="0" style={{ left: '48px', top: '0px', width: '440px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '80px', width: '330px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '160px', width: '340px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '240px', width: '500px', height: '74px' }} />
-
-                {/* 5 Satellite Blobs */}
-                <div className="goo-rect sat-rect" data-sat="top1" style={{ left: '20px', top: '0px', width: '320px', height: '64px' }} />
-                <div className="goo-rect sat-rect" data-sat="top2" style={{ left: '110px', top: '0px', width: '340px', height: '64px' }} />
-                <div className="goo-rect sat-rect" data-sat="left" style={{ left: '0px', top: '82px', width: '210px', height: '66px' }} />
-                <div className="goo-rect sat-rect" data-sat="right" style={{ left: '180px', top: '162px', width: '260px', height: '66px' }} />
-                <div className="goo-rect sat-rect" data-sat="bottom" style={{ left: '10px', top: '244px', width: '370px', height: '70px' }} />
+                {/* 4 Distinct Rounded Capsule Pills with 24px vertical separation */}
+                <div className="goo-rect main-rect" data-row="0" style={{ left: '48px', top: '0px', width: '390px', height: '68px' }} />
+                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '92px', width: '290px', height: '68px' }} />
+                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '184px', width: '280px', height: '68px' }} />
+                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '276px', width: '440px', height: '68px' }} />
               </div>
 
               <div className="text-layer">
                 <div className="goo-text-row" data-row="0" style={{ left: '68px', top: '11px' }}>KARYA LOKAL</div>
-                <div className="goo-text-row" data-row="1" style={{ left: '20px', top: '91px' }}>IKM KOTA</div>
-                <div className="goo-text-row" data-row="2" style={{ left: '20px', top: '171px' }}>BANDUNG</div>
-                <div className="goo-text-row" data-row="3" style={{ left: '20px', top: '251px' }}>INOVASI NYATA</div>
+                <div className="goo-text-row" data-row="1" style={{ left: '20px', top: '103px' }}>IKM KOTA</div>
+                <div className="goo-text-row" data-row="2" style={{ left: '20px', top: '195px' }}>BANDUNG</div>
+                <div className="goo-text-row" data-row="3" style={{ left: '20px', top: '287px' }}>INOVASI NYATA</div>
               </div>
             </div>
           </div>
@@ -771,25 +764,18 @@ export default function GooeyPixelCountdownSection() {
           <div className="gooey-scene gooey-scene-2" ref={scene2Ref}>
             <div className="cluster-anchor">
               <div className="goo-layer">
-                {/* 4 Main Blobs */}
-                <div className="goo-rect main-rect" data-row="0" style={{ left: '48px', top: '0px', width: '350px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '80px', width: '620px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '160px', width: '610px', height: '74px' }} />
-                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '240px', width: '550px', height: '74px' }} />
-
-                {/* 5 Satellite Blobs */}
-                <div className="goo-rect sat-rect" data-sat="top1" style={{ left: '20px', top: '0px', width: '300px', height: '64px' }} />
-                <div className="goo-rect sat-rect" data-sat="top2" style={{ left: '120px', top: '0px', width: '360px', height: '64px' }} />
-                <div className="goo-rect sat-rect" data-sat="left" style={{ left: '0px', top: '82px', width: '220px', height: '66px' }} />
-                <div className="goo-rect sat-rect" data-sat="right" style={{ left: '220px', top: '162px', width: '300px', height: '66px' }} />
-                <div className="goo-rect sat-rect" data-sat="bottom" style={{ left: '10px', top: '244px', width: '380px', height: '70px' }} />
+                {/* 4 Distinct Rounded Capsule Pills with 24px vertical separation */}
+                <div className="goo-rect main-rect" data-row="0" style={{ left: '48px', top: '0px', width: '280px', height: '68px' }} />
+                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '92px', width: '550px', height: '68px' }} />
+                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '184px', width: '530px', height: '68px' }} />
+                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '276px', width: '440px', height: '68px' }} />
               </div>
 
               <div className="text-layer">
                 <div className="goo-text-row" data-row="0" style={{ left: '68px', top: '11px' }}>THE NEXT</div>
-                <div className="goo-text-row" data-row="1" style={{ left: '20px', top: '91px' }}>CREATIVE CHAPTER</div>
-                <div className="goo-text-row" data-row="2" style={{ left: '20px', top: '171px' }}>FESYEN &amp; KULINER</div>
-                <div className="goo-text-row" data-row="3" style={{ left: '20px', top: '251px' }}>27–28 NOV 2026</div>
+                <div className="goo-text-row" data-row="1" style={{ left: '20px', top: '103px' }}>CREATIVE CHAPTER</div>
+                <div className="goo-text-row" data-row="2" style={{ left: '20px', top: '195px' }}>FESYEN &amp; KULINER</div>
+                <div className="goo-text-row" data-row="3" style={{ left: '20px', top: '287px' }}>27–28 NOV 2026</div>
               </div>
             </div>
           </div>
@@ -798,18 +784,18 @@ export default function GooeyPixelCountdownSection() {
         {/* ── DOT-MATRIX PIXEL COUNTDOWN (Scene 3 & 4) ── */}
         <div className="pixel-countdown-wrapper" ref={pixelWrapperRef}>
           <div className="pixel-countdown-card">
-            {/* Top Bar */}
+            {/* Top Bar — Human Editorial Design (No AI Beacon / Sci-Fi Clutter) */}
             <div className="countdown-header-bar">
               <div className="countdown-header-left">
-                <span className="live-beacon" />
-                <span>Festival Countdown · Braga 2026</span>
+                <span className="countdown-human-badge">Hitung Mundur</span>
+                <span className="countdown-human-sub">Menuju PRIDE Industri 2026</span>
               </div>
               <div className="countdown-header-right">
-                <span>27–28 November 2026 · Bandung</span>
+                <span className="countdown-human-venue">Braga City Walk · 27–28 Nov 2026</span>
               </div>
             </div>
 
-            {/* 4 Matrix Columns */}
+            {/* 4 Matrix Columns — Clean Human Typography */}
             <div className="matrix-stats-grid">
               {matrixSpecs.map((spec) => (
                 <div
@@ -818,7 +804,6 @@ export default function GooeyPixelCountdownSection() {
                   data-metric={spec.key}
                 >
                   <div className="matrix-label-row">
-                    <div className="matrix-icon-box">{spec.icon}</div>
                     <span className="matrix-stat-title">{spec.title}</span>
                   </div>
 

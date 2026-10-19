@@ -300,19 +300,7 @@ export default function CompetitionSection() {
                   <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  <span>Durasi Maksimal 60 Detik (Format Reels / TikTok Vertikal 9:16)</span>
-                </li>
-                <li>
-                  <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  <span>Pengambilan video langsung di venue Braga City Walk</span>
-                </li>
-                <li>
-                  <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  <span>Penjurian langsung praktisi sinematografi &amp; Disdagin</span>
+                  <span>Durasi Maksimal 60 Detik</span>
                 </li>
               </ul>
 
@@ -384,24 +372,6 @@ export default function CompetitionSection() {
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                   <span>Eksplorasi material ramah lingkungan pangan olahan lokal</span>
-                </li>
-                <li>
-                  <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  <span>Format 1 PDF Maks. 10 MB (Konsep, Pola &amp; Mockup 3D)</span>
-                </li>
-                <li>
-                  <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  <span>100% Gratis / Tanpa Biaya Pendaftaran</span>
-                </li>
-                <li>
-                  <svg className="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  <span>Grand Final &amp; Display Karya di Braga City Walk (28 Nov)</span>
                 </li>
               </ul>
 
