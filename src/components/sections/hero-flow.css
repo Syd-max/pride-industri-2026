@@ -328,14 +328,13 @@
 }
 
 .hero-subtitle-clean {
-  color: #f1f5f9;
+  color: #93c5fd;
   font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: clamp(12.5px, 1.25vw, 14.5px);
-  line-height: 1.6;
-  max-width: 600px;
-  margin: 8px auto 0;
-  font-weight: 500;
-  letter-spacing: 0.01em;
+  font-size: clamp(14px, 1.5vw, 17px);
+  line-height: 1.4;
+  margin: 6px auto 0;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.95),
     0 4px 12px rgba(0, 0, 0, 0.9);
@@ -532,11 +531,12 @@
   }
 
   .hero-subtitle-clean {
-    font-size: clamp(11.5px, 3vw, 13px);
-    line-height: 1.5;
-    margin-top: 6px;
-    max-width: 98%;
-    color: #f1f5f9;
+    font-size: clamp(13px, 3.4vw, 15px);
+    line-height: 1.4;
+    margin-top: 5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #93c5fd;
   }
 
   .hero-organizer-card {

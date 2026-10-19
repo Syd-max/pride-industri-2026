@@ -217,20 +217,14 @@ export default function HeroSection() {
             </span>
           </div>
 
-          {/* REVISI 2: Clean Human Editorial Headline (Zero AI Slop, Elegant & Minimalist) */}
+          {/* Headline Block: Pagelaran Ragam Inovasi & Eksistensi, 27-28 Nov 2026 */}
           <div className="headline-block" ref={headlineBlockRef}>
-            <div className="headline-kicker-human">
-              <span>Festival Industri Kreatif &amp; Seni Kota Bandung</span>
-              <span className="kicker-dot" />
-              <span className="kicker-date">27–28 Nov 2026</span>
-            </div>
-
             <h1 className="hero-title-clean">
               Pagelaran Ragam Inovasi <span className="title-amp">&amp;</span> Eksistensi
             </h1>
 
             <p className="hero-subtitle-clean" ref={heroSubtitleRef}>
-              Merayakan kebangkitan industri kreatif Kota Bandung: pameran produk fesyen, kuliner, dan kriya binaan, panggung apresiasi seni, serta kompetisi bergengsi di Braga City Walk.
+              27–28 Nov 2026
             </p>
           </div>
 
