@@ -48,30 +48,6 @@ export default function Footer() {
             <p className="text-xs sm:text-sm text-slate-300 font-medium max-w-xl leading-relaxed">
               Pagelaran Ragam Inovasi dan Eksistensi (PRIDE) Industri 2026 merupakan festival perayaan kreativitas, inovasi, dan kemandirian Industri Kecil dan Menengah (IKM) binaan Kota Bandung.
             </p>
-
-            {/* Event Dates & Venues Badge */}
-            <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/90 text-slate-200 border border-slate-700/80 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-                <span>27–28 Nov 2026 · Braga City Walk Bandung</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/90 text-slate-200 border border-slate-700/80 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                <span>Jum&apos;at 13:30–21:00 &amp; Sabtu 10:00–21:00 WIB</span>
-              </span>
-            </div>
-
-            {/* Organizer & Official Governance Information */}
-            <div className="text-xs text-slate-400 space-y-1.5 pt-2 border-t border-slate-800/80 max-w-xl">
-              <p>
-                <strong className="text-slate-200">Penyelenggara Resmi:</strong>{' '}
-                {EVENT_CONFIG.organizer}
-              </p>
-              <p>
-                <strong className="text-slate-200">Inisiatif &amp; Pembina:</strong>{' '}
-                Pemerintah Kota Bandung · Dinas Perdagangan dan Perindustrian (KEMILAU)
-              </p>
-            </div>
           </div>
 
           {/* Col 2: Sekretariat & Kanal Informasi Resmi (5 Cols) */}
@@ -158,75 +134,60 @@ export default function Footer() {
         </div>
 
         {/* ─── Supported By Section ─── */}
-        <div className="py-6 sm:py-7 border-b border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 w-full md:w-auto">
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              <span className="text-[11px] font-extrabold uppercase tracking-widest text-slate-300">
-                SUPPORT BY:
-              </span>
-            </div>
-
-            {/* Mobile: 2-column side by side with identical size. Desktop: inline flex */}
-            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
-              {/* Tactlink Partner Badge Card */}
-              <a
-                href="https://www.tactlink.com/id"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2.5 p-2.5 sm:px-4 sm:py-2.5 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 shadow-xs transition-all hover:scale-[1.02] group cursor-pointer w-full sm:w-auto min-w-0"
-                title="Tactlink - Official Digital Directory Partner"
-              >
-                <div className="relative w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0">
-                  <Image
-                    src="/LOGO_TACTLINK_CROPPED.png"
-                    alt="Logo Tactlink"
-                    fill
-                    sizes="32px"
-                    className="object-contain"
-                  />
-                </div>
-                <div className="flex flex-col text-left min-w-0">
-                  <span className="text-xs font-black text-slate-900 group-hover:text-blue-600 transition-colors leading-tight truncate">
-                    Tactlink
-                  </span>
-                  <span className="text-[9px] sm:text-[10px] font-semibold text-slate-500 truncate">
-                    Digital Directory
-                  </span>
-                </div>
-              </a>
-
-              {/* Braga Citywalk Partner Badge Card */}
-              <a
-                href="https://maps.google.com/?q=Braga+City+Walk+Bandung"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2.5 p-2.5 sm:px-4 sm:py-2.5 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 shadow-xs transition-all hover:scale-[1.02] group cursor-pointer w-full sm:w-auto min-w-0"
-                title="Braga Citywalk - Official Venue Partner"
-              >
-                <div className="relative w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0">
-                  <Image
-                    src="/LOGO_BRAGA_CITYWALK.png"
-                    alt="Logo Braga Citywalk"
-                    fill
-                    sizes="32px"
-                    className="object-contain"
-                  />
-                </div>
-                <div className="flex flex-col text-left min-w-0">
-                  <span className="text-xs font-black text-slate-900 group-hover:text-amber-600 transition-colors leading-tight truncate">
-                    Braga Citywalk
-                  </span>
-                  <span className="text-[9px] sm:text-[10px] font-semibold text-slate-500 truncate">
-                    Venue Partner
-                  </span>
-                </div>
-              </a>
-            </div>
+        <div className="py-4 sm:py-5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center gap-3.5 sm:gap-6">
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            <span className="text-[11px] font-extrabold uppercase tracking-widest text-slate-300">
+              SUPPORT BY:
+            </span>
           </div>
 
-          <div className="text-xs text-slate-500 hidden lg:block">
-            Sinergi digital directory cerdas &amp; venue heritage festival PRIDE Industri 2026.
+          {/* Partner Logos: Clean layer shadow layout without bulky boxes */}
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+            {/* Braga Citywalk */}
+            <a
+              href="https://maps.google.com/?q=Braga+City+Walk+Bandung"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center transition-all hover:scale-105 group cursor-pointer filter drop-shadow-md hover:drop-shadow-lg"
+              title="Braga Citywalk - Official Venue Partner"
+            >
+              <Image
+                src="/LOGO_BRAGA_CITYWALK_LAYER.png"
+                alt="Braga Citywalk"
+                width={100}
+                height={40}
+                className="h-8 sm:h-9 w-auto object-contain"
+              />
+            </a>
+
+            {/* RRD Organizer */}
+            <div
+              className="inline-flex items-center transition-all hover:scale-105 filter drop-shadow-md hover:drop-shadow-lg"
+              title="PT Rahman Ramadhan Diandra (RRD Organizer)"
+            >
+              <Image
+                src="/LOGO_RRD_ORGANIZER.png"
+                alt="RRD Organizer"
+                width={140}
+                height={40}
+                className="h-8 sm:h-9 w-auto object-contain"
+              />
+            </div>
+
+            {/* NXG Institute */}
+            <div
+              className="inline-flex items-center transition-all hover:scale-105 filter drop-shadow-md hover:drop-shadow-lg"
+              title="NXG Institute"
+            >
+              <Image
+                src="/LOGO_NXG_INSTITUTE.png"
+                alt="NXG Institute"
+                width={140}
+                height={40}
+                className="h-7 sm:h-8 w-auto object-contain"
+              />
+            </div>
           </div>
         </div>
 
