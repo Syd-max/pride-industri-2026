@@ -300,6 +300,7 @@ export async function POST(
       }
 
       specificData = {
+        address: sanitizeString(body.address || ''),
         institution,
         video_category: videoCategory,
         video_title: videoTitle,

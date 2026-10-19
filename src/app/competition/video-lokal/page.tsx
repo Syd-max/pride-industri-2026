@@ -52,6 +52,7 @@ export default function VideoLokalPage() {
 
   // ─── Section 1: Data Diri ───
   const [fullName, setFullName] = useState('');
+  const [address, setAddress] = useState('');
   const [institution, setInstitution] = useState('');
   const [customInstitution, setCustomInstitution] = useState('');
   const [phone, setPhone] = useState('');
@@ -88,6 +89,7 @@ export default function VideoLokalPage() {
     full_name: string;
     email: string;
     institution: string;
+    address?: string;
     category: string;
     video_title: string;
   } | null>(null);
@@ -155,6 +157,10 @@ export default function VideoLokalPage() {
     if (currentStep === 1) {
       if (!fullName.trim() || fullName.trim().length < 3) {
         setStepError('Nama lengkap wajib diisi minimal 3 karakter.');
+        return;
+      }
+      if (!address.trim() || address.trim().length < 5) {
+        setStepError('Alamat rumah lengkap wajib diisi minimal 5 karakter.');
         return;
       }
       if (!institution) {
@@ -288,6 +294,7 @@ export default function VideoLokalPage() {
         registration_code: regCode,
         competition_id: 'video-lokal',
         full_name: fullName.trim(),
+        address: address.trim(),
         institution: resolvedInstitution,
         phone: phone.trim(),
         email: email.trim().toLowerCase(),
@@ -320,6 +327,7 @@ export default function VideoLokalPage() {
         full_name: fullName.trim(),
         email: email.trim().toLowerCase(),
         institution: resolvedInstitution,
+        address: address.trim(),
         category: videoCategory,
         video_title: videoTitle.trim(),
       });
@@ -404,6 +412,12 @@ export default function VideoLokalPage() {
                 <span className="text-slate-500 font-medium">Instansi / Asal:</span>
                 <span className="font-semibold text-slate-900 text-right">{successData.institution}</span>
               </div>
+              {successData.address && (
+                <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
+                  <span className="text-slate-500 font-medium">Alamat:</span>
+                  <span className="font-semibold text-slate-900 text-right line-clamp-1">{successData.address}</span>
+                </div>
+              )}
               <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
                 <span className="text-slate-500 font-medium">Sub-Sektor IKM:</span>
                 <span className="font-semibold text-slate-900 text-right">{successData.category}</span>
@@ -418,14 +432,9 @@ export default function VideoLokalPage() {
               </div>
             </div>
 
-            {/* Next Steps Prompt */}
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 text-xs text-slate-700 text-left max-w-md mx-auto space-y-2">
-              <div className="font-bold text-slate-900">Informasi Penting:</div>
-              <ul className="list-disc list-inside space-y-1 text-slate-600 pl-0.5">
-                <li>Bawa smartphone dan kartu identitas saat shooting di Braga (27–28 Nov 2026).</li>
-                <li>Gunakan aplikasi TactLink Anda untuk check-in dan bertukar kontak digital.</li>
-                <li>Pengumuman pemenang pada Closing Ceremony &amp; Awarding di Main Stage Braga City Walk (28 Nov 2026).</li>
-              </ul>
+            {/* Simple Next Steps Note (Revisi 5) */}
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/90 text-xs text-slate-600 text-center max-w-md mx-auto leading-relaxed">
+              Simpan kode pendaftaran ini. Pengumuman pemenang pada <span className="font-bold text-slate-900">28 November 2026</span> di Braga City Walk.
             </div>
 
             <div className="pt-2">
@@ -486,13 +495,13 @@ export default function VideoLokalPage() {
                           ? 'bg-blue-600 text-white shadow-xs font-black'
                           : isCompleted
                           ? 'bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold cursor-pointer'
-                          : 'bg-slate-50 text-slate-400 font-medium cursor-not-allowed opacity-60'
+                          : 'bg-slate-100/90 border border-slate-200 text-slate-700 font-bold cursor-not-allowed'
                       }`}
                     >
-                      <div className="text-[11px] sm:text-xs leading-none">
+                      <div className={`text-[11px] sm:text-xs leading-none ${isActive ? 'text-white' : isCompleted ? 'text-blue-700' : 'text-slate-800 font-bold'}`}>
                         {isCompleted ? '✓' : s.step}
                       </div>
-                      <div className="text-[10px] hidden sm:block truncate mt-0.5">
+                      <div className={`text-[10px] hidden sm:block truncate mt-0.5 ${isActive ? 'text-white' : isCompleted ? 'text-blue-700' : 'text-slate-700 font-semibold'}`}>
                         {s.title}
                       </div>
                     </button>
@@ -558,6 +567,21 @@ export default function VideoLokalPage() {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition-all"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5 sm:col-span-2">
+                      <label htmlFor="address" className="text-xs font-bold text-slate-700 block">
+                        Alamat Rumah <span className="text-blue-600">*</span>
+                      </label>
+                      <textarea
+                        id="address"
+                        required
+                        rows={2}
+                        placeholder="Alamat domisili / tempat tinggal lengkap"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition-all resize-none"
                       />
                     </div>
 
@@ -846,6 +870,38 @@ export default function VideoLokalPage() {
                       <p className="text-xs text-slate-500">
                         Pakta integritas dan kartu identitas peserta.
                       </p>
+                    </div>
+                  </div>
+
+                  {/* Download Dokumen Persyaratan (Revisi 3) */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-50/90 via-indigo-50/70 to-blue-50/90 border border-blue-200/90 shadow-2xs">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                      <div className="space-y-1">
+                        <div className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-2">
+                          <svg className="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                          </svg>
+                          Dokumen Syarat &amp; Ketentuan Lomba
+                        </div>
+                        <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">
+                          Unduh berkas panduan teknis lomba dan format surat pernyataan / pakta integritas resmi untuk diisi dan diunggah di bawah.
+                        </p>
+                      </div>
+                      <a
+                        href="/syarat-video-lokal.pdf"
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-xs font-bold shadow-xs hover:shadow-md transition-all shrink-0 cursor-pointer"
+                      >
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        <span>Unduh Dokumen (PDF)</span>
+                      </a>
                     </div>
                   </div>
 
@@ -1223,8 +1279,8 @@ export default function VideoLokalPage() {
                         </>
                       ) : (
                         <>
-                          <span>Kirim Pendaftaran Resmi Lomba Video 1 Menit</span>
-                          <span>✓</span>
+                          <span>Kirim Pendaftaran</span>
+                          <span aria-hidden="true">→</span>
                         </>
                       )}
                     </button>
