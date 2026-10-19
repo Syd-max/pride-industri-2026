@@ -4,22 +4,11 @@ import { useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
-import { sanitizeStorageFileName } from '@/lib/storage';
+import { sanitizeStorageFileName, getSafeStorageContentType } from '@/lib/storage';
 import { generateRegistrationCode } from '@/lib/utils';
 
 function inferContentType(file: File): string {
-  if (file.type && file.type !== 'application/octet-stream') return file.type;
-  const ext = file.name.split('.').pop()?.toLowerCase();
-  switch (ext) {
-    case 'pdf': return 'application/pdf';
-    case 'png': return 'image/png';
-    case 'jpg':
-    case 'jpeg': return 'image/jpeg';
-    case 'webp': return 'image/webp';
-    case 'zip': return 'application/zip';
-    case 'rar': return 'application/x-rar-compressed';
-    default: return 'application/pdf';
-  }
+  return getSafeStorageContentType(file);
 }
 
 const INSTITUTION_OPTIONS = [
@@ -361,12 +350,22 @@ export default function DesainKemasanPage() {
         const objectPath = `registrations/${code}/${safeName}`;
         const contentType = inferContentType(item.file);
 
-        const { error: uploadError } = await supabase.storage
+        let { error: uploadError } = await supabase.storage
           .from('community-assets')
           .upload(objectPath, item.file, {
             contentType,
             upsert: true,
           });
+
+        if (uploadError && uploadError.message?.toLowerCase().includes('mime type')) {
+          const retry = await supabase.storage
+            .from('community-assets')
+            .upload(objectPath, item.file, {
+              contentType: 'application/octet-stream',
+              upsert: true,
+            });
+          uploadError = retry.error;
+        }
 
         if (uploadError) {
           throw new Error(`Gagal mengunggah berkas "${item.file.name}": ${uploadError.message}`);

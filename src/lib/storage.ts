@@ -30,6 +30,23 @@ export function buildRegistrationStoragePath(
 }
 
 /**
+ * Maps filenames and MIME types to Supabase bucket allowed content types.
+ * Prevents "mime type ... is not supported" errors for .docx, .doc, .rar, .jpg, etc.
+ */
+export function getSafeStorageContentType(fileOrType: string | { name?: string; type?: string }): string {
+  const type = typeof fileOrType === 'string' ? fileOrType : fileOrType?.type || '';
+  const name = typeof fileOrType === 'string' ? fileOrType : fileOrType?.name || '';
+  const ext = name.split('.').pop()?.toLowerCase() || '';
+
+  if (ext === 'jpg' || ext === 'jpeg' || type === 'image/jpg' || type === 'image/jpeg') return 'image/jpeg';
+  if (ext === 'png' || type === 'image/png') return 'image/png';
+  if (ext === 'webp' || type === 'image/webp') return 'image/webp';
+  if (ext === 'pdf' || type === 'application/pdf') return 'application/pdf';
+  if (ext === 'zip' || type === 'application/zip' || type === 'application/x-zip-compressed') return 'application/zip';
+  return 'application/octet-stream';
+}
+
+/**
  * Uploads a binary buffer or Blob to Supabase Storage with automatic contentType inference.
  */
 export async function uploadRegistrationFileToSupabase(
@@ -40,12 +57,25 @@ export async function uploadRegistrationFileToSupabase(
   bucketName = DEFAULT_STORAGE_BUCKET
 ): Promise<{ path: string | null; error: Error | null }> {
   try {
-    const { data, error } = await supabase.storage
+    const safeContentType = getSafeStorageContentType(contentType || objectPath);
+    let { data, error } = await supabase.storage
       .from(bucketName)
       .upload(objectPath, fileBody, {
-        contentType: contentType || 'application/octet-stream',
+        contentType: safeContentType,
         upsert: true,
       });
+
+    // Fallback if Supabase bucket rejects MIME type
+    if (error && error.message?.toLowerCase().includes('mime type')) {
+      const retry = await supabase.storage
+        .from(bucketName)
+        .upload(objectPath, fileBody, {
+          contentType: 'application/octet-stream',
+          upsert: true,
+        });
+      data = retry.data;
+      error = retry.error;
+    }
 
     if (error) {
       return { path: null, error: new Error(error.message) };

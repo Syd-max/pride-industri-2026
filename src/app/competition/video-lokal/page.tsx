@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { EVENT_CONFIG } from '@/config/event';
 import { createClient } from '@/lib/supabase/client';
-import { sanitizeStorageFileName } from '@/lib/storage';
+import { sanitizeStorageFileName, getSafeStorageContentType } from '@/lib/storage';
 import { generateRegistrationCode } from '@/lib/utils';
 
 type VideoCategory = 'Fesyen' | 'Kuliner' | 'Kriya' | 'PRIDE Industri 2026';
@@ -19,16 +19,7 @@ const FORM_STEPS = [
 ];
 
 function inferContentType(file: File): string {
-  if (file.type && file.type.trim().length > 0) return file.type;
-  const name = file.name.toLowerCase();
-  if (name.endsWith('.pdf')) return 'application/pdf';
-  if (name.endsWith('.png')) return 'image/png';
-  if (name.endsWith('.jpg') || name.endsWith('.jpeg')) return 'image/jpeg';
-  if (name.endsWith('.webp')) return 'image/webp';
-  if (name.endsWith('.doc')) return 'application/msword';
-  if (name.endsWith('.docx')) return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-  if (name.endsWith('.zip')) return 'application/zip';
-  return 'application/octet-stream';
+  return getSafeStorageContentType(file);
 }
 
 const INSTITUTION_OPTIONS = [
@@ -254,12 +245,22 @@ export default function VideoLokalPage() {
         setUploadProgress('Mengunggah dokumen persyaratan...');
         const safeDoc = sanitizeStorageFileName(documentFile.name);
         const pathDoc = `registrations/${regCode}/${safeDoc}`;
-        const { error: errDoc } = await supabase.storage
+        let { error: errDoc } = await supabase.storage
           .from(BUCKET)
           .upload(pathDoc, documentFile, {
             contentType: inferContentType(documentFile),
             upsert: true,
           });
+
+        if (errDoc && errDoc.message?.toLowerCase().includes('mime type')) {
+          const retry = await supabase.storage
+            .from(BUCKET)
+            .upload(pathDoc, documentFile, {
+              contentType: 'application/octet-stream',
+              upsert: true,
+            });
+          errDoc = retry.error;
+        }
 
         if (errDoc) {
           throw new Error(`Gagal mengunggah dokumen persyaratan: ${errDoc.message}`);
@@ -271,12 +272,22 @@ export default function VideoLokalPage() {
         setUploadProgress('Mengunggah QR TactLink...');
         const safeQr = sanitizeStorageFileName(tactlinkQrFile.name);
         const pathQr = `registrations/${regCode}/${safeQr}`;
-        const { error: errQr } = await supabase.storage
+        let { error: errQr } = await supabase.storage
           .from(BUCKET)
           .upload(pathQr, tactlinkQrFile, {
             contentType: inferContentType(tactlinkQrFile),
             upsert: true,
           });
+
+        if (errQr && errQr.message?.toLowerCase().includes('mime type')) {
+          const retry = await supabase.storage
+            .from(BUCKET)
+            .upload(pathQr, tactlinkQrFile, {
+              contentType: 'application/octet-stream',
+              upsert: true,
+            });
+          errQr = retry.error;
+        }
 
         if (errQr) {
           throw new Error(`Gagal mengunggah foto QR TactLink: ${errQr.message}`);
