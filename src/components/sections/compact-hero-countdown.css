@@ -1,13 +1,12 @@
 /* ─── PRIDE Industri 2026 — Real-Time Launch Countdown ─────────────────────
-   Reference: Elegant Human Design / Minimalist Industrial Launch Clock (Gambar 5)
-   Features: Unobstructed bold numerals, bottom-aligned diamond unit tags
+   Industrial Launch Clock (Responsive & Scaled to Viewport)
 ─────────────────────────────────────────────────────────────────────────────── */
 
 .launch-countdown-container {
   width: 100%;
-  max-width: clamp(380px, 44vw, 500px);
-  margin: clamp(4px, 0.6vh, 8px) auto clamp(4px, 0.6vh, 8px);
-  padding: clamp(9px, 1.2vh, 13px) clamp(14px, 1.8vw, 18px) clamp(7px, 1vh, 10px);
+  max-width: clamp(340px, min(92vw, 54vh), 500px);
+  margin: 0 auto;
+  padding: clamp(8px, 1.2vh, 13px) clamp(12px, 1.8vw, 18px) clamp(6px, 1vh, 10px);
   background-color: #0b0d13;
   background-image: 
     radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
@@ -21,6 +20,7 @@
   position: relative;
   user-select: none;
   animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+  flex-shrink: 0;
 }
 
 /* ─── Top Bar ─── */
@@ -36,19 +36,19 @@
   display: flex;
   align-items: flex-end;
   gap: 3px;
-  height: clamp(16px, 2.2vh, 20px);
+  height: clamp(14px, 2vh, 18px);
   padding-top: 2px;
 }
 
 .step-bar {
-  width: 4.5px;
+  width: 4px;
   background: #475569;
   border-radius: 1px;
 }
 
-.step-bar.step-1 { height: 7px; }
-.step-bar.step-2 { height: 12px; }
-.step-bar.step-3 { height: 17px; }
+.step-bar.step-1 { height: 6px; }
+.step-bar.step-2 { height: 11px; }
+.step-bar.step-3 { height: 16px; }
 
 /* Right Header Typography */
 .launch-header-text {
@@ -61,7 +61,7 @@
 
 .launch-label-lead {
   font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: clamp(9.5px, 1vw, 11px);
+  font-size: clamp(9px, 1vw, 10.5px);
   font-weight: 500;
   letter-spacing: 0.04em;
   color: #94a3b8;
@@ -69,22 +69,22 @@
 
 .launch-label-target {
   font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: clamp(11.5px, 1.2vw, 13px);
+  font-size: clamp(11px, 1.2vw, 12.5px);
   font-weight: 900;
   letter-spacing: 0.08em;
   color: #ffffff;
   text-transform: uppercase;
 }
 
-/* ─── Main Digits Display Box (Gambar 5 Layout) ─── */
+/* ─── Main Digits Display Box ─── */
 .launch-digits-box {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   background: #06070a;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
-  padding: clamp(7px, 1.1vh, 11px) 6px clamp(7px, 1.1vh, 10px);
-  margin: clamp(3px, 0.5vh, 5px) 0 clamp(4px, 0.6vh, 6px);
+  padding: clamp(6px, 1vh, 11px) 6px clamp(6px, 1vh, 10px);
+  margin: clamp(3px, 0.5vh, 5px) 0;
   align-items: flex-start;
   justify-items: center;
   gap: 4px;
@@ -106,20 +106,20 @@
   position: relative;
 }
 
-/* Big Bold Numbers — 100% Unobstructed and Highly Legible */
+/* Big Bold Numbers — Fully Visible & Scaled */
 .launch-number-val {
   font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: clamp(26px, 3.4vw, 38px);
+  font-size: clamp(23px, min(6.5vw, 3.8vh), 38px);
   font-weight: 900;
   line-height: 0.95;
   letter-spacing: -0.03em;
   color: #ffffff;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
   font-variant-numeric: tabular-nums;
-  margin-bottom: clamp(3px, 0.4vh, 5px);
+  margin-bottom: clamp(2px, 0.4vh, 4px);
 }
 
-/* Gambar 5 Diamond Accent & Unit Label below the Number */
+/* Diamond Accent & Unit Label below the Number */
 .launch-unit-meta {
   display: flex;
   align-items: center;
@@ -128,8 +128,8 @@
 }
 
 .launch-unit-diamond {
-  width: 7.5px;
-  height: 7.5px;
+  width: clamp(6px, 0.9vw, 7.5px);
+  height: clamp(6px, 0.9vw, 7.5px);
   background: #1652f0;
   transform: rotate(45deg);
   border-radius: 1.5px;
@@ -139,7 +139,7 @@
 
 .launch-unit-label {
   font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: clamp(8px, 0.85vw, 9.5px);
+  font-size: clamp(7.5px, 0.85vw, 9.5px);
   font-weight: 850;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -164,85 +164,16 @@
   display: flex;
   align-items: flex-end;
   gap: 3px;
-  height: clamp(14px, 1.8vh, 16px);
+  height: clamp(12px, 1.6vh, 15px);
 }
 
 .step-bar-blue {
-  width: 4.5px;
+  width: 4px;
   background: #1652f0;
   border-radius: 1px;
 }
 
-.step-bar-blue.step-b1 { height: 16px; }
-.step-bar-blue.step-b2 { height: 12px; }
-.step-bar-blue.step-b3 { height: 8px; }
-.step-bar-blue.step-b4 { height: 5px; }
-
-/* ─── Short Desktop Screens (Laptops height <= 740px) ─── */
-@media (min-width: 769px) and (max-height: 740px) {
-  .launch-countdown-container {
-    max-width: 440px;
-    padding: 8px 14px 7px;
-    margin: 4px auto;
-  }
-
-  .launch-digits-box {
-    padding: 6px 4px 6px;
-    margin: 3px 0 4px;
-  }
-
-  .launch-number-val {
-    font-size: 26px;
-    margin-bottom: 2px;
-  }
-
-  .launch-unit-label {
-    font-size: 8px;
-  }
-}
-
-/* ─── Mobile Devices (max-width: 768px) ─── */
-@media (max-width: 768px) {
-  .launch-countdown-container {
-    max-width: min(94vw, 380px);
-    margin: 5px auto;
-    padding: 9px 12px 8px;
-    border-radius: 12px;
-  }
-
-  .launch-header-text {
-    line-height: 1.1;
-  }
-
-  .launch-label-lead {
-    font-size: 9px;
-  }
-
-  .launch-label-target {
-    font-size: 11px;
-  }
-
-  .launch-digits-box {
-    padding: 7px 4px 7px;
-    margin: 4px 0 5px;
-    gap: 2px;
-  }
-
-  .launch-number-val {
-    font-size: clamp(22px, 6.5vw, 30px);
-    margin-bottom: 2px;
-  }
-
-  .launch-unit-diamond {
-    width: 6.5px;
-    height: 6.5px;
-  }
-
-  .launch-unit-label {
-    font-size: 7.5px;
-  }
-
-  .step-bar, .step-bar-blue {
-    width: 3.5px;
-  }
-}
+.step-bar-blue.step-b1 { height: 15px; }
+.step-bar-blue.step-b2 { height: 11px; }
+.step-bar-blue.step-b3 { height: 7px; }
+.step-bar-blue.step-b4 { height: 4px; }
