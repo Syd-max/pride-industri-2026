@@ -336,10 +336,10 @@ export default function GooeyPixelCountdownSection() {
       const e = exitSpread;
 
       const rowOffsets = [
-        { x: -35 * s - 45 * e, y: -42 * s - 130 * e },
-        { x: 110 * s - 160 * e, y: 18 * s - 55 * e },
-        { x: 240 * s + 95 * e, y: 38 * s + 30 * e },
-        { x: 90 * s - 70 * e, y: 105 * s + 110 * e },
+        { x: -12 * s - 16 * e, y: -16 * s - 30 * e },
+        { x: 18 * s - 24 * e, y: 8 * s - 16 * e },
+        { x: -16 * s + 18 * e, y: 12 * s + 10 * e },
+        { x: 14 * s - 18 * e, y: 22 * s + 32 * e },
       ];
 
       sceneObj.mainRects.forEach((rect, idx) => {
@@ -356,21 +356,21 @@ export default function GooeyPixelCountdownSection() {
         }
       });
 
-      const totalSpread = clamp(s + e * 1.15, 0, 1.4);
+      const totalSpread = clamp(s + e * 1.15, 0, 1.2);
       if (sceneObj.satRects.top1) {
-        sceneObj.satRects.top1.style.transform = `translate3d(${(-40 * totalSpread).toFixed(1)}px, ${(-125 * totalSpread).toFixed(1)}px, 0)`;
+        sceneObj.satRects.top1.style.transform = `translate3d(${(-20 * totalSpread).toFixed(1)}px, ${(-35 * totalSpread).toFixed(1)}px, 0)`;
       }
       if (sceneObj.satRects.top2) {
-        sceneObj.satRects.top2.style.transform = `translate3d(${(85 * totalSpread).toFixed(1)}px, ${(-70 * totalSpread).toFixed(1)}px, 0)`;
+        sceneObj.satRects.top2.style.transform = `translate3d(${(35 * totalSpread).toFixed(1)}px, ${(-25 * totalSpread).toFixed(1)}px, 0)`;
       }
       if (sceneObj.satRects.left) {
-        sceneObj.satRects.left.style.transform = `translate3d(${(-230 * totalSpread).toFixed(1)}px, ${(24 * totalSpread).toFixed(1)}px, 0)`;
+        sceneObj.satRects.left.style.transform = `translate3d(${(-40 * totalSpread).toFixed(1)}px, ${(12 * totalSpread).toFixed(1)}px, 0)`;
       }
       if (sceneObj.satRects.right) {
-        sceneObj.satRects.right.style.transform = `translate3d(${(270 * totalSpread).toFixed(1)}px, ${(18 * totalSpread).toFixed(1)}px, 0)`;
+        sceneObj.satRects.right.style.transform = `translate3d(${(40 * totalSpread).toFixed(1)}px, ${(12 * totalSpread).toFixed(1)}px, 0)`;
       }
       if (sceneObj.satRects.bottom) {
-        sceneObj.satRects.bottom.style.transform = `translate3d(${(-25 * totalSpread).toFixed(1)}px, ${(120 * totalSpread).toFixed(1)}px, 0)`;
+        sceneObj.satRects.bottom.style.transform = `translate3d(${(-12 * totalSpread).toFixed(1)}px, ${(40 * totalSpread).toFixed(1)}px, 0)`;
       }
     }
 
@@ -518,7 +518,7 @@ export default function GooeyPixelCountdownSection() {
 
       // 2. Top Pill Context Text
       if (pillTextRef.current) {
-        if (p < 0.32) {
+        if (p < 0.30) {
           pillTextRef.current.textContent = 'PRIDE INDUSTRI 2026 · KARYA LOKAL';
         } else if (p < 0.60) {
           pillTextRef.current.textContent = 'KREATIVITAS KOTA BANDUNG · 27–28 NOV';
@@ -527,45 +527,65 @@ export default function GooeyPixelCountdownSection() {
         }
       }
 
-      // 3. Scene 1 Choreography (p = 0.00 -> 0.38)
-      if (p < 0.38) {
-        const entry = 1 - easeOutCubic(mapRange(p, 0.02, 0.16, 0, 1));
-        const exit = easeInCubic(mapRange(p, 0.26, 0.38, 0, 1));
+      // 3. Scene 1 Choreography (p = 0.00 -> 0.28)
+      if (p < 0.28) {
+        const entry = 1 - easeOutCubic(mapRange(p, 0.00, 0.12, 0, 1));
+        const exit = easeInCubic(mapRange(p, 0.18, 0.28, 0, 1));
         renderSceneCluster(scene1Data, true, entry, exit);
+        if (scene1Ref.current) {
+          const fadeOut = mapRange(p, 0.20, 0.28, 1, 0);
+          scene1Ref.current.style.opacity = String(clamp(fadeOut, 0, 1));
+          scene1Ref.current.style.visibility = 'visible';
+        }
       } else {
         renderSceneCluster(scene1Data, false, 1, 0);
+        if (scene1Ref.current) {
+          scene1Ref.current.style.opacity = '0';
+          scene1Ref.current.style.visibility = 'hidden';
+        }
       }
 
-      // 4. Scene 2 Choreography (p = 0.34 -> 0.62)
-      if (p >= 0.34 && p < 0.62) {
-        const entry = 1 - easeOutCubic(mapRange(p, 0.36, 0.46, 0, 1));
-        const exit = easeInCubic(mapRange(p, 0.52, 0.62, 0, 1));
+      // 4. Scene 2 Choreography (p = 0.32 -> 0.58)
+      if (p >= 0.32 && p < 0.58) {
+        const entry = 1 - easeOutCubic(mapRange(p, 0.32, 0.42, 0, 1));
+        const exit = easeInCubic(mapRange(p, 0.48, 0.58, 0, 1));
         renderSceneCluster(scene2Data, true, entry, exit);
+        if (scene2Ref.current) {
+          const fadeIn = mapRange(p, 0.32, 0.38, 0, 1);
+          const fadeOut = mapRange(p, 0.48, 0.58, 1, 0);
+          scene2Ref.current.style.opacity = String(clamp(Math.min(fadeIn, fadeOut), 0, 1));
+          scene2Ref.current.style.visibility = 'visible';
+        }
       } else {
         renderSceneCluster(scene2Data, false, 1, 0);
+        if (scene2Ref.current) {
+          scene2Ref.current.style.opacity = '0';
+          scene2Ref.current.style.visibility = 'hidden';
+        }
       }
 
-      // 5. Scene 3 & 4: Pixel Countdown Choreography (p = 0.56 -> 1.00)
+      // 5. Scene 3 & 4: Pixel Countdown Choreography (p = 0.62 -> 1.00)
       const pixelWrap = pixelWrapperRef.current;
       if (pixelWrap) {
-        if (p >= 0.56) {
-          const wrapOpacity = mapRange(p, 0.56, 0.66, 0, 1);
-          const wrapY = mapRange(p, 0.56, 0.66, 40, 0);
+        if (p >= 0.62) {
+          const wrapOpacity = mapRange(p, 0.62, 0.70, 0, 1);
+          const wrapY = mapRange(p, 0.62, 0.70, 36, 0);
           pixelWrap.style.opacity = String(wrapOpacity);
           pixelWrap.style.transform = `translate3d(0, ${wrapY.toFixed(1)}px, 0)`;
+          pixelWrap.style.visibility = 'visible';
           pixelWrap.classList.add('visible');
 
-          if (p < 0.70) {
-            // Rapid Scrambling Phase (0.58 -> 0.70)
+          if (p < 0.76) {
+            // Rapid Scrambling Phase (0.62 -> 0.76)
             isCountdownActive = false;
-            const scrambleStep = Math.floor(mapRange(p, 0.58, 0.70, 0, 12));
+            const scrambleStep = Math.floor(mapRange(p, 0.62, 0.76, 0, 14));
             updateAllMatrixGrids('scramble', scrambleStep);
-          } else if (p < 0.76) {
-            // Fragmented Settling Phase (0.70 -> 0.76)
+          } else if (p < 0.82) {
+            // Fragmented Settling Phase (0.76 -> 0.82)
             isCountdownActive = false;
             updateAllMatrixGrids('fragment');
           } else {
-            // Final Assembled Real Countdown Phase (0.76 -> 1.00)
+            // Final Assembled Real Countdown Phase (0.82 -> 1.00)
             isCountdownActive = true;
             updateLiveCountdown();
             updateAllMatrixGrids('final');
@@ -573,7 +593,8 @@ export default function GooeyPixelCountdownSection() {
         } else {
           pixelWrap.classList.remove('visible');
           pixelWrap.style.opacity = '0';
-          pixelWrap.style.transform = 'translate3d(0, 40px, 0)';
+          pixelWrap.style.visibility = 'hidden';
+          pixelWrap.style.transform = 'translate3d(0, 36px, 0)';
           isCountdownActive = false;
         }
       }
@@ -724,24 +745,24 @@ export default function GooeyPixelCountdownSection() {
             <div className="cluster-anchor">
               <div className="goo-layer">
                 {/* 4 Main Blobs */}
-                <div className="goo-rect main-rect" data-row="0" style={{ left: '48px', top: '0px', width: '440px', height: '78px' }} />
-                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '72px', width: '330px', height: '78px' }} />
-                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '144px', width: '340px', height: '78px' }} />
-                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '216px', width: '500px', height: '78px' }} />
+                <div className="goo-rect main-rect" data-row="0" style={{ left: '48px', top: '0px', width: '440px', height: '74px' }} />
+                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '80px', width: '330px', height: '74px' }} />
+                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '160px', width: '340px', height: '74px' }} />
+                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '240px', width: '500px', height: '74px' }} />
 
                 {/* 5 Satellite Blobs */}
-                <div className="goo-rect sat-rect" data-sat="top1" style={{ left: '20px', top: '0px', width: '320px', height: '68px' }} />
+                <div className="goo-rect sat-rect" data-sat="top1" style={{ left: '20px', top: '0px', width: '320px', height: '64px' }} />
                 <div className="goo-rect sat-rect" data-sat="top2" style={{ left: '110px', top: '0px', width: '340px', height: '64px' }} />
-                <div className="goo-rect sat-rect" data-sat="left" style={{ left: '0px', top: '76px', width: '210px', height: '66px' }} />
-                <div className="goo-rect sat-rect" data-sat="right" style={{ left: '180px', top: '150px', width: '260px', height: '66px' }} />
-                <div className="goo-rect sat-rect" data-sat="bottom" style={{ left: '10px', top: '220px', width: '370px', height: '72px' }} />
+                <div className="goo-rect sat-rect" data-sat="left" style={{ left: '0px', top: '82px', width: '210px', height: '66px' }} />
+                <div className="goo-rect sat-rect" data-sat="right" style={{ left: '180px', top: '162px', width: '260px', height: '66px' }} />
+                <div className="goo-rect sat-rect" data-sat="bottom" style={{ left: '10px', top: '244px', width: '370px', height: '70px' }} />
               </div>
 
               <div className="text-layer">
-                <div className="goo-text-row" data-row="0" style={{ left: '68px', top: '12px' }}>KARYA LOKAL</div>
-                <div className="goo-text-row" data-row="1" style={{ left: '20px', top: '84px' }}>IKM KOTA</div>
-                <div className="goo-text-row" data-row="2" style={{ left: '20px', top: '156px' }}>BANDUNG</div>
-                <div className="goo-text-row" data-row="3" style={{ left: '20px', top: '228px' }}>INOVASI NYATA</div>
+                <div className="goo-text-row" data-row="0" style={{ left: '68px', top: '11px' }}>KARYA LOKAL</div>
+                <div className="goo-text-row" data-row="1" style={{ left: '20px', top: '91px' }}>IKM KOTA</div>
+                <div className="goo-text-row" data-row="2" style={{ left: '20px', top: '171px' }}>BANDUNG</div>
+                <div className="goo-text-row" data-row="3" style={{ left: '20px', top: '251px' }}>INOVASI NYATA</div>
               </div>
             </div>
           </div>
@@ -751,24 +772,24 @@ export default function GooeyPixelCountdownSection() {
             <div className="cluster-anchor">
               <div className="goo-layer">
                 {/* 4 Main Blobs */}
-                <div className="goo-rect main-rect" data-row="0" style={{ left: '48px', top: '0px', width: '350px', height: '78px' }} />
-                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '72px', width: '620px', height: '78px' }} />
-                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '144px', width: '610px', height: '78px' }} />
-                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '216px', width: '550px', height: '78px' }} />
+                <div className="goo-rect main-rect" data-row="0" style={{ left: '48px', top: '0px', width: '350px', height: '74px' }} />
+                <div className="goo-rect main-rect" data-row="1" style={{ left: '0px', top: '80px', width: '620px', height: '74px' }} />
+                <div className="goo-rect main-rect" data-row="2" style={{ left: '0px', top: '160px', width: '610px', height: '74px' }} />
+                <div className="goo-rect main-rect" data-row="3" style={{ left: '0px', top: '240px', width: '550px', height: '74px' }} />
 
                 {/* 5 Satellite Blobs */}
-                <div className="goo-rect sat-rect" data-sat="top1" style={{ left: '20px', top: '0px', width: '300px', height: '68px' }} />
+                <div className="goo-rect sat-rect" data-sat="top1" style={{ left: '20px', top: '0px', width: '300px', height: '64px' }} />
                 <div className="goo-rect sat-rect" data-sat="top2" style={{ left: '120px', top: '0px', width: '360px', height: '64px' }} />
-                <div className="goo-rect sat-rect" data-sat="left" style={{ left: '0px', top: '76px', width: '220px', height: '66px' }} />
-                <div className="goo-rect sat-rect" data-sat="right" style={{ left: '220px', top: '150px', width: '300px', height: '66px' }} />
-                <div className="goo-rect sat-rect" data-sat="bottom" style={{ left: '10px', top: '220px', width: '380px', height: '72px' }} />
+                <div className="goo-rect sat-rect" data-sat="left" style={{ left: '0px', top: '82px', width: '220px', height: '66px' }} />
+                <div className="goo-rect sat-rect" data-sat="right" style={{ left: '220px', top: '162px', width: '300px', height: '66px' }} />
+                <div className="goo-rect sat-rect" data-sat="bottom" style={{ left: '10px', top: '244px', width: '380px', height: '70px' }} />
               </div>
 
               <div className="text-layer">
-                <div className="goo-text-row" data-row="0" style={{ left: '68px', top: '12px' }}>THE NEXT</div>
-                <div className="goo-text-row" data-row="1" style={{ left: '20px', top: '84px' }}>CREATIVE CHAPTER</div>
-                <div className="goo-text-row" data-row="2" style={{ left: '20px', top: '156px' }}>FESYEN &amp; KULINER</div>
-                <div className="goo-text-row" data-row="3" style={{ left: '20px', top: '228px' }}>27–28 NOV 2026</div>
+                <div className="goo-text-row" data-row="0" style={{ left: '68px', top: '11px' }}>THE NEXT</div>
+                <div className="goo-text-row" data-row="1" style={{ left: '20px', top: '91px' }}>CREATIVE CHAPTER</div>
+                <div className="goo-text-row" data-row="2" style={{ left: '20px', top: '171px' }}>FESYEN &amp; KULINER</div>
+                <div className="goo-text-row" data-row="3" style={{ left: '20px', top: '251px' }}>27–28 NOV 2026</div>
               </div>
             </div>
           </div>

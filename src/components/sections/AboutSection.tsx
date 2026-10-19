@@ -30,16 +30,17 @@ export default function AboutSection() {
       ],
     },
     {
-      number: '20 IKM',
-      label: 'Business Matching',
-      desc: '20 IKM Kemilau terpilih dari 3 sektor industri melakukan pitching kepada calon mitra & investor.',
+      number: '4 Sasaran',
+      label: 'Sasaran Target',
+      desc: 'Pelaku industri, universitas, pelaku dunia usaha & investor, serta pemerintah dan pemangku kepentingan.',
       theme: 'amber' as const,
-      docBadge: 'PROGRAM KEMILAU & INVESTASI',
-      docTitle: 'Business Matching & Pitching',
+      docBadge: 'SASARAN & STAKEHOLDER',
+      docTitle: 'Sasaran Target PRIDE 2026',
       docItems: [
-        '20 IKM Kemilau Terpilih 3 Sektor',
-        'Pitching Calon Mitra & Investor',
-        'Workshop & Consultation Corner',
+        'Pelaku Industri & Peserta Pembinaan',
+        'Universitas/Perguruan Tinggi',
+        'Pelaku Dunia Usaha, Investor, dan Mitra Bisnis (Buyers)',
+        'Pemerintah dan Pemangku Kepentingan',
       ],
     },
     {
@@ -110,19 +111,8 @@ export default function AboutSection() {
             Industri Lokal Bandung
           </h2>
 
-          {/* Elegant Heritage Braga Hairline Accent */}
-          <div className="flex items-center justify-center gap-3 my-4">
-            <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-slate-300 to-slate-400" />
-            <span className="text-[10px] font-mono tracking-[0.2em] text-slate-400 uppercase font-medium">
-              KORIDOR BRAGA · 27–28 NOV 2026
-            </span>
-            <div className="h-px w-10 sm:w-16 bg-gradient-to-l from-transparent via-slate-300 to-slate-400" />
-          </div>
-
-          <p className="mt-2 text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            PRIDE Industri merupakan inisiatif prestisius yang digagas untuk merayakan
-            kemandirian, inovasi teknologi, serta daya saing pelaku Industri Kecil dan
-            Menengah di Kota Bandung.
+          <p className="mt-3 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto font-medium">
+            Apresiasi dan perayaan karya inovasi, kreativitas, serta daya saing IKM Kota Bandung.
           </p>
         </div>
 
