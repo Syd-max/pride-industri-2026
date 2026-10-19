@@ -1,0 +1,245 @@
+/* ─── Compact Dot-Matrix Real-Time Countdown for Hero Section ───
+   Integrated into Page Awal (Hero View)
+   Pure Real-Time Live Clock Engine (Anti-AI Slop, Editorial Human Design)
+─────────────────────────────────────────────────────────────────────────────── */
+
+.compact-countdown-wrap {
+  width: 100%;
+  max-width: 660px;
+  margin: 6px auto 10px;
+  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  user-select: none;
+}
+
+/* Card Shell */
+.compact-countdown-card {
+  width: 100%;
+  background: rgba(11, 17, 32, 0.88);
+  backdrop-filter: blur(28px) saturate(140%);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  box-shadow: 
+    0 16px 44px -10px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.compact-countdown-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 20px 52px -10px rgba(0, 0, 0, 0.82),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+/* Card Header — Human Editorial Design */
+.compact-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.compact-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.compact-human-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background: rgba(37, 99, 235, 0.18);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  color: #93c5fd;
+  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.compact-human-sub {
+  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: -0.01em;
+}
+
+.compact-header-right {
+  display: flex;
+  align-items: center;
+}
+
+.compact-human-venue {
+  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #94a3b8;
+}
+
+/* 4-Column Matrix Grid */
+.compact-matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+}
+
+.compact-stat-cell {
+  padding: 16px 12px 14px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.compact-stat-cell:last-child {
+  border-right: none;
+}
+
+.compact-stat-cell:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.compact-stat-title {
+  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+/* 5x7 Dot-Matrix Digits */
+.compact-matrix-word {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.compact-matrix-char {
+  display: grid;
+  grid-template-columns: repeat(5, 4px);
+  grid-template-rows: repeat(7, 4px);
+  gap: 1.5px;
+}
+
+.compact-pixel-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background-color: rgba(255, 255, 255, 0.06);
+  transition: background-color 0.08s linear;
+}
+
+.compact-pixel-dot.on {
+  background-color: #ffffff;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.9);
+}
+
+/* Detik (Seconds) Column Emphasis — Warm Amber Glow */
+.compact-cell-detik .compact-pixel-dot.on {
+  background-color: #fbbf24;
+  box-shadow: 0 0 2px rgba(251, 191, 36, 0.9);
+}
+
+.compact-cell-detik .compact-stat-title {
+  color: #fbbf24;
+}
+
+/* Card Bottom Metadata */
+.compact-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.015);
+  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
+  font-size: 10.5px;
+  color: #64748b;
+}
+
+.compact-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.compact-footer-right {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .compact-countdown-wrap {
+    max-width: 100%;
+    margin: 4px auto 8px;
+  }
+
+  .compact-header-bar {
+    padding: 8px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .compact-header-left {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .compact-human-sub {
+    font-size: 11px;
+  }
+
+  .compact-human-venue {
+    font-size: 10px;
+  }
+
+  .compact-stat-cell {
+    padding: 12px 4px 10px;
+    gap: 6px;
+  }
+
+  .compact-matrix-char {
+    grid-template-columns: repeat(5, 3.2px);
+    grid-template-rows: repeat(7, 3.2px);
+    gap: 1px;
+  }
+
+  .compact-pixel-dot {
+    width: 3.2px;
+    height: 3.2px;
+  }
+
+  .compact-matrix-word {
+    gap: 3px;
+  }
+
+  .compact-stat-title {
+    font-size: 9px;
+  }
+
+  .compact-footer-bar {
+    padding: 6px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    font-size: 9.5px;
+  }
+}

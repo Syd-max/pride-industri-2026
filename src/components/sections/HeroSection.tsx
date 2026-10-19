@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
+import CompactHeroCountdown from './CompactHeroCountdown';
 import './hero-flow.css';
 
 /* ============================================================
@@ -218,6 +219,9 @@ export default function HeroSection() {
             </p>
           </div>
 
+          {/* Real-Time Live Dot-Matrix Countdown (Compact & Integrated into Page Awal) */}
+          <CompactHeroCountdown />
+
           {/* Official Organizers & Partners Logo Bar */}
           <div className="hero-organizer-card" ref={heroLogosRef}>
             <div className="hero-organizer-inner">
@@ -247,9 +251,9 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Clean Scroll Cue Indicator (Inviting exploration into the post-hero experience) */}
+          {/* Clean Scroll Cue Indicator (Inviting exploration to About section) */}
           <div className="mobile-scroll-cue" ref={scrollCueRef}>
-            <a href="#gooeyPixelStage" className="scroll-cue-pill">
+            <a href="#about" className="scroll-cue-pill">
               <span>Scroll untuk eksplorasi</span>
               <svg className="w-3.5 h-3.5 animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="6 9 12 15 18 9" />

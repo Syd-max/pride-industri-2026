@@ -1,6 +1,5 @@
 import Navbar from '@/components/ui/Navbar';
 import HeroSection from '@/components/sections/HeroSection';
-import GooeyPixelCountdownSection from '@/components/sections/GooeyPixelCountdownSection';
 import AboutSection from '@/components/sections/AboutSection';
 import ActivitiesDeckSection from '@/components/sections/ActivitiesDeckSection';
 import ProgramSection from '@/components/sections/ProgramSection';
@@ -15,7 +14,6 @@ export default function HomePage() {
       <Navbar />
       <main id="main-content">
         <HeroSection />
-        <GooeyPixelCountdownSection />
         <AboutSection />
         <ActivitiesDeckSection />
         <ProgramSection />
