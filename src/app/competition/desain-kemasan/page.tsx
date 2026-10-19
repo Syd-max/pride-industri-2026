@@ -895,6 +895,38 @@ export default function DesainKemasanPage() {
 
                   <div className="space-y-5 pt-1">
 
+                    {/* ─── Download Dokumen Persyaratan & Template Desain (Sesuai Gambar 2) ─── */}
+                    <div className="space-y-2.5">
+                      <a
+                        href="/template-desain-kemasan.pdf"
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full flex items-center justify-center gap-2.5 py-3 px-4 rounded-2xl bg-emerald-50/90 hover:bg-emerald-100 border-2 border-emerald-500 text-emerald-800 text-xs sm:text-sm font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+                      >
+                        <svg className="w-4 h-4 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        <span>Unduh Format Template Desain (PDF)</span>
+                      </a>
+
+                      <a
+                        href="/syarat-desain-kemasan.pdf"
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full flex items-center justify-center gap-2.5 py-3 px-4 rounded-2xl bg-rose-50/90 hover:bg-rose-100 border-2 border-rose-500 text-rose-800 text-xs sm:text-sm font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+                      >
+                        <svg className="w-4 h-4 text-rose-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                        <span>Unduh Syarat &amp; Ketentuan PDF</span>
+                      </a>
+                    </div>
+
                     {/* ─── 9. Upload file karya desain kemasan (PDF, maks 7 MB, wajib) ─── */}
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
