@@ -337,8 +337,11 @@ export default function DesainKemasanPage() {
       const filesToUpload: { file: File; key: string }[] = [];
       if (designFile) filesToUpload.push({ file: designFile, key: 'design_file' });
       if (masterFile) filesToUpload.push({ file: masterFile, key: 'master_file' });
-      if (paktaFile) filesToUpload.push({ file: paktaFile, key: 'pakta_integritas_file' });
-      if (persetujuanFile) filesToUpload.push({ file: persetujuanFile, key: 'surat_persetujuan_file' });
+      if (paktaFile) {
+        filesToUpload.push({ file: paktaFile, key: 'pakta_integritas_file' });
+      } else if (persetujuanFile) {
+        filesToUpload.push({ file: persetujuanFile, key: 'surat_persetujuan_file' });
+      }
       if (tactlinkQrFile) filesToUpload.push({ file: tactlinkQrFile, key: 'tactlink_qr_file' });
 
       // Direct client upload to Supabase Storage (bypasses Vercel 4.5MB serverless limit)

@@ -889,32 +889,36 @@ export default function RegistrationsPage() {
                     />
 
                     <FileAttachmentItem
-                      label="Pakta Integritas Bertanda Tangan"
-                      fileName={selectedReg.pakta_integritas_file_name}
+                      label="Dokumen Pakta Integritas & Surat Pernyataan"
+                      fileName={selectedReg.pakta_integritas_file_name || selectedReg.surat_persetujuan_file_name}
                       registrationCode={selectedReg.registration_code}
                       onDownload={() =>
                         handleDownloadAttachment(
-                          selectedReg.pakta_integritas_file_name,
-                          'Pakta Integritas',
+                          selectedReg.pakta_integritas_file_name || selectedReg.surat_persetujuan_file_name,
+                          'Dokumen Pakta Integritas & Surat Pernyataan',
                           selectedReg
                         )
                       }
-                      isDownloading={downloadingFile === `${selectedReg.id}-Pakta Integritas`}
+                      isDownloading={downloadingFile === `${selectedReg.id}-Dokumen Pakta Integritas & Surat Pernyataan`}
                     />
 
-                    <FileAttachmentItem
-                      label="Surat Pernyataan Persetujuan"
-                      fileName={selectedReg.surat_persetujuan_file_name}
-                      registrationCode={selectedReg.registration_code}
-                      onDownload={() =>
-                        handleDownloadAttachment(
-                          selectedReg.surat_persetujuan_file_name,
-                          'Surat Pernyataan Persetujuan',
-                          selectedReg
-                        )
-                      }
-                      isDownloading={downloadingFile === `${selectedReg.id}-Surat Pernyataan Persetujuan`}
-                    />
+                    {selectedReg.surat_persetujuan_file_name &&
+                      selectedReg.pakta_integritas_file_name &&
+                      selectedReg.surat_persetujuan_file_name !== selectedReg.pakta_integritas_file_name && (
+                        <FileAttachmentItem
+                          label="Surat Pernyataan Persetujuan"
+                          fileName={selectedReg.surat_persetujuan_file_name}
+                          registrationCode={selectedReg.registration_code}
+                          onDownload={() =>
+                            handleDownloadAttachment(
+                              selectedReg.surat_persetujuan_file_name,
+                              'Surat Pernyataan Persetujuan',
+                              selectedReg
+                            )
+                          }
+                          isDownloading={downloadingFile === `${selectedReg.id}-Surat Pernyataan Persetujuan`}
+                        />
+                      )}
 
                     <FileAttachmentItem
                       label="Foto Barcode QR TactLink"
