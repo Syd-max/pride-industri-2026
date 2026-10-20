@@ -25,7 +25,7 @@ export default function AboutSection() {
       docTitle: 'Daftar Sertifikat Dibagikan',
       docItems: [
         '25 Sertifikat Halal Resmi',
-        '46 Sertifikat Uji Mutu Produk',
+        '46 Sertifikat Uji Mutu',
         '93 Sertifikat Kelas KEMILAU',
       ],
     },
