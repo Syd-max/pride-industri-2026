@@ -421,10 +421,6 @@ export default function ActivitiesDeckSection() {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        {/* Subtle Edge Fades (Left & Right) */}
-        <div className="deck-edge-fade left" aria-hidden="true" />
-        <div className="deck-edge-fade right" aria-hidden="true" />
-
         {/* Carousel Viewport (Handles Fluid Drag & Touch Swiping) */}
         <div
           className="activities-carousel-viewport"
@@ -434,6 +430,10 @@ export default function ActivitiesDeckSection() {
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
         >
+          {/* Subtle Edge Fades (Confined strictly to card track, never covering controls or footer) */}
+          <div className="deck-edge-fade left" aria-hidden="true" />
+          <div className="deck-edge-fade right" aria-hidden="true" />
+
           {/* Horizontal Track of Infinite Seamless Cards */}
           <div className="activities-carousel-track" ref={trackRef}>
             {clonedCards.map(({ item, globalSlot }) => {
@@ -499,9 +499,23 @@ export default function ActivitiesDeckSection() {
           </div>
         </div>
 
-        {/* Carousel Controls Footer: Pagination Dots + Navigation Arrows */}
+        {/* Carousel Controls Footer: Tombol Kiri + Indikator Dots + Tombol Kanan */}
         <div className="activities-carousel-footer">
-          {/* Pagination Dots (7 logical cards) */}
+          {/* Tombol Kiri (Prev) */}
+          <div className="deck-footer-left">
+            <button
+              type="button"
+              className="deck-arrow-btn prev"
+              onClick={() => moveBySteps(-1, 6)}
+              aria-label="Tujuan Kegiatan Sebelumnya"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Indikator Titik Halaman (7 kartu) */}
           <div className="deck-pagination-dots" role="tablist" aria-label="Indikator Tujuan Kegiatan">
             {BASE_CARDS.map((card, idx) => (
               <button
@@ -516,8 +530,8 @@ export default function ActivitiesDeckSection() {
             ))}
           </div>
 
-          {/* Navigation Controls: Auto-Motion Toggle & Prev / Next Arrows */}
-          <div className="deck-nav-controls">
+          {/* Tombol Kanan (Next) & Auto-Motion Toggle */}
+          <div className="deck-footer-right">
             <button
               type="button"
               className="deck-auto-toggle hidden sm:inline-flex"
@@ -527,28 +541,16 @@ export default function ActivitiesDeckSection() {
               <span>{isAutoMotionActive ? '⏸ Auto' : '▶ Auto'}</span>
             </button>
 
-            <div className="deck-nav-arrows">
-              <button
-                type="button"
-                className="deck-arrow-btn prev"
-                onClick={() => moveBySteps(-1, 6)}
-                aria-label="Tujuan Kegiatan Sebelumnya"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="15 18 9 12 15 6" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                className="deck-arrow-btn next"
-                onClick={() => moveBySteps(1, -6)}
-                aria-label="Tujuan Kegiatan Selanjutnya"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-            </div>
+            <button
+              type="button"
+              className="deck-arrow-btn next"
+              onClick={() => moveBySteps(1, -6)}
+              aria-label="Tujuan Kegiatan Selanjutnya"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
           </div>
         </div>
       </section>
