@@ -1,531 +1,557 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import './activities-deck.css';
 
+interface CardItem {
+  id: string;
+  index: number;
+  isCover?: boolean;
+  theme?: string;
+  num?: string;
+  verb?: string;
+  subject?: string;
+}
+
+/* ==========================================================
+   ORIGINAL PRIDE 2026 TUJUAN KEGIATAN CARDS DATA
+   Exact content, wording, numbering, and color theme preserved
+   ========================================================== */
+const BASE_CARDS: CardItem[] = [
+  {
+    id: 'cover',
+    index: 0,
+    isCover: true,
+  },
+  {
+    id: 'goal-1',
+    index: 1,
+    theme: 'theme-red',
+    num: '01.',
+    verb: 'Meningkatkan',
+    subject: 'Eksposur IKM',
+  },
+  {
+    id: 'goal-2',
+    index: 2,
+    theme: 'theme-green',
+    num: '02.',
+    verb: 'Membangun',
+    subject: 'Ruang Interaksi',
+  },
+  {
+    id: 'goal-3',
+    index: 3,
+    theme: 'theme-orange',
+    num: '03.',
+    verb: 'Mendorong',
+    subject: 'Kolaborasi',
+  },
+  {
+    id: 'goal-4',
+    index: 4,
+    theme: 'theme-yellow',
+    num: '04.',
+    verb: 'Mendorong',
+    subject: 'Akses Pasar dan Transaksi',
+  },
+  {
+    id: 'goal-5',
+    index: 5,
+    theme: 'theme-blue',
+    num: '05.',
+    verb: 'Mengapresiasi',
+    subject: 'Kreativitas dan Inovasi',
+  },
+  {
+    id: 'goal-6',
+    index: 6,
+    theme: 'theme-purple',
+    num: '06.',
+    verb: 'Meningkatkan',
+    subject: 'Awareness Industri Kota Bandung',
+  },
+];
+
+const SETS_COUNT = 3;
+const TOTAL_BASE = BASE_CARDS.length; // 7 cards (Cover + 6 Goals)
+
 export default function ActivitiesDeckSection() {
-  const scrollDriverRef = useRef<HTMLDivElement>(null);
-  const deckContainerRef = useRef<HTMLDivElement>(null);
-  const activeCardIndexRef = useRef(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const autoPlayRafRef = useRef<number | null>(null);
-  const animationRafRef = useRef<number | null>(null);
-  const currentProgressRef = useRef(0);
+  const stageRef = useRef<HTMLElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
-  function clamp(val: number, min: number, max: number) {
-    return Math.max(min, Math.min(max, val));
-  }
+  const [activeLogicalIndex, setActiveLogicalIndex] = useState(0);
+  const [isAutoMotionActive, setIsAutoMotionActive] = useState(true);
 
-  function easeInOutCubic(t: number) {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-  }
+  // Physics & Animation State Refs
+  const currentXRef = useRef(0);
+  const targetXRef = useRef(0);
+  const velocityXRef = useRef(0);
+  const currentSlotRef = useRef(TOTAL_BASE); // Start at middle set (Slot 7 = Cover of Set 1)
 
-  /* ==========================================================
-     STACKED DECK PEEL-DOWN SCROLL CHOREOGRAPHY (ILIA DELIN ENGINE)
-     ========================================================== */
-  const updateDeck = useCallback((scrollProgress: number) => {
-    const container = deckContainerRef.current;
-    if (!container) return;
+  const isDraggingRef = useRef(false);
+  const isPointerDownRef = useRef(false);
+  const isSnappingRef = useRef(false);
+  const isHoveredRef = useRef(false);
+  const isAutoPlayingRef = useRef(true);
 
-    const cards = Array.from(container.querySelectorAll<HTMLElement>('.activities-card'));
-    cards.sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index));
-    const totalCards = cards.length; // 7 cards (0..6)
-    if (totalCards === 0) return;
+  const stepWidthRef = useRef(404);
+  const cardWidthRef = useRef(380);
+  const gapWidthRef = useRef(24);
+  const centerOffsetRef = useRef(0);
+  const singleSetWidthRef = useRef(TOTAL_BASE * 404);
 
-    currentProgressRef.current = scrollProgress;
+  const dragStartXRef = useRef(0);
+  const dragStartYRef = useRef(0);
+  const lastPointerXRef = useRef(0);
+  const pointerVelocityRef = useRef(0);
+  const totalDragDistanceRef = useRef(0);
+  const isHorizontalDragRef = useRef(false);
 
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
-    const PEEK_STEP_Y = isMobile ? 12 : 18;
-    const SCALE_STEP = isMobile ? 0.020 : 0.026;
+  const rafRef = useRef<number | null>(null);
+  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const activeLogicalRef = useRef(0);
 
-    // 7 cards total (0..6). 6 peel transitions across scrollProgress 0..1
-    const peelStages = totalCards - 1; // 6
-    const stageProgress = scrollProgress * peelStages;
-
-    // Update active index
-    const activeIdx = clamp(Math.round(stageProgress), 0, totalCards - 1);
-    if (activeIdx !== activeCardIndexRef.current) {
-      activeCardIndexRef.current = activeIdx;
-    }
-
-    cards.forEach((card, i) => {
-      // Set z-index so card 0 is on top (70), card 6 is at bottom (10)
-      card.style.zIndex = String((totalCards - i) * 10);
-
-      // Relative depth from current active top card
-      // Final card (Card 6) rests on stage and never peels off
-      const isFinalCard = i === totalCards - 1;
-      const depth = isFinalCard ? Math.max(0, i - stageProgress) : (i - stageProgress);
-
-      const isActive = activeIdx === i;
-      card.classList.toggle('is-active', isActive);
-
-      if (depth < 0) {
-        // This card is currently peeling down or has already peeled off the bottom of the screen
-        const peelAmount = clamp(-depth, 0, 1);
-        const easedPeel = easeInOutCubic(peelAmount);
-        const translateYPercent = easedPeel * 140; // Slides smoothly past bottom viewport edge
-        card.style.transform = `translate3d(0, ${translateYPercent.toFixed(2)}%, 0) scale(1)`;
-        card.style.pointerEvents = peelAmount > 0.15 ? 'none' : 'auto';
-        card.classList.add('is-peeled');
-        card.classList.remove('is-stacked');
-        card.setAttribute('aria-hidden', 'true');
-      } else {
-        // This card is waiting in the stack (or is currently the active front card at depth == 0)
-        // Cap visible stack depth offset so all background rims are neatly visible at the top
-        const effectiveDepth = Math.min(depth, 5.5);
-        const yOffset = -effectiveDepth * PEEK_STEP_Y;
-        const scale = 1 - effectiveDepth * SCALE_STEP;
-
-        card.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
-        card.style.pointerEvents = depth < 0.35 ? 'auto' : 'none';
-        card.classList.remove('is-peeled');
-        card.classList.toggle('is-stacked', depth >= 0.35);
-        card.setAttribute('aria-hidden', depth < 0.35 ? 'false' : 'true');
-      }
-    });
-  }, []);
-
-  const stopAutoPlay = useCallback(() => {
-    setIsPlaying(false);
-    if (autoPlayRafRef.current) {
-      cancelAnimationFrame(autoPlayRafRef.current);
-      autoPlayRafRef.current = null;
-    }
-    if (animationRafRef.current) {
-      cancelAnimationFrame(animationRafRef.current);
-      animationRafRef.current = null;
-    }
-  }, []);
-
-  /* ==========================================================
-     AUTO-PLAY VIDEO SEQUENCE (REPRODUCES ILIA DELIN 00:00 -> 00:16 FLOW)
-     ========================================================== */
-  const runVideoTour = useCallback(() => {
-    if (isPlaying) {
-      stopAutoPlay();
-      return;
-    }
-
-    setIsPlaying(true);
-
-    const driver = scrollDriverRef.current;
-    const totalScroll = driver ? driver.offsetHeight - window.innerHeight : 0;
-    const driverTop = driver ? window.scrollY + driver.getBoundingClientRect().top : 0;
-    const startTime = performance.now();
-    const totalDuration = 14000; // 14s full tour: peel all down -> hold on Card 6 -> un-peel back up
-
-    function tick(now: number) {
-      const elapsed = now - startTime;
-      const t = clamp(elapsed / totalDuration, 0, 1);
-
-      let targetProgress = 0;
-      if (t < 0.44) {
-        // 00:00 -> 00:06: Peel all 6 cards down to reveal Card 6
-        targetProgress = easeInOutCubic(t / 0.44);
-      } else if (t < 0.56) {
-        // 00:06 -> 00:08: Hold on Card 6
-        targetProgress = 1;
-      } else if (t < 0.94) {
-        // 00:08 -> 00:13: Un-peel cards back up one by one to Cover
-        targetProgress = 1 - easeInOutCubic((t - 0.56) / 0.38);
-      } else {
-        // 00:13 -> 00:14: Back at Cover
-        targetProgress = 0;
-      }
-
-      if (totalScroll > 0) {
-        window.scrollTo(0, driverTop + targetProgress * totalScroll);
-      }
-      updateDeck(targetProgress);
-
-      if (t < 1) {
-        autoPlayRafRef.current = requestAnimationFrame(tick);
-      } else {
-        stopAutoPlay();
-      }
-    }
-
-    autoPlayRafRef.current = requestAnimationFrame(tick);
-  }, [isPlaying, stopAutoPlay, updateDeck]);
-
-  const toggleAutoPlay = () => {
-    runVideoTour();
-  };
-
-  /* ==========================================================
-     INTERACTIVE JUMP TO SPECIFIC CARD (WITH DUAL ANIMATION + SCROLL)
-     ========================================================== */
-  const goToCard = useCallback((targetIndex: number) => {
-    stopAutoPlay();
-
-    const clampedTarget = clamp(targetIndex, 0, 6);
-    const targetProgress = clampedTarget / 6;
-
-    const driver = scrollDriverRef.current;
-    if (driver) {
-      const totalScroll = driver.offsetHeight - window.innerHeight;
-      const rect = driver.getBoundingClientRect();
-      const driverTop = window.scrollY + rect.top;
-      if (totalScroll > 0) {
-        window.scrollTo({
-          top: driverTop + targetProgress * totalScroll,
-          behavior: 'smooth',
+  // Triple set of cards for seamless infinite horizontal rail
+  const clonedCards = useMemo(() => {
+    const list: Array<{ item: CardItem; globalSlot: number }> = [];
+    for (let setIdx = 0; setIdx < SETS_COUNT; setIdx++) {
+      BASE_CARDS.forEach((item, baseIdx) => {
+        list.push({
+          item,
+          globalSlot: setIdx * TOTAL_BASE + baseIdx,
         });
-      }
+      });
     }
+    return list;
+  }, []);
 
-    // Direct smooth animation of card transforms in case scroll is delayed
-    const startProgress = currentProgressRef.current;
-    const startTime = performance.now();
-    const duration = 480;
+  // Update layout metrics (card width, gap, step width, center offset)
+  const updateLayout = useCallback((snapImmediately = false) => {
+    const viewport = viewportRef.current;
+    const track = trackRef.current;
+    if (!viewport || !track) return;
 
-    if (animationRafRef.current) cancelAnimationFrame(animationRafRef.current);
+    const firstCard = track.querySelector<HTMLElement>('.activities-card');
+    if (!firstCard) return;
 
-    function step(now: number) {
-      const elapsed = now - startTime;
-      const t = clamp(elapsed / duration, 0, 1);
-      const eased = easeInOutCubic(t);
-      const p = startProgress + (targetProgress - startProgress) * eased;
-      updateDeck(p);
+    const style = window.getComputedStyle(track);
+    const gap = parseFloat(style.gap) || 24;
+    const cardW = firstCard.offsetWidth || 380;
+    const step = cardW + gap;
 
-      if (t < 1) {
-        animationRafRef.current = requestAnimationFrame(step);
-      } else {
-        animationRafRef.current = null;
-      }
+    gapWidthRef.current = gap;
+    cardWidthRef.current = cardW;
+    stepWidthRef.current = step;
+    singleSetWidthRef.current = TOTAL_BASE * step;
+
+    const vpWidth = viewport.clientWidth;
+    const centerOffset = (vpWidth - cardW) / 2;
+    centerOffsetRef.current = centerOffset;
+
+    targetXRef.current = centerOffset - currentSlotRef.current * step;
+
+    if (snapImmediately) {
+      currentXRef.current = targetXRef.current;
+      velocityXRef.current = 0;
+      track.style.transform = `translate3d(${currentXRef.current.toFixed(2)}px, 0, 0)`;
     }
+  }, []);
 
-    animationRafRef.current = requestAnimationFrame(step);
-  }, [stopAutoPlay, updateDeck]);
+  // Recenter infinite loop when slot drifts outside middle set
+  const recenterIfNeeded = useCallback(() => {
+    const total = TOTAL_BASE;
+    const setWidth = singleSetWidthRef.current;
+    if (setWidth <= 0) return;
 
-  // Scroll listener that scrubs through cards in real time
+    const minSlot = total;
+    const maxSlot = (SETS_COUNT - 1) * total;
+
+    if (currentSlotRef.current < minSlot) {
+      currentSlotRef.current += total;
+      currentXRef.current -= setWidth;
+      targetXRef.current -= setWidth;
+    } else if (currentSlotRef.current >= maxSlot) {
+      currentSlotRef.current -= total;
+      currentXRef.current += setWidth;
+      targetXRef.current += setWidth;
+    }
+  }, []);
+
+  // Smoothly move by delta cards (with optional throw velocity injection)
+  const moveBySteps = useCallback((delta: number, initialThrowVelocity = 0) => {
+    recenterIfNeeded();
+    currentSlotRef.current += delta;
+    targetXRef.current = centerOffsetRef.current - currentSlotRef.current * stepWidthRef.current;
+    velocityXRef.current += initialThrowVelocity;
+    isSnappingRef.current = true;
+  }, [recenterIfNeeded]);
+
+  // Go to a specific logical card index (0..6)
+  const goToLogicalIndex = useCallback((targetLogical: number) => {
+    recenterIfNeeded();
+    const currentLogical = ((currentSlotRef.current % TOTAL_BASE) + TOTAL_BASE) % TOTAL_BASE;
+    let diff = targetLogical - currentLogical;
+    if (diff > TOTAL_BASE / 2) diff -= TOTAL_BASE;
+    if (diff < -TOTAL_BASE / 2) diff += TOTAL_BASE;
+    moveBySteps(diff, -diff * 4);
+  }, [moveBySteps, recenterIfNeeded]);
+
+  // Pause auto-motion during active user interaction
+  const pauseAutoPlay = useCallback(() => {
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+      resumeTimerRef.current = null;
+    }
+  }, []);
+
+  // Resume auto-motion after idle period
+  const resumeAutoPlayDelayed = useCallback(() => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      isAutoPlayingRef.current = true;
+    }, 2800);
+  }, []);
+
+  // Main physics loop (Spring-damper physics + subtle auto-glide)
   useEffect(() => {
-    const driver = scrollDriverRef.current;
-    if (!driver) return;
+    const STIFFNESS = 0.088;
+    const DAMPING = 0.77;
+    const AUTO_SPEED = -0.45; // Gentle, smooth continuous drift
 
-    let ticking = false;
-
-    function getScrollProgress(): number {
-      const rect = driver!.getBoundingClientRect();
-      const totalScroll = driver!.offsetHeight - window.innerHeight;
-      if (totalScroll <= 0) return 0;
-      const current = -rect.top;
-      return clamp(current / totalScroll, 0, 1);
+    // Check reduced motion
+    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      isAutoPlayingRef.current = false;
+      setIsAutoMotionActive(false);
     }
 
-    const onScroll = () => {
-      if (autoPlayRafRef.current !== null || animationRafRef.current !== null) return;
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          updateDeck(getScrollProgress());
-          ticking = false;
-        });
-        ticking = true;
+    function loop() {
+      if (!isDraggingRef.current) {
+        if (isSnappingRef.current) {
+          const force = (targetXRef.current - currentXRef.current) * STIFFNESS;
+          velocityXRef.current = (velocityXRef.current + force) * DAMPING;
+          currentXRef.current += velocityXRef.current;
+
+          if (Math.abs(targetXRef.current - currentXRef.current) < 0.1 && Math.abs(velocityXRef.current) < 0.08) {
+            currentXRef.current = targetXRef.current;
+            velocityXRef.current = 0;
+            isSnappingRef.current = false;
+            recenterIfNeeded();
+          }
+        } else if (isAutoPlayingRef.current && !isHoveredRef.current && !prefersReducedMotion) {
+          currentXRef.current += AUTO_SPEED;
+          recenterIfNeeded();
+        }
       }
+
+      if (trackRef.current) {
+        trackRef.current.style.transform = `translate3d(${currentXRef.current.toFixed(2)}px, 0, 0)`;
+      }
+
+      // Update active slot and active class
+      const step = stepWidthRef.current || 404;
+      const slotFloat = (centerOffsetRef.current - currentXRef.current) / step;
+      const nearestSlot = Math.round(slotFloat);
+      const logical = ((nearestSlot % TOTAL_BASE) + TOTAL_BASE) % TOTAL_BASE;
+
+      if (logical !== activeLogicalRef.current) {
+        activeLogicalRef.current = logical;
+        setActiveLogicalIndex(logical);
+
+        // Update card active classes
+        if (trackRef.current) {
+          const cards = trackRef.current.querySelectorAll('.activities-card');
+          cards.forEach((card, idx) => {
+            const isCardActive = idx === nearestSlot;
+            card.classList.toggle('is-active', isCardActive);
+          });
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(loop);
+    }
+
+    rafRef.current = requestAnimationFrame(loop);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
     };
+  }, [recenterIfNeeded]);
+
+  // Initial layout measurement & window resize listener
+  useEffect(() => {
+    updateLayout(true);
 
     const onResize = () => {
-      if (autoPlayRafRef.current === null && animationRafRef.current === null) {
-        updateDeck(getScrollProgress());
+      updateLayout(false);
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [updateLayout]);
+
+  // Pointer Drag Handlers (Unified mouse and touch with fluid momentum)
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.button !== 0) return; // Only primary mouse button or touch
+    pauseAutoPlay();
+    isPointerDownRef.current = true;
+    isHorizontalDragRef.current = false;
+    isDraggingRef.current = false;
+    isSnappingRef.current = false;
+
+    dragStartXRef.current = e.clientX;
+    dragStartYRef.current = e.clientY;
+    lastPointerXRef.current = e.clientX;
+    pointerVelocityRef.current = 0;
+    totalDragDistanceRef.current = 0;
+    velocityXRef.current = 0;
+
+    viewportRef.current?.classList.add('is-dragging');
+    try {
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    } catch (err) {}
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isPointerDownRef.current) return;
+
+    const dx = e.clientX - lastPointerXRef.current;
+    const dy = e.clientY - dragStartYRef.current;
+    const totalDx = e.clientX - dragStartXRef.current;
+
+    // Check if gesture is horizontal vs vertical on initial movement
+    if (!isHorizontalDragRef.current) {
+      if (Math.abs(totalDx) > 6 && Math.abs(totalDx) >= Math.abs(dy)) {
+        isHorizontalDragRef.current = true;
+        isDraggingRef.current = true;
+      } else if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(totalDx)) {
+        // Safe release to let browser scroll vertically
+        isPointerDownRef.current = false;
+        viewportRef.current?.classList.remove('is-dragging');
+        resumeAutoPlayDelayed();
+        return;
       }
-    };
+    }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize, { passive: true });
+    if (isHorizontalDragRef.current) {
+      lastPointerXRef.current = e.clientX;
+      currentXRef.current += dx;
+      totalDragDistanceRef.current += dx;
+      pointerVelocityRef.current = dx;
+      recenterIfNeeded();
+    }
+  };
 
-    // Initial render calls on mount to guarantee perfect positioning
-    updateDeck(getScrollProgress());
-    requestAnimationFrame(() => {
-      updateDeck(getScrollProgress());
-    });
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!isPointerDownRef.current) return;
+    isPointerDownRef.current = false;
+    viewportRef.current?.classList.remove('is-dragging');
 
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onResize);
-      stopAutoPlay();
-    };
-  }, [updateDeck, stopAutoPlay]);
+    try {
+      (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch (err) {}
 
-  // Stop autoplay on user interaction
-  useEffect(() => {
-    const onWheel = () => {
-      if (autoPlayRafRef.current) stopAutoPlay();
-    };
-    const onTouchStart = () => {
-      if (autoPlayRafRef.current) stopAutoPlay();
-    };
-    window.addEventListener('wheel', onWheel, { passive: true });
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
-    return () => {
-      window.removeEventListener('wheel', onWheel);
-      window.removeEventListener('touchstart', onTouchStart);
-    };
-  }, [stopAutoPlay]);
+    const step = stepWidthRef.current || 404;
+    const centerOffset = centerOffsetRef.current;
 
-  // Touch Swipe for Mobile
-  useEffect(() => {
-    const container = deckContainerRef.current;
-    if (!container) return;
+    if (isHorizontalDragRef.current && Math.abs(totalDragDistanceRef.current) > 5) {
+      // Release with momentum throw projection & magnetic spring snap
+      const v = pointerVelocityRef.current;
+      const projectedX = currentXRef.current + v * 9.5;
+      let nextSlot = Math.round((centerOffset - projectedX) / step);
 
-    let touchStartX = 0;
-    let touchStartY = 0;
-
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-    };
-
-    const onTouchEnd = (e: TouchEvent) => {
-      const touchEndX = e.changedTouches[0].clientX;
-      const touchEndY = e.changedTouches[0].clientY;
-      const dx = touchEndX - touchStartX;
-      const dy = touchEndY - touchStartY;
-
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
-        if (dx < 0) {
-          if (activeCardIndexRef.current < 6) goToCard(activeCardIndexRef.current + 1);
-        } else {
-          if (activeCardIndexRef.current > 0) goToCard(activeCardIndexRef.current - 1);
-        }
+      if (
+        nextSlot === currentSlotRef.current &&
+        Math.abs(totalDragDistanceRef.current) > 24 &&
+        Math.abs(v) > 2
+      ) {
+        nextSlot += v < 0 ? 1 : -1;
       }
-    };
 
-    container.addEventListener('touchstart', onTouchStart, { passive: true });
-    container.addEventListener('touchend', onTouchEnd, { passive: true });
+      currentSlotRef.current = nextSlot;
+      targetXRef.current = centerOffset - nextSlot * step;
+      velocityXRef.current = v * 0.85;
+      isSnappingRef.current = true;
+    } else {
+      // Snap to nearest slot
+      const nearestSlot = Math.round((centerOffset - currentXRef.current) / step);
+      currentSlotRef.current = nearestSlot;
+      targetXRef.current = centerOffset - nearestSlot * step;
+      isSnappingRef.current = true;
+    }
 
-    return () => {
-      container.removeEventListener('touchstart', onTouchStart);
-      container.removeEventListener('touchend', onTouchEnd);
-    };
-  }, [goToCard]);
+    isDraggingRef.current = false;
+    resumeAutoPlayDelayed();
+  };
 
-  // Keyboard navigation
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      const driver = scrollDriverRef.current;
-      if (!driver) return;
-      const rect = driver.getBoundingClientRect();
-      if (rect.top > window.innerHeight || rect.bottom < 0) return;
+  // Prevent card click if user was dragging
+  const handleCardClick = (targetLogical: number, e: React.MouseEvent) => {
+    if (Math.abs(totalDragDistanceRef.current) > 6) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    goToLogicalIndex(targetLogical);
+  };
 
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        if (activeCardIndexRef.current < 6) {
-          e.preventDefault();
-          goToCard(activeCardIndexRef.current + 1);
-        }
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        if (activeCardIndexRef.current > 0) {
-          e.preventDefault();
-          goToCard(activeCardIndexRef.current - 1);
-        }
-      }
-    };
+  const handleMouseEnter = () => {
+    isHoveredRef.current = true;
+  };
 
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [goToCard]);
+  const handleMouseLeave = () => {
+    isHoveredRef.current = false;
+    resumeAutoPlayDelayed();
+  };
+
+  const toggleAutoMotion = () => {
+    const nextState = !isAutoMotionActive;
+    setIsAutoMotionActive(nextState);
+    isAutoPlayingRef.current = nextState;
+  };
 
   return (
-    <div className="activities-scroll-driver" id="programUnggulan" ref={scrollDriverRef}>
-      <section className="activities-stage" aria-label="Tujuan Kegiatan PRIDE 2026">
+    <div className="activities-scroll-driver" id="programUnggulan">
+      <section
+        className="activities-stage activities-carousel-stage"
+        aria-label="Tujuan Kegiatan PRIDE 2026"
+        ref={stageRef}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Subtle Edge Fades (Left & Right) */}
+        <div className="deck-edge-fade left" aria-hidden="true" />
+        <div className="deck-edge-fade right" aria-hidden="true" />
 
-        {/* 7-Card Stack Deck Container: Cover (0) + 6 Tujuan Kegiatan (1..6) */}
-        <div className="activities-deck-container" ref={deckContainerRef}>
+        {/* Carousel Viewport (Handles Fluid Drag & Touch Swiping) */}
+        <div
+          className="activities-carousel-viewport"
+          ref={viewportRef}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+        >
+          {/* Horizontal Track of Infinite Seamless Cards */}
+          <div className="activities-carousel-track" ref={trackRef}>
+            {clonedCards.map(({ item, globalSlot }) => {
+              const isActive = globalSlot === currentSlotRef.current;
 
-          {/* ════════════════════════════════════════════════════════════════
-              LAYER 0 (Frontmost): COVER CARD ("TUJUAN KEGIATAN")
-              Centerpiece with bespoke Editorial Font Mix
-              ════════════════════════════════════════════════════════════════ */}
-          <section
-            className="activities-card deck-cover-card"
-            data-index="0"
-            onClick={() => goToCard(1)}
-            style={{ cursor: 'pointer' }}
-          >
-            {/* Playful Colorful Background Accents */}
-            <div className="deck-cover-decorations" aria-hidden="true">
-              <div className="decor-circle decor-red" />
-              <div className="decor-circle decor-yellow" />
-              <div className="decor-circle decor-blue" />
-              <div className="decor-circle decor-green" />
-              <div className="decor-circle decor-orange" />
-            </div>
+              if (item.isCover) {
+                return (
+                  <div
+                    key={globalSlot}
+                    className={`activities-card deck-cover-card ${isActive ? 'is-active' : ''}`}
+                    data-slot={globalSlot}
+                    data-index="0"
+                    onClick={(e) => handleCardClick(1, e)}
+                  >
+                    {/* Playful Colorful Background Accents */}
+                    <div className="deck-cover-decorations" aria-hidden="true">
+                      <div className="decor-circle decor-red" />
+                      <div className="decor-circle decor-yellow" />
+                      <div className="decor-circle decor-blue" />
+                      <div className="decor-circle decor-green" />
+                      <div className="decor-circle decor-orange" />
+                    </div>
 
-            {/* Center Focal Point: Simple & Aesthetic Font Mix Title */}
-            <div className="deck-cover-center">
-              <h2 className="deck-cover-mix-title">
-                <span className="deck-mix-sans">TUJUAN</span>
-                <span className="deck-mix-serif">Kegiatan</span>
-              </h2>
-            </div>
-          </section>
+                    {/* Center Focal Point: Simple & Aesthetic Font Mix Title */}
+                    <div className="deck-cover-center">
+                      <h3 className="deck-cover-mix-title">
+                        <span className="deck-mix-sans">TUJUAN</span>
+                        <span className="deck-mix-serif">Kegiatan</span>
+                      </h3>
+                    </div>
+                  </div>
+                );
+              }
 
-          {/* ════════════════════════════════════════════════════════════════
-              LAYER 1 (Card 1): 01. Meningkatkan Eksposur IKM
-              Theme: Red (#e51937)
-              ════════════════════════════════════════════════════════════════ */}
-          <article
-            className="activities-card deck-festival-card theme-red"
-            data-index="1"
-            onClick={() => goToCard(2)}
-            style={{ cursor: 'pointer' }}
-          >
-            <div className="deck-card-decorations" aria-hidden="true">
-              <div className="decor-blob decor-blob-1" />
-              <div className="decor-blob decor-blob-2" />
-              <div className="decor-ring" />
-            </div>
+              const nextLogical = (item.index % TOTAL_BASE) + 1;
 
-            <div className="deck-card-inner-centered">
-              <div className="deck-goal-mix-block">
-                <div className="deck-goal-top-row">
-                  <span className="deck-goal-num">01.</span>
-                  <span className="deck-goal-verb">Meningkatkan</span>
-                </div>
-                <h3 className="deck-goal-subject">Eksposur IKM</h3>
-              </div>
-            </div>
-          </article>
+              return (
+                <article
+                  key={globalSlot}
+                  className={`activities-card deck-festival-card ${item.theme} ${isActive ? 'is-active' : ''}`}
+                  data-slot={globalSlot}
+                  data-index={item.index}
+                  onClick={(e) => handleCardClick(nextLogical < TOTAL_BASE ? nextLogical : 0, e)}
+                >
+                  <div className="deck-card-decorations" aria-hidden="true">
+                    <div className="decor-blob decor-blob-1" />
+                    <div className="decor-blob decor-blob-2" />
+                    <div className="decor-ring" />
+                  </div>
 
-          {/* ════════════════════════════════════════════════════════════════
-              LAYER 2 (Card 2): 02. Membangun Ruang Interaksi
-              Theme: Emerald Green (#009e49)
-              ════════════════════════════════════════════════════════════════ */}
-          <article
-            className="activities-card deck-festival-card theme-green"
-            data-index="2"
-            onClick={() => goToCard(3)}
-            style={{ cursor: 'pointer' }}
-          >
-            <div className="deck-card-decorations" aria-hidden="true">
-              <div className="decor-blob decor-blob-1" />
-              <div className="decor-blob decor-blob-2" />
-              <div className="decor-ring" />
-            </div>
-
-            <div className="deck-card-inner-centered">
-              <div className="deck-goal-mix-block">
-                <div className="deck-goal-top-row">
-                  <span className="deck-goal-num">02.</span>
-                  <span className="deck-goal-verb">Membangun</span>
-                </div>
-                <h3 className="deck-goal-subject">Ruang Interaksi</h3>
-              </div>
-            </div>
-          </article>
-
-          {/* ════════════════════════════════════════════════════════════════
-              LAYER 3 (Card 3): 03. Mendorong Kolaborasi
-              Theme: Warm Orange (#f69321)
-              ════════════════════════════════════════════════════════════════ */}
-          <article
-            className="activities-card deck-festival-card theme-orange"
-            data-index="3"
-            onClick={() => goToCard(4)}
-            style={{ cursor: 'pointer' }}
-          >
-            <div className="deck-card-decorations" aria-hidden="true">
-              <div className="decor-blob decor-blob-1" />
-              <div className="decor-blob decor-blob-2" />
-              <div className="decor-ring" />
-            </div>
-
-            <div className="deck-card-inner-centered">
-              <div className="deck-goal-mix-block">
-                <div className="deck-goal-top-row">
-                  <span className="deck-goal-num">03.</span>
-                  <span className="deck-goal-verb">Mendorong</span>
-                </div>
-                <h3 className="deck-goal-subject">Kolaborasi</h3>
-              </div>
-            </div>
-          </article>
-
-          {/* ════════════════════════════════════════════════════════════════
-              LAYER 4 (Card 4): 04. Mendorong Akses Pasar dan Transaksi
-              Theme: Golden Yellow (#ffb800)
-              ════════════════════════════════════════════════════════════════ */}
-          <article
-            className="activities-card deck-festival-card theme-yellow"
-            data-index="4"
-            onClick={() => goToCard(5)}
-            style={{ cursor: 'pointer' }}
-          >
-            <div className="deck-card-decorations" aria-hidden="true">
-              <div className="decor-blob decor-blob-1" />
-              <div className="decor-blob decor-blob-2" />
-              <div className="decor-ring" />
-            </div>
-
-            <div className="deck-card-inner-centered">
-              <div className="deck-goal-mix-block">
-                <div className="deck-goal-top-row">
-                  <span className="deck-goal-num">04.</span>
-                  <span className="deck-goal-verb">Mendorong</span>
-                </div>
-                <h3 className="deck-goal-subject">Akses Pasar dan Transaksi</h3>
-              </div>
-            </div>
-          </article>
-
-          {/* ════════════════════════════════════════════════════════════════
-              LAYER 5 (Card 5): 05. Mengapresiasi Kreativitas dan Inovasi
-              Theme: Royal Bandung Blue (#1652f0)
-              ════════════════════════════════════════════════════════════════ */}
-          <article
-            className="activities-card deck-festival-card theme-blue"
-            data-index="5"
-            onClick={() => goToCard(6)}
-            style={{ cursor: 'pointer' }}
-          >
-            <div className="deck-card-decorations" aria-hidden="true">
-              <div className="decor-blob decor-blob-1" />
-              <div className="decor-blob decor-blob-2" />
-              <div className="decor-ring" />
-            </div>
-
-            <div className="deck-card-inner-centered">
-              <div className="deck-goal-mix-block">
-                <div className="deck-goal-top-row">
-                  <span className="deck-goal-num">05.</span>
-                  <span className="deck-goal-verb">Mengapresiasi</span>
-                </div>
-                <h3 className="deck-goal-subject">Kreativitas dan Inovasi</h3>
-              </div>
-            </div>
-          </article>
-
-          {/* ════════════════════════════════════════════════════════════════
-              LAYER 6 (Card 6): 06. Meningkatkan Awareness Industri Kota Bandung
-              Theme: Creative Purple (#8b5cf6)
-              ════════════════════════════════════════════════════════════════ */}
-          <article
-            className="activities-card deck-festival-card theme-purple"
-            data-index="6"
-            onClick={() => goToCard(0)}
-            style={{ cursor: 'pointer' }}
-          >
-            <div className="deck-card-decorations" aria-hidden="true">
-              <div className="decor-blob decor-blob-1" />
-              <div className="decor-blob decor-blob-2" />
-              <div className="decor-ring" />
-            </div>
-
-            <div className="deck-card-inner-centered">
-              <div className="deck-goal-mix-block">
-                <div className="deck-goal-top-row">
-                  <span className="deck-goal-num">06.</span>
-                  <span className="deck-goal-verb">Meningkatkan</span>
-                </div>
-                <h3 className="deck-goal-subject">Awareness Industri Kota Bandung</h3>
-              </div>
-            </div>
-          </article>
-
+                  <div className="deck-card-inner-centered">
+                    <div className="deck-goal-mix-block">
+                      <div className="deck-goal-top-row">
+                        <span className="deck-goal-num">{item.num}</span>
+                        <span className="deck-goal-verb">{item.verb}</span>
+                      </div>
+                      <h3 className="deck-goal-subject">{item.subject}</h3>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
         </div>
 
-      </section>
+        {/* Carousel Controls Footer: Pagination Dots + Navigation Arrows */}
+        <div className="activities-carousel-footer">
+          {/* Pagination Dots (7 logical cards) */}
+          <div className="deck-pagination-dots" role="tablist" aria-label="Indikator Tujuan Kegiatan">
+            {BASE_CARDS.map((card, idx) => (
+              <button
+                key={idx}
+                type="button"
+                role="tab"
+                aria-selected={activeLogicalIndex === idx}
+                aria-label={`Pilih ${card.isCover ? 'Tujuan Kegiatan' : `Tujuan ${card.num}`}`}
+                className={`deck-dot-btn ${activeLogicalIndex === idx ? 'active' : ''}`}
+                onClick={() => goToLogicalIndex(idx)}
+              />
+            ))}
+          </div>
 
+          {/* Navigation Controls: Auto-Motion Toggle & Prev / Next Arrows */}
+          <div className="deck-nav-controls">
+            <button
+              type="button"
+              className="deck-auto-toggle hidden sm:inline-flex"
+              onClick={toggleAutoMotion}
+              aria-label={isAutoMotionActive ? 'Jeda Gerak Otomatis' : 'Putar Gerak Otomatis'}
+            >
+              <span>{isAutoMotionActive ? '⏸ Auto' : '▶ Auto'}</span>
+            </button>
+
+            <div className="deck-nav-arrows">
+              <button
+                type="button"
+                className="deck-arrow-btn prev"
+                onClick={() => moveBySteps(-1, 6)}
+                aria-label="Tujuan Kegiatan Sebelumnya"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                className="deck-arrow-btn next"
+                onClick={() => moveBySteps(1, -6)}
+                aria-label="Tujuan Kegiatan Selanjutnya"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
