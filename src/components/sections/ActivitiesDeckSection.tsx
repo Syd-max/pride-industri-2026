@@ -421,6 +421,10 @@ export default function ActivitiesDeckSection() {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
+        {/* Subtle Edge Fades (Left & Right) */}
+        <div className="deck-edge-fade left" aria-hidden="true" />
+        <div className="deck-edge-fade right" aria-hidden="true" />
+
         {/* Carousel Viewport (Handles Fluid Drag & Touch Swiping) */}
         <div
           className="activities-carousel-viewport"
@@ -430,10 +434,6 @@ export default function ActivitiesDeckSection() {
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
         >
-          {/* Subtle Edge Fades (Confined strictly to card track, never covering controls or footer) */}
-          <div className="deck-edge-fade left" aria-hidden="true" />
-          <div className="deck-edge-fade right" aria-hidden="true" />
-
           {/* Horizontal Track of Infinite Seamless Cards */}
           <div className="activities-carousel-track" ref={trackRef}>
             {clonedCards.map(({ item, globalSlot }) => {
@@ -499,10 +499,10 @@ export default function ActivitiesDeckSection() {
           </div>
         </div>
 
-        {/* Carousel Controls Footer: Tombol Kiri + Indikator Dots + Tombol Kanan */}
+        {/* Carousel Controls Footer: [Tombol Kiri] - [Gambar 2: Dots] - [Tombol Kanan] */}
         <div className="activities-carousel-footer">
-          {/* Tombol Kiri (Prev) */}
-          <div className="deck-footer-left">
+          <div className="deck-controls-cluster">
+            {/* Tombol Kiri (Prev) */}
             <button
               type="button"
               className="deck-arrow-btn prev"
@@ -513,34 +513,23 @@ export default function ActivitiesDeckSection() {
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </button>
-          </div>
 
-          {/* Indikator Titik Halaman (7 kartu) */}
-          <div className="deck-pagination-dots" role="tablist" aria-label="Indikator Tujuan Kegiatan">
-            {BASE_CARDS.map((card, idx) => (
-              <button
-                key={idx}
-                type="button"
-                role="tab"
-                aria-selected={activeLogicalIndex === idx}
-                aria-label={`Pilih ${card.isCover ? 'Tujuan Kegiatan' : `Tujuan ${card.num}`}`}
-                className={`deck-dot-btn ${activeLogicalIndex === idx ? 'active' : ''}`}
-                onClick={() => goToLogicalIndex(idx)}
-              />
-            ))}
-          </div>
+            {/* Gambar 2: Pagination Dots (7 cards: 0..6) */}
+            <div className="deck-pagination-dots" role="tablist" aria-label="Indikator Tujuan Kegiatan">
+              {BASE_CARDS.map((card, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeLogicalIndex === idx}
+                  aria-label={`Pilih ${card.isCover ? 'Tujuan Kegiatan' : `Tujuan ${card.num}`}`}
+                  className={`deck-dot-btn ${activeLogicalIndex === idx ? 'active' : ''}`}
+                  onClick={() => goToLogicalIndex(idx)}
+                />
+              ))}
+            </div>
 
-          {/* Tombol Kanan (Next) & Auto-Motion Toggle */}
-          <div className="deck-footer-right">
-            <button
-              type="button"
-              className="deck-auto-toggle hidden sm:inline-flex"
-              onClick={toggleAutoMotion}
-              aria-label={isAutoMotionActive ? 'Jeda Gerak Otomatis' : 'Putar Gerak Otomatis'}
-            >
-              <span>{isAutoMotionActive ? '⏸ Auto' : '▶ Auto'}</span>
-            </button>
-
+            {/* Tombol Kanan (Next) */}
             <button
               type="button"
               className="deck-arrow-btn next"

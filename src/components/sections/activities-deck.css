@@ -5,7 +5,6 @@
    - Momentum / throw inertia
    - Spring-damper magnetic snapping
    - Edge fade masks & grab cursor feedback
-   - Non-overlapping, clean & visible left/right buttons
    - Exact PRIDE colors, typography, and card content preserved 100%
 ─────────────────────────────────────────────────────────────────────────────── */
 
@@ -25,7 +24,7 @@
   height: auto;
   background-color: var(--deck-bg-page);
   overflow: hidden;
-  padding: clamp(48px, 6vh, 84px) 0 clamp(40px, 5vh, 68px);
+  padding: clamp(48px, 6vh, 84px) 0 clamp(36px, 5vh, 60px);
 }
 
 /* Stage holding the Carousel */
@@ -40,6 +39,7 @@
   justify-content: center;
   overflow: hidden;
   background-color: var(--deck-bg-page);
+  padding-bottom: clamp(36px, 5.5vh, 60px);
   box-sizing: border-box;
   user-select: none;
 }
@@ -55,39 +55,15 @@
   pointer-events: none;
 }
 
-/* ==========================================================================
-   CAROUSEL VIEWPORT & HORIZONTAL TRACK
-   ========================================================================== */
-.activities-carousel-viewport {
-  position: relative;
-  width: 100%;
-  overflow: visible;
-  cursor: grab;
-  touch-action: pan-y;
-  padding: 24px 0;
-}
-
-.activities-carousel-viewport.is-dragging {
-  cursor: grabbing;
-}
-
-.activities-carousel-track {
-  display: flex;
-  align-items: center;
-  gap: var(--deck-card-gap);
-  will-change: transform;
-  width: max-content;
-}
-
-/* ==========================================================================
-   EDGE FADE MASKS (Confined strictly to card track, never on footer or buttons)
-   ========================================================================== */
+/* ==========================================
+   EDGE FADE MASKS (Reference 1 Style)
+   ========================================== */
 .deck-edge-fade {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: clamp(50px, 8vw, 120px);
-  z-index: 15;
+  width: clamp(60px, 9vw, 150px);
+  z-index: 20;
   pointer-events: none;
 }
 
@@ -111,16 +87,33 @@
   );
 }
 
-/* Hide edge-fade on mobile so cards and borders stay 100% crisp and unmasked */
-@media (max-width: 768px) {
-  .deck-edge-fade {
-    display: none !important;
-  }
+/* ==========================================
+   CAROUSEL VIEWPORT & HORIZONTAL TRACK
+   ========================================== */
+.activities-carousel-viewport {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+  cursor: grab;
+  touch-action: pan-y;
+  padding: 24px 0;
 }
 
-/* ==========================================================================
+.activities-carousel-viewport.is-dragging {
+  cursor: grabbing;
+}
+
+.activities-carousel-track {
+  display: flex;
+  align-items: center;
+  gap: var(--deck-card-gap);
+  will-change: transform;
+  width: max-content;
+}
+
+/* ==========================================
    PRIDE CARD COMPONENT IN HORIZONTAL RAIL
-   ========================================================================== */
+   ========================================== */
 .activities-card {
   position: relative !important;
   flex-shrink: 0 !important;
@@ -517,37 +510,39 @@
 }
 
 /* ==========================================================================
-   CAROUSEL CONTROLS FOOTER (Symmetrical: Left Arrow + Centered Dots + Right Arrow)
-   Clean, unclipped, and never covered by masks or screen borders
+   CAROUSEL CONTROLS FOOTER: [TOMBOL KIRI] - [GAMBAR 2: DOTS] - [TOMBOL KANAN]
    ========================================================================== */
 .activities-carousel-footer {
   width: 100%;
-  max-width: 1100px;
-  margin-top: clamp(18px, 2.8vh, 32px);
-  padding: 0 clamp(20px, 4vw, 44px);
+  max-width: 1200px;
+  margin-top: clamp(24px, 3.5vh, 40px);
+  padding: 8px clamp(16px, 3vw, 36px) clamp(16px, 2.5vh, 24px);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   position: relative;
-  z-index: 35;
+  z-index: 25;
   box-sizing: border-box;
+  overflow: visible;
 }
 
-.deck-footer-left,
-.deck-footer-right {
-  display: flex;
+.deck-controls-cluster {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
+  justify-content: center;
+  gap: clamp(14px, 2.5vw, 24px);
+  padding: 6px 12px;
+  box-sizing: border-box;
+  overflow: visible;
 }
 
 /* Pagination Dots */
 .deck-pagination-dots {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  flex-shrink: 0;
+  padding: 4px 0;
 }
 
 .deck-dot-btn {
@@ -572,25 +567,7 @@
   background-color: #e51937;
 }
 
-/* Navigation Controls & Arrow Buttons */
-.deck-auto-toggle {
-  background: rgba(15, 23, 42, 0.05);
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  color: #475569;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-family: var(--font-plus-jakarta), sans-serif;
-  font-size: 11.5px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.deck-auto-toggle:hover {
-  background: rgba(15, 23, 42, 0.1);
-  color: #0f172a;
-}
-
+/* Arrow Buttons (Tombol Kiri & Kanan) */
 .deck-arrow-btn {
   width: 44px;
   height: 44px;
@@ -603,32 +580,32 @@
   cursor: pointer;
   color: #334155;
   box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+  flex-shrink: 0;
+  box-sizing: border-box;
   transition:
     border-color 0.2s ease,
     background-color 0.2s ease,
-    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.15s ease,
     box-shadow 0.2s ease,
     color 0.2s ease;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 40;
 }
 
 .deck-arrow-btn:hover {
   border-color: #cbd5e1;
-  background-color: #f8fafc;
+  background-color: #ffffff;
   color: #0f172a;
   transform: scale(1.06);
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
 }
 
 .deck-arrow-btn:active {
-  transform: scale(0.94);
+  transform: scale(0.95);
 }
 
 .deck-arrow-btn svg {
   width: 18px;
   height: 18px;
+  stroke: currentColor;
 }
 
 /* ==========================================================================
@@ -671,41 +648,15 @@
   }
 
   .activities-scroll-driver {
-    padding: clamp(36px, 5vh, 60px) 0 clamp(30px, 4vh, 46px);
+    padding: clamp(36px, 5vh, 60px) 0 clamp(32px, 4vh, 48px);
   }
 
   .activities-carousel-viewport {
     padding: 16px 0;
   }
 
-  .activities-carousel-footer {
-    padding: 0 20px;
-    margin-top: 16px;
-  }
-
-  .deck-arrow-btn {
+  .deck-edge-fade {
     width: 40px;
-    height: 40px;
-    border-width: 1.5px;
-    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
-  }
-
-  .deck-arrow-btn svg {
-    width: 17px;
-    height: 17px;
-  }
-
-  .deck-pagination-dots {
-    gap: 6px;
-  }
-
-  .deck-dot-btn {
-    width: 6px;
-    height: 6px;
-  }
-
-  .deck-dot-btn.active {
-    width: 20px;
   }
 
   .deck-mix-sans {
@@ -732,6 +683,25 @@
   .deck-card-inner-centered {
     padding: 24px 18px;
   }
+
+  .activities-stage,
+  .activities-carousel-stage {
+    padding-bottom: 32px;
+  }
+
+  .deck-controls-cluster {
+    gap: 12px;
+  }
+
+  .deck-arrow-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .deck-arrow-btn svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -741,8 +711,13 @@
     --deck-card-gap: 14px;
   }
 
-  .activities-carousel-footer {
-    padding: 0 16px;
+  .activities-stage,
+  .activities-carousel-stage {
+    padding-bottom: 28px;
+  }
+
+  .deck-controls-cluster {
+    gap: 10px;
   }
 
   .deck-arrow-btn {
@@ -751,8 +726,21 @@
   }
 
   .deck-arrow-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
+  }
+
+  .deck-pagination-dots {
+    gap: 6px;
+  }
+
+  .deck-dot-btn {
+    width: 7px;
+    height: 7px;
+  }
+
+  .deck-dot-btn.active {
+    width: 20px;
   }
 
   .deck-mix-sans {
