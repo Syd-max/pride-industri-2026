@@ -124,7 +124,7 @@ export default function Navbar() {
                   scrolled ? 'text-slate-500' : 'text-slate-200 drop-shadow-sm'
                 }`}
               >
-                27-28 Nov 2026 · Braga Bandung
+                27-29 Nov 2026 · Braga Bandung
               </span>
             </div>
           </Link>

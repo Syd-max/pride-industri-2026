@@ -224,7 +224,7 @@ export default function HeroSection() {
             </h1>
 
             <p className="pride-event-date hero-subtitle-clean" ref={heroSubtitleRef}>
-              27-28 November 2026
+              27-29 November 2026
             </p>
           </div>
 

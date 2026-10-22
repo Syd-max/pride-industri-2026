@@ -53,7 +53,7 @@ export default function AboutSection() {
       docItems: [
         'Jum\'at 27 Nov: 13:30 – 21:00 WIB',
         'Sabtu 28 Nov: 10:00 – 21:00 WIB',
-        'Minggu 29 Nov 2026: TBA',
+        'Minggu 29 Nov: TBA',
         'Lokasi: Braga City Walk Bandung',
       ],
     },
