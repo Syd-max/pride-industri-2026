@@ -18,7 +18,7 @@ export default function PrivacyPage() {
             href="/"
             className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#B8B0A4] hover:text-[#C8A96E] transition-colors mb-6"
           >
-            ← Kembali
+            Kembali ke Beranda
           </Link>
 
           <div className="inline-block text-[11px] font-semibold tracking-[0.2em] uppercase text-[#C8A96E] mb-2">

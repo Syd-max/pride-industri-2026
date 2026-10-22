@@ -241,9 +241,6 @@ export default function Navbar() {
                   </span>
                   <span>{link.label}</span>
                 </div>
-                <span className="text-slate-300 group-hover:text-blue-600 transition-transform group-hover:translate-x-1">
-                  →
-                </span>
               </button>
             ))}
           </div>

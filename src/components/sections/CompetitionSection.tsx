@@ -256,7 +256,7 @@ export default function CompetitionSection() {
                 >
                   <div className="sticker-top-row">
                     <span>APRESIASI LOMBA</span>
-                    <span className="save-badge">KLIK / KELUPAS ↗</span>
+                    <span className="save-badge">KLIK / KELUPAS</span>
                   </div>
                   <div className="sticker-main-row">
                     <span className="sticker-price">Hadiah</span>
@@ -272,7 +272,6 @@ export default function CompetitionSection() {
                 className="btn-register-ticket"
               >
                 <span>Daftar Lomba Video</span>
-                <span>→</span>
               </Link>
             </div>
 
@@ -349,7 +348,6 @@ export default function CompetitionSection() {
                 className="btn-register-ticket"
               >
                 <span>Daftar Kreasi Kemasan</span>
-                <span>→</span>
               </Link>
             </div>
 

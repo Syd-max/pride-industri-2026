@@ -173,7 +173,6 @@ export default function LocationSection() {
                     className="py-2.5 px-3 rounded-xl text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200/80 border border-slate-200/80 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Buka Maps</span>
-                    <span className="text-blue-600 font-bold">↗</span>
                   </a>
                 </div>
 
@@ -191,7 +190,6 @@ export default function LocationSection() {
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
               </svg>
               <span>Buka di Google Maps</span>
-              <span className="text-blue-600 font-bold">↗</span>
             </a>
           </div>
 
@@ -218,7 +216,6 @@ export default function LocationSection() {
                     <polygon points="3 11 22 2 13 21 11 13 3 11" />
                   </svg>
                   <span>Petunjuk Arah</span>
-                  <span>↗</span>
                 </a>
 
                 <a
@@ -228,7 +225,6 @@ export default function LocationSection() {
                   className="w-full sm:w-auto py-2.5 px-4 rounded-xl text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span>Buka di Google Maps</span>
-                  <span className="text-blue-600 font-bold">↗</span>
                 </a>
 
                 <button

@@ -720,10 +720,7 @@ export default function CheckInPage() {
                   {loading ? (
                     <span>Memproses Presensi...</span>
                   ) : (
-                    <>
-                      <span>Konfirmasi Masuk Festival</span>
-                      <span>→</span>
-                    </>
+                    <span>Konfirmasi Masuk Festival</span>
                   )}
                 </button>
               </form>
@@ -785,10 +782,7 @@ export default function CheckInPage() {
                   {loading ? (
                     <span>Memverifikasi Kode...</span>
                   ) : (
-                    <>
-                      <span>Verifikasi &amp; Masuk Gate</span>
-                      <span>→</span>
-                    </>
+                    <span>Verifikasi &amp; Masuk Gate</span>
                   )}
                 </button>
               </form>

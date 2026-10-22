@@ -686,7 +686,6 @@ export default function VideoLokalPage() {
                       className="py-3 px-6 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md flex items-center gap-2 cursor-pointer"
                     >
                       <span>Lanjut</span>
-                      <span>→</span>
                     </button>
                   </div>
                 </div>
@@ -771,7 +770,7 @@ export default function VideoLokalPage() {
                       onClick={() => goToPreviousStep(1)}
                       className="py-3 px-5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
                     >
-                      <span>← Kembali</span>
+                      <span>Kembali</span>
                     </button>
                     <button
                       type="button"
@@ -779,7 +778,6 @@ export default function VideoLokalPage() {
                       className="py-3 px-6 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md flex items-center gap-2 cursor-pointer"
                     >
                       <span>Lanjut</span>
-                      <span>→</span>
                     </button>
                   </div>
                 </div>
@@ -851,7 +849,7 @@ export default function VideoLokalPage() {
                       onClick={() => goToPreviousStep(2)}
                       className="py-3 px-5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
                     >
-                      <span>← Kembali</span>
+                      <span>Kembali</span>
                     </button>
                     <button
                       type="button"
@@ -859,7 +857,6 @@ export default function VideoLokalPage() {
                       className="py-3 px-6 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md flex items-center gap-2 cursor-pointer"
                     >
                       <span>Lanjut</span>
-                      <span>→</span>
                     </button>
                   </div>
                 </div>
@@ -1008,7 +1005,7 @@ export default function VideoLokalPage() {
                       onClick={() => goToPreviousStep(3)}
                       className="py-3 px-5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
                     >
-                      <span>← Kembali</span>
+                      <span>Kembali</span>
                     </button>
                     <button
                       type="button"
@@ -1016,7 +1013,6 @@ export default function VideoLokalPage() {
                       className="py-3 px-6 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md flex items-center gap-2 cursor-pointer"
                     >
                       <span>Lanjut</span>
-                      <span>→</span>
                     </button>
                   </div>
                 </div>
@@ -1075,7 +1071,7 @@ export default function VideoLokalPage() {
                             <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
                             <line x1="12" y1="18" x2="12.01" y2="18" />
                           </svg>
-                          <span>App Store ↗</span>
+                          <span>App Store</span>
                         </a>
                         <a
                           href="https://play.google.com/store/apps/details?id=com.tactlink.app"
@@ -1088,7 +1084,7 @@ export default function VideoLokalPage() {
                             <polyline points="7 10 12 15 17 10" />
                             <line x1="12" y1="15" x2="12" y2="3" />
                           </svg>
-                          <span>Google Play ↗</span>
+                          <span>Google Play</span>
                         </a>
                       </div>
                     </div>
@@ -1273,7 +1269,7 @@ export default function VideoLokalPage() {
                       onClick={() => goToPreviousStep(4)}
                       className="w-full sm:w-auto py-3 px-5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
-                      <span>← Kembali</span>
+                      <span>Kembali</span>
                     </button>
                     <button
                       type="submit"
@@ -1289,10 +1285,7 @@ export default function VideoLokalPage() {
                           <span>{uploadProgress || 'Memproses Pendaftaran...'}</span>
                         </>
                       ) : (
-                        <>
-                          <span>Kirim Pendaftaran</span>
-                          <span aria-hidden="true">→</span>
-                        </>
+                        <span>Kirim Pendaftaran</span>
                       )}
                     </button>
                   </div>

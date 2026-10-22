@@ -35,7 +35,7 @@ export default function FaqSection() {
       a: 'Tidak sama sekali. Pendaftaran Lomba Desain Kemasan maupun Lomba Video 1 Menit (60 Detik) PRIDE Industri 2026 sepenuhnya 100% GRATIS dan tidak dipungut biaya apa pun bagi seluruh peserta.',
       highlight: '100% Bebas Biaya Pendaftaran',
       action: {
-        label: 'Daftar Kompetisi Sekarang →',
+        label: 'Daftar Kompetisi Sekarang',
         href: '/#competitions',
         type: 'link',
       },
@@ -84,7 +84,7 @@ export default function FaqSection() {
       a: 'Buka menu "Scan Barcode Check-In" di website ini melalui smartphone Anda saat tiba di lokasi. Izinkan akses kamera, lalu pindai poster barcode fisik resmi yang terpasang di Meja Registrasi Gate Braga City Walk untuk mencetak E-Pass Pengunjung atau memverifikasi E-Badge Peserta Lomba Anda.',
       highlight: 'Wajib Scan Kamera di Gate Braga',
       action: {
-        label: 'Buka Scanner Check-In Gate →',
+        label: 'Buka Scanner Check-In Gate',
         href: '/check-in',
         type: 'link',
       },
