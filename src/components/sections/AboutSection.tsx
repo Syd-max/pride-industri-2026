@@ -44,7 +44,7 @@ export default function AboutSection() {
       ],
     },
     {
-      number: '2 HARI',
+      number: '3 HARI',
       label: 'Kurasi & Festival',
       desc: 'Pameran produk IKM, talkshow industri, fashion show desainer, dan awarding di Braga City Walk.',
       theme: 'red' as const,
@@ -53,6 +53,7 @@ export default function AboutSection() {
       docItems: [
         'Jum\'at 27 Nov: 13:30 – 21:00 WIB',
         'Sabtu 28 Nov: 10:00 – 21:00 WIB',
+        'Minggu 29 Nov 2026: TBA',
         'Lokasi: Braga City Walk Bandung',
       ],
     },
