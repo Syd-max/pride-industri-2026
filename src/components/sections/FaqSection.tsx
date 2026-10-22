@@ -61,8 +61,8 @@ export default function FaqSection() {
       category: 'video',
       categoryLabel: 'Lomba Video 1 Menit',
       q: 'Kapan dan di mana pengambilan video untuk Lomba Video 1 Menit dilakukan?',
-      a: 'Pengambilan video wajib dilaksanakan pada tanggal 27–28 November 2026 secara langsung (on-site) di area festival PRIDE Industri 2026, Braga City Walk, Kota Bandung. Format video vertikal (9:16 Reels/TikTok) dengan durasi maksimal 60 detik.',
-      highlight: 'On-Site Braga City Walk · 27–28 Nov 2026',
+      a: 'Pengambilan video wajib dilaksanakan pada tanggal 27-28 November 2026 secara langsung (on-site) di area festival PRIDE Industri 2026, Braga City Walk, Kota Bandung. Format video vertikal (9:16 Reels/TikTok) dengan durasi maksimal 60 detik.',
+      highlight: 'On-Site Braga City Walk · 27-28 Nov 2026',
     },
     {
       id: 'faq-5',

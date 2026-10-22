@@ -73,8 +73,8 @@ export const EVENT_CONFIG = {
       },
       schedule: {
         // [PROVISIONAL] No specific registration open date in documents — using event dates
-        filming: 'Filming: 27–28 November 2026',
-        publication: '27–28 November 2026',
+        filming: 'Filming: 27-28 November 2026',
+        publication: '27-28 November 2026',
         judging: '28 November 2026',
       },
       documentPath: '/syarat-video-lokal.pdf',

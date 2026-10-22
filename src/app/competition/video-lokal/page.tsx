@@ -825,7 +825,7 @@ export default function VideoLokalPage() {
                       />
                       <div className="text-xs text-slate-700 leading-relaxed">
                         <strong className="text-slate-900 block mb-0.5">Kepatuhan Ketentuan Teknis</strong>
-                        Menyetujui ketentuan teknis (durasi maksimal 60 detik, format vertikal 9:16, dan shooting di Braga 27–28 Nov 2026).
+                        Menyetujui ketentuan teknis (durasi maksimal 60 detik, format vertikal 9:16, dan shooting di Braga 27-28 Nov 2026).
                       </div>
                     </label>
 
