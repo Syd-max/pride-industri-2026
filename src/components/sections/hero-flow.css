@@ -71,7 +71,8 @@
     url('/BRAGA_DE_VRIES_LANDMARK.jpg') type('image/jpeg')
   );
   background-size: cover;
-  background-position: center 32%;
+  background-position: center center;
+  background-repeat: no-repeat;
   filter: blur(35px) brightness(0.32) saturate(1.15);
   transform: scale(1.08);
   pointer-events: none;
@@ -88,7 +89,7 @@
     radial-gradient(ellipse 90% 70% at 50% 32%, rgba(7, 10, 19, 0.35) 25%, rgba(7, 10, 19, 0.85) 100%),
     url('/BRAGA_DE_VRIES_LANDMARK.webp');
   background-repeat: no-repeat;
-  background-position: center 30%;
+  background-position: center center;
   background-size: cover;
   pointer-events: none;
   -webkit-backface-visibility: hidden;
@@ -109,7 +110,8 @@
 @media (max-width: 768px) {
   .scenic-bg-photo {
     background-size: cover;
-    background-position: 65% center;
+    background-position: center center;
+    background-repeat: no-repeat;
   }
 }
 
