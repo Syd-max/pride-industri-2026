@@ -122,10 +122,10 @@ export async function POST(
         uploadedFiles['surat_persetujuan_file']?.name || body.surat_persetujuan_file_name || paktaFileName || ''
       );
 
-      // File Size Validations (Revisi 4)
-      if (uploadedFiles['design_file'] && uploadedFiles['design_file'].size > 7 * 1024 * 1024) {
+      // File Size Validations (Sesuai Ketentuan Resmi PDF)
+      if (uploadedFiles['design_file'] && uploadedFiles['design_file'].size > 10 * 1024 * 1024) {
         return NextResponse.json(
-          { success: false, error: 'Ukuran file karya desain kemasan melebihi batas maksimal 7 MB.' },
+          { success: false, error: 'Ukuran file karya desain kemasan melebihi batas maksimal 10 MB.' },
           { status: 400 }
         );
       }
