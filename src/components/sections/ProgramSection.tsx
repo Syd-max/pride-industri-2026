@@ -48,7 +48,7 @@ export default function ProgramSection() {
       title: 'Penyerahan Sertifikat Kelulusan Program 2026',
       location: 'Main Stage · Braga City Walk',
       venueKey: 'braga',
-      desc: 'Seremonial simbolis penyerahan sertifikat jaminan mutu dan kelulusan program Disdagin: 46 Sertifikat Uji Mutu, 25 Sertifikat Halal, dan 93 Sertifikat Kelas Online Program KEMILAU.',
+      desc: 'Seremonial simbolis penyerahan sertifikat jaminan mutu dan kelulusan program Disdagin: 46 Sertifikat Uji Mutu, 25 Sertifikat Halal, dan 96 Sertifikat Kelas Online Program KEMILAU.',
       theme: {
         badgeBg: 'bg-emerald-50',
         badgeText: 'text-emerald-700',
@@ -56,7 +56,7 @@ export default function ProgramSection() {
         dotColor: 'bg-emerald-600',
         accentRing: 'ring-emerald-100',
       },
-      highlights: ['46 Sertifikat Uji Mutu', '25 Sertifikat Halal', '93 Sertifikat Kelas Online KEMILAU'],
+      highlights: ['46 Sertifikat Uji Mutu', '25 Sertifikat Halal', '96 Sertifikat Kelas Online KEMILAU'],
     },
     {
       id: 'd1-3',

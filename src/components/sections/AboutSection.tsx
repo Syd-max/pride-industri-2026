@@ -17,16 +17,16 @@ export default function AboutSection() {
       ],
     },
     {
-      number: '164',
+      number: '167',
       label: 'Sertifikasi & Mutu IKM',
-      desc: 'Penyerahan sertifikat jaminan mutu: 25 Sertifikat Halal, 46 Sertifikat Uji Mutu, dan 93 Sertifikat KEMILAU.',
+      desc: 'Penyerahan sertifikat jaminan mutu: 25 Sertifikat Halal, 46 Sertifikat Uji Mutu, dan 96 Sertifikat KEMILAU.',
       theme: 'green' as const,
       docBadge: 'LEGALITAS & STANDAR MUTU',
       docTitle: 'Daftar Sertifikat Dibagikan',
       docItems: [
         '25 Sertifikat Halal Resmi',
         '46 Sertifikat Uji Mutu',
-        '93 Sertifikat Kelas KEMILAU',
+        '96 Sertifikat Kelas KEMILAU',
       ],
     },
     {
