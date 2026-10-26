@@ -80,6 +80,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  verification: {
+    google: 'lNG_zbyCguYORE93FBNVR40iEat2Hmo_qVg8HFaroAw',
+  },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
