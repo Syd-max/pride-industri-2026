@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Playfair_Display, Inter, Caveat, Plus_Jakarta_Sans, Poppins } from 'next/font/google';
 import './globals.css';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -107,6 +108,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${playfair.variable} ${inter.variable} ${caveat.variable} ${plusJakarta.variable} ${poppins.variable}`}>
       <body>
+        <GoogleAnalytics />
         {children}
       </body>
     </html>
