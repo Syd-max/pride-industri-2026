@@ -40,6 +40,13 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://prideindustri.web.id'),
+  authors: [
+    {
+      name: 'Muhammad Irsyad Andika',
+      url: 'https://www.linkedin.com/in/irsyad-andika/',
+    },
+  ],
+  creator: 'Muhammad Irsyad Andika',
   title: {
     default: 'PRIDE Industri 2026 — Pagelaran Ragam Inovasi dan Eksistensi',
     template: '%s | PRIDE Industri 2026',

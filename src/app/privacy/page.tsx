@@ -1,11 +1,13 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { EVENT_CONFIG } from '@/config/event';
 import TactlinkBanner from '@/components/ui/TactlinkBanner';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Kebijakan Privasi & Perlindungan Data Peserta',
   description:
     'Pemberitahuan kebijakan privasi dan perlindungan data peserta PRIDE Industri 2026 Kota Bandung.',
+  alternates: { canonical: '/privacy' },
 };
 
 export default function PrivacyPage() {
