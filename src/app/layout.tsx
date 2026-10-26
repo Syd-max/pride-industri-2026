@@ -39,7 +39,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://pride-industri-2026.vercel.app'),
+  metadataBase: new URL('https://prideindustri.web.id'),
   title: {
     default: 'PRIDE Industri 2026 — Pagelaran Ragam Inovasi dan Eksistensi',
     template: '%s | PRIDE Industri 2026',
