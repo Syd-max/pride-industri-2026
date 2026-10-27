@@ -111,7 +111,7 @@ export default function CompetitionWelcomeBanner() {
             onClick={closeBanner}
           >
             <span className="cwb-entry-icon"><VideoIcon /></span>
-            <span className="cwb-entry-copy">Daftar <strong>Lomba Video</strong></span>
+            <span className="cwb-entry-copy">Daftar <strong>Lomba<br />Video</strong></span>
             <span className="cwb-entry-button">Daftar sekarang!</span>
           </Link>
 
