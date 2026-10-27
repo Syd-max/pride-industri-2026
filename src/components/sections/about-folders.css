@@ -45,7 +45,7 @@
 }
 
 .folder-card-wrapper:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
 }
 
 .folder-card-wrapper:focus-visible {
@@ -59,7 +59,7 @@
   position: relative;
   width: 100%;
   min-height: 255px;
-  border-radius: 18px 26px 20px 20px;
+  border-radius: 10px 14px 12px 12px;
   overflow: visible;
 }
 
@@ -67,18 +67,14 @@
 .folder-back-body {
   position: absolute;
   inset: 0;
-  border-radius: 16px 24px 18px 18px;
+  border-radius: 9px 13px 11px 11px;
   z-index: 1;
-  box-shadow: 
-    0 12px 28px -6px rgba(0, 0, 0, 0.22),
-    0 4px 10px -2px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 18px -8px rgba(15, 23, 42, 0.34);
   transition: box-shadow 0.3s ease;
 }
 
 .folder-card-wrapper:hover .folder-back-body {
-  box-shadow: 
-    0 20px 36px -8px rgba(0, 0, 0, 0.28),
-    0 8px 16px -4px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 12px 24px -10px rgba(15, 23, 42, 0.4);
 }
 
 /* Asymmetrical Folder Top Tab (Right-aligned, matching user reference image) */
@@ -88,7 +84,7 @@
   right: 14px;
   width: 58%;
   height: 22px;
-  border-radius: 10px 10px 0 0;
+  border-radius: 6px 6px 0 0;
   z-index: 1;
 }
 
@@ -111,7 +107,7 @@
   top: 4px;
   min-height: 200px;
   background: #ffffff;
-  border-radius: 14px 14px 8px 8px;
+  border-radius: 6px 6px 3px 3px;
   border: 1px solid #e2e8f0;
   border-bottom: none;
   box-shadow: 
@@ -120,7 +116,7 @@
   z-index: 5;
   padding: 10px 12px 18px;
   transform: translateY(0);
-  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  transition: transform 0.35s ease, box-shadow 0.2s ease;
   will-change: transform;
 }
 
@@ -213,15 +209,13 @@
   position: relative;
   z-index: 10;
   min-height: 242px;
-  border-radius: 12px 12px 18px 18px;
+  border-radius: 6px 6px 10px 10px;
   padding: 20px 18px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   color: #ffffff;
-  box-shadow: 
-    0 10px 24px -4px rgba(0, 0, 0, 0.25),
-    inset 0 1px 1px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 18px -8px rgba(15, 23, 42, 0.38);
   overflow: hidden;
 }
 
@@ -350,7 +344,7 @@
   background: #1d4ed8;
 }
 .folder-theme-blue .folder-front-pocket {
-  background: linear-gradient(175deg, #2563eb 0%, #1d4ed8 70%, #1e40af 100%);
+  background: #24558a;
 }
 .folder-theme-blue .doc-sheet-badge {
   background: #dbeafe;
@@ -366,7 +360,7 @@
   background: #047857;
 }
 .folder-theme-green .folder-front-pocket {
-  background: linear-gradient(175deg, #059669 0%, #047857 70%, #065f46 100%);
+  background: #2f6b4f;
 }
 .folder-theme-green .doc-sheet-badge {
   background: #d1fae5;
@@ -382,7 +376,7 @@
   background: #b45309;
 }
 .folder-theme-amber .folder-front-pocket {
-  background: linear-gradient(175deg, #d97706 0%, #b45309 70%, #92400e 100%);
+  background: #9a571f;
 }
 .folder-theme-amber .doc-sheet-badge {
   background: #fef3c7;
@@ -398,7 +392,7 @@
   background: #be123c;
 }
 .folder-theme-red .folder-front-pocket {
-  background: linear-gradient(175deg, #e11d48 0%, #be123c 70%, #9f1239 100%);
+  background: #9b384d;
 }
 .folder-theme-red .doc-sheet-badge {
   background: #ffe4e6;
@@ -436,144 +430,4 @@
     transform: translateY(-138px);
   }
 }
-
-/* ─── AMBIENT MOON BLUR TRANSITION (Efek Bulan Nonjol) ──────────────────────
-   Continuous, seamless celestial gradient bridge connecting dark countdown
-   stage (#070a13) into pristine white About section (#ffffff).
-   Zero visible contrast seam: multi-stop perceptual easing, expansive height,
-   full-width atmospheric wash, and luminous moon blur dome.
-─────────────────────────────────────────────────────────────────────────────── */
-.moon-blur-transition {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  height: clamp(200px, 28vw, 320px);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  pointer-events: none;
-}
-
-/* 1. Multi-stop Perceptual Eased Gradient:
-   Holds pure #070a13 for the top 16% so it seamlessly connects to countdown stage,
-   then gently melts into #ffffff with zero visible contrast boundary */
-.moon-transition-gradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    #070a13 0%,
-    #070a13 16%,
-    rgba(7, 10, 19, 0.98) 26%,
-    rgba(8, 13, 26, 0.92) 36%,
-    rgba(11, 18, 36, 0.80) 46%,
-    rgba(16, 26, 52, 0.62) 56%,
-    rgba(28, 44, 80, 0.42) 66%,
-    rgba(56, 78, 122, 0.25) 75%,
-    rgba(110, 136, 184, 0.13) 84%,
-    rgba(180, 202, 236, 0.05) 92%,
-    rgba(240, 246, 253, 0.01) 97%,
-    #ffffff 100%
-  );
-}
-
-/* 2. Moon Glow Cluster Wrapper:
-   CRITICAL ALPHA MASK — Guarantees that any blurred light strictly fades to 0% opacity
-   at the top and bottom bounds (0% and 100%). Eliminates any horizontal cut line or seam! */
-.moon-glow-cluster {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 24%,
-    black 76%,
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 24%,
-    black 76%,
-    transparent 100%
-  );
-}
-
-/* 3. Full-Width Ambient Atmospheric Wash:
-   Softly blankets the left and right flanks with moonlight haze,
-   ensuring the sides never show an abrupt dark-to-light contrast cut */
-.moon-ambient-wash {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse 90% 70% at 50% 50%,
-    rgba(22, 82, 240, 0.22) 0%,
-    rgba(147, 197, 253, 0.15) 35%,
-    rgba(245, 158, 11, 0.09) 65%,
-    transparent 88%
-  );
-  filter: blur(50px);
-}
-
-/* 4. The Protruding Moon Blur Dome ("Blur Nonjol")
-   Luminous elliptical core radiating brilliant moonlight white,
-   celestial blue, and warm amber */
-.moon-blur-dome {
-  position: absolute;
-  top: 48%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(1080px, 96vw);
-  height: clamp(160px, 20vw, 240px);
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse 65% 55% at 50% 50%,
-    rgba(255, 255, 255, 0.96) 0%,
-    rgba(191, 219, 254, 0.72) 20%,
-    rgba(37, 99, 235, 0.38) 42%,
-    rgba(245, 158, 11, 0.18) 64%,
-    transparent 82%
-  );
-  filter: blur(40px);
-  will-change: transform;
-}
-
-/* 5. Soft Diffuse Moonlight Crescent (Feathered, curved optical crest) */
-.moon-diffuse-crescent {
-  position: absolute;
-  top: 44%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(1120px, 98vw);
-  height: clamp(140px, 18vw, 210px);
-  border-radius: 50%;
-  border-top: 2.5px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 
-    0 -8px 24px rgba(255, 255, 255, 0.55),
-    0 -16px 45px rgba(59, 130, 246, 0.35),
-    0 -32px 75px rgba(245, 158, 11, 0.16);
-  filter: blur(10px);
-}
-
-@media (max-width: 640px) {
-  .moon-blur-transition {
-    height: clamp(150px, 24vh, 200px);
-  }
-  .moon-blur-dome {
-    height: 130px;
-    filter: blur(28px);
-  }
-  .moon-diffuse-crescent {
-    height: 110px;
-    filter: blur(6px);
-    border-top-width: 2px;
-  }
-}
-
 

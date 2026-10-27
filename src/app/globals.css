@@ -138,7 +138,7 @@ section[id],
   padding: 0.75rem 1.75rem;
   font-size: 0.9375rem;
   font-weight: 600;
-  border-radius: 9999px; /* Rounded pill style like proposal */
+  border-radius: 6px;
   border: 1.5px solid transparent;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -152,33 +152,30 @@ section[id],
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--pride-blue) 0%, #0040C1 100%);
+  background: var(--pride-blue-dark);
   color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(22, 82, 240, 0.2);
+  box-shadow: none;
 }
 .btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(22, 82, 240, 0.25);
+  background: #002d94;
 }
 
 .btn-red {
-  background: linear-gradient(135deg, var(--pride-red) 0%, #C40E27 100%);
+  background: var(--pride-red-dark);
   color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(229, 25, 55, 0.2);
+  box-shadow: none;
 }
 .btn-red:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(229, 25, 55, 0.25);
+  background: #930d21;
 }
 
 .btn-yellow {
-  background: linear-gradient(135deg, var(--pride-yellow) 0%, #E6A600 100%);
+  background: var(--pride-yellow);
   color: #0F172A;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(255, 184, 0, 0.2);
+  box-shadow: none;
 }
 .btn-yellow:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(255, 184, 0, 0.25);
+  background: var(--pride-yellow-dark);
 }
 
 .btn-outline-blue {
@@ -188,7 +185,6 @@ section[id],
 }
 .btn-outline-blue:hover:not(:disabled) {
   background: var(--pride-blue-light);
-  transform: translateY(-2px);
 }
 
 .btn-ghost {

@@ -61,32 +61,14 @@
   background-color: #070a13;
 }
 
-/* Ambient wide-bleed layer */
-.scenic-bg-ambient {
-  position: absolute;
-  inset: -30px;
-  background-image: url('/BRAGA_DE_VRIES_LANDMARK.jpg');
-  background-image: image-set(
-    url('/BRAGA_DE_VRIES_LANDMARK.webp') type('image/webp'),
-    url('/BRAGA_DE_VRIES_LANDMARK.jpg') type('image/jpeg')
-  );
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  filter: blur(35px) brightness(0.32) saturate(1.15);
-  transform: scale(1.08);
-  pointer-events: none;
-}
-
 /* Crisp, full-bleed Braga Heritage De Vries Landmark Photo */
 .scenic-bg-photo {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    linear-gradient(180deg, rgba(7, 10, 19, 0.72) 0%, rgba(7, 10, 19, 0.45) 28%, rgba(7, 10, 19, 0.75) 65%, rgba(7, 10, 19, 0.96) 100%),
-    radial-gradient(ellipse 90% 70% at 50% 32%, rgba(7, 10, 19, 0.35) 25%, rgba(7, 10, 19, 0.85) 100%),
+  background-image:
+    linear-gradient(180deg, rgba(6, 12, 24, 0.62) 0%, rgba(6, 12, 24, 0.58) 46%, rgba(6, 12, 24, 0.9) 100%),
     url('/BRAGA_DE_VRIES_LANDMARK.webp');
   background-repeat: no-repeat;
   background-position: center center;
@@ -94,17 +76,6 @@
   pointer-events: none;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-}
-
-/* Subtle warm cinematic vignette */
-.scenic-foreground {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: 
-    radial-gradient(circle at 18% 15%, rgba(254, 240, 138, 0.18) 0%, transparent 40%),
-    linear-gradient(0deg, rgba(7, 10, 19, 0.55) 0%, transparent 35%);
-  pointer-events: none;
 }
 
 @media (max-width: 768px) {
@@ -169,158 +140,31 @@
 
   object-fit: contain;
   margin-inline: auto;
-  filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.85));
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.5));
   animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   z-index: 2;
 }
 
-/* Floating Interactive Cursor Badges (Desktop HL: Fesyen, Kuliner, Kriya, Video, Kemasan — Floating Outside Logo) */
-.cursor-badge {
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3.5px 9px;
-  border-radius: 9999px;
-  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: #ffffff;
-  box-shadow: 
-    0 10px 25px -5px rgba(0, 0, 0, 0.5),
-    0 4px 10px -2px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-  z-index: 25;
-  cursor: pointer;
-  pointer-events: auto;
-  opacity: 0;
-  transform: scale(0.65) translateY(8px);
-  transition: 
-    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.3s ease;
-  user-select: none;
-  white-space: nowrap;
-}
-
-.cursor-badge.visible {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-}
-
-.cursor-badge:hover {
-  transform: scale(1.08) translateY(-2px) !important;
-  box-shadow: 
-    0 16px 32px -4px rgba(0, 0, 0, 0.6),
-    0 0 0 1.5px rgba(255, 255, 255, 0.4) inset;
-}
-
-.cursor-badge svg {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  pointer-events: none;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
-}
-
-/* 1. Fesyen Badge (Top-Left Shoulder — Outside Logo) */
-.badge-fesyen {
-  background: var(--flow-blue-accent);
-  top: 3%;
-  right: calc(100% + 14px);
-  left: auto;
-}
-.badge-fesyen svg {
-  bottom: -6px;
-  right: -5px;
-  fill: var(--flow-blue-accent);
-  transform: rotate(135deg);
-}
-
-/* 2. Kuliner Badge (Top-Right Shoulder — Outside Logo) */
-.badge-kuliner {
-  background: var(--flow-orange-accent);
-  top: 3%;
-  left: calc(100% + 14px);
-  right: auto;
-}
-.badge-kuliner svg {
-  bottom: -6px;
-  left: -5px;
-  fill: var(--flow-orange-accent);
-  transform: rotate(-135deg);
-}
-
-/* 3. Kriya & Kerajinan Badge (Mid-Left Shoulder — Outside Logo) */
-.badge-kriya {
-  background: #9333ea;
-  top: 48%;
-  right: calc(100% + 18px);
-  left: auto;
-  transform: translateY(-50%) scale(0.65);
-}
-.badge-kriya.visible {
-  transform: translateY(-50%) scale(1);
-}
-.badge-kriya:hover {
-  transform: translateY(-50%) scale(1.08) !important;
-}
-.badge-kriya svg {
-  top: -6px;
-  right: -5px;
-  fill: #9333ea;
-  transform: rotate(45deg);
-}
-
-/* 4. Video 1 Menit Badge (Bottom-Left Shoulder — Outside Logo) */
-.badge-video {
-  background: var(--flow-rose-accent);
-  bottom: 3%;
-  right: calc(100% + 14px);
-  left: auto;
-}
-.badge-video svg {
-  top: -6px;
-  right: -5px;
-  fill: var(--flow-rose-accent);
-  transform: rotate(45deg);
-}
-
-/* 5. Desain Kemasan Badge (Bottom-Right Shoulder — Outside Logo) */
-.badge-kemasan {
-  background: var(--flow-green-accent);
-  bottom: 3%;
-  left: calc(100% + 14px);
-  right: auto;
-}
-.badge-kemasan svg {
-  top: -6px;
-  left: -5px;
-  fill: var(--flow-green-accent);
-  transform: rotate(-45deg);
-}
-
-/* 2. HIGHLIGHTS — MOBILE ONLY */
+/* 2. EVENT CATEGORIES */
 .pride-highlights,
-.hero-mobile-categories-row {
+.hero-categories-row {
   order: 2;
-  display: none;
+  display: flex;
 
   width: 100%;
-  max-width: 420px;
+  max-width: 720px;
   margin-inline: auto;
 
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 }
 
 /* Highlight chips */
 .pride-highlights > *,
-.hero-mobile-categories-row > * {
+.hero-categories-row > * {
   position: relative;
   flex: 0 1 auto;
   max-width: 100%;
@@ -334,17 +178,15 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 3px 8px;
-  border-radius: 999px;
+  padding: 4px 8px;
+  border-radius: 4px;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-  color: #f8fafc;
+  background: rgba(6, 12, 24, 0.82);
+  border: 1px solid rgba(203, 213, 225, 0.42);
+  box-shadow: none;
+  color: #e2e8f0;
   white-space: nowrap;
   text-align: center;
   box-sizing: border-box;
@@ -366,26 +208,19 @@
   padding: clamp(3px, 0.5vh, 6px) clamp(12px, 1.8vw, 20px);
 
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: 9999px;
-  box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.28),
-    0 2px 6px rgba(0, 0, 0, 0.12);
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
   margin-inline: auto;
   animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
-  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 2;
 }
 
 .pride-institution-logo:hover,
 .hero-organizer-card:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 
-    0 14px 34px rgba(0, 0, 0, 0.34),
-    0 3px 10px rgba(0, 0, 0, 0.16);
+  transform: none;
 }
 
 .pride-institution-logo.visible,
@@ -429,7 +264,7 @@
   display: block;
 }
 
-/* 4. EVENT TITLE + DATE (Sleek, Compact Subtitle Card) */
+/* 4. EVENT TITLE + DATE */
 .pride-event-heading,
 .headline-block {
   order: 4;
@@ -442,15 +277,7 @@
   align-items: center;
   gap: 3px;
 
-  padding: clamp(4px, 0.7vh, 7px) clamp(12px, 1.6vw, 18px);
-  background: rgba(7, 10, 19, 0.8);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 12px;
-  box-shadow: 
-    0 16px 40px -10px rgba(0, 0, 0, 0.8),
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  padding: 0;
   animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
 }
 
@@ -467,7 +294,7 @@
   margin: 0;
 
   font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: clamp(13px, 1.4vw, 17px);
+  font-size: clamp(18px, 2.1vw, 28px);
   line-height: 1.25;
   font-weight: 700;
   text-align: center;
@@ -475,17 +302,15 @@
   overflow-wrap: break-word;
   text-wrap: balance;
   color: #ffffff;
-  text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.9),
-    0 6px 20px rgba(0, 0, 0, 0.95);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .title-amp {
   display: inline-block;
-  color: #f59e0b;
-  font-style: italic;
-  font-weight: 700;
-  padding: 0 4px;
+  color: inherit;
+  font-style: normal;
+  font-weight: inherit;
+  padding: 0;
 }
 
 .pride-event-date,
@@ -495,10 +320,8 @@
   font-size: clamp(11px, 1vw, 13px);
   line-height: 1.3;
   font-weight: 600;
-  color: #93c5fd;
-  text-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.95),
-    0 4px 12px rgba(0, 0, 0, 0.9);
+  color: #f8d35c;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
 }
 
 /* 5. COUNTDOWN — SUPPORTING ELEMENT */
@@ -539,24 +362,18 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 3px 12px;
+  padding: 3px 0;
   font-size: 10.5px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 9999px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
   text-decoration: none;
   transition: all 0.25s ease;
 }
 
 .scroll-cue-pill:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.22);
-  transform: translateY(1px);
+  border-color: #ffffff;
 }
 
 @keyframes heroFadeUp {
@@ -583,52 +400,9 @@
   max-width: 100%;
 }
 
-/* ==========================================
-   DESKTOP — FLOATING HIGHLIGHT BADGES
-   ========================================== */
+/* Desktop adjustments */
 
 @media (min-width: 769px) {
-  .pride-highlights,
-  .hero-mobile-categories-row {
-    display: none !important;
-  }
-
-  /* Desktop Floating Cursor Badges (Positioned cleanly outside the PRIDE logo) */
-  .cursor-badge {
-    display: inline-flex !important;
-  }
-
-  .badge-fesyen {
-    top: 3%;
-    right: calc(100% + 14px);
-    left: auto;
-  }
-
-  .badge-kuliner {
-    top: 3%;
-    left: calc(100% + 14px);
-    right: auto;
-  }
-
-  .badge-kriya {
-    top: 48%;
-    right: calc(100% + 18px);
-    left: auto;
-    transform: translateY(-50%);
-  }
-
-  .badge-video {
-    bottom: 3%;
-    right: calc(100% + 14px);
-    left: auto;
-  }
-
-  .badge-kemasan {
-    bottom: 3%;
-    left: calc(100% + 14px);
-    right: auto;
-  }
-
   .pride-hero,
   .flow-hero-section {
     gap: clamp(10px, 1.6vh, 20px);
@@ -670,34 +444,23 @@
   .headline-block {
     gap: 3px;
     max-width: clamp(280px, 34vw, 440px);
-    padding: 5px 18px;
+    padding: 0;
   }
 
   .pride-event-title,
   .hero-title-clean {
-    font-size: clamp(13px, 1.4vw, 17px);
+    font-size: clamp(18px, 2.1vw, 28px);
   }
 
   .pride-event-date,
   .hero-subtitle-clean {
-    font-size: 11.5px;
+    font-size: 12.5px;
   }
 }
 
-/* ==========================================
-   MOBILE — SHOW HIGHLIGHTS UNDER PRIDE LOGO
-   ========================================== */
+/* Mobile adjustments */
 
 @media (max-width: 768px) {
-  .cursor-badge,
-  .badge-fesyen,
-  .badge-kuliner,
-  .badge-kriya,
-  .badge-video,
-  .badge-kemasan {
-    display: none !important;
-  }
-
   .pride-hero,
   .flow-hero-section {
     min-height: 100svh;
@@ -719,7 +482,7 @@
   }
 
   .pride-highlights,
-  .hero-mobile-categories-row {
+  .hero-categories-row {
     display: flex !important;
     gap: 5px;
   }
@@ -738,12 +501,12 @@
   .headline-block {
     gap: 2px;
     max-width: min(92vw, 340px);
-    padding: 4px 12px;
+    padding: 0;
   }
 
   .pride-event-title,
   .hero-title-clean {
-    font-size: clamp(12.5px, 3.8vw, 15px);
+    font-size: clamp(18px, 5vw, 22px);
     line-height: 1.25;
   }
 

@@ -62,54 +62,16 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="relative pt-0 pb-6 sm:pb-8 lg:pb-16 bg-white overflow-hidden"
+      className="relative pt-12 pb-8 sm:pt-16 sm:pb-10 lg:pt-20 lg:pb-16 bg-white overflow-hidden"
       aria-label="Tentang PRIDE Industri 2026"
     >
-      {/* ── AMBIENT MOON BLUR TRANSITION (Efek Bulan Nonjol) ── */}
-      <div className="moon-blur-transition" aria-hidden="true">
-        {/* Seamless multi-stop eased gradient bridge */}
-        <div className="moon-transition-gradient" />
-
-        {/* Masked Moon Glow Cluster (fades to strictly 0% opacity at top & bottom borders) */}
-        <div className="moon-glow-cluster">
-          {/* Full-width atmospheric moonlight wash */}
-          <div className="moon-ambient-wash" />
-
-          {/* Protruding Moon Blur Dome (The "Blur Nonjol Efek Bulan") */}
-          <div className="moon-blur-dome" />
-
-          {/* Soft Diffuse Moonlight Crescent (No harsh cuts, pure feathered horizon light) */}
-          <div className="moon-diffuse-crescent" />
-        </div>
-      </div>
-
-      {/* Background Architectural Accent: Subtle Blueprint Dot Grid & Ambient Warm Mesh */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-40" 
-        style={{
-          top: '240px',
-          backgroundImage: 'radial-gradient(#94a3b8 0.75px, transparent 0.75px)',
-          backgroundSize: '24px 24px',
-          maskImage: 'radial-gradient(ellipse 70% 60% at 50% 25%, black 15%, transparent 75%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 25%, black 15%, transparent 75%)'
-        }} 
-      />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-4 sm:pt-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 relative">
           
-          {/* Apple Style Frosted Status Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-50 text-slate-700 border border-slate-200/90 shadow-2xs mb-4">
-            <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-            <span>Tentang Acara</span>
-          </div>
-
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Panggung Kehormatan Kreativitas{' '}
-            <span className="font-serif italic font-normal text-blue-600 px-1">&amp;</span>{' '}
-            Industri Lokal Bandung
+            Panggung Kehormatan Kreativitas &amp; Industri Lokal Bandung
           </h2>
 
           <p className="mt-3 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto font-medium">

@@ -10,8 +10,8 @@
 
 :root {
   --deck-bg-page: #f8fafc;
-  --deck-card-radius: 28px;
-  --deck-card-radius-sm: 20px;
+  --deck-card-radius: 12px;
+  --deck-card-radius-sm: 10px;
   --deck-card-width: 380px;
   --deck-card-height: 470px;
   --deck-card-gap: 24px;
@@ -44,15 +44,8 @@
   user-select: none;
 }
 
-/* Subtle dot matrix architectural backdrop */
 .activities-stage::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(#cbd5e1 0.75px, transparent 0.75px);
-  background-size: 24px 24px;
-  opacity: 0.6;
-  pointer-events: none;
+  content: none;
 }
 
 /* ==========================================
@@ -121,7 +114,7 @@
   height: var(--deck-card-height) !important;
   border-radius: var(--deck-card-radius);
   overflow: hidden;
-  box-shadow: 0 10px 32px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
   transform: scale(0.95);
   opacity: 0.78;
   transform-origin: center center;
@@ -136,11 +129,9 @@
 
 /* Active card at the focal center slot */
 .activities-card.is-active {
-  transform: scale(1.03);
+  transform: scale(1);
   opacity: 1;
-  box-shadow:
-    0 20px 48px rgba(15, 23, 42, 0.14),
-    0 0 0 1.5px rgba(15, 23, 42, 0.09);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
 }
 
 .activities-card:hover:not(.is-active) {
@@ -166,7 +157,7 @@
 }
 
 .deck-cover-card::before {
-  background: linear-gradient(90deg, #e51937 0%, #009e49 20%, #f69321 40%, #ffb800 60%, #1652f0 80%, #8b5cf6 100%);
+  background: #0f172a;
   display: block;
 }
 
@@ -181,8 +172,8 @@
    CARD 0: ELEGANT & AESTHETIC COVER CARD ("TUJUAN KEGIATAN")
    ========================================================================== */
 .deck-cover-card {
-  background: linear-gradient(145deg, #ffffff 0%, #fffbfc 55%, #fff1f2 100%);
-  border: 1.5px solid #fecdd3;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
   padding: clamp(20px, 3.2vh, 36px) clamp(24px, 3.8vw, 44px);
   display: flex !important;
   flex-direction: column !important;
@@ -365,80 +356,80 @@
 /* ─── 6 Proposal Themes ─── */
 /* Theme 1: Vibrant Red */
 .theme-red {
-  background: linear-gradient(145deg, #ffffff 0%, #fff5f6 50%, #ffe4e6 100%);
-  border: 1.5px solid #fecdd3;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 .theme-red .decor-blob-1 { background: #e51937; }
 .theme-red .decor-blob-2 { background: #fda4af; }
 .theme-red .deck-goal-num,
 .theme-red .deck-goal-verb {
   color: #e51937;
-  text-shadow: 0 4px 20px rgba(229, 25, 55, 0.15);
+  text-shadow: none;
 }
 
 /* Theme 2: Emerald Green */
 .theme-green {
-  background: linear-gradient(145deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
-  border: 1.5px solid #bbf7d0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 .theme-green .decor-blob-1 { background: #009e49; }
 .theme-green .decor-blob-2 { background: #86efac; }
 .theme-green .deck-goal-num,
 .theme-green .deck-goal-verb {
   color: #009e49;
-  text-shadow: 0 4px 20px rgba(0, 158, 73, 0.15);
+  text-shadow: none;
 }
 
 /* Theme 3: Warm Orange */
 .theme-orange {
-  background: linear-gradient(145deg, #ffffff 0%, #fff7ed 50%, #ffedd5 100%);
-  border: 1.5px solid #fed7aa;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 .theme-orange .decor-blob-1 { background: #f69321; }
 .theme-orange .decor-blob-2 { background: #fdba74; }
 .theme-orange .deck-goal-num,
 .theme-orange .deck-goal-verb {
   color: #ea580c;
-  text-shadow: 0 4px 20px rgba(234, 88, 12, 0.15);
+  text-shadow: none;
 }
 
 /* Theme 4: Golden Yellow */
 .theme-yellow {
-  background: linear-gradient(145deg, #ffffff 0%, #fefce8 50%, #fef9c3 100%);
-  border: 1.5px solid #fef08a;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 .theme-yellow .decor-blob-1 { background: #ffb800; }
 .theme-yellow .decor-blob-2 { background: #fde047; }
 .theme-yellow .deck-goal-num,
 .theme-yellow .deck-goal-verb {
   color: #d97706;
-  text-shadow: 0 4px 20px rgba(217, 119, 6, 0.15);
+  text-shadow: none;
 }
 
 /* Theme 5: Royal Blue */
 .theme-blue {
-  background: linear-gradient(145deg, #ffffff 0%, #eff6ff 50%, #dbeafe 100%);
-  border: 1.5px solid #bfdbfe;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 .theme-blue .decor-blob-1 { background: #1652f0; }
 .theme-blue .decor-blob-2 { background: #93c5fd; }
 .theme-blue .deck-goal-num,
 .theme-blue .deck-goal-verb {
   color: #1652f0;
-  text-shadow: 0 4px 20px rgba(22, 82, 240, 0.15);
+  text-shadow: none;
 }
 
 /* Theme 6: Creative Purple */
 .theme-purple {
-  background: linear-gradient(145deg, #ffffff 0%, #faf5ff 50%, #f3e8ff 100%);
-  border: 1.5px solid #e9d5ff;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 .theme-purple .decor-blob-1 { background: #8b5cf6; }
 .theme-purple .decor-blob-2 { background: #c4b5fd; }
 .theme-purple .deck-goal-num,
 .theme-purple .deck-goal-verb {
   color: #8b5cf6;
-  text-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+  text-shadow: none;
 }
 
 /* ─── Centered Minimalist Goal Cards ─── */

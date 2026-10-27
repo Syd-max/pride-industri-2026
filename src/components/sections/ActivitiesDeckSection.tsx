@@ -448,15 +448,6 @@ export default function ActivitiesDeckSection() {
                     data-index="0"
                     onClick={(e) => handleCardClick(1, e)}
                   >
-                    {/* Playful Colorful Background Accents */}
-                    <div className="deck-cover-decorations" aria-hidden="true">
-                      <div className="decor-circle decor-red" />
-                      <div className="decor-circle decor-yellow" />
-                      <div className="decor-circle decor-blue" />
-                      <div className="decor-circle decor-green" />
-                      <div className="decor-circle decor-orange" />
-                    </div>
-
                     {/* Center Focal Point: Simple & Aesthetic Font Mix Title */}
                     <div className="deck-cover-center">
                       <h3 className="deck-cover-mix-title">
@@ -478,12 +469,6 @@ export default function ActivitiesDeckSection() {
                   data-index={item.index}
                   onClick={(e) => handleCardClick(nextLogical < TOTAL_BASE ? nextLogical : 0, e)}
                 >
-                  <div className="deck-card-decorations" aria-hidden="true">
-                    <div className="decor-blob decor-blob-1" />
-                    <div className="decor-blob decor-blob-2" />
-                    <div className="decor-ring" />
-                  </div>
-
                   <div className="deck-card-inner-centered">
                     <div className="deck-goal-mix-block">
                       <div className="deck-goal-top-row">
