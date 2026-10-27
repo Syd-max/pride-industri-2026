@@ -69,12 +69,14 @@ export default function HomePage() {
       <Navbar />
       <main id="main-content">
         <HeroSection />
-        <AboutSection />
-        <ActivitiesDeckSection />
-        <ProgramSection />
-        <CompetitionSection />
-        <LocationSection />
-        <FaqSection />
+        <div className="pride-content-flow">
+          <AboutSection />
+          <ActivitiesDeckSection />
+          <ProgramSection />
+          <CompetitionSection />
+          <LocationSection />
+          <FaqSection />
+        </div>
       </main>
       <Footer />
     </div>

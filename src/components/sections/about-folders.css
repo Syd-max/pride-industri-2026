@@ -431,7 +431,7 @@
   }
 }
 
-/* Moonlight horizon bridge from the dark hero (#070a13) directly into the white About section.
+/* Moonlight horizon bridge from the dark hero (#070a13) into the shared content canvas.
    100% mathematically continuous: zero lines, zero banding steps, pure organic gradient flow. */
 .moon-blur-transition {
   position: relative;
@@ -446,7 +446,7 @@
 
 /* Buttery-smooth perceptual gradient:
    Holds pure #070a13 for the top 18% so it locks into hero with ZERO jump/seam.
-   Reaches and holds pure #ffffff for the bottom 5% so it locks into about with ZERO line. */
+   Reaches and holds the shared #f2f4ef canvas so it locks into About with zero line. */
 .moon-transition-gradient {
   position: absolute;
   inset: 0;
@@ -460,8 +460,8 @@
     #3b66ad 66%,
     #79a3e6 78%,
     #cde0fb 88%,
-    #ffffff 96%,
-    #ffffff 100%
+    #f2f4ef 96%,
+    #f2f4ef 100%
   );
 }
 
@@ -489,10 +489,10 @@
   border-radius: 50%;
   background: radial-gradient(
     ellipse 50% 60% at 50% 70%,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.75) 25%,
-    rgba(255, 255, 255, 0.35) 45%,
-    rgba(255, 255, 255, 0.08) 65%,
+    rgba(242, 244, 239, 0.95) 0%,
+    rgba(242, 244, 239, 0.75) 25%,
+    rgba(242, 244, 239, 0.35) 45%,
+    rgba(242, 244, 239, 0.08) 65%,
     transparent 80%
   );
   filter: blur(20px);
