@@ -120,7 +120,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation & Action */}
-          <div className="hidden md:flex items-center gap-6 lg:gap-8">
+          <div className="hidden lg:flex items-center gap-6 lg:gap-8">
             <nav
               aria-label="Navigasi utama"
               className="flex items-center gap-6 lg:gap-7"
@@ -181,7 +181,7 @@ export default function Navbar() {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((prev) => !prev)}
-            className={`md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 p-2 rounded-xl border transition-colors cursor-pointer ${
+            className={`lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 p-2 rounded-xl border transition-colors cursor-pointer ${
               scrolled
                 ? 'border-slate-200 text-slate-700 hover:bg-slate-50'
                 : 'border-white/20 text-white hover:bg-white/10'
@@ -211,7 +211,7 @@ export default function Navbar() {
         id="mobile-menu"
         ref={menuRef}
         aria-hidden={!menuOpen}
-        className={`fixed inset-x-0 top-[60px] sm:top-[68px] bottom-0 z-40 bg-white/98 backdrop-blur-2xl transition-all duration-300 md:hidden flex flex-col justify-between p-5 sm:p-6 overflow-y-auto overscroll-contain max-h-[calc(100dvh-60px)] shadow-2xl ${
+        className={`fixed inset-x-0 top-[60px] sm:top-[68px] bottom-0 z-40 bg-white/98 backdrop-blur-2xl transition-all duration-300 lg:hidden flex flex-col justify-between p-5 sm:p-6 overflow-y-auto overscroll-contain max-h-[calc(100dvh-60px)] shadow-2xl ${
           menuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-2'
         }`}
       >

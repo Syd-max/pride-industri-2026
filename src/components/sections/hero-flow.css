@@ -43,12 +43,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   box-sizing: border-box;
-  padding:
-    max(calc(68px + var(--hero-padding-y)), calc(68px + env(safe-area-inset-top, 0px)))
-    var(--hero-padding-x)
-    max(var(--hero-padding-y), env(safe-area-inset-bottom, 0px));
+  padding: 0;
   z-index: 20;
 }
 
@@ -121,19 +118,21 @@
 .flow-hero-section,
 .pride-hero {
   width: 100%;
-  min-height: 100svh;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+  min-height: 540px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  gap: clamp(12px, 1.8vh, 22px);
+  gap: clamp(6px, 1.1vh, 12px);
   padding:
-    max(calc(64px + clamp(14px, 2.5vh, 28px)), calc(64px + env(safe-area-inset-top, 0px)))
+    max(calc(68px + clamp(6px, 1.2vh, 12px)), calc(68px + env(safe-area-inset-top, 0px)))
     24px
-    max(clamp(14px, 2.5vh, 28px), env(safe-area-inset-bottom, 0px));
+    max(clamp(6px, 1.2vh, 12px), env(safe-area-inset-bottom, 0px));
 
   box-sizing: border-box;
   text-align: center;
@@ -473,6 +472,14 @@
   line-height: 1.3;
 }
 
+.pride-countdown .launch-countdown-container {
+  padding: clamp(6px, 0.9vh, 9px) clamp(10px, 1.4vw, 14px) clamp(5px, 0.7vh, 7px);
+}
+
+.pride-countdown .launch-stat-col {
+  padding-block: clamp(4px, 0.8vh, 7px);
+}
+
 /* 6. SCROLL CUE */
 .mobile-scroll-cue {
   order: 6;
@@ -540,7 +547,7 @@
 
   .pride-hero,
   .flow-hero-section {
-    gap: clamp(10px, 1.6vh, 20px);
+    gap: clamp(6px, 1vh, 11px);
   }
 
   .pride-logo,
@@ -593,6 +600,13 @@
   }
 }
 
+@media (min-width: 769px) and (min-height: 850px) {
+  .pride-hero,
+  .flow-hero-section {
+    padding-bottom: max(10vh, env(safe-area-inset-bottom, 0px));
+  }
+}
+
 /* Mobile adjustments */
 
 @media (max-width: 768px) {
@@ -618,13 +632,14 @@
 
   .pride-hero,
   .flow-hero-section {
-    min-height: 100svh;
+    height: 100dvh;
+    min-height: 540px;
     justify-content: center;
-    gap: 12px;
+    gap: clamp(6px, 1vh, 9px);
     padding:
-      max(calc(60px + 14px), calc(60px + env(safe-area-inset-top, 0px)))
-      16px
-      max(14px, env(safe-area-inset-bottom, 0px));
+      max(calc(60px + 6px), calc(60px + env(safe-area-inset-top, 0px)))
+      14px
+      max(6px, env(safe-area-inset-bottom, 0px));
   }
 
   .pride-logo,
@@ -703,16 +718,20 @@
 @media (max-height: 650px) {
   .pride-hero,
   .flow-hero-section {
-    gap: 10px;
-    padding-block: 14px;
+    gap: 5px;
+    padding:
+      max(calc(68px + 4px), calc(68px + env(safe-area-inset-top, 0px)))
+      14px
+      max(4px, env(safe-area-inset-bottom, 0px));
     height: auto !important;
-    min-height: 100vh !important;
+    min-height: 100dvh !important;
   }
 
   .pride-logo,
   .hero-logo,
   .hero-logo-wrap {
-    max-height: 27svh;
+    width: clamp(180px, 52vw, 300px);
+    max-height: 24svh;
   }
 
   .pride-event-title,
