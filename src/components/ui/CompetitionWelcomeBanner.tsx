@@ -47,101 +47,6 @@ function ChefHatIcon() {
   );
 }
 
-function BatagorIcon() {
-  return (
-    <svg viewBox="0 0 110 80" fill="none" aria-hidden="true">
-      <g transform="rotate(2, 55, 40)">
-        {/* Vector Shadow */}
-        <ellipse cx="55" cy="54" rx="46" ry="18" fill="#000" />
-        {/* Ceramic Plate */}
-        <ellipse cx="55" cy="46" rx="45" ry="20" fill="#F8FAFC" stroke="#000" strokeWidth="3.5" />
-        <ellipse cx="55" cy="46" rx="36" ry="14" fill="#E2E8F0" />
-        {/* Peanut Sauce */}
-        <ellipse cx="55" cy="45" rx="26" ry="10" fill="#92400E" stroke="#000" strokeWidth="1.5" />
-        {/* Crispy Fried Wonton / Batagor Triangles */}
-        <polygon points="26,42 42,22 48,44" fill="#F59E0B" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <polygon points="40,40 60,18 68,44" fill="#FBBF24" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <polygon points="58,43 76,23 84,44" fill="#F59E0B" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        {/* Kecap drizzle */}
-        <path d="M 38,42 Q 52,38 66,42 Q 74,40 78,44" stroke="#451A03" strokeWidth="2.5" strokeLinecap="round" />
-        {/* Fresh Limau Slice */}
-        <circle cx="32" cy="47" r="7" fill="#84CC16" stroke="#000" strokeWidth="2" />
-        <circle cx="32" cy="47" r="4" fill="#ECFCCB" stroke="#000" strokeWidth="1.5" />
-        {/* Pill Label: BATAGOR */}
-        <rect x="24" y="55" width="62" height="18" rx="9" fill="#0F172A" stroke="#FFC700" strokeWidth="2" />
-        <text
-          x="55"
-          y="68"
-          textAnchor="middle"
-          fill="#FFC700"
-          fontFamily="var(--font-poppins), 'Poppins', sans-serif"
-          fontSize="10"
-          fontWeight="900"
-          letterSpacing="1"
-        >
-          BATAGOR
-        </text>
-      </g>
-    </svg>
-  );
-}
-
-function ShoeIcon() {
-  return (
-    <svg viewBox="0 0 120 70" fill="none" aria-hidden="true">
-      <g transform="rotate(-4, 60, 35)">
-        {/* Vector Shadow */}
-        <ellipse cx="60" cy="58" rx="46" ry="8" fill="#000" />
-        {/* Thick White Rubber Outsole */}
-        <path
-          d="M 12,48 C 16,48 40,49 65,49 C 90,49 106,47 110,42 C 110,48 102,54 84,55 C 60,56 22,56 12,53 Z"
-          fill="#FFFFFF"
-          stroke="#000"
-          strokeWidth="3"
-          strokeLinejoin="round"
-        />
-        {/* Sole Tread Line */}
-        <path d="M 16,51 L 104,50" stroke="#000" strokeWidth="2" />
-        {/* Upper Body (Bright Cibaduyut Red / Orange) */}
-        <path
-          d="M 12,48 C 14,35 26,24 44,20 C 54,18 64,24 72,28 C 84,32 98,35 108,42 C 105,48 85,49 65,49 C 40,49 16,48 12,48 Z"
-          fill="#EA580C"
-          stroke="#000"
-          strokeWidth="3"
-          strokeLinejoin="round"
-        />
-        {/* White Toe Cap */}
-        <path
-          d="M 90,34 C 98,35 106,39 108,42 C 103,45 94,46 88,45 C 86,40 88,36 90,34 Z"
-          fill="#FFFFFF"
-          stroke="#000"
-          strokeWidth="2.5"
-        />
-        {/* White Classic Wave Stripe */}
-        <path d="M 34,25 C 46,33 66,39 88,41" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
-        {/* White Shoelaces */}
-        <line x1="50" y1="23" x2="56" y2="28" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" />
-        <line x1="58" y1="26" x2="64" y2="31" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" />
-        <line x1="66" y1="29" x2="72" y2="34" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" />
-        {/* Pill Label: SEPATU */}
-        <rect x="30" y="53" width="56" height="15" rx="7.5" fill="#0F172A" stroke="#FFC700" strokeWidth="1.5" />
-        <text
-          x="58"
-          y="64"
-          textAnchor="middle"
-          fill="#FFC700"
-          fontFamily="var(--font-poppins), 'Poppins', sans-serif"
-          fontSize="8.5"
-          fontWeight="900"
-          letterSpacing="0.8"
-        >
-          SEPATU
-        </text>
-      </g>
-    </svg>
-  );
-}
-
 /* ─── MAIN COMPONENT ──────────────────────────────────────────────────────── */
 
 export default function CompetitionWelcomeBanner() {
@@ -194,11 +99,9 @@ export default function CompetitionWelcomeBanner() {
           </svg>
         </button>
 
-        {/* 4 Corner Framing Ornaments */}
+        {/* Top Framing Ornaments */}
         <div className="cwb-ornament cwb-ornament-sewing"><SewingMachineIcon /></div>
         <div className="cwb-ornament cwb-ornament-chef"><ChefHatIcon /></div>
-        <div className="cwb-ornament cwb-ornament-batagor"><BatagorIcon /></div>
-        <div className="cwb-ornament cwb-ornament-shoe"><ShoeIcon /></div>
 
         {/* Accessible Title for Screen Readers */}
         <h2 id="competition-banner-title" className="sr-only">

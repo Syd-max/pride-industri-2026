@@ -196,20 +196,6 @@
   width: 60px;
 }
 
-/* Bottom-Left: Batagor (Bandung Culinary) */
-.cwb-ornament-batagor {
-  bottom: 8px;
-  left: 16px;
-  width: 74px;
-}
-
-/* Bottom-Right: Cibaduyut Footwear / Sneaker */
-.cwb-ornament-shoe {
-  bottom: 8px;
-  right: 16px;
-  width: 78px;
-}
-
 /* Smooth Entrance Animations */
 @keyframes cwb-fade-in {
   from { opacity: 0; }
@@ -269,18 +255,6 @@
     top: -10px;
     right: 44px;
     width: 42px;
-  }
-
-  .cwb-ornament-batagor {
-    bottom: 2px;
-    left: 4px;
-    width: 52px;
-  }
-
-  .cwb-ornament-shoe {
-    bottom: 2px;
-    right: 4px;
-    width: 54px;
   }
 
   .cwb-close {
