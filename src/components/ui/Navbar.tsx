@@ -94,38 +94,28 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
-          {/* Logo & Brand Identity */}
+          {/* Logo & Brand Identity (Gambar 2: HD Pop-Art PRIDE INDUSTRI Title) */}
           <Link
             href="/"
             aria-label="PRIDE Industri 2026 — Beranda"
-            className="flex items-center gap-2.5 sm:gap-3.5 group text-decoration-none min-w-0"
+            className="flex items-center group text-decoration-none min-w-0"
           >
-            <div className="relative w-12 sm:w-20 md:w-[84px] h-9 sm:h-12 md:h-[50px] transition-transform duration-200 group-hover:scale-105 filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)] shrink-0">
+            <div
+              className={`relative h-9 sm:h-10 md:h-12 w-36 sm:w-44 md:w-52 transition-all duration-200 group-hover:scale-105 shrink-0 ${
+                scrolled
+                  ? 'filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.2)]'
+                  : 'filter drop-shadow-[0_0_14px_rgba(255,255,255,0.25)] drop-shadow-[0_3px_10px_rgba(0,0,0,0.7)]'
+              }`}
+            >
               <Image
-                src="/LOGO_PRIDE_INDUSTRI.png"
-                alt="Logo PRIDE Industri 2026"
+                src="/LOGO_PRIDE_TITLE.png"
+                alt="PRIDE Industri 2026"
                 fill
-                style={{ objectFit: 'contain' }}
-                sizes="(max-width: 640px) 100px, 180px"
+                style={{ objectFit: 'contain', objectPosition: 'left' }}
+                sizes="(max-width: 640px) 150px, (max-width: 768px) 180px, 210px"
                 priority
-                className="object-contain"
+                className="object-contain object-left"
               />
-            </div>
-            <div className="flex flex-col justify-center min-w-0">
-              <span
-                className={`font-black text-base sm:text-xl tracking-tight leading-none transition-colors truncate ${
-                  scrolled ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-amber-300 drop-shadow-sm'
-                }`}
-              >
-                PRIDE <span className="text-rose-500">INDUSTRI</span>
-              </span>
-              <span
-                className={`text-[9.5px] sm:text-[11px] font-bold tracking-wide sm:tracking-widest uppercase mt-0.5 sm:mt-1 transition-colors truncate ${
-                  scrolled ? 'text-slate-500' : 'text-slate-200 drop-shadow-sm'
-                }`}
-              >
-                27-29 Nov 2026 · Braga Bandung
-              </span>
             </div>
           </Link>
 
