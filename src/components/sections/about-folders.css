@@ -440,8 +440,21 @@
   height: clamp(130px, 15vw, 180px);
   overflow: hidden;
   pointer-events: none;
-  margin-top: -1px;
+  margin: -1px 0 -3px;
+  border: 0;
   background-color: #070a13;
+  box-shadow: none;
+}
+
+.moon-blur-transition::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  height: 5px;
+  background: #f2f4ef;
 }
 
 /* Buttery-smooth perceptual gradient:
@@ -449,7 +462,7 @@
    Reaches and holds the shared #f2f4ef canvas so it locks into About with zero line. */
 .moon-transition-gradient {
   position: absolute;
-  inset: 0;
+  inset: 0 0 -3px;
   background: linear-gradient(
     180deg,
     #070a13 0%,
