@@ -431,18 +431,21 @@
   }
 }
 
-/* Moonlight bridge from the dark hero into the white About section. */
+/* Moonlight horizon bridge from the dark hero (#070a13) directly into the white About section.
+   Compact, seamless celestial bridge: unbroken black connection at top, pure white at bottom. */
 .moon-blur-transition {
   position: relative;
   z-index: 10;
   width: 100%;
-  height: clamp(200px, 28vw, 320px);
+  height: clamp(140px, 16vw, 200px);
   overflow: hidden;
   pointer-events: none;
   margin-top: -1px;
   background-color: #070a13;
 }
 
+/* Seamless vertical sky gradient: Holds pure #070a13 for top 22% so it connects unbroken to hero,
+   then transitions smoothly through midnight twilight into dawn white */
 .moon-transition-gradient {
   position: absolute;
   inset: 0;
@@ -450,86 +453,126 @@
     180deg,
     #070a13 0%,
     #070a13 22%,
-    rgba(8, 13, 26, 0.92) 40%,
-    rgba(16, 26, 52, 0.62) 58%,
-    rgba(56, 78, 122, 0.25) 76%,
-    rgba(180, 202, 236, 0.05) 92%,
+    rgba(8, 14, 28, 0.95) 36%,
+    rgba(15, 28, 60, 0.75) 50%,
+    rgba(30, 64, 130, 0.45) 65%,
+    rgba(125, 175, 245, 0.22) 80%,
+    rgba(255, 255, 255, 0.9) 93%,
     #ffffff 100%
   );
 }
 
+/* CRITICAL ALPHA MASK: Guarantees all glow inside is 100% transparent for top 18%,
+   preventing ANY clipping or horizontal cut line where it joins the hero! */
 .moon-glow-cluster {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 18%,
+    black 45%,
+    black 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 18%,
+    black 45%,
+    black 100%
+  );
 }
 
+/* Wide celestial ambient wash behind the rising moon glow */
 .moon-ambient-wash {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    ellipse 90% 70% at 50% 50%,
-    rgba(22, 82, 240, 0.22) 0%,
-    rgba(147, 197, 253, 0.15) 35%,
-    rgba(245, 158, 11, 0.09) 65%,
-    transparent 88%
+    ellipse 80% 90% at 50% 100%,
+    rgba(37, 99, 235, 0.35) 0%,
+    rgba(96, 165, 250, 0.18) 40%,
+    transparent 75%
   );
-  filter: blur(50px);
+  filter: blur(28px);
 }
 
+/* Wide planetary horizon dome: gentle curvature spanning beyond viewport edges to avoid capsule ends */
 .moon-blur-dome {
   position: absolute;
-  top: 48%;
   left: 50%;
-  width: min(1080px, 96vw);
-  height: clamp(160px, 20vw, 240px);
+  bottom: -40px;
+  width: 170vw;
+  min-width: 1500px;
+  height: clamp(180px, 24vw, 280px);
   border-radius: 50%;
   background: radial-gradient(
-    ellipse 65% 55% at 50% 50%,
-    rgba(255, 255, 255, 0.96) 0%,
-    rgba(191, 219, 254, 0.72) 20%,
-    rgba(37, 99, 235, 0.38) 42%,
-    rgba(245, 158, 11, 0.18) 64%,
-    transparent 82%
+    ellipse 50% 65% at 50% 65%,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.96) 24%,
+    rgba(224, 238, 255, 0.78) 44%,
+    rgba(59, 130, 246, 0.32) 66%,
+    transparent 88%
   );
-  filter: blur(40px);
-  transform: translate(-50%, -50%);
+  filter: blur(24px);
+  transform: translateX(-50%);
 }
 
+/* Diffuse moonlight crest glow — pure soft aura, no harsh border line to prevent any seam */
 .moon-diffuse-crescent {
   position: absolute;
-  top: 44%;
   left: 50%;
-  width: min(1120px, 98vw);
-  height: clamp(140px, 18vw, 210px);
+  bottom: -40px;
+  width: 170vw;
+  min-width: 1500px;
+  height: clamp(180px, 24vw, 280px);
   border-radius: 50%;
-  border-top: 2.5px solid rgba(255, 255, 255, 0.7);
-  box-shadow:
-    0 -8px 24px rgba(255, 255, 255, 0.55),
-    0 -16px 45px rgba(59, 130, 246, 0.35),
-    0 -32px 75px rgba(245, 158, 11, 0.16);
-  filter: blur(10px);
-  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse 45% 60% at 50% 60%,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(191, 219, 254, 0.5) 30%,
+    transparent 65%
+  );
+  filter: blur(14px);
+  transform: translateX(-50%);
+}
+
+/* Seamless bottom fade: ensures the bottom merges with 100% pure #ffffff across entire width */
+.moon-blur-transition::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 35%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.6) 45%,
+    #ffffff 100%
+  );
+  pointer-events: none;
 }
 
 @media (max-width: 640px) {
   .moon-blur-transition {
-    height: clamp(150px, 24vh, 200px);
+    height: clamp(100px, 16vh, 140px);
   }
 
   .moon-blur-dome {
-    height: 130px;
-    filter: blur(28px);
+    bottom: -25px;
+    width: 190vw;
+    min-width: 700px;
+    height: clamp(140px, 22vh, 190px);
+    filter: blur(18px);
   }
 
   .moon-diffuse-crescent {
-    height: 110px;
-    border-top-width: 2px;
-    filter: blur(6px);
+    bottom: -25px;
+    width: 190vw;
+    min-width: 700px;
+    height: clamp(140px, 22vh, 190px);
+    filter: blur(12px);
   }
 }
 
