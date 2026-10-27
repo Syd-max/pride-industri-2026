@@ -1,48 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-
-function VideoIcon() {
-  return (
-    <svg viewBox="0 0 88 90" aria-hidden="true">
-      <circle cx="26" cy="18" r="12" />
-      <circle cx="55" cy="18" r="12" />
-      <rect x="13" y="30" width="55" height="39" rx="7" />
-      <path d="m68 39 17-9v39L68 60Z" />
-      <path d="M26 79h34M43 69v10" />
-    </svg>
-  );
-}
-
-function PackageIcon() {
-  return (
-    <svg viewBox="0 0 88 90" aria-hidden="true">
-      <path d="m12 27 32-17 32 17-32 17Z" />
-      <path d="M12 27v37l32 17 32-17V27M44 44v37" />
-      <path d="m28 18 32 17" />
-    </svg>
-  );
-}
-
-function HomeIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="m3 11 9-8 9 8v10h-6v-7H9v7H3Z" />
-    </svg>
-  );
-}
-
-function OrnamentIcon({ type }: { type: 'sewing' | 'chef' | 'food' | 'shoe' }) {
-  const paths = {
-    sewing: <><path d="M10 54h60v18H10zM21 54V21h35l8 16H42v17M27 29h25M15 72v8M65 72v8" /><circle cx="58" cy="45" r="5" /></>,
-    chef: <><path d="M22 45C6 39 10 17 28 19 34 3 58 6 60 23c18-4 26 19 8 25v25H22Z" /><path d="M23 57h45M32 58v15M58 58v15" /></>,
-    food: <><path d="M13 44h62c-2 22-14 33-31 33S15 66 13 44Z" /><path d="M20 44c4-17 44-17 49 0M27 32l5-14M43 30V13M58 33l7-13" /></>,
-    shoe: <><path d="M9 58c14-1 22-9 29-25l13 9c7 5 15 7 27 9v18H15c-7 0-10-7-6-11Z" /><path d="M39 40l8 6M33 48l8 6M18 69h60" /></>,
-  };
-
-  return <svg viewBox="0 0 88 88" aria-hidden="true">{paths[type]}</svg>;
-}
 
 export default function CompetitionWelcomeBanner() {
   const [isOpen, setIsOpen] = useState(true);
@@ -82,6 +42,7 @@ export default function CompetitionWelcomeBanner() {
         aria-modal="true"
         aria-labelledby="competition-banner-title"
       >
+        {/* Close button with high-contrast circular outline */}
         <button
           type="button"
           className="cwb-close"
@@ -94,42 +55,124 @@ export default function CompetitionWelcomeBanner() {
           </svg>
         </button>
 
-        <span className="cwb-ornament cwb-sewing"><OrnamentIcon type="sewing" /></span>
-        <span className="cwb-ornament cwb-chef"><OrnamentIcon type="chef" /></span>
-        <span className="cwb-ornament cwb-batagor"><OrnamentIcon type="food" /></span>
-        <span className="cwb-ornament cwb-shoe"><OrnamentIcon type="shoe" /></span>
+        {/* 4 Corner Ornaments from Reference Artwork */}
+        <div className="cwb-ornament cwb-ornament-sewing" aria-hidden="true">
+          <Image
+            src="/cwb/ornament-sewing.webp"
+            alt=""
+            width={118}
+            height={122}
+            priority
+            className="cwb-ornament-img"
+          />
+        </div>
 
-        <h2 id="competition-banner-title">
-          Ikuti &amp; daftar
-          <span>lombanya sekarang!</span>
-        </h2>
+        <div className="cwb-ornament cwb-ornament-chef" aria-hidden="true">
+          <Image
+            src="/cwb/ornament-chef.webp"
+            alt=""
+            width={118}
+            height={110}
+            priority
+            className="cwb-ornament-img"
+          />
+        </div>
 
+        <div className="cwb-ornament cwb-ornament-batagor" aria-hidden="true">
+          <Image
+            src="/cwb/ornament-batagor.webp"
+            alt=""
+            width={91}
+            height={62}
+            priority
+            className="cwb-ornament-img"
+          />
+        </div>
+
+        <div className="cwb-ornament cwb-ornament-shoe" aria-hidden="true">
+          <Image
+            src="/cwb/ornament-shoe.webp"
+            alt=""
+            width={123}
+            height={71}
+            priority
+            className="cwb-ornament-img"
+          />
+        </div>
+
+        {/* Header Title */}
+        <div className="cwb-title-wrap">
+          <h2 id="competition-banner-title" className="sr-only">
+            Ikuti &amp; Daftar Lombanya Sekarang!
+          </h2>
+          <Image
+            src="/cwb/banner-title.webp"
+            alt="Ikuti &amp; Daftar Lombanya Sekarang!"
+            width={347}
+            height={90}
+            priority
+            className="cwb-title-img"
+          />
+        </div>
+
+        {/* Side-by-Side Competition Action Badges */}
         <div className="cwb-actions">
+          {/* Lomba Video Card */}
           <Link
             href="/competition/video-lokal#registration-form"
-            className="cwb-entry cwb-entry-video"
+            className="cwb-card cwb-card-video"
             onClick={closeBanner}
+            aria-label="Daftar Lomba Video - Daftar Sekarang!"
           >
-            <span className="cwb-entry-icon"><VideoIcon /></span>
-            <span className="cwb-entry-copy">Daftar <strong>Lomba<br />Video</strong></span>
-            <span className="cwb-entry-button">Daftar sekarang!</span>
+            <span className="sr-only">Daftar Lomba Video - Daftar Sekarang!</span>
+            <Image
+              src="/cwb/card-video.webp"
+              alt="Daftar Lomba Video"
+              width={255}
+              height={205}
+              priority
+              className="cwb-card-img"
+            />
           </Link>
 
+          {/* Lomba Desain Kemasan Card */}
           <Link
             href="/competition/desain-kemasan#registration-form"
-            className="cwb-entry cwb-entry-package"
+            className="cwb-card cwb-card-kemasan"
             onClick={closeBanner}
+            aria-label="Daftar Lomba Desain Kemasan - Daftar Sekarang!"
           >
-            <span className="cwb-entry-icon"><PackageIcon /></span>
-            <span className="cwb-entry-copy">Daftar Lomba <strong>Desain Kemasan</strong></span>
-            <span className="cwb-entry-button">Daftar sekarang!</span>
+            <span className="sr-only">Daftar Lomba Desain Kemasan - Daftar Sekarang!</span>
+            <Image
+              src="/cwb/card-kemasan.webp"
+              alt="Daftar Lomba Desain Kemasan"
+              width={260}
+              height={220}
+              priority
+              className="cwb-card-img"
+            />
           </Link>
         </div>
 
-        <a href="#competitions" className="cwb-home" onClick={closeBanner}>
-          <span>Kembali ke<br />page utama</span>
-          <HomeIcon />
-        </a>
+        {/* Bottom Home Arrow Ribbon */}
+        <div className="cwb-home-wrap">
+          <a
+            href="#competitions"
+            className="cwb-home-ribbon"
+            onClick={closeBanner}
+            aria-label="Kembali ke page utama"
+          >
+            <span className="sr-only">Kembali ke page utama</span>
+            <Image
+              src="/cwb/banner-home.webp"
+              alt="Kembali ke page utama"
+              width={216}
+              height={70}
+              priority
+              className="cwb-home-img"
+            />
+          </a>
+        </div>
       </section>
     </div>
   );
