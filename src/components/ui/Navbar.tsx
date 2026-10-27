@@ -13,9 +13,13 @@ const NAV_LINKS = [
   { label: 'FAQ', href: '#faq' },
 ];
 
+// 26 November 2026, 00:00 WIB.
+const CHECK_IN_VISIBLE_AT = Date.parse('2026-11-25T17:00:00Z');
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [checkInAvailable, setCheckInAvailable] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -44,6 +48,28 @@ export default function Navbar() {
     return () => {
       window.removeEventListener('scroll', onScroll);
       if (rafId !== null) cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  useEffect(() => {
+    let timerId: number | undefined;
+
+    const updateCheckInAvailability = () => {
+      const remaining = CHECK_IN_VISIBLE_AT - Date.now();
+      if (remaining <= 0) {
+        setCheckInAvailable(true);
+        return;
+      }
+
+      timerId = window.setTimeout(
+        updateCheckInAvailability,
+        Math.min(remaining, 2_147_483_647),
+      );
+    };
+
+    updateCheckInAvailability();
+    return () => {
+      if (timerId !== undefined) window.clearTimeout(timerId);
     };
   }, []);
 
@@ -82,6 +108,8 @@ export default function Navbar() {
       }, 60);
     }
   };
+
+  const actionHref = checkInAvailable ? '/check-in' : '/#competitions';
 
   return (
     <>
@@ -147,29 +175,25 @@ export default function Navbar() {
               }`}
             />
 
-            {/* Scan Barcode Action Button */}
+            {/* Registration CTA becomes check-in access on 26 November 2026. */}
             <Link
-              href="/check-in"
+              href={actionHref}
               className={`inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-full transition-all hover:-translate-y-0.5 shadow-sm ${
                 scrolled
                   ? 'text-slate-900 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-sm'
                   : 'text-white bg-white/20 hover:bg-white/30 border border-white/30 backdrop-blur-md shadow-sm'
               }`}
             >
-              <svg
-                className={`w-4 h-4 ${scrolled ? 'text-blue-600' : 'text-emerald-300'}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
-                />
-              </svg>
-              <span>Scan Barcode</span>
+              {checkInAvailable ? (
+                <svg className={`w-4 h-4 ${scrolled ? 'text-blue-600' : 'text-emerald-300'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+              ) : (
+                <svg className={`w-4 h-4 ${scrolled ? 'text-orange-600' : 'text-amber-300'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v14M5 12h14" />
+                </svg>
+              )}
+              <span>{checkInAvailable ? 'Scan Barcode' : 'Daftar Lomba'}</span>
             </Link>
           </div>
 
@@ -239,24 +263,24 @@ export default function Navbar() {
         {/* Bottom Drawer Actions */}
         <div className="space-y-3 pt-4 border-t border-slate-100">
           <Link
-            href="/check-in"
+            href={actionHref}
             onClick={() => setMenuOpen(false)}
-            className="w-full min-h-[46px] py-3 px-4 text-center text-xs sm:text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 active:scale-[0.98] rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all"
+            className={`w-full min-h-[46px] py-3 px-4 text-center text-xs sm:text-sm font-bold active:scale-[0.98] rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all ${
+              checkInAvailable
+                ? 'text-white bg-slate-900 hover:bg-slate-800'
+                : 'text-slate-950 bg-amber-400 hover:bg-amber-300'
+            }`}
           >
-            <svg
-              className="w-4 h-4 text-emerald-400 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
-              />
-            </svg>
-            <span>Scan Barcode Check-In</span>
+            {checkInAvailable ? (
+              <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v14M5 12h14" />
+              </svg>
+            )}
+            <span>{checkInAvailable ? 'Scan Barcode Check-In' : 'Daftar Lomba Sekarang'}</span>
           </Link>
 
           <div className="text-center text-[11px] text-slate-400">
