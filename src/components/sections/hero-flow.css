@@ -703,7 +703,32 @@
   }
 }
 
-@media (max-width: 419px) {
+@media (max-width: 520px) {
+  .scroll-stage,
+  .flow-viewport {
+    min-height: min(100dvh, max(720px, 180vw));
+  }
+
+  .pride-hero,
+  .flow-hero-section {
+    height: min(100dvh, max(720px, 180vw));
+    min-height: min(540px, 100dvh);
+    gap: clamp(7px, 1.2vh, 11px);
+  }
+
+  .pride-logo,
+  .hero-logo,
+  .event-logo,
+  .hero-logo-wrap {
+    width: clamp(210px, 65vw, 285px);
+  }
+
+  .pride-countdown,
+  .countdown,
+  .countdown-container {
+    max-width: min(340px, 92vw);
+  }
+
   .cursor-badge {
     display: none !important;
   }
