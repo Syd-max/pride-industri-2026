@@ -620,3 +620,63 @@ section[id],
 .animate-scanner-laser {
   animation: scanner-laser 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
 }
+
+/* ─── Partner & Sponsor Logo Cards — Human Design Micro-Interactions ───────── */
+@keyframes logo-card-float-a {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3.5px);
+  }
+}
+
+@keyframes logo-card-float-b {
+  0%, 100% {
+    transform: translateY(-3.5px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes logo-sheen-sweep {
+  0% {
+    transform: translateX(-120%) skewX(-20deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(220%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+.logo-float-a {
+  animation: logo-card-float-a 4.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.logo-float-b {
+  animation: logo-card-float-b 5.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.group:hover .logo-float-a,
+.group:hover .logo-float-b {
+  animation-play-state: paused;
+}
+
+.group:hover .logo-sheen-effect {
+  animation: logo-sheen-sweep 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-float-a,
+  .logo-float-b {
+    animation: none !important;
+  }
+}

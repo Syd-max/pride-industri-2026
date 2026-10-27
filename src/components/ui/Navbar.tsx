@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { label: 'Kompetisi', href: '#competitions' },
   { label: 'Lokasi', href: '#location' },
   { label: 'FAQ', href: '#faq' },
+  { label: 'Partner', href: '#partners' },
 ];
 
 const REGISTRATION_LINKS = [

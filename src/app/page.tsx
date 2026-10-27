@@ -7,6 +7,7 @@ import ProgramSection from '@/components/sections/ProgramSection';
 import CompetitionSection from '@/components/sections/CompetitionSection';
 import LocationSection from '@/components/sections/LocationSection';
 import FaqSection from '@/components/sections/FaqSection';
+import PartnersSection from '@/components/sections/PartnersSection';
 import Footer from '@/components/sections/Footer';
 import CompetitionWelcomeBanner from '@/components/ui/CompetitionWelcomeBanner';
 
@@ -76,6 +77,7 @@ export default function HomePage() {
           <CompetitionSection />
           <LocationSection />
           <FaqSection />
+          <PartnersSection />
         </div>
       </main>
       <Footer />
