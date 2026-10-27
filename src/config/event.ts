@@ -59,7 +59,7 @@ export const EVENT_CONFIG = {
         grandFinal: new Date('2026-11-28T00:00:00+07:00'),
       },
       documentPath: '/syarat-desain-kemasan.pdf',
-      assetsLink: 'https://drive.google.com/drive/folders/1vKAXG_SPikZAOlSxSVP9MaqqFw2DOGIR?usp=drive_link',
+      assetsLink: 'https://drive.google.com/drive/folders/1fxBjVGEq5f8Z8jcYj-XT37ixqM18clVX',
     },
     videoLokal: {
       id: 'video-lokal',

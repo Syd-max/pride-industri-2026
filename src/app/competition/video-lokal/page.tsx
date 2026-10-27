@@ -914,7 +914,7 @@ export default function VideoLokalPage() {
                   </div>
 
                   <a
-                    href="https://drive.google.com/drive/folders/1vKAXG_SPikZAOlSxSVP9MaqqFw2DOGIR?usp=drive_link"
+                    href="https://drive.google.com/drive/folders/1fxBjVGEq5f8Z8jcYj-XT37ixqM18clVX"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-50/80 hover:bg-blue-100 border border-blue-200 text-blue-700 text-xs font-bold transition-all cursor-pointer"
