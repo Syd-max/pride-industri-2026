@@ -145,30 +145,30 @@ export default function HeroSection() {
               <span>Lomba Desain Kemasan</span>
               <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
             </div>
-          </div>
 
-          {/* 2. Versi ringkas kategori untuk layar kecil */}
-          <div className="pride-highlights hero-mobile-categories-row md:hidden">
-            <span className="mob-chip mob-chip-fesyen">
-              <FesyenIcon className="w-3.5 h-3.5 shrink-0" />
-              <span>Fesyen Binaan</span>
-            </span>
-            <span className="mob-chip mob-chip-kuliner">
-              <KulinerIcon className="w-3.5 h-3.5 shrink-0" />
-              <span>Kuliner Lokal</span>
-            </span>
-            <span className="mob-chip mob-chip-kriya">
-              <KriyaIcon className="w-3.5 h-3.5 shrink-0" />
-              <span>Kriya &amp; Seni</span>
-            </span>
-            <span className="mob-chip mob-chip-video">
-              <VideoIcon className="w-3.5 h-3.5 shrink-0" />
-              <span>Video 1 Menit</span>
-            </span>
-            <span className="mob-chip mob-chip-kemasan">
-              <KemasanIcon className="w-3.5 h-3.5 shrink-0" />
-              <span>Desain Kemasan</span>
-            </span>
+            {/* Versi ringkas kategori untuk layar kecil */}
+            <div className="pride-highlights hero-mobile-categories-row md:hidden">
+              <span className="mob-chip mob-chip-fesyen">
+                <FesyenIcon className="w-3.5 h-3.5 shrink-0" />
+                <span>Fesyen Binaan</span>
+              </span>
+              <span className="mob-chip mob-chip-kuliner">
+                <KulinerIcon className="w-3.5 h-3.5 shrink-0" />
+                <span>Kuliner Lokal</span>
+              </span>
+              <span className="mob-chip mob-chip-kriya">
+                <KriyaIcon className="w-3.5 h-3.5 shrink-0" />
+                <span>Kriya &amp; Seni</span>
+              </span>
+              <span className="mob-chip mob-chip-video">
+                <VideoIcon className="w-3.5 h-3.5 shrink-0" />
+                <span>Video 1 Menit</span>
+              </span>
+              <span className="mob-chip mob-chip-kemasan">
+                <KemasanIcon className="w-3.5 h-3.5 shrink-0" />
+                <span>Desain Kemasan</span>
+              </span>
+            </div>
           </div>
 
           {/* 3. Logo instansi: tepat di bawah logo PRIDE / highlights, ukuran lebih kecil */}

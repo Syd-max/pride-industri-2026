@@ -710,7 +710,86 @@
 
   .pride-highlights,
   .hero-mobile-categories-row {
-    display: flex !important;
+    position: absolute;
+    inset: 0;
+    display: block !important;
+    width: 100%;
+    max-width: none;
+    pointer-events: none;
+    z-index: 4;
+  }
+
+  .hero-mobile-categories-row .mob-chip {
+    position: absolute;
+    gap: 3px;
+    padding: 3px 5px;
+    border: 1px solid rgba(255, 255, 255, 0.42);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 8px;
+    font-weight: 700;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.34);
+  }
+
+  .hero-mobile-categories-row .mob-chip svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .mob-chip-fesyen {
+    top: 5%;
+    left: -48px;
+    background: var(--flow-blue-accent);
+  }
+
+  .mob-chip-kuliner {
+    top: 5%;
+    right: -48px;
+    background: var(--flow-orange-accent);
+  }
+
+  .mob-chip-kriya {
+    top: 43%;
+    left: -48px;
+    background: #7e22ce;
+  }
+
+  .mob-chip-video {
+    bottom: 5%;
+    left: -48px;
+    background: var(--flow-rose-accent);
+  }
+
+  .mob-chip-kemasan {
+    right: -48px;
+    bottom: 5%;
+    background: var(--flow-green-accent);
+  }
+}
+
+@media (max-width: 350px) {
+  .hero-mobile-categories-row .mob-chip {
+    padding-inline: 4px;
+    font-size: 7.5px;
+  }
+
+  .hero-mobile-categories-row .mob-chip svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .mob-chip-fesyen,
+  .mob-chip-kriya,
+  .mob-chip-video {
+    left: -52px;
+  }
+
+  .mob-chip-kuliner,
+  .mob-chip-kemasan {
+    right: -52px;
   }
 }
 
