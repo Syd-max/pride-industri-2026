@@ -80,39 +80,25 @@ export default function PartnersSection() {
 function PartnerCard({ partner, index }: { partner: PartnerItem; index: number }) {
   const floatClass = index % 2 === 0 ? 'logo-float-a' : 'logo-float-b';
 
-  const cardContent = (
-    <div
-      className={`group relative w-full h-[68px] sm:h-[74px] px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-white border border-slate-200/90 shadow-[0_2px_8px_-2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_20px_-4px_rgba(15,23,42,0.08),0_3px_8px_-2px_rgba(22,82,240,0.06)] hover:border-blue-400/50 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-center overflow-hidden cursor-pointer ${floatClass}`}
-    >
-      {/* Sheen light reflex passing on hover */}
-      <div className="pointer-events-none absolute inset-0 -translate-x-full logo-sheen-effect bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
+  return (
+    <div className="w-full">
+      <div
+        className={`group relative w-full h-[68px] sm:h-[74px] px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-white border border-slate-200/90 shadow-[0_2px_8px_-2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_20px_-4px_rgba(15,23,42,0.08),0_3px_8px_-2px_rgba(22,82,240,0.06)] hover:border-blue-400/50 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-center overflow-hidden cursor-default select-none ${floatClass}`}
+      >
+        {/* Sheen light reflex passing on hover */}
+        <div className="pointer-events-none absolute inset-0 -translate-x-full logo-sheen-effect bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
 
-      {/* Real Logo Image */}
-      <div className="relative w-full h-10 sm:h-11 flex items-center justify-center px-1">
-        <Image
-          src={partner.logoUrl}
-          alt={partner.name}
-          fill
-          sizes="(max-width: 768px) 50vw, 20vw"
-          className="object-contain group-hover:scale-105 transition-all duration-300"
-        />
+        {/* Real Logo Image */}
+        <div className="relative w-full h-10 sm:h-11 flex items-center justify-center px-1">
+          <Image
+            src={partner.logoUrl}
+            alt={partner.name}
+            fill
+            sizes="(max-width: 768px) 50vw, 20vw"
+            className="object-contain group-hover:scale-105 transition-all duration-300 pointer-events-none"
+          />
+        </div>
       </div>
     </div>
   );
-
-  if (partner.website) {
-    return (
-      <a
-        href={partner.website}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={partner.name}
-        className="block w-full"
-      >
-        {cardContent}
-      </a>
-    );
-  }
-
-  return <div className="w-full">{cardContent}</div>;
 }

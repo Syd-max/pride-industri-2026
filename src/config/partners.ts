@@ -11,7 +11,6 @@ export interface PartnerItem {
   category: 'created-by' | 'sponsored-by' | 'support-by' | 'partnership-by';
   role: string;
   logoUrl: string;
-  website?: string;
 }
 
 export const PARTNER_CATEGORIES: PartnerCategoryInfo[] = [
@@ -50,7 +49,6 @@ export const PARTNERS_DATA: PartnerItem[] = [
     category: 'sponsored-by',
     role: 'Official Sponsor & Venue',
     logoUrl: '/LOGO_BRAGA_CITYWALK.png',
-    website: 'https://bragacitywalk.co.id',
   },
 
   // ─── 3. SUPPORT BY (3 Logo) ──────────────────────────────────
@@ -67,7 +65,6 @@ export const PARTNERS_DATA: PartnerItem[] = [
     category: 'support-by',
     role: 'Bank BJB',
     logoUrl: '/LOGO_BANK_BJB.png',
-    website: 'https://bankbjb.co.id',
   },
   {
     id: 'support-tactlink',
@@ -75,7 +72,6 @@ export const PARTNERS_DATA: PartnerItem[] = [
     category: 'support-by',
     role: 'Tactlink Smart Digital Directory',
     logoUrl: '/LOGO_TACTLINK_CROPPED.png',
-    website: 'https://tactlink.id',
   },
 
   // ─── 4. PARTNERSHIP BY (2 Logo) ──────────────────────────────
