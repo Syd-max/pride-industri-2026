@@ -31,7 +31,7 @@
   --bg-main: #FFFFFF;
   --bg-subtle: #F8FAFC;
   --bg-card: #FFFFFF;
-  --pride-content-bg: #F2F4EF;
+  --pride-content-bg: #EEF3F7;
   --border-subtle: #E2E8F0;
   --border-medium: #CBD5E1;
 
@@ -70,11 +70,11 @@
 }
 
 .pride-content-flow .deck-edge-fade.left {
-  background: linear-gradient(90deg, rgba(242, 244, 239, 0.98) 0%, rgba(242, 244, 239, 0.7) 42%, rgba(242, 244, 239, 0) 100%);
+  background: linear-gradient(90deg, rgba(238, 243, 247, 0.98) 0%, rgba(238, 243, 247, 0.7) 42%, rgba(238, 243, 247, 0) 100%);
 }
 
 .pride-content-flow .deck-edge-fade.right {
-  background: linear-gradient(270deg, rgba(242, 244, 239, 0.98) 0%, rgba(242, 244, 239, 0.7) 42%, rgba(242, 244, 239, 0) 100%);
+  background: linear-gradient(270deg, rgba(238, 243, 247, 0.98) 0%, rgba(238, 243, 247, 0.7) 42%, rgba(238, 243, 247, 0) 100%);
 }
 
 /* ─── AESTHETIC CURVED AMPERSAND (&) ──────────────────────────────────────────
