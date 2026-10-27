@@ -59,7 +59,7 @@ export const EVENT_CONFIG = {
         grandFinal: new Date('2026-11-28T00:00:00+07:00'),
       },
       documentPath: '/syarat-desain-kemasan.pdf',
-      assetsLink: 'https://drive.google.com/drive/folders/1fxBjVGEq5f8Z8jcYj-XT37ixqM18clVX',
+      assetsLink: 'https://bit.ly/PRIDE2026LogodanVisualAssets',
     },
     videoLokal: {
       id: 'video-lokal',
@@ -78,6 +78,7 @@ export const EVENT_CONFIG = {
         judging: '28 November 2026',
       },
       documentPath: '/syarat-video-lokal.pdf',
+      assetsLink: 'https://bit.ly/PRIDE2026LogodanVisualAssets',
     },
   },
 
