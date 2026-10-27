@@ -3,9 +3,6 @@ export type PartnerCategory = 'all' | 'created-by' | 'sponsored-by' | 'support-b
 export interface PartnerCategoryInfo {
   id: PartnerCategory;
   title: string;
-  badgeLabel: string;
-  description: string;
-  accentColor: string;
 }
 
 export interface PartnerItem {
@@ -22,106 +19,53 @@ export interface PartnerItem {
 export const PARTNER_CATEGORIES: PartnerCategoryInfo[] = [
   {
     id: 'created-by',
-    title: 'Created By',
-    badgeLabel: 'Penyelenggara Resmi',
-    description: 'Inisiasi dan penyelenggaraan resmi festival oleh pemerintah dan dinas terkait.',
-    accentColor: 'blue',
+    title: 'CREATED BY',
   },
   {
     id: 'sponsored-by',
-    title: 'Sponsored By',
-    badgeLabel: 'Sponsor Resmi',
-    description: 'Mitra sponsor utama dan akselerator kemajuan industri kreatif Kota Bandung.',
-    accentColor: 'amber',
+    title: 'SPONSORED BY',
   },
   {
     id: 'support-by',
-    title: 'Support By',
-    badgeLabel: 'Didukung Oleh',
-    description: 'Fasilitator tempat, ekosistem pembinaan industri, dan komunitas kreatif.',
-    accentColor: 'emerald',
+    title: 'SUPPORT BY',
   },
   {
     id: 'partnership-by',
-    title: 'Partnership By',
-    badgeLabel: 'Mitra & Kolaborasi',
-    description: 'Mitra strategis verifikasi, media publikasi, dan jejaring kolaborator.',
-    accentColor: 'purple',
+    title: 'PARTNERSHIP BY',
   },
 ];
 
 export const PARTNERS_DATA: PartnerItem[] = [
-  // ─── 1. CREATED BY ───────────────────────────────────────────
+  // ─── 1. CREATED BY (1 Logo) ──────────────────────────────────
   {
     id: 'created-disdagin',
     name: 'Disdagin Kota Bandung',
     category: 'created-by',
-    role: 'Penyelenggara Utama',
+    role: 'Penyelenggara Resmi',
     logoUrl: '/LOGOS_GOV_DISDAGIN_KEMILAU_CROPPED.png',
     website: 'https://disdagin.bandung.go.id',
     tag: 'Official Host',
   },
-  {
-    id: 'created-pemkot',
-    name: 'Pemerintah Kota Bandung',
-    category: 'created-by',
-    role: 'Pemerintah Daerah',
-    logoUrl: '/LOGOS_GOV_DISDAGIN_KEMILAU_CROPPED.png',
-    website: 'https://bandung.go.id',
-    tag: 'Government',
-  },
-  {
-    id: 'created-rumah-kemasan',
-    name: 'Rumah Kemasan Disdagin',
-    category: 'created-by',
-    role: 'Inisiator Kompetisi Kemasan',
-    isPlaceholder: true,
-    tag: 'Fasilitasi IKM',
-  },
-  {
-    id: 'created-slot-extra',
-    name: 'Penyelenggara / Co-Host',
-    category: 'created-by',
-    role: 'Slot Penyelenggara',
-    isPlaceholder: true,
-    tag: 'Slot Siap',
-  },
 
-  // ─── 2. SPONSORED BY ─────────────────────────────────────────
+  // ─── 2. SPONSORED BY (2 Logo) ────────────────────────────────
   {
-    id: 'sponsor-platinum',
-    name: 'Platinum Sponsor',
+    id: 'sponsor-01',
+    name: 'Official Sponsor 01',
     category: 'sponsored-by',
     role: 'Main Corporate Partner',
     isPlaceholder: true,
-    tag: 'Platinum Tier',
+    tag: 'Sponsor Slot',
   },
   {
-    id: 'sponsor-gold-1',
-    name: 'Gold Sponsor 01',
+    id: 'sponsor-02',
+    name: 'Official Sponsor 02',
     category: 'sponsored-by',
-    role: 'Official Industry Sponsor',
+    role: 'Official Industry Partner',
     isPlaceholder: true,
-    tag: 'Gold Tier',
-  },
-  {
-    id: 'sponsor-gold-2',
-    name: 'Gold Sponsor 02',
-    category: 'sponsored-by',
-    role: 'Official Financial Sponsor',
-    isPlaceholder: true,
-    tag: 'Gold Tier',
-  },
-  {
-    id: 'sponsor-silver',
-    name: 'Silver Sponsor',
-    category: 'sponsored-by',
-    role: 'Supporting Sponsor',
-    isPlaceholder: true,
-    tag: 'Silver Tier',
+    tag: 'Sponsor Slot',
   },
 
-  // ─── 3. SUPPORT BY ───────────────────────────────────────────
+  // ─── 3. SUPPORT BY (3 Logo) ──────────────────────────────────
   {
     id: 'support-braga-citywalk',
     name: 'Braga City Walk',
@@ -147,16 +91,8 @@ export const PARTNERS_DATA: PartnerItem[] = [
     isPlaceholder: true,
     tag: 'Komunitas IKM',
   },
-  {
-    id: 'support-creative-hub',
-    name: 'Bandung Creative Hub',
-    category: 'support-by',
-    role: 'Dukungan Fasilitas Kreatif',
-    isPlaceholder: true,
-    tag: 'Creative Ecosystem',
-  },
 
-  // ─── 4. PARTNERSHIP BY ───────────────────────────────────────
+  // ─── 4. PARTNERSHIP BY (2 Logo) ──────────────────────────────
   {
     id: 'partner-tactlink',
     name: 'Tactlink',
@@ -164,30 +100,14 @@ export const PARTNERS_DATA: PartnerItem[] = [
     role: 'Official Verification & Platform',
     logoUrl: '/LOGO_TACTLINK_CROPPED.png',
     website: 'https://tactlink.id',
-    tag: 'Tech & Verification',
+    tag: 'Platform Partner',
   },
   {
-    id: 'partner-media-1',
+    id: 'partner-media',
     name: 'Official Media Partner',
     category: 'partnership-by',
     role: 'Liputan Nasional & Lokal',
     isPlaceholder: true,
     tag: 'Media Partner',
-  },
-  {
-    id: 'partner-broadcast',
-    name: 'Radio & Broadcast Network',
-    category: 'partnership-by',
-    role: 'Publikasi Media Siar',
-    isPlaceholder: true,
-    tag: 'Broadcast',
-  },
-  {
-    id: 'partner-community',
-    name: 'Creative Community Network',
-    category: 'partnership-by',
-    role: 'Kolaborasi Komunitas Desain & Video',
-    isPlaceholder: true,
-    tag: 'Community',
   },
 ];
