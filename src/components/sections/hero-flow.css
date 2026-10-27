@@ -202,6 +202,19 @@
   width: 13px;
   height: 13px;
   pointer-events: none;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cursor-badge:hover {
+  transform: scale(1.08) translateY(-2px) !important;
+  animation-play-state: paused !important;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.5) !important;
+  cursor: default;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+.cursor-badge:hover svg {
+  transform: scale(1.15);
 }
 
 .badge-fesyen {
@@ -209,16 +222,23 @@
   right: calc(100% + 14px);
   background: var(--flow-blue-accent);
 }
+.badge-fesyen.visible {
+  animation: badge-float-fesyen 4.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.3s infinite;
+}
 .badge-fesyen svg {
   right: -5px;
   bottom: -6px;
   fill: var(--flow-blue-accent);
   transform: rotate(135deg);
 }
+
 .badge-kuliner {
   top: 3%;
   left: calc(100% + 14px);
   background: var(--flow-orange-accent);
+}
+.badge-kuliner.visible {
+  animation: badge-float-kuliner 5.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.2s infinite;
 }
 .badge-kuliner svg {
   bottom: -6px;
@@ -226,6 +246,7 @@
   fill: var(--flow-orange-accent);
   transform: rotate(-135deg);
 }
+
 .badge-kriya {
   top: 48%;
   right: calc(100% + 18px);
@@ -234,6 +255,10 @@
 }
 .badge-kriya.visible {
   transform: translateY(-50%) scale(1);
+  animation: badge-float-kriya 5.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.4s infinite;
+}
+.badge-kriya:hover {
+  transform: translateY(calc(-50% - 2px)) scale(1.08) !important;
 }
 .badge-kriya svg {
   top: -6px;
@@ -241,10 +266,14 @@
   fill: #7e22ce;
   transform: rotate(45deg);
 }
+
 .badge-video {
   right: calc(100% + 14px);
   bottom: 3%;
   background: var(--flow-rose-accent);
+}
+.badge-video.visible {
+  animation: badge-float-video 4.9s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.5s infinite;
 }
 .badge-video svg {
   top: -6px;
@@ -252,16 +281,120 @@
   fill: var(--flow-rose-accent);
   transform: rotate(45deg);
 }
+
 .badge-kemasan {
   bottom: 3%;
   left: calc(100% + 14px);
   background: var(--flow-green-accent);
+}
+.badge-kemasan.visible {
+  animation: badge-float-kemasan 5.3s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.35s infinite;
 }
 .badge-kemasan svg {
   top: -6px;
   left: -5px;
   fill: var(--flow-green-accent);
   transform: rotate(-45deg);
+}
+
+/* ─── Zero-Gravity Floating Keyframes for Badges ─── */
+@keyframes badge-float-fesyen {
+  0%, 100% {
+    transform: scale(1) translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: scale(1) translateY(-5px) rotate(-1.5deg);
+  }
+}
+
+@keyframes badge-float-kuliner {
+  0%, 100% {
+    transform: scale(1) translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: scale(1) translateY(-6px) rotate(1.5deg);
+  }
+}
+
+@keyframes badge-float-kriya {
+  0%, 100% {
+    transform: translateY(-50%) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translateY(calc(-50% - 5px)) scale(1.02) rotate(-1.2deg);
+  }
+}
+
+@keyframes badge-float-video {
+  0%, 100% {
+    transform: scale(1) translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: scale(1) translateY(-5px) rotate(1deg);
+  }
+}
+
+@keyframes badge-float-kemasan {
+  0%, 100% {
+    transform: scale(1) translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: scale(1) translateY(-6px) rotate(-1.2deg);
+  }
+}
+
+/* ─── Hero Pop-Art Logo Ambient Float & Glow ─── */
+@keyframes hero-logo-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3.5px);
+  }
+}
+
+.hero-floating-logo-img {
+  animation: hero-logo-float 6.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform;
+}
+
+.hero-logo-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 110%;
+  height: 110%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.12) 0%, rgba(22, 82, 240, 0.08) 50%, transparent 75%);
+  filter: blur(28px);
+  pointer-events: none;
+  z-index: 1;
+  animation: hero-glow-pulse 5.5s ease-in-out infinite alternate;
+}
+
+@keyframes hero-glow-pulse {
+  0% {
+    opacity: 0.35;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  100% {
+    opacity: 0.75;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+/* ─── Scroll Cue Gentle Downward Guide ─── */
+@keyframes scroll-arrow-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(3.5px);
+  }
+}
+
+.scroll-cue-pill svg {
+  animation: scroll-arrow-bounce 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 /* Mobile category list */

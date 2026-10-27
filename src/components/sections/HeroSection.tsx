@@ -111,13 +111,14 @@ export default function HeroSection() {
         <section className="flow-hero-section pride-hero" id="heroSection" ref={heroSectionRef}>
           {/* 1. Logo PRIDE dan kategori acara */}
           <div className="pride-logo hero-logo-wrap hero-logo event-logo" ref={heroLogoRef}>
+            <div className="hero-logo-glow" aria-hidden="true" />
             <Image
               src="/LOGO_PRIDE_INDUSTRI.png"
               alt="PRIDE Industri 2026"
               fill
               priority
               sizes="(max-width: 640px) 90vw, (max-width: 1024px) 580px, 680px"
-              className="object-contain"
+              className="object-contain hero-floating-logo-img"
             />
 
             <div className="cursor-badge badge-fesyen hidden md:inline-flex" ref={badgeFesyenRef}>
