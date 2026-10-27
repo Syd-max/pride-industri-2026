@@ -1,6 +1,6 @@
 /* ─── PRIDE Industri 2026 — Competition Welcome Banner Modal ────────────────
-   Faithful recreation of official illustrated reference artwork (Gambar 2).
-   Clean, compact, proportional, fully interactive, and zero border-leaks.
+   Pure Coded SVG & CSS Architecture — Faithful to Reference Artwork (Gambar 2).
+   Zero image slices, zero clipping artifacts, compact, proportional, and clean.
 ─────────────────────────────────────────────────────────────────────────────── */
 
 .cwb-backdrop {
@@ -19,7 +19,7 @@
 
 .cwb-banner {
   position: relative;
-  width: min(640px, calc(100vw - 28px));
+  width: min(650px, calc(100vw - 28px));
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -30,15 +30,15 @@
   animation: cwb-scale-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Close Button (Circular with white border, top-right) */
+/* Close Button (Circular, Top-Right) */
 .cwb-close {
   position: absolute;
-  top: clamp(-6px, -1.2vw, 0px);
-  right: clamp(-6px, -1.2vw, 0px);
+  top: clamp(-4px, -1vw, 2px);
+  right: clamp(0px, 0.5vw, 6px);
   z-index: 40;
   display: grid;
-  width: clamp(34px, 4.5vw, 40px);
-  height: clamp(34px, 4.5vw, 40px);
+  width: clamp(34px, 4.5vw, 38px);
+  height: clamp(34px, 4.5vw, 38px);
   place-items: center;
   padding: 0;
   border: 3px solid #ffffff;
@@ -46,14 +46,14 @@
   background: #0d131f;
   color: #ffffff;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.65);
   transition: transform 160ms ease, background-color 160ms ease, border-color 160ms ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .cwb-close svg {
-  width: clamp(16px, 2.2vw, 20px);
-  height: clamp(16px, 2.2vw, 20px);
+  width: clamp(16px, 2.2vw, 18px);
+  height: clamp(16px, 2.2vw, 18px);
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
@@ -64,53 +64,53 @@
 .cwb-close:hover {
   transform: scale(1.1) rotate(90deg);
   background-color: #1e293b;
-  border-color: #facc15;
+  border-color: #ffcc00;
 }
 
 .cwb-close:focus-visible,
 .cwb-card:focus-visible,
 .cwb-home-ribbon:focus-visible {
-  outline: 3px solid #facc15;
+  outline: 3px solid #ffcc00;
   outline-offset: 4px;
 }
 
-/* Header Title (Centered Arched Cartoon Graphic) */
+/* Header Title (Arched SVG Comic Title) */
 .cwb-title-wrap {
   position: relative;
   z-index: 15;
-  width: clamp(230px, 58%, 350px);
+  width: clamp(230px, 60%, 380px);
   margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.cwb-title-img {
+.cwb-title-svg {
   width: 100%;
   height: auto;
   display: block;
   pointer-events: none;
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
 }
 
-/* Two Side-by-Side Action Cards */
+/* Side-by-Side Action Cards */
 .cwb-actions {
   position: relative;
   z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(8px, 2.5vw, 22px);
+  gap: clamp(8px, 2.2vw, 20px);
   width: 100%;
   max-width: 550px;
-  margin: clamp(-4px, -0.8vw, 2px) auto 0;
+  margin: clamp(-6px, -1vw, 0px) auto 0;
 }
 
 .cwb-card {
   position: relative;
   display: block;
   flex: 1 1 0;
-  max-width: clamp(140px, 46%, 260px);
+  max-width: clamp(140px, 48%, 255px);
   text-decoration: none;
   cursor: pointer;
   transform-origin: center center;
@@ -145,28 +145,27 @@
   transform: rotate(1.5deg) scale(0.98);
 }
 
-.cwb-card-img {
+.cwb-badge-svg {
   width: 100%;
   height: auto;
   display: block;
   pointer-events: none;
-  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.5));
 }
 
 /* Bottom Navigation Banner (Arrow pointing right) */
-.cwb-home-wrap {
+.cwb-home-container {
   position: relative;
   z-index: 30;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: clamp(-20px, -3.2vw, -12px);
+  margin-top: clamp(-20px, -3.2vw, -14px);
 }
 
 .cwb-home-ribbon {
   display: block;
-  width: clamp(155px, 36%, 215px);
+  width: clamp(155px, 36%, 220px);
   text-decoration: none;
   cursor: pointer;
   transform: rotate(-1.5deg);
@@ -185,15 +184,14 @@
   transform: rotate(-1deg) scale(0.98);
 }
 
-.cwb-home-img {
+.cwb-home-svg {
   width: 100%;
   height: auto;
   display: block;
   pointer-events: none;
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
 }
 
-/* 4 Corner Ornaments from Reference Artwork */
+/* 4 Corner Ornaments (Vector SVGs) */
 .cwb-ornament {
   position: absolute;
   pointer-events: none;
@@ -201,11 +199,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.55));
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
   transition: transform 300ms ease;
 }
 
-.cwb-ornament-img {
+.cwb-ornament svg {
   width: 100%;
   height: auto;
   display: block;
@@ -213,34 +211,30 @@
 
 /* Top-Left: Sewing Machine */
 .cwb-ornament-sewing {
-  top: clamp(-4px, 1vw, 8px);
-  left: clamp(-16px, -1.5vw, 6px);
-  width: clamp(48px, 9.5vw, 76px);
-  transform: rotate(-9deg);
+  top: clamp(-6px, 0.5vw, 4px);
+  left: clamp(-10px, -1vw, 10px);
+  width: clamp(48px, 9.5vw, 72px);
 }
 
 /* Top-Right: Chef Hat */
 .cwb-ornament-chef {
-  top: clamp(-6px, 0.5vw, 6px);
-  right: clamp(28px, 4.5vw, 44px);
-  width: clamp(46px, 9vw, 74px);
-  transform: rotate(7deg);
+  top: clamp(-6px, 0.5vw, 4px);
+  right: clamp(26px, 4.5vw, 48px);
+  width: clamp(46px, 9vw, 70px);
 }
 
 /* Bottom-Left: Batagor */
 .cwb-ornament-batagor {
-  bottom: clamp(-4px, 1vw, 8px);
-  left: clamp(-16px, -1.5vw, 6px);
-  width: clamp(44px, 8.5vw, 68px);
-  transform: rotate(5deg);
+  bottom: clamp(-4px, 1vw, 10px);
+  left: clamp(-10px, -1vw, 12px);
+  width: clamp(44px, 8.5vw, 66px);
 }
 
 /* Bottom-Right: Shoe */
 .cwb-ornament-shoe {
-  bottom: clamp(-4px, 1vw, 8px);
-  right: clamp(-12px, -1vw, 8px);
+  bottom: clamp(-4px, 1vw, 10px);
+  right: clamp(-6px, 0.5vw, 14px);
   width: clamp(52px, 9.8vw, 80px);
-  transform: rotate(-8deg);
 }
 
 /* Smooth Entrance Animations */
@@ -260,7 +254,7 @@
   }
 }
 
-/* Screen Reader Only Utility */
+/* Screen Reader Utility */
 .cwb-banner .sr-only {
   position: absolute;
   width: 1px;
@@ -280,19 +274,19 @@
   }
 
   .cwb-banner {
-    width: min(380px, calc(100vw - 20px));
+    width: min(390px, calc(100vw - 20px));
   }
 
   .cwb-actions {
     gap: 8px;
   }
 
-  .cwb-home-wrap {
-    margin-top: -10px;
+  .cwb-home-container {
+    margin-top: -12px;
   }
 
   .cwb-ornament-chef {
-    right: 28px;
+    right: 32px;
   }
 }
 
