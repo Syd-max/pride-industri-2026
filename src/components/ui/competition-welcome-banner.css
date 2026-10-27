@@ -16,6 +16,7 @@
   background: rgba(3, 8, 18, 0.88);
   backdrop-filter: blur(6px) saturate(0.9);
   animation: cwb-fade-in 180ms ease-out both;
+  box-sizing: border-box;
 }
 
 .cwb-banner {
@@ -30,6 +31,7 @@
   justify-content: center;
   isolation: isolate;
   user-select: none;
+  box-sizing: border-box;
   font-family: var(--font-poppins), 'Poppins', var(--font-plus-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
   animation: cwb-scale-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -229,17 +231,17 @@
 /* Responsiveness on Small Mobile Screens */
 @media (max-width: 480px) {
   .cwb-backdrop {
-    padding: 10px;
+    padding: 16px;
   }
 
   .cwb-banner {
-    width: min(370px, calc(100vw - 20px));
-    padding-top: 20px;
+    width: min(345px, calc(100vw - 36px));
+    padding-top: 18px;
     padding-bottom: 8px;
   }
 
   .cwb-actions {
-    gap: 4px;
+    gap: 6px;
   }
 
   .cwb-home-container {
@@ -247,26 +249,31 @@
   }
 
   .cwb-home-ribbon {
-    width: clamp(155px, 48%, 185px);
+    width: clamp(145px, 46%, 175px);
   }
 
   .cwb-ornament-sewing {
     top: -12px;
-    left: 8px;
-    width: 46px;
+    left: 6px;
+    width: 44px;
   }
 
   .cwb-ornament-chef {
     top: -10px;
-    right: 28px;
-    width: 42px;
+    right: 34px;
+    width: 38px;
   }
 
   .cwb-close {
     top: -10px;
-    right: -4px;
-    width: 30px;
-    height: 30px;
+    right: 2px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .cwb-close svg {
+    width: 13px;
+    height: 13px;
   }
 }
 
