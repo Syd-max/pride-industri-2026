@@ -152,7 +152,7 @@ export default function CompetitionWelcomeBanner() {
               />
 
               {/* Retro Film Camera (Top Left of Shield) */}
-              <g transform="translate(14, 14) rotate(-6, 25, 20)">
+              <g transform="translate(14, 16) rotate(-6, 25, 20)">
                 <rect x="8" y="16" width="34" height="24" rx="4" fill="#000" transform="translate(0, 3)" />
                 <circle cx="16" cy="10" r="8" fill="#475569" stroke="#000" strokeWidth="2.5" />
                 <circle cx="16" cy="10" r="3" fill="#94A3B8" />
@@ -379,51 +379,46 @@ export default function CompetitionWelcomeBanner() {
           </Link>
         </div>
 
-        {/* Bottom Home Arrow Ribbon */}
+        {/* Bottom Home Arrow Ribbon: Clean, Simple "Page Utama" */}
         <div className="cwb-home-container">
-          <a
-            href="#competitions"
+          <Link
+            href="/"
             className="cwb-home-ribbon"
             onClick={closeBanner}
-            aria-label="Kembali ke page utama"
+            aria-label="Page Utama"
           >
-            <span className="sr-only">Kembali ke page utama</span>
-            <svg className="cwb-home-svg" viewBox="0 0 240 48" fill="none" aria-hidden="true">
+            <span className="sr-only">Page Utama</span>
+            <svg className="cwb-home-svg" viewBox="0 0 200 44" fill="none" aria-hidden="true">
               <defs>
                 <linearGradient id="cwbHomeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#FFD000" />
+                  <stop offset="0%" stopColor="#FFD500" />
                   <stop offset="100%" stopColor="#F97316" />
                 </linearGradient>
               </defs>
-              <polygon points="12,8 198,8 226,24 198,40 12,40" fill="#000" transform="translate(0, 4)" />
-              <polygon points="12,8 198,8 226,24 198,40 12,40" fill="url(#cwbHomeGrad)" stroke="#000" strokeWidth="4" strokeLinejoin="round" />
+              <polygon points="10,6 168,6 192,22 168,38 10,38" fill="#000" transform="translate(0, 3)" />
+              <polygon points="10,6 168,6 192,22 168,38 10,38" fill="url(#cwbHomeGrad)" stroke="#000" strokeWidth="3" strokeLinejoin="round" />
 
-              {/* Cursor Icon (Left) */}
-              <g transform="translate(24, 14)">
-                <polygon points="0,0 0,16 5,12 9,19 12,17 8,11 14,11" fill="#FFD000" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+              {/* Home Icon (Left) */}
+              <g transform="translate(24, 13)">
+                <polygon points="8,0 0,7 2.5,7 2.5,16 13.5,16 13.5,7 16,7" fill="#000" stroke="#000" strokeWidth="1" strokeLinejoin="round" />
+                <rect x="6" y="9.5" width="4" height="6.5" rx="0.5" fill="#FFD500" />
               </g>
 
-              {/* Center Text */}
+              {/* Center Text: "Page Utama" */}
               <text
-                x="116"
-                y="28"
+                x="106"
+                y="26.5"
                 textAnchor="middle"
                 fontFamily="var(--font-poppins), 'Poppins', system-ui, sans-serif"
-                fontSize="10.5"
+                fontSize="13.5"
                 fontWeight="900"
-                fill="#000"
-                letterSpacing="0.5"
+                fill="#000000"
+                letterSpacing="0.6"
               >
-                KEMBALI KE PAGE UTAMA
+                Page Utama
               </text>
-
-              {/* House Icon (Right) */}
-              <g transform="translate(184, 16)">
-                <polygon points="8,0 0,7 3,7 3,15 13,15 13,7 16,7" fill="#000" />
-                <rect x="6" y="9" width="4" height="6" fill="#FFD000" />
-              </g>
             </svg>
-          </a>
+          </Link>
         </div>
       </section>
     </div>
