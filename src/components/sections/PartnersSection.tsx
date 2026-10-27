@@ -85,41 +85,29 @@ function PartnerCard({ partner, index }: { partner: PartnerItem; index: number }
 
   const cardContent = (
     <div
-      className={`group relative w-full min-h-[82px] sm:min-h-[88px] px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-white border border-slate-200/90 shadow-[0_2px_10px_-2px_rgba(15,23,42,0.04)] hover:shadow-[0_10px_24px_-4px_rgba(15,23,42,0.08),0_4px_10px_-2px_rgba(22,82,240,0.06)] hover:border-blue-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col items-center justify-center text-center overflow-hidden cursor-pointer ${floatClass}`}
+      className={`group relative w-full min-h-[76px] sm:min-h-[82px] px-3.5 sm:px-5 py-3 sm:py-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-[0_2px_10px_-2px_rgba(15,23,42,0.04)] hover:shadow-[0_10px_24px_-4px_rgba(15,23,42,0.08),0_4px_10px_-2px_rgba(22,82,240,0.06)] hover:border-blue-400/50 hover:-translate-y-1.5 transition-all duration-300 flex items-center justify-center text-center overflow-hidden cursor-pointer ${floatClass}`}
     >
       {/* Sheen light reflex passing on hover */}
       <div className="pointer-events-none absolute inset-0 -translate-x-full logo-sheen-effect bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
 
       {/* Real Logo Image */}
       {partner.logoUrl ? (
-        <div className="w-full flex flex-col items-center justify-center space-y-1">
-          <div className="relative w-full h-10 sm:h-11 flex items-center justify-center px-1">
-            <Image
-              src={partner.logoUrl}
-              alt={partner.name}
-              fill
-              sizes="(max-width: 768px) 50vw, 25vw"
-              className="object-contain filter grayscale group-hover:grayscale-0 contrast-125 group-hover:scale-105 transition-all duration-300"
-            />
-          </div>
-          {partner.tag && (
-            <span className="text-[9px] font-semibold text-slate-400 group-hover:text-blue-600 bg-slate-50 group-hover:bg-blue-50 border border-slate-200/60 group-hover:border-blue-200/60 rounded px-1.5 py-0.2 transition-colors">
-              {partner.tag}
-            </span>
-          )}
+        <div className="relative w-full h-11 sm:h-12 flex items-center justify-center px-2">
+          <Image
+            src={partner.logoUrl}
+            alt={partner.name}
+            fill
+            sizes="(max-width: 768px) 50vw, 25vw"
+            className="object-contain filter grayscale group-hover:grayscale-0 contrast-125 group-hover:scale-105 transition-all duration-300"
+          />
         </div>
       ) : (
-        /* Human Design Placeholder Slot: Clean, balanced, 0 collision */
+        /* Human Design Placeholder Slot: Clean, balanced typography */
         <div className="w-full flex flex-col items-center justify-center space-y-0.5">
-          {partner.tag && (
-            <span className="text-[9px] font-semibold text-slate-400 group-hover:text-blue-600 bg-slate-50 group-hover:bg-blue-50 border border-slate-200/60 group-hover:border-blue-200/60 rounded px-1.5 py-0.2 transition-colors">
-              {partner.tag}
-            </span>
-          )}
-          <span className="text-xs sm:text-xs font-bold text-slate-800 group-hover:text-blue-600 tracking-tight leading-snug transition-colors line-clamp-1">
+          <span className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-blue-600 tracking-tight leading-snug transition-colors line-clamp-1">
             {partner.name}
           </span>
-          <span className="text-[10px] font-medium text-slate-500 group-hover:text-slate-700 transition-colors line-clamp-1">
+          <span className="text-[10px] font-medium text-slate-400 group-hover:text-slate-600 transition-colors line-clamp-1">
             {partner.role}
           </span>
         </div>
