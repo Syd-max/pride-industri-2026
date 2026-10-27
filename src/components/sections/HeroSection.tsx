@@ -59,6 +59,11 @@ function KriyaIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
 export default function HeroSection() {
   const heroSectionRef = useRef<HTMLElement>(null);
   const heroLogoRef = useRef<HTMLDivElement>(null);
+  const badgeKulinerRef = useRef<HTMLDivElement>(null);
+  const badgeFesyenRef = useRef<HTMLDivElement>(null);
+  const badgeKriyaRef = useRef<HTMLDivElement>(null);
+  const badgeKemasanRef = useRef<HTMLDivElement>(null);
+  const badgeVideoRef = useRef<HTMLDivElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
   const headlineBlockRef = useRef<HTMLDivElement>(null);
   const heroLogosRef = useRef<HTMLDivElement>(null);
@@ -70,6 +75,14 @@ export default function HeroSection() {
       heroLogoRef.current?.classList.add('visible');
     }, 60);
 
+    const badgeTimers = [
+      setTimeout(() => badgeKulinerRef.current?.classList.add('visible'), 160),
+      setTimeout(() => badgeFesyenRef.current?.classList.add('visible'), 240),
+      setTimeout(() => badgeKriyaRef.current?.classList.add('visible'), 320),
+      setTimeout(() => badgeKemasanRef.current?.classList.add('visible'), 400),
+      setTimeout(() => badgeVideoRef.current?.classList.add('visible'), 480),
+    ];
+
     // Organizer Logos right below PRIDE Logo
     const tLogos = setTimeout(() => heroLogosRef.current?.classList.add('visible'), 220);
 
@@ -79,6 +92,7 @@ export default function HeroSection() {
 
     return () => {
       clearTimeout(t0);
+      badgeTimers.forEach(clearTimeout);
       clearTimeout(tLogos);
       clearTimeout(tHeadline);
       clearTimeout(tSub);
@@ -95,7 +109,7 @@ export default function HeroSection() {
 
         {/* Hero Section */}
         <section className="flow-hero-section pride-hero" id="heroSection" ref={heroSectionRef}>
-          {/* 1. Logo PRIDE: elemen terbesar & fokus utama */}
+          {/* 1. Logo PRIDE dan kategori acara */}
           <div className="pride-logo hero-logo-wrap hero-logo event-logo" ref={heroLogoRef}>
             <Image
               src="/LOGO_PRIDE_INDUSTRI.png"
@@ -105,10 +119,36 @@ export default function HeroSection() {
               sizes="(max-width: 640px) 90vw, (max-width: 1024px) 580px, 680px"
               className="object-contain"
             />
+
+            <div className="cursor-badge badge-fesyen hidden md:inline-flex" ref={badgeFesyenRef}>
+              <FesyenIcon className="w-3.5 h-3.5" />
+              <span>Fesyen Binaan</span>
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
+            <div className="cursor-badge badge-kuliner hidden md:inline-flex" ref={badgeKulinerRef}>
+              <KulinerIcon className="w-3.5 h-3.5" />
+              <span>Kuliner Lokal</span>
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
+            <div className="cursor-badge badge-kriya hidden md:inline-flex" ref={badgeKriyaRef}>
+              <KriyaIcon className="w-3.5 h-3.5" />
+              <span>Kriya &amp; Kerajinan</span>
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
+            <div className="cursor-badge badge-video hidden md:inline-flex" ref={badgeVideoRef}>
+              <VideoIcon className="w-3.5 h-3.5" />
+              <span>Lomba Video 1 Menit</span>
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
+            <div className="cursor-badge badge-kemasan hidden md:inline-flex" ref={badgeKemasanRef}>
+              <KemasanIcon className="w-3.5 h-3.5" />
+              <span>Lomba Desain Kemasan</span>
+              <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </div>
           </div>
 
-          {/* 2. Ruang lingkup acara */}
-          <div className="pride-highlights hero-categories-row">
+          {/* 2. Versi ringkas kategori untuk layar kecil */}
+          <div className="pride-highlights hero-mobile-categories-row md:hidden">
             <span className="mob-chip mob-chip-fesyen">
               <FesyenIcon className="w-3.5 h-3.5 shrink-0" />
               <span>Fesyen Binaan</span>

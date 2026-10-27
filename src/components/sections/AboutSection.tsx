@@ -62,10 +62,19 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="relative pt-12 pb-8 sm:pt-16 sm:pb-10 lg:pt-20 lg:pb-16 bg-white overflow-hidden"
+      className="relative pt-0 pb-8 sm:pb-10 lg:pb-16 bg-white overflow-hidden"
       aria-label="Tentang PRIDE Industri 2026"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="moon-blur-transition" aria-hidden="true">
+        <div className="moon-transition-gradient" />
+        <div className="moon-glow-cluster">
+          <div className="moon-ambient-wash" />
+          <div className="moon-blur-dome" />
+          <div className="moon-diffuse-crescent" />
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-4 sm:pt-6">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 relative">

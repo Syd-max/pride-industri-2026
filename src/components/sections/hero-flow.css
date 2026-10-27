@@ -145,14 +145,107 @@
   z-index: 2;
 }
 
-/* 2. EVENT CATEGORIES */
+/* Floating category tags around the logo on desktop */
+.cursor-badge {
+  position: absolute;
+  z-index: 25;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 5px;
+  color: #fff;
+  font-family: var(--font-plus-jakarta), -apple-system, sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  transform: scale(0.78) translateY(6px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.cursor-badge.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.cursor-badge svg {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  pointer-events: none;
+}
+
+.badge-fesyen {
+  top: 3%;
+  right: calc(100% + 14px);
+  background: var(--flow-blue-accent);
+}
+.badge-fesyen svg {
+  right: -5px;
+  bottom: -6px;
+  fill: var(--flow-blue-accent);
+  transform: rotate(135deg);
+}
+.badge-kuliner {
+  top: 3%;
+  left: calc(100% + 14px);
+  background: var(--flow-orange-accent);
+}
+.badge-kuliner svg {
+  bottom: -6px;
+  left: -5px;
+  fill: var(--flow-orange-accent);
+  transform: rotate(-135deg);
+}
+.badge-kriya {
+  top: 48%;
+  right: calc(100% + 18px);
+  background: #7e22ce;
+  transform: translateY(-50%) scale(0.78);
+}
+.badge-kriya.visible {
+  transform: translateY(-50%) scale(1);
+}
+.badge-kriya svg {
+  top: -6px;
+  right: -5px;
+  fill: #7e22ce;
+  transform: rotate(45deg);
+}
+.badge-video {
+  right: calc(100% + 14px);
+  bottom: 3%;
+  background: var(--flow-rose-accent);
+}
+.badge-video svg {
+  top: -6px;
+  right: -5px;
+  fill: var(--flow-rose-accent);
+  transform: rotate(45deg);
+}
+.badge-kemasan {
+  bottom: 3%;
+  left: calc(100% + 14px);
+  background: var(--flow-green-accent);
+}
+.badge-kemasan svg {
+  top: -6px;
+  left: -5px;
+  fill: var(--flow-green-accent);
+  transform: rotate(-45deg);
+}
+
+/* Mobile category list */
 .pride-highlights,
-.hero-categories-row {
+.hero-mobile-categories-row {
   order: 2;
-  display: flex;
+  display: none;
 
   width: 100%;
-  max-width: 720px;
+  max-width: 420px;
   margin-inline: auto;
 
   flex-wrap: wrap;
@@ -164,7 +257,7 @@
 
 /* Highlight chips */
 .pride-highlights > *,
-.hero-categories-row > * {
+.hero-mobile-categories-row > * {
   position: relative;
   flex: 0 1 auto;
   max-width: 100%;
@@ -403,6 +496,15 @@
 /* Desktop adjustments */
 
 @media (min-width: 769px) {
+  .pride-highlights,
+  .hero-mobile-categories-row {
+    display: none !important;
+  }
+
+  .cursor-badge {
+    display: inline-flex !important;
+  }
+
   .pride-hero,
   .flow-hero-section {
     gap: clamp(10px, 1.6vh, 20px);
@@ -461,6 +563,26 @@
 /* Mobile adjustments */
 
 @media (max-width: 768px) {
+  .cursor-badge {
+    display: inline-flex !important;
+    padding: 3px 6px;
+    font-size: 9px;
+  }
+
+  .badge-fesyen,
+  .badge-video {
+    right: calc(100% - 10px);
+  }
+
+  .badge-kuliner,
+  .badge-kemasan {
+    left: calc(100% - 10px);
+  }
+
+  .badge-kriya {
+    right: calc(100% - 8px);
+  }
+
   .pride-hero,
   .flow-hero-section {
     min-height: 100svh;
@@ -482,8 +604,8 @@
   }
 
   .pride-highlights,
-  .hero-categories-row {
-    display: flex !important;
+  .hero-mobile-categories-row {
+    display: none !important;
     gap: 5px;
   }
 
@@ -530,6 +652,17 @@
   .pride-countdown .countdown-label,
   .pride-countdown .launch-unit-label {
     font-size: 9.5px;
+  }
+}
+
+@media (max-width: 419px) {
+  .cursor-badge {
+    display: none !important;
+  }
+
+  .pride-highlights,
+  .hero-mobile-categories-row {
+    display: flex !important;
   }
 }
 

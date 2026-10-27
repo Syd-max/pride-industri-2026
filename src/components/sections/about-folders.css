@@ -431,3 +431,103 @@
   }
 }
 
+/* Moonlight bridge from the dark hero into the white About section. */
+.moon-blur-transition {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: clamp(200px, 28vw, 320px);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.moon-transition-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #070a13 0%,
+    #070a13 16%,
+    rgba(8, 13, 26, 0.92) 36%,
+    rgba(16, 26, 52, 0.62) 56%,
+    rgba(56, 78, 122, 0.25) 75%,
+    rgba(180, 202, 236, 0.05) 92%,
+    #ffffff 100%
+  );
+}
+
+.moon-glow-cluster {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%);
+}
+
+.moon-ambient-wash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 90% 70% at 50% 50%,
+    rgba(22, 82, 240, 0.22) 0%,
+    rgba(147, 197, 253, 0.15) 35%,
+    rgba(245, 158, 11, 0.09) 65%,
+    transparent 88%
+  );
+  filter: blur(50px);
+}
+
+.moon-blur-dome {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  width: min(1080px, 96vw);
+  height: clamp(160px, 20vw, 240px);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse 65% 55% at 50% 50%,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(191, 219, 254, 0.72) 20%,
+    rgba(37, 99, 235, 0.38) 42%,
+    rgba(245, 158, 11, 0.18) 64%,
+    transparent 82%
+  );
+  filter: blur(40px);
+  transform: translate(-50%, -50%);
+}
+
+.moon-diffuse-crescent {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  width: min(1120px, 98vw);
+  height: clamp(140px, 18vw, 210px);
+  border-radius: 50%;
+  border-top: 2.5px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 -8px 24px rgba(255, 255, 255, 0.55),
+    0 -16px 45px rgba(59, 130, 246, 0.35),
+    0 -32px 75px rgba(245, 158, 11, 0.16);
+  filter: blur(10px);
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 640px) {
+  .moon-blur-transition {
+    height: clamp(150px, 24vh, 200px);
+  }
+
+  .moon-blur-dome {
+    height: 130px;
+    filter: blur(28px);
+  }
+
+  .moon-diffuse-crescent {
+    height: 110px;
+    border-top-width: 2px;
+    filter: blur(6px);
+  }
+}
+

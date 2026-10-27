@@ -157,7 +157,7 @@
 }
 
 .deck-cover-card::before {
-  background: #0f172a;
+  background: linear-gradient(90deg, #e51937 0%, #009e49 20%, #f69321 40%, #ffb800 60%, #1652f0 80%, #8b5cf6 100%);
   display: block;
 }
 
@@ -172,8 +172,8 @@
    CARD 0: ELEGANT & AESTHETIC COVER CARD ("TUJUAN KEGIATAN")
    ========================================================================== */
 .deck-cover-card {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
+  background: linear-gradient(145deg, #ffffff 0%, #fffbfc 55%, #fff1f2 100%);
+  border: 1.5px solid #fecdd3;
   padding: clamp(20px, 3.2vh, 36px) clamp(24px, 3.8vw, 44px);
   display: flex !important;
   flex-direction: column !important;
@@ -356,8 +356,8 @@
 /* ─── 6 Proposal Themes ─── */
 /* Theme 1: Vibrant Red */
 .theme-red {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(145deg, #ffffff 0%, #fff5f6 50%, #ffe4e6 100%);
+  border: 1.5px solid #fecdd3;
 }
 .theme-red .decor-blob-1 { background: #e51937; }
 .theme-red .decor-blob-2 { background: #fda4af; }
@@ -369,8 +369,8 @@
 
 /* Theme 2: Emerald Green */
 .theme-green {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(145deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+  border: 1.5px solid #bbf7d0;
 }
 .theme-green .decor-blob-1 { background: #009e49; }
 .theme-green .decor-blob-2 { background: #86efac; }
@@ -382,8 +382,8 @@
 
 /* Theme 3: Warm Orange */
 .theme-orange {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(145deg, #ffffff 0%, #fff7ed 50%, #ffedd5 100%);
+  border: 1.5px solid #fed7aa;
 }
 .theme-orange .decor-blob-1 { background: #f69321; }
 .theme-orange .decor-blob-2 { background: #fdba74; }
@@ -395,8 +395,8 @@
 
 /* Theme 4: Golden Yellow */
 .theme-yellow {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(145deg, #ffffff 0%, #fefce8 50%, #fef9c3 100%);
+  border: 1.5px solid #fef08a;
 }
 .theme-yellow .decor-blob-1 { background: #ffb800; }
 .theme-yellow .decor-blob-2 { background: #fde047; }
@@ -408,8 +408,8 @@
 
 /* Theme 5: Royal Blue */
 .theme-blue {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(145deg, #ffffff 0%, #eff6ff 50%, #dbeafe 100%);
+  border: 1.5px solid #bfdbfe;
 }
 .theme-blue .decor-blob-1 { background: #1652f0; }
 .theme-blue .decor-blob-2 { background: #93c5fd; }
@@ -421,8 +421,8 @@
 
 /* Theme 6: Creative Purple */
 .theme-purple {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(145deg, #ffffff 0%, #faf5ff 50%, #f3e8ff 100%);
+  border: 1.5px solid #e9d5ff;
 }
 .theme-purple .decor-blob-1 { background: #8b5cf6; }
 .theme-purple .decor-blob-2 { background: #c4b5fd; }
