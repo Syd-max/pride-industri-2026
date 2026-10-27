@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Playfair_Display, Inter, Caveat, Plus_Jakarta_Sans, Poppins } from 'next/font/google';
 import './globals.css';
+import '@/components/ui/competition-welcome-banner.css';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 const playfair = Playfair_Display({

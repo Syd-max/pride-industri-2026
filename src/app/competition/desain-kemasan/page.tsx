@@ -618,7 +618,7 @@ export default function DesainKemasanPage() {
             )}
 
             {/* ─── 4 SECTIONS MULTI-STEP FORM ─── */}
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form id="registration-form" onSubmit={handleSubmit} className="scroll-mt-24 space-y-6">
 
               {/* ════════════════════════════════════════════════════════════════
                   SECTION 1: DATA DIRI PESERTA (Visible on currentStep === 1)

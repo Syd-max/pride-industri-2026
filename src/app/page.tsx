@@ -8,6 +8,7 @@ import CompetitionSection from '@/components/sections/CompetitionSection';
 import LocationSection from '@/components/sections/LocationSection';
 import FaqSection from '@/components/sections/FaqSection';
 import Footer from '@/components/sections/Footer';
+import CompetitionWelcomeBanner from '@/components/ui/CompetitionWelcomeBanner';
 
 const title = 'PRIDE Industri 2026 — Festival IKM Kota Bandung';
 const description =
@@ -64,6 +65,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteStructuredData) }}
       />
+      <CompetitionWelcomeBanner />
       <Navbar />
       <main id="main-content">
         <HeroSection />

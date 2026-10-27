@@ -544,7 +544,7 @@ export default function VideoLokalPage() {
             )}
 
             {/* ─── MULTI-STEP SECTIONS (1 PER SECTION) ─── */}
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form id="registration-form" onSubmit={handleSubmit} className="scroll-mt-24 space-y-6">
 
               {/* ════════════════════════════════════════════════════════════════
                   SECTION 1: DATA DIRI (Visible on currentStep === 1)
