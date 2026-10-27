@@ -34,10 +34,158 @@ export default function LocationSection() {
   return (
     <section
       id="location"
-      className="relative py-10 sm:py-14 lg:py-16 bg-slate-50/70 border-t border-slate-200/80"
+      className="relative py-10 sm:py-14 lg:py-16 bg-slate-50/70 border-t border-slate-200/80 overflow-hidden"
       aria-label="Lokasi dan Informasi Pengunjung"
     >
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ─── Animated Exterior Road & Car Journey (Garis Berjalan & Mobil di Luar Map) ─── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-20" aria-hidden="true">
+        <svg
+          className="w-full h-full"
+          viewBox="0 0 1200 950"
+          preserveAspectRatio="xMidYMin slice"
+          fill="none"
+        >
+          <defs>
+            {/* Soft Ambient Road Aura */}
+            <filter id="exteriorRoadAura" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2" stdDeviation="5" floodColor="#2563eb" floodOpacity="0.25" />
+            </filter>
+
+            {/* Glowing Car Headlight Beam */}
+            <linearGradient id="carHeadlightGlow" x1="0%" y1="50%" x2="100%" y2="50%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+              <stop offset="25%" stopColor="#fef08a" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#fef08a" stopOpacity="0" />
+            </linearGradient>
+
+            {/* GPS Radar Puck beneath car */}
+            <radialGradient id="carRadarPuck" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+
+          {/* Exterior Navigation Route Path (Curves around title & outside the map container) */}
+          <path
+            id="exteriorCarJourneyPath"
+            d="M 340 10 
+               C 360 65, 420 90, 500 55 
+               C 580 15, 740 15, 840 50 
+               C 915 75, 945 130, 890 170 
+               C 820 195, 700 195, 540 195 
+               C 380 195, 240 190, 140 205 
+               C 75 220, 50 300, 45 420 
+               C 40 560, 55 700, 95 840"
+            fill="none"
+          />
+
+          {/* 1. Road Aura Base Track */}
+          <path
+            d="M 340 10 
+               C 360 65, 420 90, 500 55 
+               C 580 15, 740 15, 840 50 
+               C 915 75, 945 130, 890 170 
+               C 820 195, 700 195, 540 195 
+               C 380 195, 240 190, 140 205 
+               C 75 220, 50 300, 45 420 
+               C 40 560, 55 700, 95 840"
+            stroke="#2563eb"
+            strokeWidth="12"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.14"
+          />
+
+          {/* 2. Main Sapphire Blue Highway Line */}
+          <path
+            d="M 340 10 
+               C 360 65, 420 90, 500 55 
+               C 580 15, 740 15, 840 50 
+               C 915 75, 945 130, 890 170 
+               C 820 195, 700 195, 540 195 
+               C 380 195, 240 190, 140 205 
+               C 75 220, 50 300, 45 420 
+               C 40 560, 55 700, 95 840"
+            stroke="#2563eb"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.6"
+            filter="url(#exteriorRoadAura)"
+          />
+
+          {/* 3. Animated Forward Moving Chevrons / Dashes (Garis Berjalan) */}
+          <path
+            d="M 340 10 
+               C 360 65, 420 90, 500 55 
+               C 580 15, 740 15, 840 50 
+               C 915 75, 945 130, 890 170 
+               C 820 195, 700 195, 540 195 
+               C 380 195, 240 190, 140 205 
+               C 75 220, 50 300, 45 420 
+               C 40 560, 55 700, 95 840"
+            stroke="#ffffff"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray="8 12"
+            className="map-road-animated-dash"
+          />
+
+          {/* Start Origin Marker */}
+          <g transform="translate(340, 10)">
+            <circle r="6" fill="#2563eb" stroke="#ffffff" strokeWidth="2" />
+            <circle r="13" fill="#2563eb" opacity="0.25" />
+          </g>
+
+          {/* Destination Pin Marker at Braga City Walk */}
+          <g transform="translate(95, 840)">
+            <circle r="9" fill="#ef4444" stroke="#ffffff" strokeWidth="2.5" />
+            <circle r="18" fill="#ef4444" opacity="0.2" className="map-pin-pulse-effect" />
+          </g>
+
+          {/* 4. Animated Moving Car (Mobil yang Berjalan Mengikuti Garis via CSS offset-path) */}
+          <g className="exterior-car-drive">
+            {/* GPS Tracking Puck Aura */}
+            <circle cx="0" cy="0" r="22" fill="url(#carRadarPuck)" />
+
+            {/* Headlights Forward Beam Cone */}
+            <polygon points="14,-5 54,-18 54,18 14,5" fill="url(#carHeadlightGlow)" opacity="0.9" />
+
+            {/* Soft Drop Shadow */}
+            <rect x="-16" y="-8.5" width="32" height="17" rx="7" fill="#0f172a" opacity="0.32" transform="translate(0, 2.5)" />
+
+            {/* Car Body Shell (Sleek White & Sapphire Accent) */}
+            <rect x="-15.5" y="-8" width="31" height="16" rx="6.5" fill="#ffffff" stroke="#2563eb" strokeWidth="1.2" />
+
+            {/* Front Racing/Brand Stripe */}
+            <line x1="7" y1="0" x2="14" y2="0" stroke="#2563eb" strokeWidth="1.6" />
+
+            {/* Front Windshield */}
+            <path d="M 3 -6 L 6.5 -4.5 L 6.5 4.5 L 3 6 Z" fill="#0f172a" />
+
+            {/* Panoramic Glass Roof */}
+            <rect x="-5.5" y="-4.5" width="8" height="9" rx="1.8" fill="#0f172a" />
+
+            {/* Rear Window */}
+            <path d="M -8 -5 L -11 -4 L -11 4 L -8 5 Z" fill="#0f172a" />
+
+            {/* LED Headlights */}
+            <rect x="14" y="-7" width="2" height="2.6" rx="0.6" fill="#fef08a" />
+            <rect x="14" y="4.4" width="2" height="2.6" rx="0.6" fill="#fef08a" />
+
+            {/* Red LED Taillights */}
+            <rect x="-16" y="-6.5" width="1.6" height="2.2" rx="0.5" fill="#ef4444" />
+            <rect x="-16" y="4.3" width="1.6" height="2.2" rx="0.5" fill="#ef4444" />
+
+            {/* Side Mirrors */}
+            <rect x="3" y="-9.6" width="2.6" height="1.5" rx="0.6" fill="#ffffff" stroke="#2563eb" strokeWidth="0.6" />
+            <rect x="3" y="8.1" width="2.6" height="1.5" rx="0.6" fill="#ffffff" stroke="#2563eb" strokeWidth="0.6" />
+          </g>
+        </svg>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">

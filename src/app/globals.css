@@ -680,3 +680,64 @@ section[id],
     animation: none !important;
   }
 }
+
+/* ─── Animated Exterior Road & Car Journey for Location Section ──────────── */
+@keyframes map-road-dash {
+  0% {
+    stroke-dashoffset: 40;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.map-road-animated-dash {
+  animation: map-road-dash 1.4s linear infinite;
+}
+
+@keyframes mapCarDriveLoop {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+.exterior-car-drive {
+  offset-path: path("M 340 10 C 360 65, 420 90, 500 55 C 580 15, 740 15, 840 50 C 915 75, 945 130, 890 170 C 820 195, 700 195, 540 195 C 380 195, 240 190, 140 205 C 75 220, 50 300, 45 420 C 40 560, 55 700, 95 840");
+  offset-rotate: auto;
+  animation: mapCarDriveLoop 14s linear infinite;
+}
+
+@keyframes map-pin-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.9;
+  }
+}
+
+.map-pin-pulse-effect {
+  animation: map-pin-pulse 2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-road-animated-dash,
+  .map-pin-pulse-effect,
+  .exterior-car-drive {
+    animation: none !important;
+  }
+}
