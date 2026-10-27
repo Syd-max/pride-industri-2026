@@ -10,9 +10,8 @@ export interface PartnerItem {
   name: string;
   category: 'created-by' | 'sponsored-by' | 'support-by' | 'partnership-by';
   role: string;
-  logoUrl?: string;
+  logoUrl: string;
   website?: string;
-  isPlaceholder?: boolean;
 }
 
 export const PARTNER_CATEGORIES: PartnerCategoryInfo[] = [
@@ -44,7 +43,7 @@ export const PARTNERS_DATA: PartnerItem[] = [
     logoUrl: '/LOGO_RRD_ORGANIZER.png',
   },
 
-  // ─── 2. SPONSORED BY (2 Logo) ────────────────────────────────
+  // ─── 2. SPONSORED BY (1 Logo) ────────────────────────────────
   {
     id: 'sponsor-braga',
     name: 'Braga City Walk',
@@ -53,52 +52,45 @@ export const PARTNERS_DATA: PartnerItem[] = [
     logoUrl: '/LOGO_BRAGA_CITYWALK.png',
     website: 'https://bragacitywalk.co.id',
   },
-  {
-    id: 'sponsor-02',
-    name: 'Official Sponsor 02',
-    category: 'sponsored-by',
-    role: 'Official Industry Sponsor',
-    isPlaceholder: true,
-  },
 
   // ─── 3. SUPPORT BY (3 Logo) ──────────────────────────────────
   {
-    id: 'support-disdagin',
-    name: 'Disdagin Kota Bandung',
+    id: 'support-akademi-umkm',
+    name: 'Akademi UMKM',
     category: 'support-by',
-    role: 'Pemerintah Kota Bandung',
-    logoUrl: '/LOGOS_GOV_DISDAGIN_KEMILAU_CROPPED.png',
-    website: 'https://disdagin.bandung.go.id',
+    role: 'Akademi UMKM',
+    logoUrl: '/LOGO_AKADEMI_UMKM.png',
   },
   {
-    id: 'support-nxg',
-    name: 'NXG Institute',
+    id: 'support-bank-bjb',
+    name: 'Bank BJB',
     category: 'support-by',
-    role: 'Edukasi & Riset Digital',
-    logoUrl: '/LOGO_NXG_INSTITUTE.png',
+    role: 'Bank BJB',
+    logoUrl: '/LOGO_BANK_BJB.png',
+    website: 'https://bankbjb.co.id',
   },
   {
-    id: 'support-dekranasda',
-    name: 'Dekranasda Kota Bandung',
+    id: 'support-tactlink',
+    name: 'Tactlink',
     category: 'support-by',
-    role: 'Dewan Kerajinan Nasional Daerah',
-    isPlaceholder: true,
+    role: 'Tactlink Smart Digital Directory',
+    logoUrl: '/LOGO_TACTLINK_CROPPED.png',
+    website: 'https://tactlink.id',
   },
 
   // ─── 4. PARTNERSHIP BY (2 Logo) ──────────────────────────────
   {
-    id: 'partner-tactlink',
-    name: 'Tactlink',
+    id: 'partner-gajiya',
+    name: 'Gajiya by JOOB',
     category: 'partnership-by',
-    role: 'Official Verification & Platform',
-    logoUrl: '/LOGO_TACTLINK_CROPPED.png',
-    website: 'https://tactlink.id',
+    role: 'Gajiya by JOOB',
+    logoUrl: '/LOGO_GAJIYA.png',
   },
   {
-    id: 'partner-media',
-    name: 'Official Media Partner',
+    id: 'partner-perintis-berdaya',
+    name: 'Perintis Berdaya',
     category: 'partnership-by',
-    role: 'Liputan Nasional & Lokal',
-    isPlaceholder: true,
+    role: 'Perintis Berdaya',
+    logoUrl: '/LOGO_PERINTIS_BERDAYA.png',
   },
 ];
