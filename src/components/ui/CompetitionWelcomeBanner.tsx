@@ -10,21 +10,30 @@ import { useEffect, useState } from 'react';
 
 function SewingMachineIcon() {
   return (
-    <svg viewBox="0 0 100 90" fill="none" aria-hidden="true">
-      <g transform="rotate(-6, 50, 45)">
+    <svg viewBox="0 0 100 85" fill="none" aria-hidden="true">
+      <g transform="rotate(-4, 50, 42)">
         {/* Vector Shadow Plate */}
-        <path d="M 10,74 L 90,74 L 85,84 L 15,84 Z" fill="#000" />
-        {/* Base */}
-        <path d="M 12,66 L 88,66 L 85,76 L 15,76 Z" fill="#E5A110" stroke="#000" strokeWidth="3.5" strokeLinejoin="round" />
-        {/* Machine Body */}
-        <path d="M 66,66 V 26 C 66,16 45,16 26,26 V 46 H 42 V 34 H 54 V 66 Z" fill="#FFC700" stroke="#000" strokeWidth="3.5" strokeLinejoin="round" />
-        {/* Needle */}
-        <line x1="26" y1="46" x2="26" y2="64" stroke="#000" strokeWidth="3" />
-        {/* Hand Wheel */}
-        <ellipse cx="76" cy="35" rx="6" ry="12" fill="#E5A110" stroke="#000" strokeWidth="3" />
-        {/* Thread Spool */}
-        <rect x="48" y="11" width="10" height="9" fill="#FFFFFF" stroke="#000" strokeWidth="2.5" rx="1" />
-        <line x1="53" y1="9" x2="53" y2="21" stroke="#000" strokeWidth="2.5" />
+        <path d="M 8,72 L 92,72 L 88,80 L 12,80 Z" fill="#000" opacity="0.4" />
+        {/* Base Plate */}
+        <path d="M 10,64 L 90,64 C 91,64 92,65 91,67 L 88,74 C 87,76 86,76 84,76 L 16,76 C 14,76 13,76 12,74 L 9,67 C 8,65 9,64 10,64 Z" fill="#E5A110" stroke="#000" strokeWidth="3" strokeLinejoin="round" />
+        {/* Silver Needle Plate */}
+        <rect x="22" y="64" width="20" height="3" fill="#E2E8F0" stroke="#000" strokeWidth="1.5" />
+        {/* Machine Body C-Frame */}
+        <path d="M 64,64 V 30 C 64,24 60,20 54,20 H 30 C 24,20 20,24 20,30 V 42 C 20,44 22,46 24,46 H 32 C 34,46 36,44 36,42 V 34 C 36,32 38,30 40,30 H 52 C 54,30 56,32 56,34 V 64 Z" fill="#FFC700" stroke="#000" strokeWidth="3" strokeLinejoin="round" />
+        {/* Needle Bar & Needle */}
+        <rect x="26" y="44" width="3" height="15" fill="#CBD5E1" stroke="#000" strokeWidth="1.5" />
+        <line x1="27.5" y1="59" x2="27.5" y2="64" stroke="#000" strokeWidth="2" strokeLinecap="round" />
+        {/* Presser Foot */}
+        <path d="M 24,61 H 31 V 63 H 24 Z" fill="#94A3B8" stroke="#000" strokeWidth="1.5" />
+        {/* Handwheel on right */}
+        <path d="M 64,32 C 68,32 72,34 72,40 V 52 C 72,58 68,60 64,60 Z" fill="#E5A110" stroke="#000" strokeWidth="3" strokeLinejoin="round" />
+        <ellipse cx="68" cy="46" rx="2.5" ry="8" fill="#F59E0B" stroke="#000" strokeWidth="1.5" />
+        {/* Spool Pin & Thread Spool */}
+        <line x1="48" y1="20" x2="48" y2="10" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
+        <rect x="43" y="11" width="10" height="9" rx="1.5" fill="#38BDF8" stroke="#000" strokeWidth="2" />
+        <line x1="43" y1="15.5" x2="53" y2="15.5" stroke="#FFF" strokeWidth="1.5" />
+        {/* Tension Dial */}
+        <circle cx="36" cy="28" r="3.5" fill="#E2E8F0" stroke="#000" strokeWidth="2" />
       </g>
     </svg>
   );
@@ -257,29 +266,62 @@ export default function CompetitionWelcomeBanner() {
               <path d="M 52,65 Q 52,70 47,70 Q 52,70 52,75 Q 52,70 57,70 Q 52,70 52,65 Z" fill="#FFD000" />
               <path d="M 198,88 Q 198,92 194,92 Q 198,92 198,96 Q 198,92 202,92 Q 198,92 198,88 Z" fill="#FFD000" />
 
-              {/* Open Delivery Box (Top Right) */}
-              <g transform="translate(186, 20) rotate(14, 20, 20)">
-                <polygon points="12,18 28,12 40,20 24,28" fill="#FBBF24" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-                <polygon points="12,18 24,28 24,42 12,32" fill="#D97706" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-                <polygon points="24,28 40,20 40,34 24,42" fill="#B45309" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-                <polygon points="12,18 4,14 16,10 24,14" fill="#FBBF24" stroke="#000" strokeWidth="2" />
-                <polygon points="28,12 36,6 46,12 38,18" fill="#FDE68A" stroke="#000" strokeWidth="2" />
+              {/* 3D Open Shipping Parcel Box (Top Right) */}
+              <g transform="translate(182, 14) rotate(10, 25, 25)">
+                {/* Inside Dark Cavity */}
+                <polygon points="12,18 24,12 36,18 24,24" fill="#451A03" stroke="#000" strokeWidth="1.8" strokeLinejoin="round" />
+                {/* Back-Left Flap */}
+                <polygon points="12,18 24,12 21,5 9,10" fill="#D97706" stroke="#000" strokeWidth="1.8" strokeLinejoin="round" />
+                {/* Back-Right Flap */}
+                <polygon points="24,12 36,18 39,10 27,5" fill="#B45309" stroke="#000" strokeWidth="1.8" strokeLinejoin="round" />
+                {/* Front-Left Face */}
+                <polygon points="12,18 24,24 24,38 12,32" fill="#F59E0B" stroke="#000" strokeWidth="1.8" strokeLinejoin="round" />
+                {/* Front-Right Face */}
+                <polygon points="24,24 36,18 36,32 24,38" fill="#D97706" stroke="#000" strokeWidth="1.8" strokeLinejoin="round" />
+                {/* Front-Left Flap */}
+                <polygon points="12,18 24,24 21,30 9,23" fill="#FBBF24" stroke="#000" strokeWidth="1.8" strokeLinejoin="round" />
+                {/* Front-Right Flap */}
+                <polygon points="24,24 36,18 39,23 27,30" fill="#F59E0B" stroke="#000" strokeWidth="1.8" strokeLinejoin="round" />
+                {/* Barcode Shipping Label */}
+                <polygon points="14.5,23 19,25 19,30 14.5,27.5" fill="#FFF" stroke="#000" strokeWidth="0.8" />
+                <line x1="16" y1="24.5" x2="16" y2="28" stroke="#000" strokeWidth="0.7" />
+                <line x1="17.5" y1="25.5" x2="17.5" y2="29" stroke="#000" strokeWidth="0.9" />
               </g>
 
-              {/* Gift Box (Bottom Left Outer Corner) */}
-              <g transform="translate(20, 122)">
-                <rect x="0" y="8" width="26" height="22" fill="#F59E0B" stroke="#000" strokeWidth="2.5" rx="2" />
-                <line x1="13" y1="8" x2="13" y2="30" stroke="#B45309" strokeWidth="3" />
-                <rect x="6" y="0" width="14" height="8" fill="#EF4444" stroke="#000" strokeWidth="2" rx="1" />
+              {/* 3D Gift Packaging Box with Bow (Bottom Left) */}
+              <g transform="translate(18, 118) rotate(-4, 18, 18)">
+                {/* Left Face */}
+                <polygon points="5,15 18,21 18,33 5,26" fill="#F59E0B" stroke="#000" strokeWidth="2" strokeLinejoin="round" />
+                {/* Right Face */}
+                <polygon points="18,21 32,15 32,26 18,33" fill="#D97706" stroke="#000" strokeWidth="2" strokeLinejoin="round" />
+                {/* Top Face */}
+                <polygon points="18,9 32,15 18,21 5,15" fill="#FBBF24" stroke="#000" strokeWidth="2" strokeLinejoin="round" />
+                {/* Red Ribbon Bands */}
+                <polygon points="10.5,17.5 13,18.5 13,29.5 10.5,28.5" fill="#DC2626" />
+                <polygon points="23.5,18.5 26,17.5 26,28.5 23.5,29.5" fill="#B91C1C" />
+                <polygon points="10.5,11.5 13,12.5 26,17.5 23.5,16.5" fill="#EF4444" />
+                <polygon points="23.5,11.5 26,12.5 13,17.5 10.5,16.5" fill="#EF4444" />
+                {/* Ribbon Bow on Top */}
+                <path d="M 18,9 C 14,5 12,8 17,10 Z" fill="#EF4444" stroke="#000" strokeWidth="1.2" strokeLinejoin="round" />
+                <path d="M 18,9 C 22,5 24,8 19,10 Z" fill="#EF4444" stroke="#000" strokeWidth="1.2" strokeLinejoin="round" />
+                <circle cx="18" cy="9" r="2" fill="#DC2626" stroke="#000" strokeWidth="1.2" />
               </g>
 
-              {/* Blue Scissors (Bottom Right) */}
-              <g transform="translate(188, 126) rotate(-22, 15, 15)">
-                <circle cx="10" cy="35" r="6" fill="none" stroke="#2563EB" strokeWidth="3.5" />
-                <circle cx="24" cy="35" r="6" fill="none" stroke="#2563EB" strokeWidth="3.5" />
-                <polygon points="8,30 16,8 18,8 14,30" fill="#E2E8F0" stroke="#000" strokeWidth="2" />
-                <polygon points="22,30 16,8 14,8 18,30" fill="#CBD5E1" stroke="#000" strokeWidth="2" />
-                <circle cx="16" cy="22" r="2" fill="#000" />
+              {/* Refined Craft Scissors (Bottom Right) */}
+              <g transform="translate(186, 122) rotate(-18, 20, 20)">
+                {/* Upper Blade */}
+                <path d="M 16,19 L 36,8 C 34,13 28,18 20,22 Z" fill="#E2E8F0" stroke="#000" strokeWidth="1.8" strokeLinejoin="round" />
+                {/* Lower Blade */}
+                <path d="M 16,21 L 36,30 C 33,26 26,22 20,19 Z" fill="#CBD5E1" stroke="#000" strokeWidth="1.8" strokeLinejoin="round" />
+                {/* Pivot Screw */}
+                <circle cx="18" cy="20.5" r="2" fill="#475569" stroke="#000" strokeWidth="1.2" />
+                <circle cx="18" cy="20.5" r="0.7" fill="#FFF" />
+                {/* Upper Handle Ring */}
+                <path d="M 16,18 C 12,16 6,12 4,17 C 2,22 8,24 14,21 Z" fill="#2563EB" stroke="#000" strokeWidth="2" strokeLinejoin="round" />
+                <ellipse cx="8.5" cy="18.5" rx="3" ry="2.5" fill="none" stroke="#000" strokeWidth="1.5" />
+                {/* Lower Handle Ring */}
+                <path d="M 15,22 C 12,24 6,27 5,32 C 4,37 10,38 14,31 Z" fill="#2563EB" stroke="#000" strokeWidth="2" strokeLinejoin="round" />
+                <ellipse cx="9" cy="31.5" rx="3" ry="3" fill="none" stroke="#000" strokeWidth="1.5" />
               </g>
 
               {/* Desain Kemasan Typography (Clean Poppins 900 — Open, Legible, Not Mepet, NO Black Shadow) */}

@@ -184,9 +184,9 @@
 
 /* Top-Left: Sewing Machine (Textile / Fashion Industry) */
 .cwb-ornament-sewing {
-  top: -12px;
-  left: 16px;
-  width: 64px;
+  top: -14px;
+  left: 12px;
+  width: 70px;
 }
 
 /* Top-Right: Chef Hat (Culinary Industry) */
@@ -246,9 +246,9 @@
   }
 
   .cwb-ornament-sewing {
-    top: -10px;
+    top: -12px;
     left: 4px;
-    width: 46px;
+    width: 50px;
   }
 
   .cwb-ornament-chef {
