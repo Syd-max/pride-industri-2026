@@ -11,12 +11,9 @@ export default function PartnersSection() {
   return (
     <section
       id="partners"
-      className="relative pt-10 sm:pt-14 pb-10 sm:pb-14 scroll-mt-20 overflow-hidden border-t border-slate-200/80 bg-gradient-to-b from-white/70 via-slate-50/80 to-white/95"
+      className="relative pt-10 sm:pt-14 pb-12 sm:pb-16 scroll-mt-20 overflow-hidden"
       aria-label="Partner dan Sponsor PRIDE Industri 2026"
     >
-      {/* Subtle ambient background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-blue-100/25 rounded-full blur-3xl pointer-events-none -z-10" />
-
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* ─── Header: Human Design Compact ─── */}
