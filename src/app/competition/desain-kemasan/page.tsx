@@ -926,18 +926,6 @@ export default function DesainKemasanPage() {
                         <span>Unduh Syarat &amp; Ketentuan PDF</span>
                       </a>
 
-                      <a
-                        href="https://bit.ly/PRIDE2026LogodanVisualAssets"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-50/80 hover:bg-blue-100 border border-blue-200 text-blue-700 text-xs font-bold transition-all cursor-pointer"
-                      >
-                        <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                        </svg>
-                        <span>Aset Logo &amp; Format Visual (bit.ly/PRIDE2026LogodanVisualAssets)</span>
-                      </a>
                     </div>
 
                     {/* ─── 9. Upload file karya desain kemasan (PDF, maks 7 MB, wajib) ─── */}
