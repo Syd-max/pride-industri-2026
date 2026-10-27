@@ -379,7 +379,7 @@ export default function CompetitionWelcomeBanner() {
           </Link>
         </div>
 
-        {/* Bottom Home Arrow Ribbon: Clean, Simple "Page Utama" */}
+        {/* Bottom Home Arrow Ribbon: Clean, Taller & Proportional "Page Utama" */}
         <div className="cwb-home-container">
           <Link
             href="/"
@@ -388,32 +388,29 @@ export default function CompetitionWelcomeBanner() {
             aria-label="Page Utama"
           >
             <span className="sr-only">Page Utama</span>
-            <svg className="cwb-home-svg" viewBox="0 0 200 44" fill="none" aria-hidden="true">
+            <svg className="cwb-home-svg" viewBox="0 0 210 52" fill="none" aria-hidden="true">
               <defs>
                 <linearGradient id="cwbHomeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="0%" stopColor="#FFD500" />
                   <stop offset="100%" stopColor="#F97316" />
                 </linearGradient>
               </defs>
-              <polygon points="10,6 168,6 192,22 168,38 10,38" fill="#000" transform="translate(0, 3)" />
-              <polygon points="10,6 168,6 192,22 168,38 10,38" fill="url(#cwbHomeGrad)" stroke="#000" strokeWidth="3" strokeLinejoin="round" />
+              {/* Drop Shadow */}
+              <polygon points="10,4 176,4 202,25 176,46 10,46" fill="#000" transform="translate(0, 3)" />
+              {/* Arrow Ribbon Base (Taller shape, crisp border) */}
+              <polygon points="10,4 176,4 202,25 176,46 10,46" fill="url(#cwbHomeGrad)" stroke="#000" strokeWidth="3.2" strokeLinejoin="round" />
 
-              {/* Home Icon (Left) */}
-              <g transform="translate(24, 13)">
-                <polygon points="8,0 0,7 2.5,7 2.5,16 13.5,16 13.5,7 16,7" fill="#000" stroke="#000" strokeWidth="1" strokeLinejoin="round" />
-                <rect x="6" y="9.5" width="4" height="6.5" rx="0.5" fill="#FFD500" />
-              </g>
-
-              {/* Center Text: "Page Utama" */}
+              {/* Center Text: "Page Utama" (Bold Poppins 800, Tall & Clear, Not Bantet) */}
               <text
-                x="106"
-                y="26.5"
+                x="98"
+                y="25"
+                dominantBaseline="central"
                 textAnchor="middle"
                 fontFamily="var(--font-poppins), 'Poppins', system-ui, sans-serif"
-                fontSize="13.5"
-                fontWeight="900"
+                fontSize="16.5"
+                fontWeight="800"
                 fill="#000000"
-                letterSpacing="0.6"
+                letterSpacing="0.8"
               >
                 Page Utama
               </text>

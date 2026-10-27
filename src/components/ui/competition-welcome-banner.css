@@ -137,7 +137,7 @@
 
 .cwb-home-ribbon {
   display: block;
-  width: clamp(170px, 38%, 210px);
+  width: clamp(180px, 40%, 220px);
   text-decoration: none;
   cursor: pointer;
   transform: none;
@@ -247,7 +247,7 @@
   }
 
   .cwb-home-ribbon {
-    width: clamp(160px, 50%, 195px);
+    width: clamp(165px, 52%, 205px);
   }
 
   .cwb-ornament-sewing {
