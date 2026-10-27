@@ -54,7 +54,7 @@ export default function Footer() {
           <div className="lg:col-span-5 space-y-4">
             <div>
               <h3 className="text-xs font-extrabold uppercase tracking-wider text-white">
-                Sekretariat &amp; Kontak Resmi
+                Sekretariat <span className="title-amp text-blue-400">&amp;</span> Kontak Resmi
               </h3>
               <p className="text-xs text-slate-400 mt-1">
                 Layanan informasi pameran, kepesertaan kompetisi, dan presensi festival.

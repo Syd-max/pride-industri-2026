@@ -177,7 +177,7 @@ export default function CompetitionSection() {
               <span>Kompetisi Resmi PRIDE 2026</span>
             </div>
             <h2 className="ticket-main-title">
-              Lomba Desain Kemasan &amp; Video
+              Lomba Desain Kemasan <span className="title-amp">&amp;</span> Video
             </h2>
             <p className="ticket-main-desc">
               Kompetisi yang mendorong inovasi dan kualitas produk IKM/UMKM. Terbuka untuk Mahasiswa/i, Siswa/i &amp; Umum.

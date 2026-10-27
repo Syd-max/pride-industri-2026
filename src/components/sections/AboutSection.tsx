@@ -80,7 +80,7 @@ export default function AboutSection() {
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 relative">
           
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Panggung Kehormatan Kreativitas &amp; Industri Lokal Bandung
+            Panggung Kehormatan Kreativitas <span className="title-amp">&amp;</span> Industri Lokal Bandung
           </h2>
 
           <p className="mt-3 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto font-medium">

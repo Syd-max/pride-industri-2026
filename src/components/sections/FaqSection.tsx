@@ -142,7 +142,7 @@ export default function FaqSection() {
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white text-slate-700 border border-slate-200/90 shadow-2xs mb-3">
             <span className="w-2 h-2 rounded-full bg-blue-600" />
-            <span>Pusat Bantuan &amp; FAQ</span>
+            <span>Pusat Bantuan <span className="title-amp">&amp;</span> FAQ</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
             Pertanyaan yang Sering Diajukan
