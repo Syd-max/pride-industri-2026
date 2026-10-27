@@ -37,51 +37,51 @@ export const PARTNER_CATEGORIES: PartnerCategoryInfo[] = [
 export const PARTNERS_DATA: PartnerItem[] = [
   // ─── 1. CREATED BY (1 Logo) ──────────────────────────────────
   {
-    id: 'created-disdagin',
-    name: 'Disdagin Kota Bandung',
+    id: 'created-rrd',
+    name: 'RRD Organizer',
     category: 'created-by',
-    role: 'Penyelenggara Resmi',
-    logoUrl: '/LOGOS_GOV_DISDAGIN_KEMILAU_CROPPED.png',
-    website: 'https://disdagin.bandung.go.id',
+    role: 'PT Rahman Ramadhan Diandra',
+    logoUrl: '/LOGO_RRD_ORGANIZER.png',
   },
 
   // ─── 2. SPONSORED BY (2 Logo) ────────────────────────────────
   {
-    id: 'sponsor-01',
-    name: 'Official Sponsor 01',
+    id: 'sponsor-braga',
+    name: 'Braga City Walk',
     category: 'sponsored-by',
-    role: 'Main Corporate Partner',
-    isPlaceholder: true,
+    role: 'Official Sponsor & Venue',
+    logoUrl: '/LOGO_BRAGA_CITYWALK.png',
+    website: 'https://bragacitywalk.co.id',
   },
   {
     id: 'sponsor-02',
     name: 'Official Sponsor 02',
     category: 'sponsored-by',
-    role: 'Official Industry Partner',
+    role: 'Official Industry Sponsor',
     isPlaceholder: true,
   },
 
   // ─── 3. SUPPORT BY (3 Logo) ──────────────────────────────────
   {
-    id: 'support-braga-citywalk',
-    name: 'Braga City Walk',
+    id: 'support-disdagin',
+    name: 'Disdagin Kota Bandung',
     category: 'support-by',
-    role: 'Official Venue Host',
-    logoUrl: '/LOGO_BRAGA_CITYWALK.png',
-    website: 'https://bragacitywalk.co.id',
+    role: 'Pemerintah Kota Bandung',
+    logoUrl: '/LOGOS_GOV_DISDAGIN_KEMILAU_CROPPED.png',
+    website: 'https://disdagin.bandung.go.id',
+  },
+  {
+    id: 'support-nxg',
+    name: 'NXG Institute',
+    category: 'support-by',
+    role: 'Edukasi & Riset Digital',
+    logoUrl: '/LOGO_NXG_INSTITUTE.png',
   },
   {
     id: 'support-dekranasda',
     name: 'Dekranasda Kota Bandung',
     category: 'support-by',
     role: 'Dewan Kerajinan Nasional Daerah',
-    isPlaceholder: true,
-  },
-  {
-    id: 'support-ikm-hub',
-    name: 'Asosiasi IKM Kota Bandung',
-    category: 'support-by',
-    role: 'Jejaring Pelaku Industri',
     isPlaceholder: true,
   },
 

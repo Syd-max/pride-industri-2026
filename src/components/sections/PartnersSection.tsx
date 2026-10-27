@@ -98,7 +98,7 @@ function PartnerCard({ partner, index }: { partner: PartnerItem; index: number }
             alt={partner.name}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
-            className="object-contain filter grayscale group-hover:grayscale-0 contrast-125 group-hover:scale-105 transition-all duration-300"
+            className="object-contain group-hover:scale-105 transition-all duration-300"
           />
         </div>
       ) : (
