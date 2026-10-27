@@ -439,6 +439,8 @@
   height: clamp(200px, 28vw, 320px);
   overflow: hidden;
   pointer-events: none;
+  margin-top: -1px;
+  background-color: #070a13;
 }
 
 .moon-transition-gradient {
@@ -447,10 +449,10 @@
   background: linear-gradient(
     180deg,
     #070a13 0%,
-    #070a13 16%,
-    rgba(8, 13, 26, 0.92) 36%,
-    rgba(16, 26, 52, 0.62) 56%,
-    rgba(56, 78, 122, 0.25) 75%,
+    #070a13 22%,
+    rgba(8, 13, 26, 0.92) 40%,
+    rgba(16, 26, 52, 0.62) 58%,
+    rgba(56, 78, 122, 0.25) 76%,
     rgba(180, 202, 236, 0.05) 92%,
     #ffffff 100%
   );

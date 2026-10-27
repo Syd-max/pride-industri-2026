@@ -68,7 +68,15 @@
   width: 100%;
   height: 100%;
   background-image:
-    linear-gradient(180deg, rgba(6, 12, 24, 0.62) 0%, rgba(6, 12, 24, 0.58) 46%, rgba(6, 12, 24, 0.9) 100%),
+    linear-gradient(
+      180deg,
+      rgba(6, 12, 24, 0.62) 0%,
+      rgba(6, 12, 24, 0.58) 40%,
+      rgba(7, 10, 19, 0.78) 65%,
+      rgba(7, 10, 19, 0.94) 84%,
+      #070a13 96%,
+      #070a13 100%
+    ),
     url('/BRAGA_DE_VRIES_LANDMARK.webp');
   background-repeat: no-repeat;
   background-position: center center;
@@ -76,6 +84,25 @@
   pointer-events: none;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+}
+
+/* Seamless bottom fade: smoothly transitions hero photo into the dark transition stage */
+.scroll-stage::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: clamp(160px, 24vh, 300px);
+  background: linear-gradient(
+    180deg,
+    rgba(7, 10, 19, 0) 0%,
+    rgba(7, 10, 19, 0.4) 35%,
+    rgba(7, 10, 19, 0.85) 70%,
+    #070a13 100%
+  );
+  pointer-events: none;
+  z-index: 5;
 }
 
 @media (max-width: 768px) {
