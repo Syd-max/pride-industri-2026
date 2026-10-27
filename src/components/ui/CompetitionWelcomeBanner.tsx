@@ -152,7 +152,7 @@ export default function CompetitionWelcomeBanner() {
               />
 
               {/* Retro Film Camera (Top Left of Shield) */}
-              <g transform="translate(14, 16) rotate(-6, 25, 20)">
+              <g transform="translate(12, 20) rotate(-6, 25, 20)">
                 <rect x="8" y="16" width="34" height="24" rx="4" fill="#000" transform="translate(0, 3)" />
                 <circle cx="16" cy="10" r="8" fill="#475569" stroke="#000" strokeWidth="2.5" />
                 <circle cx="16" cy="10" r="3" fill="#94A3B8" />
