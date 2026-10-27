@@ -133,66 +133,7 @@ export default function Footer() {
 
         </div>
 
-        {/* ─── Supported By Section ─── */}
-        <div className="py-4 sm:py-5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center gap-3.5 sm:gap-6">
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-[11px] font-extrabold uppercase tracking-widest text-slate-300">
-              SUPPORT BY:
-            </span>
-          </div>
 
-          {/* Partner Logos: Clean layer shadow layout without bulky boxes */}
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-            {/* Braga Citywalk */}
-            <a
-              href="https://maps.google.com/?q=Braga+City+Walk+Bandung"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center transition-all hover:scale-105 group cursor-pointer filter drop-shadow-sm hover:drop-shadow-md"
-              title="Braga Citywalk - Official Venue Partner"
-            >
-              <Image
-                src="/LOGO_BRAGA_CITYWALK_LAYER.png"
-                alt="Braga Citywalk"
-                width={70}
-                height={28}
-                style={{ height: '28px', width: 'auto', maxHeight: '28px' }}
-                className="object-contain"
-              />
-            </a>
-
-            {/* RRD Organizer */}
-            <div
-              className="inline-flex items-center transition-all hover:scale-105 filter drop-shadow-sm hover:drop-shadow-md"
-              title="PT Rahman Ramadhan Diandra (RRD Organizer)"
-            >
-              <Image
-                src="/LOGO_RRD_ORGANIZER.png"
-                alt="RRD Organizer"
-                width={120}
-                height={28}
-                style={{ height: '28px', width: 'auto', maxHeight: '28px' }}
-                className="object-contain"
-              />
-            </div>
-
-            {/* NXG Institute */}
-            <div
-              className="inline-flex items-center transition-all hover:scale-105 filter drop-shadow-sm hover:drop-shadow-md"
-              title="NXG Institute"
-            >
-              <Image
-                src="/LOGO_NXG_INSTITUTE.png"
-                alt="NXG Institute"
-                width={120}
-                height={28}
-                style={{ height: '28px', width: 'auto', maxHeight: '28px' }}
-                className="object-contain"
-              />
-            </div>
-          </div>
-        </div>
 
         {/* Bottom Bar: Copyright & Developer / Powered By Attribution */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
