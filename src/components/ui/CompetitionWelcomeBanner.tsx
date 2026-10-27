@@ -127,22 +127,10 @@ export default function CompetitionWelcomeBanner() {
         <div className="cwb-ornament cwb-ornament-batagor"><BatagorIcon /></div>
         <div className="cwb-ornament cwb-ornament-shoe"><ShoeIcon /></div>
 
-        {/* Header Title (Coded with SVG Layers) */}
-        <div className="cwb-title-wrap">
-          <h2 id="competition-banner-title" className="sr-only">
-            Ikuti &amp; Daftar Lombanya Sekarang!
-          </h2>
-          <svg className="cwb-title-svg" viewBox="0 0 380 75" fill="none" aria-hidden="true">
-            <g textAnchor="middle" fontFamily="Impact, 'Arial Black', sans-serif" fontWeight="900">
-              {/* Drop Shadow */}
-              <text x="190" y="32" fontSize="27" fill="#000" stroke="#000" strokeWidth="7" strokeLinejoin="round">IKUTI &amp; DAFTAR</text>
-              <text x="190" y="65" fontSize="31" fill="#000" stroke="#000" strokeWidth="7" strokeLinejoin="round">LOMBANYA SEKARANG!</text>
-              {/* Inner Yellow Fill with Crisp Stroke */}
-              <text x="190" y="29" fontSize="27" fill="#FFC700" stroke="#000" strokeWidth="3" strokeLinejoin="round">IKUTI &amp; DAFTAR</text>
-              <text x="190" y="62" fontSize="31" fill="#FFC700" stroke="#000" strokeWidth="3" strokeLinejoin="round">LOMBANYA SEKARANG!</text>
-            </g>
-          </svg>
-        </div>
+        {/* Accessible Title for Screen Readers */}
+        <h2 id="competition-banner-title" className="sr-only">
+          Pilih Kompetisi PRIDE Industri 2026
+        </h2>
 
         {/* Side-by-Side Action Cards (Pure Vector SVG Badges) */}
         <div className="cwb-actions">

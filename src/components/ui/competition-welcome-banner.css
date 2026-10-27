@@ -21,6 +21,7 @@
   position: relative;
   width: min(650px, calc(100vw - 28px));
   margin: auto;
+  padding-top: clamp(10px, 2.5vw, 18px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -74,25 +75,6 @@
   outline-offset: 4px;
 }
 
-/* Header Title (Arched SVG Comic Title) */
-.cwb-title-wrap {
-  position: relative;
-  z-index: 15;
-  width: clamp(230px, 60%, 380px);
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cwb-title-svg {
-  width: 100%;
-  height: auto;
-  display: block;
-  pointer-events: none;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
-}
-
 /* Side-by-Side Action Cards */
 .cwb-actions {
   position: relative;
@@ -103,7 +85,7 @@
   gap: clamp(8px, 2.2vw, 20px);
   width: 100%;
   max-width: 550px;
-  margin: clamp(-6px, -1vw, 0px) auto 0;
+  margin: 0 auto;
 }
 
 .cwb-card {
