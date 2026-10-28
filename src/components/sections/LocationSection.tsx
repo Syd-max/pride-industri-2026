@@ -44,10 +44,24 @@ function generateExteriorPath(faqTop: number) {
   ].join(' ');
 }
 
+function generateMobileExteriorPath(mobileFaqTop: number) {
+  const yEntry = mobileFaqTop + 380;
+
+  return [
+    `M 180 20`,
+    `C 130 35, 75 77, 45 77`,
+    `C 25 77, 12 90, 12 115`,
+    `C 12 350, 12 ${mobileFaqTop - 80}, 12 ${yEntry - 35}`,
+    `C 12 ${yEntry - 15}, 30 ${yEntry}, 60 ${yEntry}`,
+    `C 90 ${yEntry}, 130 ${yEntry}, 160 ${yEntry}`
+  ].join(' ');
+}
+
 export default function LocationSection() {
   const [copied, setCopied] = useState(false);
   const [hasScrolledIntoView, setHasScrolledIntoView] = useState(false);
   const [faqTop, setFaqTop] = useState(720);
+  const [mobileFaqTop, setMobileFaqTop] = useState(769);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -76,9 +90,15 @@ export default function LocationSection() {
       if (locEl && faqEl) {
         const locRect = locEl.getBoundingClientRect();
         const faqRect = faqEl.getBoundingClientRect();
+        
+        // Desktop scale (1200 viewBox)
         const svgScale = 1200 / (locRect.width || 1200);
         const rawDistance = (faqRect.top - locRect.top + 64) * svgScale;
         setFaqTop(Math.round(rawDistance));
+
+        // Mobile scale (360 viewBox, rawDistance + 64 from -top-16)
+        const rawMobileDistance = faqRect.top - locRect.top + 64;
+        setMobileFaqTop(Math.round(rawMobileDistance));
       }
     };
     updateFaqOffset();
@@ -103,8 +123,8 @@ export default function LocationSection() {
       className="relative z-10 py-6 sm:py-8 lg:py-3.5 lg:h-[calc(100dvh-4rem)] lg:max-h-[calc(100dvh-4rem)] lg:min-h-[580px] lg:flex lg:flex-col lg:justify-between bg-slate-50/70 border-t border-slate-200/80 overflow-visible scroll-mt-16"
       aria-label="Lokasi dan Informasi Pengunjung"
     >
-      {/* ─── Animated Exterior Road & Car Journey (Garis Berjalan & Mobil di Luar Map) ─── */}
-      <div className="absolute inset-x-0 -top-16 bottom-0 pointer-events-none select-none z-0 overflow-visible" style={{ overflow: 'visible' }} aria-hidden="true">
+      {/* ─── Desktop Animated Exterior Road & Car Journey (Garis Berjalan & Mobil di Luar Map - Desktop) ─── */}
+      <div className="hidden lg:block absolute inset-x-0 -top-16 bottom-0 pointer-events-none select-none z-0 overflow-visible" style={{ overflow: 'visible' }} aria-hidden="true">
         <svg
           className="w-full h-full overflow-visible"
           style={{ overflow: 'visible' }}
@@ -220,6 +240,117 @@ export default function LocationSection() {
             {/* Side Mirrors */}
             <rect x="3" y="-9.6" width="2.6" height="1.5" rx="0.6" fill="#ffffff" stroke="#2563eb" strokeWidth="0.6" />
             <rect x="3" y="8.1" width="2.6" height="1.5" rx="0.6" fill="#ffffff" stroke="#2563eb" strokeWidth="0.6" />
+          </g>
+        </svg>
+      </div>
+
+      {/* ─── Mobile Animated Exterior Road & Car Journey (Garis Berjalan & Mobil di Luar Map - Mobile) ─── */}
+      <div className="block lg:hidden absolute inset-x-0 -top-16 bottom-0 pointer-events-none select-none z-0 overflow-visible" style={{ overflow: 'visible' }} aria-hidden="true">
+        <svg
+          className="w-full h-full overflow-visible"
+          style={{ overflow: 'visible' }}
+          viewBox={`0 0 360 ${mobileFaqTop + 500}`}
+          preserveAspectRatio="none"
+          fill="none"
+        >
+          <defs>
+            <filter id="exteriorRoadAuraMob" x="-20%" y="-20%" width="140%" height="200%">
+              <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#2563eb" floodOpacity="0.25" />
+            </filter>
+            <linearGradient id="carHeadlightGlowMob" x1="0%" y1="50%" x2="100%" y2="50%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+              <stop offset="25%" stopColor="#fef08a" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#fef08a" stopOpacity="0" />
+            </linearGradient>
+            <radialGradient id="carRadarPuckMob" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+
+          {/* Mobile Path */}
+          <path
+            id="exteriorCarJourneyPathMobile"
+            d={generateMobileExteriorPath(mobileFaqTop)}
+            fill="none"
+          />
+
+          {/* 1. Road Aura Base Track */}
+          <path
+            d={generateMobileExteriorPath(mobileFaqTop)}
+            stroke="#2563eb"
+            strokeWidth="8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.14"
+          />
+
+          {/* 2. Main Sapphire Blue Highway Line */}
+          <path
+            d={generateMobileExteriorPath(mobileFaqTop)}
+            stroke="#2563eb"
+            strokeWidth="2.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.6"
+            filter="url(#exteriorRoadAuraMob)"
+          />
+
+          {/* 3. Animated Forward Moving Dashes */}
+          <path
+            d={generateMobileExteriorPath(mobileFaqTop)}
+            stroke="#ffffff"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray="6 8"
+            className="map-road-animated-dash"
+          />
+
+          {/* Start Origin Marker behind Competition Ticket Card */}
+          <g transform="translate(180, 20)">
+            <circle r="4" fill="#2563eb" stroke="#ffffff" strokeWidth="1.5" />
+            <circle r="9" fill="#2563eb" opacity="0.25" />
+          </g>
+
+          {/* 4. Animated Moving Car on Mobile */}
+          <g
+            className={hasScrolledIntoView ? 'exterior-car-drive-mobile' : 'opacity-0'}
+            style={{
+              offsetPath: `path("${generateMobileExteriorPath(mobileFaqTop)}")`,
+            }}
+          >
+            {/* GPS Tracking Puck Aura */}
+            <circle cx="0" cy="0" r="16" fill="url(#carRadarPuckMob)" />
+
+            {/* Headlights Forward Beam Cone */}
+            <polygon points="10,-4 40,-14 40,14 10,4" fill="url(#carHeadlightGlowMob)" opacity="0.9" />
+
+            {/* Soft Drop Shadow */}
+            <rect x="-12" y="-6.5" width="24" height="13" rx="5" fill="#0f172a" opacity="0.32" transform="translate(0, 2)" />
+
+            {/* Car Chassis Body */}
+            <rect x="-11.5" y="-6" width="23" height="12" rx="4.5" fill="#ffffff" stroke="#2563eb" strokeWidth="1" />
+
+            {/* Hood / Racing Stripe */}
+            <line x1="5" y1="0" x2="10" y2="0" stroke="#2563eb" strokeWidth="1.2" />
+
+            {/* Front Windshield */}
+            <path d="M 2 -4.5 L 4.8 -3.5 L 4.8 3.5 L 2 4.5 Z" fill="#0f172a" />
+
+            {/* Roof Top Tinted Glass */}
+            <rect x="-4" y="-3.5" width="6" height="7" rx="1.4" fill="#0f172a" />
+
+            {/* Rear Windshield */}
+            <path d="M -6 -4 L -8 -3 L -8 3 L -6 4 Z" fill="#0f172a" />
+
+            {/* Dual LED Headlights */}
+            <rect x="10.5" y="-5.2" width="1.6" height="2" rx="0.5" fill="#fef08a" />
+            <rect x="10.5" y="3.2" width="1.6" height="2" rx="0.5" fill="#fef08a" />
+
+            {/* Tail Brake Lights */}
+            <rect x="-12" y="-5" width="1.2" height="1.8" rx="0.4" fill="#ef4444" />
+            <rect x="-12" y="3.2" width="1.2" height="1.8" rx="0.4" fill="#ef4444" />
           </g>
         </svg>
       </div>

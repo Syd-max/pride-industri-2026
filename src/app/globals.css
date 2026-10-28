@@ -721,6 +721,31 @@ section[id],
   animation: mapCarDriveOnce 32s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
+@keyframes mapCarDriveMobile {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  2% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 0.3;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+.exterior-car-drive-mobile {
+  offset-rotate: auto;
+  animation: mapCarDriveMobile 24s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
 @keyframes map-pin-pulse {
   0%, 100% {
     transform: scale(1);
@@ -740,7 +765,8 @@ section[id],
 @media (prefers-reduced-motion: reduce) {
   .map-road-animated-dash,
   .map-pin-pulse-effect,
-  .exterior-car-drive-once {
+  .exterior-car-drive-once,
+  .exterior-car-drive-mobile {
     animation: none !important;
   }
 }
