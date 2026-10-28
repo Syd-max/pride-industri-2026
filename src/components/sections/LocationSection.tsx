@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const VENUE = {
   name: 'Braga City Walk Bandung',
@@ -20,6 +20,27 @@ const VENUE = {
 
 export default function LocationSection() {
   const [copied, setCopied] = useState(false);
+  const [hasScrolledIntoView, setHasScrolledIntoView] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          setHasScrolledIntoView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const handleCopyAddress = async () => {
     try {
@@ -34,11 +55,12 @@ export default function LocationSection() {
   return (
     <section
       id="location"
-      className="relative py-10 sm:py-14 lg:py-16 bg-slate-50/70 border-t border-slate-200/80 overflow-hidden"
+      ref={sectionRef}
+      className="relative py-6 sm:py-8 lg:py-3.5 lg:h-[calc(100dvh-4rem)] lg:max-h-[calc(100dvh-4rem)] lg:min-h-[580px] lg:flex lg:flex-col lg:justify-between bg-slate-50/70 border-t border-slate-200/80 overflow-visible scroll-mt-16"
       aria-label="Lokasi dan Informasi Pengunjung"
     >
       {/* ─── Animated Exterior Road & Car Journey (Garis Berjalan & Mobil di Luar Map) ─── */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-20" aria-hidden="true">
+      <div className="absolute inset-x-0 -top-16 -bottom-24 pointer-events-none select-none z-0 overflow-visible" aria-hidden="true">
         <svg
           className="w-full h-full"
           viewBox="0 0 1200 950"
@@ -65,30 +87,16 @@ export default function LocationSection() {
             </radialGradient>
           </defs>
 
-          {/* Exterior Navigation Route Path (Curves around title & outside the map container) */}
+          {/* Exterior Navigation Route Path (Starts behind Video Card at 320,-60 and ends behind FAQ Badge at 600,850) */}
           <path
             id="exteriorCarJourneyPath"
-            d="M 340 10 
-               C 360 65, 420 90, 500 55 
-               C 580 15, 740 15, 840 50 
-               C 915 75, 945 130, 890 170 
-               C 820 195, 700 195, 540 195 
-               C 380 195, 240 190, 140 205 
-               C 75 220, 50 300, 45 420 
-               C 40 560, 55 700, 95 840"
+            d="M 320 -60 C 330 0, 380 50, 460 55 C 560 60, 720 10, 830 45 C 910 70, 940 130, 890 165 C 820 185, 700 185, 540 185 C 380 185, 240 180, 140 195 C 70 215, 50 290, 45 420 C 40 560, 45 660, 60 720 C 80 770, 160 810, 300 830 C 420 845, 520 850, 600 850"
             fill="none"
           />
 
           {/* 1. Road Aura Base Track */}
           <path
-            d="M 340 10 
-               C 360 65, 420 90, 500 55 
-               C 580 15, 740 15, 840 50 
-               C 915 75, 945 130, 890 170 
-               C 820 195, 700 195, 540 195 
-               C 380 195, 240 190, 140 205 
-               C 75 220, 50 300, 45 420 
-               C 40 560, 55 700, 95 840"
+            d="M 320 -60 C 330 0, 380 50, 460 55 C 560 60, 720 10, 830 45 C 910 70, 940 130, 890 165 C 820 185, 700 185, 540 185 C 380 185, 240 180, 140 195 C 70 215, 50 290, 45 420 C 40 560, 45 660, 60 720 C 80 770, 160 810, 300 830 C 420 845, 520 850, 600 850"
             stroke="#2563eb"
             strokeWidth="12"
             strokeLinecap="round"
@@ -98,14 +106,7 @@ export default function LocationSection() {
 
           {/* 2. Main Sapphire Blue Highway Line */}
           <path
-            d="M 340 10 
-               C 360 65, 420 90, 500 55 
-               C 580 15, 740 15, 840 50 
-               C 915 75, 945 130, 890 170 
-               C 820 195, 700 195, 540 195 
-               C 380 195, 240 190, 140 205 
-               C 75 220, 50 300, 45 420 
-               C 40 560, 55 700, 95 840"
+            d="M 320 -60 C 330 0, 380 50, 460 55 C 560 60, 720 10, 830 45 C 910 70, 940 130, 890 165 C 820 185, 700 185, 540 185 C 380 185, 240 180, 140 195 C 70 215, 50 290, 45 420 C 40 560, 45 660, 60 720 C 80 770, 160 810, 300 830 C 420 845, 520 850, 600 850"
             stroke="#2563eb"
             strokeWidth="3.5"
             strokeLinecap="round"
@@ -116,14 +117,7 @@ export default function LocationSection() {
 
           {/* 3. Animated Forward Moving Chevrons / Dashes (Garis Berjalan) */}
           <path
-            d="M 340 10 
-               C 360 65, 420 90, 500 55 
-               C 580 15, 740 15, 840 50 
-               C 915 75, 945 130, 890 170 
-               C 820 195, 700 195, 540 195 
-               C 380 195, 240 190, 140 205 
-               C 75 220, 50 300, 45 420 
-               C 40 560, 55 700, 95 840"
+            d="M 320 -60 C 330 0, 380 50, 460 55 C 560 60, 720 10, 830 45 C 910 70, 940 130, 890 165 C 820 185, 700 185, 540 185 C 380 185, 240 180, 140 195 C 70 215, 50 290, 45 420 C 40 560, 45 660, 60 720 C 80 770, 160 810, 300 830 C 420 845, 520 850, 600 850"
             stroke="#ffffff"
             strokeWidth="2.2"
             strokeLinecap="round"
@@ -132,20 +126,20 @@ export default function LocationSection() {
             className="map-road-animated-dash"
           />
 
-          {/* Start Origin Marker */}
-          <g transform="translate(340, 10)">
+          {/* Start Origin Marker behind Video Card */}
+          <g transform="translate(320, -60)">
+            <circle r="5" fill="#2563eb" stroke="#ffffff" strokeWidth="2" />
+            <circle r="11" fill="#2563eb" opacity="0.25" />
+          </g>
+
+          {/* Arrival Marker cleanly behind FAQ Badge */}
+          <g transform="translate(600, 850)">
             <circle r="6" fill="#2563eb" stroke="#ffffff" strokeWidth="2" />
-            <circle r="13" fill="#2563eb" opacity="0.25" />
+            <circle r="14" fill="#2563eb" opacity="0.25" className="map-pin-pulse-effect" />
           </g>
 
-          {/* Destination Pin Marker at Braga City Walk */}
-          <g transform="translate(95, 840)">
-            <circle r="9" fill="#ef4444" stroke="#ffffff" strokeWidth="2.5" />
-            <circle r="18" fill="#ef4444" opacity="0.2" className="map-pin-pulse-effect" />
-          </g>
-
-          {/* 4. Animated Moving Car (Mobil yang Berjalan Mengikuti Garis via CSS offset-path) */}
-          <g className="exterior-car-drive">
+          {/* 4. Animated Moving Car (Once when visible in viewport, 15s slow drive) */}
+          <g className={hasScrolledIntoView ? 'exterior-car-drive-once' : 'opacity-0'}>
             {/* GPS Tracking Puck Aura */}
             <circle cx="0" cy="0" r="22" fill="url(#carRadarPuck)" />
 
@@ -185,27 +179,27 @@ export default function LocationSection() {
         </svg>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full lg:h-full lg:flex lg:flex-col lg:justify-between">
         
         {/* Section Header */}
-        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 mb-3 shadow-xs">
+        <div className="text-center max-w-xl mx-auto mb-3 sm:mb-4 lg:mb-2 shrink-0">
+          <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 mb-1.5 shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
             Lokasi Venue
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
             Braga City Walk Bandung
           </h2>
-          <p className="mt-2 text-xs sm:text-sm text-slate-600">
+          <p className="mt-1 text-xs text-slate-600">
             Pusat seluruh rangkaian kegiatan festival PRIDE Industri 2026.
           </p>
         </div>
 
         {/* ─── Apple Maps Master Container ─── */}
-        <div className="rounded-3xl sm:rounded-[32px] bg-white border border-slate-200/90 shadow-xl overflow-hidden relative">
+        <div className="flex-1 min-h-0 flex flex-col rounded-3xl sm:rounded-[32px] bg-white border border-slate-200/90 shadow-xl overflow-hidden relative">
           
           {/* Top Apple Maps Chrome Header Bar */}
-          <div className="px-5 py-3.5 bg-slate-900/95 text-white backdrop-blur-md border-b border-slate-800 flex items-center justify-between gap-3">
+          <div className="px-4 py-2 sm:px-5 sm:py-2.5 bg-slate-900/95 text-white backdrop-blur-md border-b border-slate-800 flex items-center justify-between gap-3 shrink-0">
             <div className="flex items-center gap-2.5">
               <div className="flex gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
@@ -225,7 +219,7 @@ export default function LocationSection() {
           </div>
 
           {/* Interactive Map Viewport with Floating Apple Place Card */}
-          <div className="relative w-full h-[420px] sm:h-[480px] lg:h-[540px] bg-slate-100 overflow-hidden">
+          <div className="relative w-full flex-1 min-h-[320px] lg:min-h-0 bg-slate-100 overflow-hidden">
             {/* Embedded Interactive Google Map */}
             <iframe
               title={`Peta Lokasi ${VENUE.name}`}
@@ -267,33 +261,33 @@ export default function LocationSection() {
             </div>
 
             {/* Floating Apple Maps Place Card (Overlay on Desktop, Floating Snug on Map) */}
-            <div className="hidden lg:block absolute top-4 left-4 z-20 w-[350px] max-w-[calc(100%-32px)] pointer-events-auto">
-              <div className="p-5 rounded-3xl bg-white/95 backdrop-blur-xl border border-white/80 shadow-2xl space-y-4">
+            <div className="hidden lg:block absolute top-3 left-3 z-20 w-[330px] max-w-[calc(100%-24px)] pointer-events-auto">
+              <div className="p-4 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/80 shadow-2xl space-y-3">
                 
                 {/* Header Tag & Title */}
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full border bg-blue-50 text-blue-700 border-blue-200">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border bg-blue-50 text-blue-700 border-blue-200">
                       Terbuka untuk Umum
                     </span>
-                    <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-1">
+                    <span className="text-[10px] font-bold text-emerald-600 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                       Aktif 2026
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-black text-slate-900 tracking-tight leading-snug">
+                  <h3 className="text-base font-black text-slate-900 tracking-tight leading-snug">
                     {VENUE.name}
                   </h3>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[10px] text-slate-500 mt-0.5">
                     {VENUE.category}
                   </p>
                 </div>
 
                 {/* Address Snippet */}
-                <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-100 text-[11px] text-slate-600 leading-relaxed">
-                  <div className="flex items-start gap-2">
-                    <svg className="w-3.5 h-3.5 text-rose-500 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor">
+                <div className="p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 text-[10px] text-slate-600 leading-relaxed">
+                  <div className="flex items-start gap-1.5">
+                    <svg className="w-3 h-3 text-rose-500 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
                     </svg>
                     <span className="line-clamp-2">{VENUE.address}</span>
@@ -306,7 +300,7 @@ export default function LocationSection() {
                     href={VENUE.directionsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-2.5 px-3 rounded-xl text-xs font-bold text-white bg-[#0071e3] hover:bg-[#0077ed] transition-all flex items-center justify-center gap-1.5 shadow-sm hover:scale-[1.02] cursor-pointer"
+                    className="py-2 px-3 rounded-xl text-xs font-bold text-white bg-[#0071e3] hover:bg-[#0077ed] transition-all flex items-center justify-center gap-1.5 shadow-sm hover:scale-[1.02] cursor-pointer"
                   >
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <polygon points="3 11 22 2 13 21 11 13 3 11" />
@@ -318,7 +312,7 @@ export default function LocationSection() {
                     href={VENUE.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-2.5 px-3 rounded-xl text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200/80 border border-slate-200/80 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="py-2 px-3 rounded-xl text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200/80 border border-slate-200/80 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Buka Maps</span>
                   </a>
@@ -332,7 +326,7 @@ export default function LocationSection() {
               href={VENUE.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black text-slate-900 bg-white/95 hover:bg-white shadow-lg border border-slate-200/90 backdrop-blur-md transition-all hover:scale-105 cursor-pointer"
+              className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[11px] font-black text-slate-900 bg-white/95 hover:bg-white shadow-lg border border-slate-200/90 backdrop-blur-md transition-all hover:scale-105 cursor-pointer"
             >
               <svg className="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
@@ -342,25 +336,28 @@ export default function LocationSection() {
           </div>
 
           {/* ─── Apple Maps Bottom Information Sheet (For All Devices) ─── */}
-          <div className="p-5 sm:p-7 bg-white space-y-5 border-t border-slate-100">
+          <div className="p-3.5 sm:p-4 lg:py-2.5 lg:px-5 bg-white border-t border-slate-100 shrink-0">
             
             {/* Venue Headline & Quick Actions Bar */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div className="space-y-0.5">
+                <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
                   {VENUE.name}
                 </h3>
+                <p className="text-xs text-slate-500 hidden md:block">
+                  {VENUE.schedule}
+                </p>
               </div>
 
               {/* Action Buttons: Direct to Google Maps & Copy Address */}
-              <div className="flex flex-wrap items-center gap-2.5 flex-shrink-0 w-full md:w-auto">
+              <div className="flex flex-wrap items-center gap-2 flex-shrink-0 w-full md:w-auto">
                 <a
                   href={VENUE.directionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-[#0071e3] hover:bg-[#0077ed] transition-all flex items-center justify-center gap-2 shadow-sm hover:scale-[1.02] cursor-pointer"
+                  className="w-full sm:w-auto py-2 px-3.5 rounded-xl text-xs font-bold text-white bg-[#0071e3] hover:bg-[#0077ed] transition-all flex items-center justify-center gap-2 shadow-sm hover:scale-[1.02] cursor-pointer"
                 >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polygon points="3 11 22 2 13 21 11 13 3 11" />
                   </svg>
                   <span>Petunjuk Arah</span>
@@ -370,7 +367,7 @@ export default function LocationSection() {
                   href={VENUE.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto py-2.5 px-4 rounded-xl text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="w-full sm:w-auto py-2 px-3.5 rounded-xl text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span>Buka di Google Maps</span>
                 </a>
@@ -378,7 +375,7 @@ export default function LocationSection() {
                 <button
                   type="button"
                   onClick={handleCopyAddress}
-                  className={`w-full sm:w-auto py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all border cursor-pointer flex items-center justify-center gap-2 ${
+                  className={`w-full sm:w-auto py-2 px-3 rounded-xl text-xs font-bold transition-all border cursor-pointer flex items-center justify-center gap-1.5 ${
                     copied
                       ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
                       : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
