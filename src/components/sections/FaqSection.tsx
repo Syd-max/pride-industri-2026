@@ -133,13 +133,13 @@ export default function FaqSection() {
   return (
     <section
       id="faq"
-      className="relative py-10 sm:py-14 lg:py-16 bg-transparent border-t border-slate-200/80"
+      className="relative z-20 py-10 sm:py-14 lg:py-16 bg-transparent border-t border-slate-200/80"
       aria-label="Pertanyaan yang Sering Diajukan"
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10 relative z-10">
+        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-14 lg:mb-16 relative z-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white text-slate-700 border border-slate-200/90 shadow-2xs mb-3 relative z-10">
             <span className="w-2 h-2 rounded-full bg-blue-600" />
             <span>Pusat Bantuan <span className="title-amp">&amp;</span> FAQ</span>
@@ -232,6 +232,7 @@ export default function FaqSection() {
               return (
                 <div
                   key={faq.id}
+                  id={idx === 0 ? 'faq-card-first' : undefined}
                   className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
                     isOpen
                       ? 'border-blue-400/90 bg-white shadow-md ring-2 ring-blue-500/10 border-l-4 border-l-blue-600'

@@ -18,9 +18,36 @@ const VENUE = {
   embedUrl: 'https://www.google.com/maps?q=-6.917464,107.609467&hl=id&z=17&output=embed',
 };
 
+function generateExteriorPath(faqTop: number) {
+  const yTop = faqTop + 35;
+  const yMid = faqTop + 225;
+  const yEnd = faqTop + 400;
+  const yApex = Math.round((yTop + yMid) / 2);
+
+  return [
+    `M 320 -60`,
+    `C 330 0, 380 50, 460 55`,
+    `C 560 60, 720 10, 830 45`,
+    `C 910 70, 940 130, 890 165`,
+    `C 820 185, 700 185, 540 185`,
+    `C 380 185, 240 180, 140 195`,
+    `C 80 215, 60 290, 55 420`,
+    `C 52 500, 55 ${faqTop - 100}, 55 ${faqTop - 50}`,
+    `C 55 ${faqTop + 5}, 75 ${yTop}, 140 ${yTop}`,
+    `C 350 ${yTop}, 680 ${yTop}, 900 ${yTop}`,
+    `C 965 ${yTop}, 1015 ${yTop + 40}, 1015 ${yApex}`,
+    `C 1015 ${yMid - 40}, 965 ${yMid}, 900 ${yMid}`,
+    `C 700 ${yMid}, 450 ${yMid}, 280 ${yMid}`,
+    `C 230 ${yMid}, 195 ${yMid + 35}, 195 ${yMid + 85}`,
+    `C 195 ${yEnd - 60}, 195 ${yEnd - 30}, 235 ${yEnd}`,
+    `C 280 ${yEnd}, 360 ${yEnd}, 450 ${yEnd}`
+  ].join(' ');
+}
+
 export default function LocationSection() {
   const [copied, setCopied] = useState(false);
   const [hasScrolledIntoView, setHasScrolledIntoView] = useState(false);
+  const [faqTop, setFaqTop] = useState(720);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -40,6 +67,23 @@ export default function LocationSection() {
 
     observer.observe(el);
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const updateFaqOffset = () => {
+      const locEl = sectionRef.current;
+      const faqEl = document.getElementById('faq');
+      if (locEl && faqEl) {
+        const locRect = locEl.getBoundingClientRect();
+        const faqRect = faqEl.getBoundingClientRect();
+        const svgScale = 1200 / (locRect.width || 1200);
+        const rawDistance = (faqRect.top - locRect.top + 64) * svgScale;
+        setFaqTop(Math.round(rawDistance));
+      }
+    };
+    updateFaqOffset();
+    window.addEventListener('resize', updateFaqOffset);
+    return () => window.removeEventListener('resize', updateFaqOffset);
   }, []);
 
   const handleCopyAddress = async () => {
@@ -88,16 +132,16 @@ export default function LocationSection() {
             </radialGradient>
           </defs>
 
-          {/* Exterior Navigation Route Path (Starts behind Video Card at 320,-60, frames FAQ header S-curve, ends behind Card 01 FAQ at 320,1145) */}
+          {/* Exterior Navigation Route Path (Starts behind Video Card at 320,-60, natural rounded S-loop avoiding text, ends behind Card 01 FAQ) */}
           <path
             id="exteriorCarJourneyPath"
-            d="M 320 -60 C 330 0, 380 50, 460 55 C 560 60, 720 10, 830 45 C 910 70, 940 130, 890 165 C 820 185, 700 185, 540 185 C 380 185, 240 180, 140 195 C 80 215, 60 290, 55 420 C 50 560, 50 680, 60 740 C 65 770, 100 780, 180 780 C 320 780, 700 775, 880 780 C 960 782, 1030 800, 1050 850 C 1070 900, 1040 945, 960 955 C 840 965, 480 965, 340 965 C 250 965, 205 1010, 205 1070 C 205 1115, 240 1145, 320 1145"
+            d={generateExteriorPath(faqTop)}
             fill="none"
           />
 
           {/* 1. Road Aura Base Track */}
           <path
-            d="M 320 -60 C 330 0, 380 50, 460 55 C 560 60, 720 10, 830 45 C 910 70, 940 130, 890 165 C 820 185, 700 185, 540 185 C 380 185, 240 180, 140 195 C 80 215, 60 290, 55 420 C 50 560, 50 680, 60 740 C 65 770, 100 780, 180 780 C 320 780, 700 775, 880 780 C 960 782, 1030 800, 1050 850 C 1070 900, 1040 945, 960 955 C 840 965, 480 965, 340 965 C 250 965, 205 1010, 205 1070 C 205 1115, 240 1145, 320 1145"
+            d={generateExteriorPath(faqTop)}
             stroke="#2563eb"
             strokeWidth="12"
             strokeLinecap="round"
@@ -107,7 +151,7 @@ export default function LocationSection() {
 
           {/* 2. Main Sapphire Blue Highway Line */}
           <path
-            d="M 320 -60 C 330 0, 380 50, 460 55 C 560 60, 720 10, 830 45 C 910 70, 940 130, 890 165 C 820 185, 700 185, 540 185 C 380 185, 240 180, 140 195 C 80 215, 60 290, 55 420 C 50 560, 50 680, 60 740 C 65 770, 100 780, 180 780 C 320 780, 700 775, 880 780 C 960 782, 1030 800, 1050 850 C 1070 900, 1040 945, 960 955 C 840 965, 480 965, 340 965 C 250 965, 205 1010, 205 1070 C 205 1115, 240 1145, 320 1145"
+            d={generateExteriorPath(faqTop)}
             stroke="#2563eb"
             strokeWidth="3.5"
             strokeLinecap="round"
@@ -118,7 +162,7 @@ export default function LocationSection() {
 
           {/* 3. Animated Forward Moving Chevrons / Dashes (Garis Berjalan) */}
           <path
-            d="M 320 -60 C 330 0, 380 50, 460 55 C 560 60, 720 10, 830 45 C 910 70, 940 130, 890 165 C 820 185, 700 185, 540 185 C 380 185, 240 180, 140 195 C 80 215, 60 290, 55 420 C 50 560, 50 680, 60 740 C 65 770, 100 780, 180 780 C 320 780, 700 775, 880 780 C 960 782, 1030 800, 1050 850 C 1070 900, 1040 945, 960 955 C 840 965, 480 965, 340 965 C 250 965, 205 1010, 205 1070 C 205 1115, 240 1145, 320 1145"
+            d={generateExteriorPath(faqTop)}
             stroke="#ffffff"
             strokeWidth="2.2"
             strokeLinecap="round"
@@ -133,14 +177,14 @@ export default function LocationSection() {
             <circle r="11" fill="#2563eb" opacity="0.25" />
           </g>
 
-          {/* Arrival Marker cleanly behind Card 01 FAQ (Apakah pendaftaran kompetisi dipungut biaya?) */}
-          <g transform="translate(320, 1145)">
-            <circle r="6" fill="#2563eb" stroke="#ffffff" strokeWidth="2" />
-            <circle r="14" fill="#2563eb" opacity="0.25" className="map-pin-pulse-effect" />
-          </g>
-
           {/* 4. Animated Moving Car (Once when visible in viewport, 32s slow drive) */}
-          <g className={hasScrolledIntoView ? 'exterior-car-drive-once' : 'opacity-0'}>
+          <g
+            className={hasScrolledIntoView ? 'exterior-car-drive-once' : 'opacity-0'}
+            style={{
+              offsetPath: `path("${generateExteriorPath(faqTop)}")`,
+              ['--exterior-car-path' as string]: `path("${generateExteriorPath(faqTop)}")`,
+            }}
+          >
             {/* GPS Tracking Puck Aura */}
             <circle cx="0" cy="0" r="22" fill="url(#carRadarPuck)" />
 
