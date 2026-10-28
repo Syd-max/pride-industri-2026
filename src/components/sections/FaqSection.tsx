@@ -133,10 +133,10 @@ export default function FaqSection() {
   return (
     <section
       id="faq"
-      className="relative py-10 sm:py-14 lg:py-16 bg-white border-t border-slate-200/80"
+      className="relative py-10 sm:py-14 lg:py-16 bg-transparent border-t border-slate-200/80"
       aria-label="Pertanyaan yang Sering Diajukan"
     >
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10 relative z-10">

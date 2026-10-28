@@ -17,6 +17,7 @@
   --notch-size: 26px;
 
   position: relative;
+  z-index: 20;
   background-color: var(--bg-page);
   padding: clamp(36px, 5vw, 56px) 20px clamp(40px, 6vw, 64px);
   overflow-x: clip;
