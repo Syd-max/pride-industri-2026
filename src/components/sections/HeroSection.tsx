@@ -185,19 +185,6 @@ export default function HeroSection() {
                   className="organizer-gov-img"
                 />
               </div>
-
-              <div className="organizer-divider" />
-
-              <div className="organizer-tactlink-wrap">
-                <Image
-                  src="/LOGO_TACTLINK_CROPPED.png"
-                  alt="TACTLINK - Smart Directory With One Touch"
-                  width={492}
-                  height={454}
-                  priority
-                  className="organizer-tactlink-img"
-                />
-              </div>
             </div>
           </div>
 
