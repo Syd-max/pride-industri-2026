@@ -38,37 +38,47 @@ export default function PartnersSection() {
         </div>
 
         {/* ─── Logo Showcase Grid: Compact & Centered ─── */}
-        <div className="mt-7 sm:mt-9 space-y-5 sm:space-y-6">
-          {PARTNER_CATEGORIES.map((catInfo) => {
-            const items = PARTNERS_DATA.filter((p) => p.category === catInfo.id);
-            if (items.length === 0) return null;
+        <div className="mt-8 sm:mt-10 max-w-4xl mx-auto">
+          {/* Visual Frame Container (Bingkai Visual) */}
+          <div className="relative rounded-2xl sm:rounded-3xl bg-slate-50/60 border border-slate-200/90 p-5 sm:p-8 lg:p-9 shadow-xs">
+            <div className="divide-y divide-slate-200/70">
+              {PARTNER_CATEGORIES.map((catInfo, catIdx) => {
+                const items = PARTNERS_DATA.filter((p) => p.category === catInfo.id);
+                if (items.length === 0) return null;
 
-            return (
-              <div key={catInfo.id} className="space-y-2 sm:space-y-2.5 text-center">
-                
-                {/* Centered Category Title */}
-                <h3 className="text-[11px] sm:text-xs font-black uppercase tracking-widest text-slate-700">
-                  {catInfo.title}
-                </h3>
-
-                {/* Centered Logo Cards (Compact Shape) */}
-                <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5">
-                  {items.map((partner, index) => (
-                    <div
-                      key={partner.id}
-                      className={
-                        items.length === 1
-                          ? 'w-full max-w-[180px] sm:max-w-[200px]'
-                          : 'w-[calc(50%-5px)] max-w-[165px] sm:max-w-[190px] sm:w-[190px]'
-                      }
-                    >
-                      <PartnerCard partner={partner} index={index} />
+                return (
+                  <div
+                    key={catInfo.id}
+                    className={`${catIdx === 0 ? 'pb-6 sm:pb-7' : catIdx === PARTNER_CATEGORIES.length - 1 ? 'pt-6 sm:pt-7' : 'py-6 sm:py-7'} text-center`}
+                  >
+                    {/* Consistent Category Label Badge */}
+                    <div className="flex items-center justify-center mb-3.5 sm:mb-4">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200/90 text-[10px] sm:text-[11px] font-extrabold text-slate-700 tracking-wider uppercase shadow-2xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                        {catInfo.title}
+                      </span>
                     </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+
+                    {/* Centered Logo Cards (Compact Shape) */}
+                    <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5">
+                      {items.map((partner) => (
+                        <div
+                          key={partner.id}
+                          className={
+                            items.length === 1
+                              ? 'w-full max-w-[180px] sm:max-w-[200px]'
+                              : 'w-[calc(50%-5px)] max-w-[165px] sm:max-w-[190px] sm:w-[190px]'
+                          }
+                        >
+                          <PartnerCard partner={partner} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
       </div>
@@ -77,13 +87,11 @@ export default function PartnersSection() {
 }
 
 // ─── Individual Partner Card (Compact Human Design Shape) ────────────────────
-function PartnerCard({ partner, index }: { partner: PartnerItem; index: number }) {
-  const floatClass = index % 2 === 0 ? 'logo-float-a' : 'logo-float-b';
-
+function PartnerCard({ partner }: { partner: PartnerItem }) {
   return (
     <div className="w-full">
       <div
-        className={`group relative w-full h-[68px] sm:h-[74px] px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-white border border-slate-200/90 shadow-[0_2px_8px_-2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_20px_-4px_rgba(15,23,42,0.08),0_3px_8px_-2px_rgba(22,82,240,0.06)] hover:border-blue-400/50 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-center overflow-hidden cursor-default select-none ${floatClass}`}
+        className="group relative w-full h-[68px] sm:h-[74px] px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-white border border-slate-200/90 shadow-[0_2px_8px_-2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_20px_-4px_rgba(15,23,42,0.08),0_3px_8px_-2px_rgba(22,82,240,0.06)] hover:border-blue-400/50 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-center overflow-hidden cursor-default select-none"
       >
         {/* Sheen light reflex passing on hover */}
         <div className="pointer-events-none absolute inset-0 -translate-x-full logo-sheen-effect bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
