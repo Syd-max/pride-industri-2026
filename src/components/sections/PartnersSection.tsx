@@ -53,8 +53,7 @@ export default function PartnersSection() {
                   >
                     {/* Consistent Category Label Badge */}
                     <div className="flex items-center justify-center mb-3.5 sm:mb-4">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200/90 text-[10px] sm:text-[11px] font-extrabold text-slate-700 tracking-wider uppercase shadow-2xs">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                      <span className="inline-flex items-center px-3.5 py-1 rounded-full bg-white border border-slate-200/90 text-[10px] sm:text-[11px] font-extrabold text-slate-700 tracking-wider uppercase shadow-2xs">
                         {catInfo.title}
                       </span>
                     </div>
