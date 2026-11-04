@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { Playfair_Display, Inter, Caveat, Plus_Jakarta_Sans, Poppins } from 'next/font/google';
 import './globals.css';
 import 'lenis/dist/lenis.css';
@@ -121,6 +122,22 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${playfair.variable} ${inter.variable} ${caveat.variable} ${plusJakarta.variable} ${poppins.variable}`}>
       <body>
+        <Script id="home-reload-scroll" strategy="beforeInteractive">{`
+          if (window.location.pathname === '/' &&
+              performance.getEntriesByType('navigation')[0]?.type === 'reload') {
+            const previousRestoration = history.scrollRestoration;
+            history.scrollRestoration = 'manual';
+            if (window.location.hash) {
+              history.replaceState(history.state, '', window.location.pathname + window.location.search);
+            }
+            const resetScroll = () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            resetScroll();
+            window.addEventListener('pageshow', resetScroll, { once: true });
+            window.addEventListener('pagehide', () => {
+              history.scrollRestoration = previousRestoration;
+            }, { once: true });
+          }
+        `}</Script>
         <GoogleAnalytics />
         <SmoothScrolling>{children}</SmoothScrolling>
       </body>
