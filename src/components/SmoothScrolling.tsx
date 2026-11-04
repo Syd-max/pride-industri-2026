@@ -25,7 +25,7 @@ export default function SmoothScrolling({ children }: { children: ReactNode }) {
     const syncDesktop = () => {
       if (desktop.matches && !instance.current) {
         instance.current = new Lenis({
-          lerp: 0.1,
+          lerp: 0.18,
           wheelMultiplier: 1,
           smoothWheel: true,
           syncTouch: false,
@@ -33,6 +33,18 @@ export default function SmoothScrolling({ children }: { children: ReactNode }) {
           anchors: true,
           allowNestedScroll: true,
           stopInertiaOnNavigate: true,
+          virtualScroll: ({ deltaY, event }) => {
+            const lenis = instance.current;
+            // Discard the old destination when the wheel reverses direction.
+            if (
+              event.type === 'wheel' && !event.ctrlKey &&
+              lenis && !lenis.isStopped && !lenis.isLocked &&
+              deltaY * (lenis.targetScroll - lenis.animatedScroll) < 0
+            ) {
+              lenis.scrollTo(lenis.animatedScroll, { immediate: true });
+            }
+            return true;
+          },
         });
         syncScrollLock();
       } else if (!desktop.matches && instance.current) {
