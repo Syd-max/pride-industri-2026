@@ -1,4 +1,4 @@
-/* ─── PRIDE Industri 2026 — Interactive Hero & Scroll Flow ──────────────────
+/* ─── PRIDE Industri 2026 - Interactive Hero & Scroll Flow ──────────────────
    Responsive Hero / Countdown Layout (Centered, Consistent Gaps, Proportional)
 ─────────────────────────────────────────────────────────────────────────────── */
 
@@ -33,7 +33,7 @@
   background-color: #070a13;
 }
 
-/* Hero Viewport Container — Centered composition, clearing fixed navbar */
+/* Hero Viewport Container - Centered composition, clearing fixed navbar */
 .flow-viewport {
   width: 100%;
   min-height: 100vh;
@@ -111,7 +111,7 @@
 }
 
 /* ==========================================
-   PRIDE INDUSTRI 2026 — HERO LAYOUT REPAIR
+   PRIDE INDUSTRI 2026 - HERO LAYOUT REPAIR
    ========================================== */
 
 /* Main layout container */
@@ -150,7 +150,7 @@
   box-sizing: border-box;
 }
 
-/* 1. PRIDE LOGO — DOMINANT ELEMENT */
+/* 1. PRIDE LOGO - DOMINANT ELEMENT */
 .pride-logo,
 .hero-logo,
 .event-logo,
@@ -582,7 +582,7 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
 }
 
-/* 5. COUNTDOWN — SUPPORTING ELEMENT */
+/* 5. COUNTDOWN - SUPPORTING ELEMENT */
 .pride-countdown,
 .countdown,
 .countdown-container {
@@ -951,7 +951,7 @@
   }
 }
 
-/* Short screens — avoid clipping */
+/* Short screens - avoid clipping */
 @media (max-height: 650px) {
   .pride-hero,
   .flow-hero-section {

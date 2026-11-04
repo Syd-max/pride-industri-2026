@@ -4,7 +4,7 @@ import { createBrowserClient } from '@supabase/ssr';
 
 /**
  * Browser-side Supabase client.
- * Uses only the public anon key — never the service role key.
+ * Uses only the public anon key - never the service role key.
  */
 export function createClient() {
   return createBrowserClient(

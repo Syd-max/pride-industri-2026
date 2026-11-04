@@ -11,7 +11,7 @@ import PartnersSection from '@/components/sections/PartnersSection';
 import Footer from '@/components/sections/Footer';
 import CompetitionWelcomeBanner from '@/components/ui/CompetitionWelcomeBanner';
 
-const title = 'PRIDE Industri 2026 — Festival IKM Kota Bandung';
+const title = 'PRIDE Industri 2026';
 const description =
   'Informasi PRIDE Industri 2026, festival industri kecil dan menengah Kota Bandung di Braga City Walk, termasuk agenda acara dan kompetisi kreatif.';
 

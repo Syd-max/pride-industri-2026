@@ -1,5 +1,5 @@
 /**
- * PRIDE Industri 2026 — Event Configuration
+ * PRIDE Industri 2026 - Event Configuration
  * 
  * ORGANIZER: Update provisional values (marked [PROVISIONAL]) before launch.
  * This file is the single source of truth for all event details.
@@ -11,7 +11,7 @@ export const EVENT_CONFIG = {
   organizer: 'PT Rahman Ramadhan Diandra (RRD Organizer)',
   hostPartner: 'Braga City Walk',
 
-  // [PROVISIONAL] start time — confirm exact WIB start with organizer
+  // [PROVISIONAL] start time - confirm exact WIB start with organizer
   startDate: new Date('2026-11-27T09:00:00+07:00'),
   endDate: new Date('2026-11-28T21:00:00+07:00'),
 
@@ -72,7 +72,7 @@ export const EVENT_CONFIG = {
         description: 'Hadiah, Trofi & Sertifikat Pembinaan Disdagin Kota Bandung',
       },
       schedule: {
-        // [PROVISIONAL] No specific registration open date in documents — using event dates
+        // [PROVISIONAL] No specific registration open date in documents - using event dates
         filming: 'Filming: 27-28 November 2026',
         publication: '27-28 November 2026',
         judging: '28 November 2026',

@@ -64,7 +64,7 @@ export default function VideoLokalPage() {
   const [documentError, setDocumentError] = useState<string | null>(null);
   const documentInputRef = useRef<HTMLInputElement>(null);
 
-  // ─── Section 5: Siapkan Tactlink — Upload QR Code (Max 2 MB) ───
+  // ─── Section 5: Siapkan Tactlink - Upload QR Code (Max 2 MB) ───
   const [tactlinkQrFile, setTactlinkQrFile] = useState<File | null>(null);
   const [tactlinkQrPreview, setTactlinkQrPreview] = useState<string | null>(null);
   const [tactlinkQrError, setTactlinkQrError] = useState<string | null>(null);

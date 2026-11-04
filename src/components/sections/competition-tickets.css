@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PRIDE 2026 — INTERACTIVE TICKET & 3D STICKER PEEL SECTION STYLING
+   PRIDE 2026 - INTERACTIVE TICKET & 3D STICKER PEEL SECTION STYLING
    ========================================================================== */
 
 .competition-section-wrapper {
@@ -627,7 +627,7 @@
   color: #6ee7b7;
 }
 
-/* Secondary PDF Download link — High Contrast & Actionable */
+/* Secondary PDF Download link - High Contrast & Actionable */
 .btn-pdf-link {
   font-size: 12px;
   font-weight: 700;
@@ -654,7 +654,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Featured Card (Blue Card) Download Button — Solid White with Strong Contrast */
+/* Featured Card (Blue Card) Download Button - Solid White with Strong Contrast */
 .ticket-card.featured .btn-pdf-link,
 .btn-pdf-featured {
   background: #ffffff !important;

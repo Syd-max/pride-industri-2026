@@ -1,4 +1,4 @@
-/* ─── PRIDE Industri 2026 — Real-Time Launch Countdown ─────────────────────
+/* ─── PRIDE Industri 2026 - Real-Time Launch Countdown ─────────────────────
    Responsive Industrial Launch Clock (Compact & Non-Dominating)
 ─────────────────────────────────────────────────────────────────────────────── */
 
@@ -109,7 +109,7 @@
   position: relative;
 }
 
-/* Compact Bold Numbers — Fully Visible, Tabular Nums */
+/* Compact Bold Numbers - Fully Visible, Tabular Nums */
 .launch-number-val,
 .countdown-number {
   font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

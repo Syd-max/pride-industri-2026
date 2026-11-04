@@ -5,7 +5,7 @@ import Script from 'next/script';
 const GA_MEASUREMENT_ID = 'G-M81BBJFFL2';
 
 /**
- * Google Analytics 4 — loads gtag.js once for all routes.
+ * Google Analytics 4 - loads gtag.js once for all routes.
  * Placed in the root layout so every page (/, /admin, /competition, /check-in)
  * is tracked automatically. Uses next/script "afterInteractive" to avoid
  * blocking the page render.

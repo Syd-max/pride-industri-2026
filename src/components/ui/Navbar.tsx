@@ -145,7 +145,7 @@ export default function Navbar() {
           {/* Logo & Brand Identity (Gambar 2: HD Pop-Art PRIDE INDUSTRI Title) */}
           <Link
             href="/"
-            aria-label="PRIDE Industri 2026 — Beranda"
+            aria-label="PRIDE Industri 2026 - Beranda"
             className="flex items-center group text-decoration-none min-w-0"
           >
             <div

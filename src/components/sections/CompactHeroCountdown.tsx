@@ -74,7 +74,7 @@ export default function CompactHeroCountdown() {
         </div>
       </div>
 
-      {/* Main 4-Column Digits Display Box — Gambar 5 Unobstructed Digits */}
+      {/* Main 4-Column Digits Display Box - Gambar 5 Unobstructed Digits */}
       <div className="launch-digits-box">
         {timeUnits.map((unit) => (
           <div key={unit.key} className="launch-stat-col countdown-item">
@@ -89,7 +89,7 @@ export default function CompactHeroCountdown() {
         ))}
       </div>
 
-      {/* Bottom Footer Row — Tagline removed per user request */}
+      {/* Bottom Footer Row - Tagline removed per user request */}
       <div className="launch-footer-row">
         <div className="launch-footer-spacer" />
         {/* Right Stepped Blue Geometric Bars */}

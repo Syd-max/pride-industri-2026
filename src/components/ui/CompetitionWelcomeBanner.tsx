@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 /* ─── PURE SVG ILLUSTRATED VECTOR ORNAMENTS ─────────────────────────────────
-   100% coded in SVG vector paths — Zero image slices, zero clipping artifacts.
+   100% coded in SVG vector paths - Zero image slices, zero clipping artifacts.
    Ultra-crisp HD vector rendering with pure geometric precision.
 ─────────────────────────────────────────────────────────────────────────────── */
 
@@ -176,7 +176,7 @@ export default function CompetitionWelcomeBanner() {
                 <polygon points="35,2 38,2 36,12 30,12" fill="#000" />
               </g>
 
-              {/* Video 1 Menit Typography (Clean Poppins 900 — Open, Legible, Not Mepet, NO Black Shadow) */}
+              {/* Video 1 Menit Typography (Clean Poppins 900 - Open, Legible, Not Mepet, NO Black Shadow) */}
               <g
                 textAnchor="middle"
                 fontFamily="var(--font-poppins), 'Poppins', var(--font-plus-jakarta), system-ui, sans-serif"
@@ -324,7 +324,7 @@ export default function CompetitionWelcomeBanner() {
                 <ellipse cx="9" cy="31.5" rx="3" ry="3" fill="none" stroke="#000" strokeWidth="1.5" />
               </g>
 
-              {/* Desain Kemasan Typography (Clean Poppins 900 — Open, Legible, Not Mepet, NO Black Shadow) */}
+              {/* Desain Kemasan Typography (Clean Poppins 900 - Open, Legible, Not Mepet, NO Black Shadow) */}
               <g
                 textAnchor="middle"
                 fontFamily="var(--font-poppins), 'Poppins', var(--font-plus-jakarta), system-ui, sans-serif"

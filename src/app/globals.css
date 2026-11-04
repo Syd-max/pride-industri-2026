@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ─── PRIDE Industri 2026 — Colorful Festival Design System ─────────────────
+/* ─── PRIDE Industri 2026 - Colorful Festival Design System ─────────────────
    Directly derived from Official Sponsorship Proposal & Brand Assets
    Palette: Royal Blue, Vibrant Red, Golden Yellow, Emerald Green, Warm Orange
 ─────────────────────────────────────────────────────────────────────────────── */
@@ -41,7 +41,7 @@
   --text-muted: #64748B;
   --text-light: #94A3B8;
 
-  /* Typography scale — Plus Jakarta Sans for Elegant, Simple, Fun Character */
+  /* Typography scale - Plus Jakarta Sans for Elegant, Simple, Fun Character */
   --font-display: var(--font-plus-jakarta), var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: var(--font-plus-jakarta), var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
@@ -625,7 +625,7 @@ section[id],
   animation: scanner-laser 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
 }
 
-/* ─── Partner & Sponsor Logo Cards — Human Design Micro-Interactions ───────── */
+/* ─── Partner & Sponsor Logo Cards - Human Design Micro-Interactions ───────── */
 @keyframes logo-card-float-a {
   0%, 100% {
     transform: translateY(0px);

@@ -51,11 +51,11 @@ export const metadata: Metadata = {
   ],
   creator: 'Muhammad Irsyad Andika',
   title: {
-    default: 'PRIDE Industri 2026 — Pagelaran Ragam Inovasi dan Eksistensi',
+    default: 'PRIDE Industri 2026',
     template: '%s | PRIDE Industri 2026',
   },
   description:
-    'PRIDE Industri 2026 — Pagelaran Ragam Inovasi dan Eksistensi. Festival Industri Kecil dan Menengah Kota Bandung. 27-29 November 2026 di Braga City Walk, Bandung.',
+    'PRIDE Industri 2026 - Pagelaran Ragam Inovasi dan Eksistensi. Festival Industri Kecil dan Menengah Kota Bandung. 27-29 November 2026 di Braga City Walk, Bandung.',
   keywords: [
     'PRIDE Industri 2026',
     'Braga City Walk',
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'PRIDE Industri 2026',
     description:
-      'Pagelaran Ragam Inovasi dan Eksistensi — 27-29 November 2026, Braga City Walk, Bandung',
+      'Pagelaran Ragam Inovasi dan Eksistensi - 27-29 November 2026, Braga City Walk, Bandung',
     locale: 'id_ID',
     type: 'website',
     images: [
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
         url: '/LANDING_BG.jpg',
         width: 1440,
         height: 810,
-        alt: 'PRIDE Industri 2026 — Braga City Walk Bandung',
+        alt: 'PRIDE Industri 2026 - Braga City Walk Bandung',
       },
     ],
   },

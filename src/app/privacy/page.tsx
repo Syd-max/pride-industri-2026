@@ -30,7 +30,7 @@ export default function PrivacyPage() {
             Kebijakan Privasi Data Peserta
           </h1>
           <p className="font-display italic text-base text-[#B8B0A4] mt-2">
-            PRIDE Industri 2026 — Pagelaran Ragam Inovasi dan Eksistensi
+            PRIDE Industri 2026 - Pagelaran Ragam Inovasi dan Eksistensi
           </p>
         </div>
 

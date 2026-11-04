@@ -44,7 +44,7 @@ export default function TactlinkBanner({
             <div className="space-y-0.5 min-w-0">
               <div className="text-xs sm:text-sm font-black tracking-tight flex items-center gap-1.5 flex-wrap">
                 <span className="text-amber-500 font-extrabold">Tactlink</span>
-                <span className="text-slate-400 font-normal">—</span>
+                <span className="text-slate-400 font-normal">-</span>
                 <span className={isDark ? 'text-white' : 'text-slate-900'}>
                   Smart Digital Directory
                 </span>

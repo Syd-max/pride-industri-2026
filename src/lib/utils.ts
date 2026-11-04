@@ -73,7 +73,7 @@ export function formatJakartaDateTime(date: Date | string): string {
 }
 
 /**
- * Rate limiting helper — returns whether a request should be rate limited.
+ * Rate limiting helper - returns whether a request should be rate limited.
  * Uses a simple in-memory map for dev; in production use Redis/Upstash.
  */
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
