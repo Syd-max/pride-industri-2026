@@ -25,7 +25,7 @@ export default function SmoothScrolling({ children }: { children: ReactNode }) {
     const syncDesktop = () => {
       if (desktop.matches && !instance.current) {
         instance.current = new Lenis({
-          lerp: 0.15,
+          lerp: 0.1,
           wheelMultiplier: 1,
           smoothWheel: true,
           syncTouch: false,
