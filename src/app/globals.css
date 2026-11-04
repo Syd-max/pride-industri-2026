@@ -116,6 +116,10 @@
   box-sizing: border-box;
 }
 
+html.lenis {
+  scroll-behavior: auto !important;
+}
+
 html {
   scroll-behavior: smooth;
   color-scheme: light;

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
+import { SmoothScrollContext } from '@/components/SmoothScrolling';
 import Link from 'next/link';
 import Image from 'next/image';
 import { EVENT_CONFIG } from '@/config/event';
@@ -33,6 +34,7 @@ const REGISTRATION_LINKS = [
 const CHECK_IN_VISIBLE_AT = Date.parse('2026-11-25T17:00:00Z');
 
 export default function Navbar() {
+  const smoothScroll = useContext(SmoothScrollContext);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [checkInAvailable, setCheckInAvailable] = useState(false);
@@ -109,9 +111,11 @@ export default function Navbar() {
 
   // Prevent body scroll when menu open
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    if (!menuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = previousOverflow;
     };
   }, [menuOpen]);
 
@@ -120,7 +124,9 @@ export default function Navbar() {
     if (href.startsWith('#')) {
       setTimeout(() => {
         const el = document.querySelector(href);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!el) return;
+        if (smoothScroll?.current) smoothScroll.current.scrollTo(el);
+        else el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 60);
     }
   };
