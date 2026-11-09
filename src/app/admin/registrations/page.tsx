@@ -1,7 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { PrideRegistration, RegistrationStatus } from '@/types';
+import type { PrideRegistration } from '@/types';
+
+function consentLabel(value?: boolean) {
+  return value === true ? 'Ya' : value === false ? 'Tidak' : '-';
+}
 
 // Helper to highlight matching search text (Apple clean styling)
 function highlightMatch(text: string | undefined | null, query: string) {
@@ -192,7 +196,6 @@ export default function RegistrationsPage() {
   // Filters
   const [search, setSearch] = useState('');
   const [compFilter, setCompFilter] = useState<'all' | 'desain-kemasan' | 'video-lokal'>('all');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   // Modals
   const [selectedReg, setSelectedReg] = useState<PrideRegistration | null>(null);
@@ -229,30 +232,6 @@ export default function RegistrationsPage() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-  const handleUpdateStatus = async (
-    id: string,
-    newStatus: RegistrationStatus
-  ) => {
-    try {
-      const res = await fetch('/api/admin/data', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, status: newStatus }),
-      });
-
-      if (res.ok) {
-        setRegistrations((prev) =>
-          prev.map((r) => (r.id === id ? { ...r, status: newStatus } : r))
-        );
-        if (selectedReg?.id === id) {
-          setSelectedReg((prev) => (prev ? { ...prev, status: newStatus } : null));
-        }
-      }
-    } catch {
-      alert('Gagal memperbarui status registrasi.');
-    }
-  };
 
   // Safe Deletion Action
   const handleDeleteConfirm = async () => {
@@ -356,9 +335,7 @@ export default function RegistrationsPage() {
       compFilter === 'all'
         ? r.competition_id !== 'pengunjung-umum'
         : r.competition_id === compFilter;
-    const matchStatus = statusFilter === 'all' || r.status === statusFilter;
-
-    return matchSearch && matchComp && matchStatus;
+    return matchSearch && matchComp;
   });
 
   // Export to spreadsheet
@@ -500,21 +477,6 @@ export default function RegistrationsPage() {
             </select>
           </div>
 
-          {/* Status Filter */}
-          <div className="w-full sm:w-auto">
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full sm:w-auto text-xs py-2 px-3.5 rounded-xl bg-neutral-100/70 border border-neutral-200/80 text-neutral-700 font-medium focus:bg-white focus:outline-none focus:border-[#0071e3] transition-all cursor-pointer"
-            >
-              <option value="all">Semua Status</option>
-              <option value="confirmed">Terkonfirmasi</option>
-              <option value="finalist">Lolos Finalis</option>
-              <option value="pending">Menunggu Verifikasi</option>
-              <option value="disqualified">Didiskualifikasi</option>
-            </select>
-          </div>
-
           {/* Counter Badge */}
           <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100/80 border border-neutral-200/60 text-[11px] font-medium text-neutral-600 whitespace-nowrap ml-auto">
             <span>Menampilkan</span>
@@ -543,22 +505,13 @@ export default function RegistrationsPage() {
               className="p-4 rounded-2xl bg-white border border-neutral-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] space-y-3"
             >
               {/* Header: Name & Code */}
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-neutral-900 text-sm truncate">
-                    {highlightMatch(r.full_name, search)}
-                  </div>
-                  <div className="font-mono text-[11px] text-neutral-500 font-medium mt-0.5">
-                    {highlightMatch(r.registration_code, search)}
-                  </div>
+              <div>
+                <div className="font-semibold text-neutral-900 text-sm truncate">
+                  {highlightMatch(r.full_name, search)}
                 </div>
-
-                <span className="text-[10px] font-medium px-2 py-0.5 rounded-md shrink-0 bg-neutral-100 text-neutral-700 border border-neutral-200/70">
-                  {r.status === 'confirmed' && 'Terkonfirmasi'}
-                  {r.status === 'finalist' && 'Finalis'}
-                  {r.status === 'pending' && 'Menunggu'}
-                  {r.status === 'disqualified' && 'Diskualifikasi'}
-                </span>
+                <div className="font-mono text-[11px] text-neutral-500 font-medium mt-0.5">
+                  {highlightMatch(r.registration_code, search)}
+                </div>
               </div>
 
               {/* Sub-info: Category & Date */}
@@ -619,20 +572,19 @@ export default function RegistrationsPage() {
                 <th className="py-3 px-5 min-w-[190px]">Kode &amp; Tanggal</th>
                 <th className="py-3 px-5 min-w-[220px]">Nama Peserta &amp; Kontak</th>
                 <th className="py-3 px-5 min-w-[150px]">Kategori Lomba</th>
-                <th className="py-3 px-5 min-w-[170px]">Status Verifikasi</th>
                 <th className="py-3 px-5 min-w-[170px] text-right pr-6">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-100">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-12 text-xs font-normal text-neutral-400">
+                  <td colSpan={4} className="text-center py-12 text-xs font-normal text-neutral-400">
                     Memuat data pendaftar lomba...
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-12 text-xs font-normal text-neutral-400">
+                  <td colSpan={4} className="text-center py-12 text-xs font-normal text-neutral-400">
                     Tidak ditemukan pendaftar yang sesuai kriteria pencarian.
                   </td>
                 </tr>
@@ -677,23 +629,7 @@ export default function RegistrationsPage() {
                       )}
                     </td>
 
-                    {/* Column 4: Status Verifikasi */}
-                    <td className="py-3.5 px-5 whitespace-nowrap">
-                      <select
-                        value={r.status}
-                        onChange={(e) =>
-                          handleUpdateStatus(r.id, e.target.value as RegistrationStatus)
-                        }
-                        className="text-xs py-1 px-2.5 rounded-lg border border-neutral-200/80 bg-neutral-50/70 text-neutral-800 font-medium cursor-pointer transition-colors focus:outline-none focus:border-[#0071e3]"
-                      >
-                        <option value="confirmed">Terkonfirmasi</option>
-                        <option value="finalist">Lolos Finalis</option>
-                        <option value="pending">Menunggu</option>
-                        <option value="disqualified">Didiskualifikasi</option>
-                      </select>
-                    </td>
-
-                    {/* Column 5: Aksi (Detail & Hapus) */}
+                    {/* Column 4: Aksi (Detail & Hapus) */}
                     <td className="py-3.5 px-5 text-right pr-6 whitespace-nowrap">
                       <div className="inline-flex items-center gap-2">
                         <button
@@ -1104,33 +1040,15 @@ export default function RegistrationsPage() {
               </div>
             )}
 
-            {/* Status Verifikasi Selector */}
-            <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2.5 text-xs">
-              <div className="flex items-center justify-between">
-                <span className="text-neutral-600 font-medium">Status Verifikasi:</span>
-                <select
-                  value={selectedReg.status}
-                  onChange={(e) =>
-                    handleUpdateStatus(selectedReg.id, e.target.value as RegistrationStatus)
-                  }
-                  className="text-xs py-1.5 px-3 bg-white border border-neutral-200/80 rounded-xl font-medium text-neutral-800 focus:outline-none focus:border-[#0071e3] cursor-pointer"
-                >
-                  <option value="confirmed">Terkonfirmasi (Lengkap)</option>
-                  <option value="finalist">Lolos Finalis Lomba</option>
-                  <option value="pending">Menunggu Verifikasi</option>
-                  <option value="disqualified">Didiskualifikasi</option>
-                </select>
-              </div>
-
-              <div className="flex items-center justify-between pt-2 border-t border-neutral-200/60">
-                <span className="text-neutral-500 font-normal">Status Kehadiran Gate:</span>
-                <span className="px-2.5 py-0.5 rounded-full font-medium text-xs bg-neutral-100 text-neutral-700 border border-neutral-200/60 inline-flex items-center gap-1.5">
-                  <span className={`w-1.5 h-1.5 rounded-full ${selectedReg.check_in_status === 'checked_in' ? 'bg-emerald-600' : 'bg-neutral-400'}`} />
-                  {selectedReg.check_in_status === 'checked_in'
-                    ? 'Hadir di Lokasi'
-                    : 'Belum Hadir'}
-                </span>
-              </div>
+            {/* Gate attendance status */}
+            <div className="flex items-center justify-between p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 text-xs">
+              <span className="text-neutral-500 font-normal">Status Kehadiran Gate:</span>
+              <span className="px-2.5 py-0.5 rounded-full font-medium text-xs bg-neutral-100 text-neutral-700 border border-neutral-200/60 inline-flex items-center gap-1.5">
+                <span className={`w-1.5 h-1.5 rounded-full ${selectedReg.check_in_status === 'checked_in' ? 'bg-emerald-600' : 'bg-neutral-400'}`} />
+                {selectedReg.check_in_status === 'checked_in'
+                  ? 'Hadir di Lokasi'
+                  : 'Belum Hadir'}
+              </span>
             </div>
 
             {/* Modal Bottom Actions */}
