@@ -1,8 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { EVENT_CONFIG } from '@/config/event';
 import { downloadCsv } from '@/lib/csv';
 import type { PrideRegistration } from '@/types';
+
+function getGateStatus(now: Date) {
+  const { windowStart, windowEnd } = EVENT_CONFIG.checkin;
+  if (now < windowStart) return 'Gate Belum Dibuka';
+  if (now > windowEnd) return 'Gate Ditutup';
+  return 'Gate Live';
+}
 
 // Helper for real-time text highlight (Apple clean styling)
 function highlightMatch(text: string | undefined | null, query: string) {
@@ -31,6 +39,8 @@ export default function ParticipantsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [compFilter, setCompFilter] = useState('all');
+  const [gateStatus, setGateStatus] = useState<ReturnType<typeof getGateStatus> | null>(null);
+  const isGateLive = gateStatus === 'Gate Live';
 
   // Modals
   const [selectedParticipant, setSelectedParticipant] = useState<PrideRegistration | null>(null);
@@ -39,6 +49,7 @@ export default function ParticipantsPage() {
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const fetchData = async () => {
+    setGateStatus(getGateStatus(new Date()));
     try {
       const res = await fetch('/api/admin/data');
       const json = await res.json();
@@ -187,10 +198,16 @@ export default function ParticipantsPage() {
               <h1 className="text-xl sm:text-2xl font-semibold text-[#1d1d1f] tracking-tight">
                 Data Presensi
               </h1>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70 shadow-2xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Gate Live
-              </span>
+              {gateStatus && (
+                <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border shadow-2xs ${
+                  isGateLive
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200/70'
+                    : 'bg-neutral-100 text-neutral-600 border-neutral-200/70'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${isGateLive ? 'bg-emerald-500 animate-pulse' : 'bg-neutral-400'}`} />
+                  {gateStatus}
+                </span>
+              )}
             </div>
             <p className="text-xs font-normal text-neutral-500 mt-0.5 hidden sm:block">
               Data kehadiran resmi pengunjung dan peserta lomba yang telah check-in di gate Braga City Walk.
