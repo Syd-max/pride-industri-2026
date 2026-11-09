@@ -83,6 +83,7 @@ export default function DesainKemasanPage() {
   const [tactlinkQrFile, setTactlinkQrFile] = useState<File | null>(null);
   const [tactlinkQrPreview, setTactlinkQrPreview] = useState<string | null>(null);
   const [tactlinkQrError, setTactlinkQrError] = useState<string | null>(null);
+  const [checkingTactlinkQr, setCheckingTactlinkQr] = useState(false);
   const tactlinkQrInputRef = useRef<HTMLInputElement>(null);
 
   // ─── Submission States ───
@@ -171,12 +172,15 @@ export default function DesainKemasanPage() {
     handlePaktaFileChange(file);
   };
 
-  const handleTactlinkQrChange = (file: File | null) => {
+  const handleTactlinkQrChange = async (file: File | null) => {
+    const input = tactlinkQrInputRef.current;
     setTactlinkQrError(null);
     setErrorMessage(null);
+    setTactlinkQrFile(null);
+    setTactlinkQrPreview(null);
     if (!file) {
-      setTactlinkQrFile(null);
-      setTactlinkQrPreview(null);
+      if (input) input.value = '';
+      setCheckingTactlinkQr(false);
       return;
     }
     const MAX_QR_SIZE = 2 * 1024 * 1024; // 2 MB
@@ -184,19 +188,25 @@ export default function DesainKemasanPage() {
       setTactlinkQrError(
         `File "${file.name}" berukuran ${formatFileSize(file.size)}, melebihi batas maksimal 2 MB. File tidak dapat dimasukkan.`
       );
-      if (tactlinkQrInputRef.current) tactlinkQrInputRef.current.value = '';
-      setTactlinkQrFile(null);
-      setTactlinkQrPreview(null);
+      if (input) input.value = '';
+      setCheckingTactlinkQr(false);
+      return;
+    }
+
+    setCheckingTactlinkQr(true);
+    const preview = await import('@/lib/registration-qr-image')
+      .then(({ readRegistrationQrPreview }) => readRegistrationQrPreview(file))
+      .catch(() => null);
+    if (input !== tactlinkQrInputRef.current || input?.files?.[0] !== file) return;
+
+    setCheckingTactlinkQr(false);
+    if (!preview) {
+      input.value = '';
+      setTactlinkQrError('QR tidak terbaca. Pilih foto JPG atau PNG yang menampilkan QR TactLink dengan jelas.');
       return;
     }
     setTactlinkQrFile(file);
-    if (file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = () => setTactlinkQrPreview(reader.result as string);
-      reader.readAsDataURL(file);
-    } else {
-      setTactlinkQrPreview(null);
-    }
+    setTactlinkQrPreview(preview);
   };
 
   // ─── Step Transitions with Validations ───
@@ -1439,7 +1449,7 @@ export default function DesainKemasanPage() {
                       </div>
 
                       {tactlinkQrError && (
-                        <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-medium">
+                        <div role="alert" className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-medium">
                           {tactlinkQrError}
                         </div>
                       )}
@@ -1484,7 +1494,7 @@ export default function DesainKemasanPage() {
                                   {tactlinkQrFile.name}
                                 </div>
                                 <div className="text-[11px] text-emerald-700 font-semibold mt-0.5">
-                                  {formatFileSize(tactlinkQrFile.size)} · Foto barcode siap diunggah
+                                  {formatFileSize(tactlinkQrFile.size)} · QR terbaca
                                 </div>
                               </div>
                             </div>
@@ -1502,7 +1512,7 @@ export default function DesainKemasanPage() {
                         ) : (
                           <div className="space-y-1">
                             <div className="text-xs font-bold text-slate-800">
-                              Pilih tangkapan layar (screenshot) QR TactLink
+                              {checkingTactlinkQr ? 'Memeriksa QR…' : 'Pilih tangkapan layar (screenshot) QR TactLink'}
                             </div>
                             <div className="text-[11px] text-slate-500">
                               Format JPG atau PNG
@@ -1525,7 +1535,7 @@ export default function DesainKemasanPage() {
                     </button>
                     <button
                       type="submit"
-                      disabled={loading}
+                      disabled={loading || checkingTactlinkQr}
                       className="w-full sm:w-auto py-3.5 px-8 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 active:scale-[0.99] transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:pointer-events-none cursor-pointer flex items-center justify-center gap-2"
                     >
                       {loading ? (
