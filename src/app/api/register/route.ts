@@ -16,6 +16,7 @@ import {
   DEFAULT_STORAGE_BUCKET,
 } from '@/lib/storage';
 import { isRegistrationFileField, registrationFileLimits, registrationUploadName, type RegistrationFileField } from '@/lib/registration-upload';
+import { hasReadableRegistrationQr, registrationQrError } from '@/lib/registration-qr';
 import type { ApiResponse, RegistrationSuccessData } from '@/types';
 
 export async function POST(
@@ -355,19 +356,30 @@ export async function POST(
         const objectPath = buildRegistrationStoragePath(registrationCode, name);
         const file = uploadedFiles[field];
         if (file) {
+          if (field === 'tactlink_qr_file' && !(await hasReadableRegistrationQr(file))) {
+            return NextResponse.json({ success: false, error: registrationQrError }, { status: 400 });
+          }
           const { path, error } = await uploadRegistrationFileToSupabase(
             supabase, file, objectPath, file.type, DEFAULT_STORAGE_BUCKET
           );
           if (error || !path) throw error || new Error('Upload failed.');
           uploadedPaths.push(objectPath);
         } else {
-          const { data, error } = await supabase.storage.from(DEFAULT_STORAGE_BUCKET).info(objectPath);
+          const bucket = supabase.storage.from(DEFAULT_STORAGE_BUCKET);
+          const { data, error } = await bucket.info(objectPath);
           const size = data?.size ?? Number(data?.metadata?.size);
           if (error || !data || !Number.isFinite(size) || size < 1 || size > registrationFileLimits[field]) {
             return NextResponse.json(
               { success: false, error: `Berkas "${name}" belum tersedia atau ukurannya tidak sesuai.` },
               { status: 400 }
             );
+          }
+          if (field === 'tactlink_qr_file') {
+            const { data: photo, error: downloadError } = await bucket.download(objectPath);
+            if (downloadError) throw downloadError;
+            if (!photo || !(await hasReadableRegistrationQr(photo))) {
+              return NextResponse.json({ success: false, error: registrationQrError }, { status: 400 });
+            }
           }
         }
       }
