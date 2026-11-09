@@ -1,231 +1,121 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/lib/supabase/server';
-import {
-  getSharedRegistrations,
-  updateSharedRegistration,
-  getSharedVisitors,
-  deleteSharedRegistration,
-  deleteSharedVisitor,
-} from '@/lib/store';
+import { createAdminClient, hasAdminSession } from '@/lib/supabase/server';
+import type { PrideRegistration } from '@/types';
+
+function fail(error: string, status: number) {
+  return NextResponse.json({ success: false, error }, { status });
+}
+
+function isUuid(id: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+}
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const includeVisitors = searchParams.get('visitors') === 'true';
+  if (!(await hasAdminSession())) return fail('Silakan login sebagai admin.', 401);
 
-  const hasSupabase =
-    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-    (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
-      Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
-      Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
-    process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
-
-  if (hasSupabase) {
-    try {
-      const supabase = createAdminClient();
-      const { data, error } = await supabase
+  try {
+    const supabase = createAdminClient();
+    const data: PrideRegistration[] = [];
+    const pageSize = 500;
+    let total: number | null = null;
+    for (;;) {
+      const { data: page, error, count } = await supabase
         .from('pride_registrations')
-        .select('*')
+        .select('*', data.length === 0 ? { count: 'exact' } : undefined)
         .neq('status', 'cancelled')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('[PRIDE_ADMIN_DATA_FETCH_ERROR]', error);
-      } else if (data) {
-        return NextResponse.json({
-          success: true,
-          data,
-          visitors: includeVisitors ? getSharedVisitors() : undefined,
-        });
-      }
-    } catch (err) {
-      console.warn('Supabase fetch failed, falling back to memory store:', err);
+        .order('created_at', { ascending: false })
+        .order('id', { ascending: false })
+        .range(data.length, data.length + pageSize - 1);
+      if (error) throw error;
+      if (!page.length) break;
+      data.push(...page);
+      total ??= count;
+      if (total !== null && data.length >= total) break;
     }
+
+    const visitors = request.nextUrl.searchParams.get('visitors') === 'true'
+      ? data.filter((entry) => entry.competition_id === 'pengunjung-umum').map((entry) => ({
+          id: entry.id,
+          visitor_type: 'umum',
+          ticket_code: entry.registration_code,
+          full_name: entry.full_name,
+          city: entry.address || entry.phone,
+          group_size: 1,
+          checked_in_at: entry.checked_in_at,
+        }))
+      : undefined;
+
+    return NextResponse.json({ success: true, data, visitors }, {
+      headers: { 'Cache-Control': 'private, no-store' },
+    });
+  } catch (error) {
+    console.error('[PRIDE_ADMIN_DATA_FETCH_ERROR]', error);
+    return fail('Data peserta belum bisa dimuat. Silakan coba lagi.', 503);
   }
-
-  const memoryData = getSharedRegistrations().filter((r) => r.status !== 'cancelled');
-
-  return NextResponse.json({
-    success: true,
-    data: memoryData,
-    visitors: includeVisitors ? getSharedVisitors() : undefined,
-  });
 }
 
 export async function PATCH(request: NextRequest) {
+  if (!(await hasAdminSession())) return fail('Silakan login sebagai admin.', 401);
+
   try {
     const { id, status, check_in_status } = await request.json();
-
-    const hasSupabase =
-      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-      (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
-        Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
-        Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
-      process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
-
-    if (hasSupabase) {
-      try {
-        const supabase = createAdminClient();
-        const updatePayload: Record<string, unknown> = {};
-        if (status) updatePayload.status = status;
-        if (check_in_status) {
-          updatePayload.check_in_status = check_in_status;
-          if (check_in_status === 'checked_in') {
-            updatePayload.checked_in_at = new Date().toISOString();
-          } else {
-            updatePayload.checked_in_at = null;
-          }
-        }
-
-        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(id));
-        let query = supabase.from('pride_registrations').update(updatePayload);
-        if (isUuid) {
-          query = query.eq('id', id);
-        } else {
-          query = query.eq('registration_code', id);
-        }
-
-        const { error } = await query;
-
-        if (!error) {
-          updateSharedRegistration(id, {
-            status,
-            check_in_status,
-            checked_in_at: check_in_status === 'checked_in' ? new Date().toISOString() : undefined,
-          });
-          return NextResponse.json({ success: true });
-        } else {
-          console.error('[PRIDE_ADMIN_DATA_PATCH_ERROR]', error);
-        }
-      } catch (err) {
-        console.warn('Supabase update failed:', err);
-      }
+    if (
+      typeof id !== 'string' || !id || (!status && !check_in_status) ||
+      (status && !['pending', 'confirmed', 'finalist', 'disqualified', 'cancelled'].includes(status)) ||
+      (check_in_status && !['not_checked_in', 'checked_in'].includes(check_in_status))
+    ) {
+      return fail('ID atau status peserta tidak valid.', 400);
     }
 
-    // Memory update fallback
-    updateSharedRegistration(id, {
-      status,
-      check_in_status,
-      checked_in_at: check_in_status === 'checked_in' ? new Date().toISOString() : undefined,
-    });
+    const update: Record<string, unknown> = {};
+    if (status) update.status = status;
+    if (check_in_status) {
+      update.check_in_status = check_in_status;
+      update.checked_in_at = check_in_status === 'checked_in' ? new Date().toISOString() : null;
+    }
 
+    const { data, error } = await createAdminClient()
+      .from('pride_registrations')
+      .update(update)
+      .eq(isUuid(id) ? 'id' : 'registration_code', id)
+      .select('id')
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) return fail('Data peserta tidak ditemukan.', 404);
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json(
-      { success: false, error: 'Gagal memperbarui status data.' },
-      { status: 500 }
-    );
+  } catch (error) {
+    console.error('[PRIDE_ADMIN_DATA_PATCH_ERROR]', error);
+    return fail('Gagal memperbarui status data.', 500);
   }
 }
 
 export async function DELETE(request: NextRequest) {
+  if (!(await hasAdminSession())) return fail('Silakan login sebagai admin.', 401);
+
   try {
-    let id: string | null = null;
-    const { searchParams } = new URL(request.url);
-    id = searchParams.get('id');
+    const id = request.nextUrl.searchParams.get('id') || (await request.json().catch(() => null))?.id;
+    if (typeof id !== 'string' || !id) return fail('ID atau kode registrasi wajib disertakan.', 400);
 
-    if (!id) {
-      try {
-        const body = await request.json();
-        id = body?.id || null;
-      } catch {
-        // Body might be empty
-      }
-    }
+    const supabase = createAdminClient();
+    const { data: registration, error: findError } = await supabase
+      .from('pride_registrations')
+      .select('id')
+      .eq(isUuid(id) ? 'id' : 'registration_code', id)
+      .maybeSingle();
+    if (findError) throw findError;
+    if (!registration) return fail('Data peserta tidak ditemukan.', 404);
 
-    if (!id) {
-      return NextResponse.json(
-        { success: false, error: 'ID atau kode registrasi wajib disertakan.' },
-        { status: 400 }
-      );
-    }
+    const { error: checkInError } = await supabase.from('pride_checkins')
+      .delete().eq('registration_id', registration.id);
+    if (checkInError) throw checkInError;
 
-    const hasSupabase =
-      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-      (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
-        Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
-        Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
-      process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
-
-    if (hasSupabase) {
-      try {
-        const supabase = createAdminClient();
-        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(id));
-
-        // 1. Fetch record first to know real UUID & code
-        let targetUuid: string | null = null;
-        let targetCode: string | null = null;
-
-        if (isUuid) {
-          targetUuid = id;
-          const { data: rec } = await supabase
-            .from('pride_registrations')
-            .select('id, registration_code')
-            .eq('id', id)
-            .maybeSingle();
-          if (rec) targetCode = rec.registration_code;
-        } else {
-          targetCode = id;
-          const { data: rec } = await supabase
-            .from('pride_registrations')
-            .select('id, registration_code')
-            .eq('registration_code', id)
-            .maybeSingle();
-          if (rec) targetUuid = rec.id;
-        }
-
-        // 2. Mark as cancelled & not_checked_in via UPDATE (guaranteed to succeed across all RLS policies)
-        let updateQuery = supabase
-          .from('pride_registrations')
-          .update({
-            status: 'cancelled',
-            check_in_status: 'not_checked_in',
-            checked_in_at: null,
-          });
-        if (targetUuid) {
-          updateQuery = updateQuery.eq('id', targetUuid);
-        } else if (targetCode) {
-          updateQuery = updateQuery.eq('registration_code', targetCode);
-        } else {
-          updateQuery = updateQuery.eq('id', id);
-        }
-        await updateQuery;
-
-        // 3. Clean up foreign keys in pride_checkins if targetUuid exists
-        if (targetUuid) {
-          await supabase
-            .from('pride_checkins')
-            .delete()
-            .eq('registration_id', targetUuid);
-        }
-
-        // 4. Also attempt physical DELETE from pride_registrations
-        let deleteQuery = supabase.from('pride_registrations').delete();
-        if (targetUuid) {
-          deleteQuery = deleteQuery.eq('id', targetUuid);
-        } else if (targetCode) {
-          deleteQuery = deleteQuery.eq('registration_code', targetCode);
-        } else {
-          deleteQuery = deleteQuery.eq('id', id);
-        }
-        await deleteQuery;
-      } catch (err) {
-        console.warn('Supabase delete error, attempting memory fallback:', err);
-      }
-    }
-
-    // Clean up memory store
-    deleteSharedRegistration(id);
-    deleteSharedVisitor(id);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Data berhasil dihapus secara permanen.',
-    });
-  } catch (err) {
-    console.error('Delete handler fatal error:', err);
-    return NextResponse.json(
-      { success: false, error: 'Terjadi kesalahan sistem saat menghapus data.' },
-      { status: 500 }
-    );
+    const { data: deleted, error: deleteError } = await supabase.from('pride_registrations')
+      .delete().eq('id', registration.id).select('id').maybeSingle();
+    if (deleteError) throw deleteError;
+    if (!deleted) return fail('Data peserta tidak ditemukan.', 404);
+    return NextResponse.json({ success: true, message: 'Data berhasil dihapus secara permanen.' });
+  } catch (error) {
+    console.error('[PRIDE_ADMIN_DATA_DELETE_ERROR]', error);
+    return fail('Terjadi kesalahan sistem saat menghapus data.', 500);
   }
 }

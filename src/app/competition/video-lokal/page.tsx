@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { EVENT_CONFIG } from '@/config/event';
 import { createClient } from '@/lib/supabase/client';
-import { sanitizeStorageFileName, getSafeStorageContentType } from '@/lib/storage';
+import { uploadRegistrationFile } from '@/lib/registration-upload';
 import { generateRegistrationCode } from '@/lib/utils';
 
 type VideoCategory = 'Fesyen' | 'Kuliner' | 'Kriya' | 'PRIDE Industri 2026';
@@ -17,10 +17,6 @@ const FORM_STEPS = [
   { step: 4, title: 'Upload Dokumen', subtitle: 'Pakta integritas (Maks 5 MB)' },
   { step: 5, title: 'Siapkan TactLink', subtitle: 'Unduh, video & QR (Maks 2 MB)' },
 ];
-
-function inferContentType(file: File): string {
-  return getSafeStorageContentType(file);
-}
 
 const INSTITUTION_OPTIONS = [
   'Pemerintah / Instansi Pemerintah',
@@ -236,64 +232,12 @@ export default function VideoLokalPage() {
     try {
       const regCode = generateRegistrationCode('VL');
       const supabase = createClient();
-      const BUCKET = 'community-assets';
-
-      let uploadedDocName = '';
-      let uploadedQrName = '';
-
-      if (documentFile) {
-        setUploadProgress('Mengunggah dokumen persyaratan...');
-        const safeDoc = sanitizeStorageFileName(documentFile.name);
-        const pathDoc = `registrations/${regCode}/${safeDoc}`;
-        let { error: errDoc } = await supabase.storage
-          .from(BUCKET)
-          .upload(pathDoc, documentFile, {
-            contentType: inferContentType(documentFile),
-            upsert: true,
-          });
-
-        if (errDoc && errDoc.message?.toLowerCase().includes('mime type')) {
-          const retry = await supabase.storage
-            .from(BUCKET)
-            .upload(pathDoc, documentFile, {
-              contentType: 'application/octet-stream',
-              upsert: true,
-            });
-          errDoc = retry.error;
-        }
-
-        if (errDoc) {
-          throw new Error(`Gagal mengunggah dokumen persyaratan: ${errDoc.message}`);
-        }
-        uploadedDocName = safeDoc;
-      }
-
-      if (tactlinkQrFile) {
-        setUploadProgress('Mengunggah QR TactLink...');
-        const safeQr = sanitizeStorageFileName(tactlinkQrFile.name);
-        const pathQr = `registrations/${regCode}/${safeQr}`;
-        let { error: errQr } = await supabase.storage
-          .from(BUCKET)
-          .upload(pathQr, tactlinkQrFile, {
-            contentType: inferContentType(tactlinkQrFile),
-            upsert: true,
-          });
-
-        if (errQr && errQr.message?.toLowerCase().includes('mime type')) {
-          const retry = await supabase.storage
-            .from(BUCKET)
-            .upload(pathQr, tactlinkQrFile, {
-              contentType: 'application/octet-stream',
-              upsert: true,
-            });
-          errQr = retry.error;
-        }
-
-        if (errQr) {
-          throw new Error(`Gagal mengunggah foto QR TactLink: ${errQr.message}`);
-        }
-        uploadedQrName = safeQr;
-      }
+      const uploadedDocName = documentFile
+        ? await uploadRegistrationFile(supabase, regCode, 'document_file', documentFile)
+        : '';
+      const uploadedQrName = tactlinkQrFile
+        ? await uploadRegistrationFile(supabase, regCode, 'tactlink_qr_file', tactlinkQrFile)
+        : '';
 
       setUploadProgress('Menyimpan data registrasi...');
 
@@ -315,8 +259,8 @@ export default function VideoLokalPage() {
         declaration_original: declarationOriginal,
         declaration_terms: declarationTerms,
         declaration_usage_rights: declarationUsageRights,
-        document_file_name: uploadedDocName || (documentFile ? sanitizeStorageFileName(documentFile.name) : ''),
-        tactlink_qr_name: uploadedQrName || (tactlinkQrFile ? sanitizeStorageFileName(tactlinkQrFile.name) : ''),
+        document_file_name: uploadedDocName,
+        tactlink_qr_name: uploadedQrName,
       };
 
       const res = await fetch('/api/register', {
@@ -914,7 +858,7 @@ export default function VideoLokalPage() {
                   </div>
 
                   <a
-                    href="https://bit.ly/PRIDE2026LogodanVisualAssets"
+                    href={EVENT_CONFIG.competitions.videoLokal.assetsLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-50/80 hover:bg-blue-100 border border-blue-200 text-blue-700 text-xs font-bold transition-all cursor-pointer"

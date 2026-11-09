@@ -13,14 +13,14 @@ export default function AdminLayout({
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // If on login page, render without admin chrome
-  if (pathname === '/admin/login') {
-    return <>{children}</>;
-  }
-
   const handleLogout = async () => {
-    await fetch('/api/admin/auth', { method: 'DELETE' });
-    window.location.href = '/admin/login';
+    try {
+      const res = await fetch('/api/admin/auth', { method: 'DELETE' });
+      if (!res.ok) throw new Error('Logout failed');
+      window.location.href = '/admin/login';
+    } catch {
+      alert('Gagal keluar dari sesi admin. Silakan coba lagi.');
+    }
   };
 
   // Close drawer on route change
@@ -48,6 +48,10 @@ export default function AdminLayout({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
 
   const navItems = [
     {

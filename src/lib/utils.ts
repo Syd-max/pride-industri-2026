@@ -6,7 +6,9 @@
 export function generateRegistrationCode(competitionSlug: string): string {
   const prefix = competitionSlug === 'desain-kemasan' ? 'DK' : 'VL';
   const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-  const random = Math.random().toString(36).toUpperCase().slice(2, 8);
+  const random = Array.from(crypto.getRandomValues(new Uint8Array(6)), (byte) =>
+    (byte % 36).toString(36).toUpperCase()
+  ).join('');
   return `PRIDE-${prefix}-${date}-${random}`;
 }
 

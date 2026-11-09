@@ -31,7 +31,7 @@ const REGISTRATION_LINKS = [
 ] as const;
 
 // 26 November 2026, 00:00 WIB.
-const CHECK_IN_VISIBLE_AT = Date.parse('2026-11-25T17:00:00Z');
+const CHECK_IN_VISIBLE_AT = EVENT_CONFIG.checkin.windowStart.getTime();
 
 export default function Navbar() {
   const smoothScroll = useContext(SmoothScrollContext);

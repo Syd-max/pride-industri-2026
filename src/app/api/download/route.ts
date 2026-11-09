@@ -1,16 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { createAdminClient } from '@/lib/supabase/server';
-import {
-  downloadRegistrationFileFromSupabase,
-  uploadRegistrationFileToSupabase,
-  sanitizeStorageFileName,
-  isConvertibleImage,
-  buildRegistrationStoragePath,
-  DEFAULT_STORAGE_BUCKET,
-} from '@/lib/storage';
-import { convertBufferToWebp } from '@/lib/server-image';
+import { createAdminClient, hasAdminSession } from '@/lib/supabase/server';
+import { DEFAULT_STORAGE_BUCKET, buildRegistrationStoragePath, sanitizeStorageFileName } from '@/lib/storage';
+import { displayRegistrationFileName } from '@/lib/registration-upload';
 
 function getMimeType(fileName: string): string {
   const ext = path.extname(fileName).toLowerCase();
@@ -37,195 +30,67 @@ function getMimeType(fileName: string): string {
   }
 }
 
+function fail(error: string, status: number) {
+  return NextResponse.json({ success: false, error }, {
+    status,
+    headers: { 'Cache-Control': 'private, no-store' },
+  });
+}
+
 export async function GET(request: NextRequest) {
+  if (!(await hasAdminSession())) return fail('Silakan login sebagai admin.', 401);
+
+  const code = request.nextUrl.searchParams.get('code') || '';
+  const file = request.nextUrl.searchParams.get('file')?.trim() || '';
+  const inline = request.nextUrl.searchParams.get('inline') === 'true';
+  if (!/^[A-Za-z0-9_-]{6,80}$/.test(code) || !file || /[\\/\x00-\x1F]/.test(file) || file === '.' || file === '..') {
+    return fail('Kode pendaftaran atau nama berkas tidak valid.', 400);
+  }
+
+  const safeName = sanitizeStorageFileName(file);
+  const downloadName = displayRegistrationFileName(file);
   try {
-    const code = request.nextUrl.searchParams.get('code');
-    const file = request.nextUrl.searchParams.get('file');
-    const isInline = request.nextUrl.searchParams.get('inline') === 'true';
-
-    if (!code || !file) {
-      return NextResponse.json(
-        { success: false, error: 'Parameter code dan file wajib disertakan.' },
-        { status: 400 }
-      );
-    }
-
-    const safeCode = code.replace(/[^a-zA-Z0-9_-]/g, '');
-    const safeFile = sanitizeStorageFileName(file);
-    const parsed = path.parse(safeFile);
-    const isImage = isConvertibleImage(safeFile);
-
-    // 1. Primary Source: Retrieve bytes from Supabase Storage
-    const hasSupabase =
-      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-      process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
-
-    if (hasSupabase) {
-      try {
-        const supabase = createAdminClient();
-
-        // INVISIBLE WEBP PIPELINE FOR PREVIEWS:
-        // When displaying in-browser preview (isInline=true) of an image, check for pre-generated WebP derivative
-        if (isInline && isImage) {
-          const webpName = `${parsed.name}.webp`;
-          const { buffer: webpBuf, error: webpErr } =
-            await downloadRegistrationFileFromSupabase(
-              supabase,
-              safeCode,
-              webpName,
-              DEFAULT_STORAGE_BUCKET
-            );
-
-          if (webpBuf && !webpErr) {
-            return new NextResponse(new Uint8Array(webpBuf), {
-              status: 200,
-              headers: {
-                'Content-Type': 'image/webp',
-                'Content-Disposition': `inline; filename="${webpName}"`,
-                'Content-Length': webpBuf.length.toString(),
-                'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-              },
-            });
-          }
-        }
-
-        // Fetch original file from Supabase Storage (unmodified archival copy)
-        const { buffer, contentType, error: storageErr } =
-          await downloadRegistrationFileFromSupabase(
-            supabase,
-            safeCode,
-            safeFile,
-            DEFAULT_STORAGE_BUCKET
-          );
-
-        if (buffer && !storageErr) {
-          // If in-browser preview requested and file is an image, convert to WebP and cache derivative
-          if (isInline && isImage && !safeFile.toLowerCase().endsWith('.webp')) {
-            try {
-              const { buffer: convertedWebp } = await convertBufferToWebp(buffer);
-              if (convertedWebp) {
-                // Background cache to Supabase Storage without blocking
-                const webpName = `${parsed.name}.webp`;
-                const webpObjectPath = buildRegistrationStoragePath(safeCode, webpName);
-                uploadRegistrationFileToSupabase(
-                  supabase,
-                  convertedWebp,
-                  webpObjectPath,
-                  'image/webp',
-                  DEFAULT_STORAGE_BUCKET
-                ).catch(() => {});
-
-                return new NextResponse(new Uint8Array(convertedWebp), {
-                  status: 200,
-                  headers: {
-                    'Content-Type': 'image/webp',
-                    'Content-Disposition': `inline; filename="${webpName}"`,
-                    'Content-Length': convertedWebp.length.toString(),
-                    'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-                  },
-                });
-              }
-            } catch (err) {
-              console.warn('[WEBP_CONVERT_FALLBACK] Serving original image directly:', err);
-            }
-          }
-
-          // Exact original file stream (for download or when inline conversion is not applicable)
-          const mimeType = contentType && contentType !== 'application/octet-stream'
-            ? contentType
-            : getMimeType(safeFile);
-
-          return new NextResponse(new Uint8Array(buffer), {
-            status: 200,
-            headers: {
-              'Content-Type': mimeType,
-              'Content-Disposition': isInline
-                ? `inline; filename="${safeFile}"`
-                : `attachment; filename="${safeFile}"`,
-              'Content-Length': buffer.length.toString(),
-              'Cache-Control': isInline
-                ? 'public, max-age=3600, s-maxage=3600'
-                : 'private, no-cache, no-store, must-revalidate',
-            },
-          });
-        }
-      } catch (err) {
-        console.warn('[DOWNLOAD_SUPABASE_ERROR] Failed to fetch from Supabase Storage:', err);
+    const bucket = createAdminClient().storage.from(DEFAULT_STORAGE_BUCKET);
+    const paths = new Set([
+      buildRegistrationStoragePath(code, safeName),
+      `registrations/${code}/${file}`,
+      `${code}/${safeName}`,
+      `${code}/${file}`,
+      safeName,
+      file,
+    ]);
+    for (const objectPath of paths) {
+      const { data } = await bucket.createSignedUrl(objectPath, 120, {
+        download: inline ? false : downloadName,
+      });
+      if (data?.signedUrl) {
+        return NextResponse.redirect(data.signedUrl, {
+          headers: { 'Cache-Control': 'private, no-store' },
+        });
       }
     }
-
-    // 2. Secondary Fallback: Local filesystem (for local dev environments)
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads', safeCode);
-    const directPath = path.join(uploadsDir, safeFile);
-
-    let localPath: string | null = null;
-    if (isInline && isImage) {
-      const webpPath = path.join(uploadsDir, `${parsed.name}.webp`);
-      if (fs.existsSync(/*turbopackIgnore: true*/ webpPath)) {
-        localPath = webpPath;
-      }
+  } catch (error) {
+    console.error('[DOWNLOAD_API_ERROR]', error);
+    if (process.env.NODE_ENV === 'production') {
+      return fail('Berkas belum bisa diunduh. Silakan coba lagi.', 503);
     }
-    if (!localPath) {
-      if (fs.existsSync(/*turbopackIgnore: true*/ directPath)) {
-        localPath = directPath;
-      } else if (fs.existsSync(/*turbopackIgnore: true*/ uploadsDir)) {
-        const filesInFolder = fs.readdirSync(/*turbopackIgnore: true*/ uploadsDir);
-        const match = filesInFolder.find(
-          (f) => f.toLowerCase() === safeFile.toLowerCase()
-        );
-        if (match) {
-          localPath = path.join(uploadsDir, match);
-        }
-      }
-    }
+  }
 
-    if (localPath) {
-      let localBuffer: Buffer = Buffer.from(fs.readFileSync(/*turbopackIgnore: true*/ localPath));
-      let mimeType = getMimeType(localPath);
-
-      if (isInline && isImage && !localPath.toLowerCase().endsWith('.webp')) {
-        try {
-          const { buffer: webpBuf } = await convertBufferToWebp(localBuffer);
-          if (webpBuf) {
-            localBuffer = webpBuf;
-            mimeType = 'image/webp';
-            try {
-              fs.writeFileSync(path.join(uploadsDir, `${parsed.name}.webp`), webpBuf);
-            } catch {}
-          }
-        } catch {}
-      }
-
-      return new NextResponse(new Uint8Array(localBuffer), {
-        status: 200,
+  if (process.env.NODE_ENV !== 'production') {
+    const uploadsDir = path.join(process.cwd(), 'public', 'uploads', code);
+    const localPath = path.join(uploadsDir, safeName);
+    if (fs.existsSync(/*turbopackIgnore: true*/ localPath)) {
+      const buffer = fs.readFileSync(/*turbopackIgnore: true*/ localPath);
+      return new NextResponse(new Uint8Array(buffer), {
         headers: {
-          'Content-Type': mimeType,
-          'Content-Disposition': isInline
-            ? `inline; filename="${path.basename(localPath)}"`
-            : `attachment; filename="${safeFile}"`,
-          'Content-Length': localBuffer.length.toString(),
-          'Cache-Control': isInline ? 'public, max-age=86400' : 'no-cache',
+          'Content-Type': getMimeType(safeName),
+          'Content-Disposition': `${inline ? 'inline' : 'attachment'}; filename="${displayRegistrationFileName(safeName)}"`,
+          'Cache-Control': 'private, no-store',
+          'X-Content-Type-Options': 'nosniff',
         },
       });
     }
-
-    // 3. Honest 404 Response: The file genuinely does not exist in Supabase Storage
-    return NextResponse.json(
-      {
-        success: false,
-        error: `Berkas "${safeFile}" tidak ditemukan pada Supabase Storage (bucket: ${DEFAULT_STORAGE_BUCKET}) untuk pendaftaran ${safeCode}.`,
-        code: 'FILE_NOT_FOUND',
-      },
-      { status: 404 }
-    );
-  } catch (error: any) {
-    if (error?.digest?.startsWith?.('NEXT_')) {
-      throw error;
-    }
-    console.error('[DOWNLOAD_API_ERROR]', error);
-    return NextResponse.json(
-      { success: false, error: 'Terjadi kesalahan sistem saat mengunduh berkas dari penyimpanan.' },
-      { status: 500 }
-    );
   }
+
+  return fail('Berkas tidak ditemukan di penyimpanan.', 404);
 }

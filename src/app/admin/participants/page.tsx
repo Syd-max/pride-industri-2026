@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { downloadCsv } from '@/lib/csv';
 import type { PrideRegistration } from '@/types';
 
 // Helper for real-time text highlight (Apple clean styling)
@@ -100,16 +101,15 @@ export default function ParticipantsPage() {
         }),
       });
 
-      if (res.ok) {
-        setParticipants((prev) =>
-          prev.map((item) =>
-            item.id === p.id
-              ? { ...item, check_in_status: 'not_checked_in', checked_in_at: undefined }
-              : item
-          )
-        );
-        setSelectedParticipant(null);
-      }
+      if (!res.ok) throw new Error('Gagal membatalkan status presensi.');
+      setParticipants((prev) =>
+        prev.map((item) =>
+          item.id === p.id
+            ? { ...item, check_in_status: 'not_checked_in', checked_in_at: undefined }
+            : item
+        )
+      );
+      setSelectedParticipant(null);
     } catch {
       alert('Gagal membatalkan status presensi.');
     }
@@ -162,31 +162,18 @@ export default function ParticipantsPage() {
     const rows = filtered.map((p, idx) => [
       idx + 1,
       p.registration_code,
-      `"${p.full_name.replace(/"/g, '""')}"`,
+      p.full_name,
       p.competition_id === 'desain-kemasan'
         ? 'Desain Kemasan'
         : p.competition_id === 'video-lokal'
         ? 'Video 1 Menit'
         : 'Pengunjung Umum',
-      `"${(p.competition_id === 'pengunjung-umum' ? p.address || p.phone : p.phone || '').replace(/"/g, '""')}"`,
+      (p.competition_id === 'pengunjung-umum' ? p.address || p.phone : p.phone || ''),
       p.checked_in_at ? new Date(p.checked_in_at).toLocaleString('id-ID') : 'Terverifikasi Gate',
       'Hadir di Braga',
     ]);
 
-    const csvContent =
-      'data:text/csv;charset=utf-8,\uFEFF' +
-      [headers.join(','), ...rows.map((e) => e.join(','))].join('\r\n');
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute(
-      'download',
-      `PRIDE_2026_Data_Presensi_${new Date().toISOString().slice(0, 10)}.csv`
-    );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadCsv([headers, ...rows], `PRIDE_2026_Data_Presensi_${new Date().toISOString().slice(0, 10)}.csv`);
   };
 
   return (

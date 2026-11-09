@@ -4,12 +4,9 @@ import { useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
-import { sanitizeStorageFileName, getSafeStorageContentType } from '@/lib/storage';
+import { uploadRegistrationFile, type RegistrationFileField } from '@/lib/registration-upload';
 import { generateRegistrationCode } from '@/lib/utils';
-
-function inferContentType(file: File): string {
-  return getSafeStorageContentType(file);
-}
+import { EVENT_CONFIG } from '@/config/event';
 
 const INSTITUTION_OPTIONS = [
   'Pemerintah / Instansi Pemerintah',
@@ -334,7 +331,8 @@ export default function DesainKemasanPage() {
       const code = generateRegistrationCode('desain-kemasan');
       const supabase = createClient();
 
-      const filesToUpload: { file: File; key: string }[] = [];
+      const filesToUpload: { file: File; key: RegistrationFileField }[] = [];
+      const uploadedNames: Partial<Record<RegistrationFileField, string>> = {};
       if (designFile) filesToUpload.push({ file: designFile, key: 'design_file' });
       if (masterFile) filesToUpload.push({ file: masterFile, key: 'master_file' });
       if (paktaFile) {
@@ -349,30 +347,7 @@ export default function DesainKemasanPage() {
         const item = filesToUpload[i];
         setUploadProgress(`Mengunggah berkas (${i + 1}/${filesToUpload.length})...`);
 
-        const safeName = sanitizeStorageFileName(item.file.name);
-        const objectPath = `registrations/${code}/${safeName}`;
-        const contentType = inferContentType(item.file);
-
-        let { error: uploadError } = await supabase.storage
-          .from('community-assets')
-          .upload(objectPath, item.file, {
-            contentType,
-            upsert: true,
-          });
-
-        if (uploadError && uploadError.message?.toLowerCase().includes('mime type')) {
-          const retry = await supabase.storage
-            .from('community-assets')
-            .upload(objectPath, item.file, {
-              contentType: 'application/octet-stream',
-              upsert: true,
-            });
-          uploadError = retry.error;
-        }
-
-        if (uploadError) {
-          throw new Error(`Gagal mengunggah berkas "${item.file.name}": ${uploadError.message}`);
-        }
+        uploadedNames[item.key] = await uploadRegistrationFile(supabase, code, item.key, item.file);
       }
 
       setUploadProgress('Menyimpan data registrasi...');
@@ -394,11 +369,11 @@ export default function DesainKemasanPage() {
         declaration_unpublished: true,
         declaration_terms: true,
         declaration_usage_rights: true,
-        design_file_name: designFile?.name,
-        master_file_name: masterFile?.name || null,
-        pakta_integritas_file_name: paktaFile?.name,
-        surat_persetujuan_file_name: persetujuanFile?.name,
-        tactlink_qr_name: tactlinkQrFile?.name,
+        design_file_name: uploadedNames.design_file,
+        master_file_name: uploadedNames.master_file || null,
+        pakta_integritas_file_name: uploadedNames.pakta_integritas_file,
+        surat_persetujuan_file_name: uploadedNames.pakta_integritas_file || uploadedNames.surat_persetujuan_file,
+        tactlink_qr_name: uploadedNames.tactlink_qr_file,
       };
 
       const res = await fetch('/api/register', {
@@ -927,7 +902,7 @@ export default function DesainKemasanPage() {
                       </a>
 
                       <a
-                        href="https://bit.ly/PRIDE2026LogodanVisualAssets"
+                        href={EVENT_CONFIG.competitions.desainKemasan.assetsLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-50/80 hover:bg-blue-100 border border-blue-200 text-blue-700 text-xs font-bold transition-all cursor-pointer"

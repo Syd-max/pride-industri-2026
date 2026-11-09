@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { EVENT_CONFIG } from '@/config/event';
 import { createAdminClient } from '@/lib/supabase/server';
 import {
   generateRegistrationCode,
@@ -15,11 +14,9 @@ import {
   sanitizeStorageFileName,
   buildRegistrationStoragePath,
   DEFAULT_STORAGE_BUCKET,
-  isConvertibleImage,
 } from '@/lib/storage';
-import { convertBufferToWebp } from '@/lib/server-image';
-import { getSharedRegistrations, addSharedRegistration } from '@/lib/store';
-import type { ApiResponse, RegistrationSuccessData, PrideRegistration } from '@/types';
+import { isRegistrationFileField, registrationFileLimits, registrationUploadName, type RegistrationFileField } from '@/lib/registration-upload';
+import type { ApiResponse, RegistrationSuccessData } from '@/types';
 
 export async function POST(
   request: NextRequest
@@ -40,7 +37,7 @@ export async function POST(
 
     // 2. Parse & Sanitize Request (Supports both FormData with binary files and JSON)
     const contentType = request.headers.get('content-type') || '';
-    const body: Record<string, any> = {};
+    const body: Record<string, unknown> = Object.create(null);
     const uploadedFiles: Record<string, File> = {};
 
     if (contentType.includes('multipart/form-data')) {
@@ -48,6 +45,9 @@ export async function POST(
       for (const [key, value] of formData.entries()) {
         if (value instanceof File) {
           if (value.size > 0) {
+            if (!isRegistrationFileField(key) || value.size > registrationFileLimits[key]) {
+              return NextResponse.json({ success: false, error: 'Berkas tidak sesuai ketentuan.' }, { status: 400 });
+            }
             uploadedFiles[key] = value;
             body[`${key}_name`] = value.name;
           }
@@ -68,7 +68,7 @@ export async function POST(
     const phone = sanitizeString(body.phone);
 
     // 3. Common Validations
-    if (!['desain-kemasan', 'video-lokal'].includes(competitionId)) {
+    if (competitionId !== 'desain-kemasan' && competitionId !== 'video-lokal') {
       return NextResponse.json(
         { success: false, error: 'Kategori kompetisi tidak valid.' },
         { status: 400 }
@@ -99,6 +99,14 @@ export async function POST(
       );
     }
 
+    const fileName = (field: RegistrationFileField, supplied: unknown) => {
+      const file = uploadedFiles[field];
+      if (file) return registrationUploadName(field, file.name);
+      const name = sanitizeString(supplied);
+      return name ? sanitizeStorageFileName(name) : '';
+    };
+    const requiredFiles: [RegistrationFileField, string][] = [];
+
     // 4. Competition Specific Validations & Data Extraction
     let specificData: Record<string, unknown> = {};
 
@@ -109,44 +117,23 @@ export async function POST(
       const institution = sanitizeString(body.institution || '');
       const localIngredients = sanitizeString(body.local_ingredients);
       const designConcept = sanitizeString(body.design_concept || body.description || '');
-      const designFileName = sanitizeString(
-        uploadedFiles['design_file']?.name || body.design_file_name || ''
-      );
-      const masterFileName = sanitizeString(
-        uploadedFiles['master_file']?.name || body.master_file_name || ''
-      );
-      const paktaFileName = sanitizeString(
-        uploadedFiles['pakta_integritas_file']?.name || body.pakta_integritas_file_name || ''
-      );
-      const persetujuanFileName = sanitizeString(
-        uploadedFiles['surat_persetujuan_file']?.name || body.surat_persetujuan_file_name || paktaFileName || ''
-      );
+      const { registrationOpen, registrationClose } = EVENT_CONFIG.competitions.desainKemasan.schedule;
+      const now = Date.now();
+      if (now < registrationOpen.getTime() || now > registrationClose.getTime()) {
+        return NextResponse.json({ success: false, error: 'Pendaftaran Desain Kemasan di luar jadwal.' }, { status: 403 });
+      }
 
-      // File Size Validations (Sesuai Ketentuan Resmi PDF)
-      if (uploadedFiles['design_file'] && uploadedFiles['design_file'].size > 10 * 1024 * 1024) {
-        return NextResponse.json(
-          { success: false, error: 'Ukuran file karya desain kemasan melebihi batas maksimal 10 MB.' },
-          { status: 400 }
-        );
+      const designFileName = fileName('design_file', body.design_file_name);
+      const masterFileName = fileName('master_file', body.master_file_name);
+      const paktaFileName = fileName('pakta_integritas_file', body.pakta_integritas_file_name);
+      const persetujuanFileName = fileName('surat_persetujuan_file', body.surat_persetujuan_file_name) || paktaFileName;
+      if (!designFileName || !(paktaFileName || persetujuanFileName)) {
+        return NextResponse.json({ success: false, error: 'File karya dan dokumen persyaratan wajib diunggah.' }, { status: 400 });
       }
-      if (uploadedFiles['master_file'] && uploadedFiles['master_file'].size > 8 * 1024 * 1024) {
-        return NextResponse.json(
-          { success: false, error: 'Ukuran master file desain melebihi batas maksimal 8 MB.' },
-          { status: 400 }
-        );
-      }
-      if (uploadedFiles['pakta_integritas_file'] && uploadedFiles['pakta_integritas_file'].size > 2 * 1024 * 1024) {
-        return NextResponse.json(
-          { success: false, error: 'Ukuran dokumen pakta integritas & surat pernyataan melebihi batas maksimal 2 MB.' },
-          { status: 400 }
-        );
-      }
-      if (uploadedFiles['surat_persetujuan_file'] && uploadedFiles['surat_persetujuan_file'].size > 2 * 1024 * 1024) {
-        return NextResponse.json(
-          { success: false, error: 'Ukuran dokumen pakta integritas & surat pernyataan melebihi batas maksimal 2 MB.' },
-          { status: 400 }
-        );
-      }
+      requiredFiles.push(['design_file', designFileName]);
+      if (masterFileName) requiredFiles.push(['master_file', masterFileName]);
+      if (paktaFileName) requiredFiles.push(['pakta_integritas_file', paktaFileName]);
+      if (persetujuanFileName !== paktaFileName) requiredFiles.push(['surat_persetujuan_file', persetujuanFileName]);
 
       if (!productName || !brandName || !address) {
         return NextResponse.json(
@@ -170,10 +157,10 @@ export async function POST(
       }
 
       if (
-        !body.declaration_original ||
-        !body.declaration_unpublished ||
-        !body.declaration_terms ||
-        !body.declaration_usage_rights
+        body.declaration_original !== true ||
+        body.declaration_unpublished !== true ||
+        body.declaration_terms !== true ||
+        body.declaration_usage_rights !== true
       ) {
         return NextResponse.json(
           {
@@ -186,9 +173,7 @@ export async function POST(
       }
 
       // TactLink Digital Business Card QR upload (Wajib Step 5)
-      const tactlinkQrName = sanitizeString(
-        uploadedFiles['tactlink_qr_file']?.name || body.tactlink_qr_name || ''
-      );
+      const tactlinkQrName = fileName('tactlink_qr_file', body.tactlink_qr_name);
       if (!tactlinkQrName) {
         return NextResponse.json(
           {
@@ -200,6 +185,7 @@ export async function POST(
         );
       }
 
+      requiredFiles.push(['tactlink_qr_file', tactlinkQrName]);
       specificData = {
         product_name: productName,
         brand_name: brandName,
@@ -268,7 +254,7 @@ export async function POST(
       const tiktokVideoUrl = sanitizeString(body.tiktok_video_url || '');
 
       // 6. Persetujuan (wajib)
-      if (!body.declaration_original) {
+      if (body.declaration_original !== true) {
         return NextResponse.json(
           {
             success: false,
@@ -279,7 +265,7 @@ export async function POST(
         );
       }
 
-      if (!body.declaration_terms) {
+      if (body.declaration_terms !== true || body.declaration_usage_rights !== true) {
         return NextResponse.json(
           {
             success: false,
@@ -291,12 +277,8 @@ export async function POST(
       }
 
       // 7. Dokumen Persyaratan Lomba (maks 5 MB)
-      const documentFileName = sanitizeString(
-        uploadedFiles['document_file']?.name ||
-          body.document_file_name ||
-          body.pakta_integritas_name ||
-          body.pakta_integritas_file_name ||
-          ''
+      const documentFileName = fileName(
+        'document_file', body.document_file_name || body.pakta_integritas_name || body.pakta_integritas_file_name
       );
       if (!documentFileName) {
         return NextResponse.json(
@@ -309,12 +291,8 @@ export async function POST(
       }
 
       // 8. Foto QR / Barcode Kartu Nama Digital TactLink (maks 2 MB)
-      const tactlinkQrName = sanitizeString(
-        uploadedFiles['tactlink_qr_file']?.name ||
-          body.tactlink_qr_name ||
-          body.surat_persetujuan_name ||
-          body.surat_persetujuan_file_name ||
-          ''
+      const tactlinkQrName = fileName(
+        'tactlink_qr_file', body.tactlink_qr_name || body.surat_persetujuan_name || body.surat_persetujuan_file_name
       );
       if (!tactlinkQrName) {
         return NextResponse.json(
@@ -327,6 +305,7 @@ export async function POST(
         );
       }
 
+      requiredFiles.push(['document_file', documentFileName], ['tactlink_qr_file', tactlinkQrName]);
       specificData = {
         address: sanitizeString(body.address || ''),
         institution,
@@ -344,328 +323,90 @@ export async function POST(
         surat_persetujuan_file_name: tactlinkQrName,
         document_file_name: documentFileName,
         tactlink_qr_name: tactlinkQrName,
-        declaration_usage_rights: Boolean(body.declaration_usage_rights ?? true),
+        declaration_usage_rights: true,
       };
     }
 
-    // 5. Generate Unique Public Registration Code (Does not leak DB IDs)
-    const registrationCode = body.registration_code
-      ? sanitizeString(body.registration_code)
-      : generateRegistrationCode(competitionId);
+    const registrationCode = sanitizeString(body.registration_code) || generateRegistrationCode(competitionId);
+    if (!/^[A-Za-z0-9_-]{6,80}$/.test(registrationCode)) {
+      return NextResponse.json({ success: false, error: 'Kode pendaftaran tidak valid.' }, { status: 400 });
+    }
 
-    // 6. Check duplicates in Shared Store (In-Memory baseline)
-    const sharedList = getSharedRegistrations();
-    const isDuplicateInMemory = sharedList.some(
-      (r) =>
-        r.email.toLowerCase() === email &&
-        r.competition_id === competitionId &&
-        r.status !== 'cancelled' &&
-        r.status !== 'disqualified'
-    );
-
-    if (isDuplicateInMemory) {
+    const supabase = createAdminClient();
+    const { data: existing, error: duplicateError } = await supabase
+      .from('pride_registrations')
+      .select('id')
+      .eq('email', email)
+      .eq('competition_id', competitionId)
+      .not('status', 'in', '(cancelled,disqualified)')
+      .maybeSingle();
+    if (duplicateError) throw duplicateError;
+    if (existing) {
       return NextResponse.json(
-        {
-          success: false,
-          error: `Email ${email} telah terdaftar pada kompetisi ini sebelumnya. Setiap peserta hanya diperkenankan mendaftar satu kali per kompetisi.`,
-          code: 'DUPLICATE_REGISTRATION',
-        },
+        { success: false, error: 'Email sudah terdaftar pada kompetisi ini.', code: 'DUPLICATE_REGISTRATION' },
         { status: 409 }
       );
     }
 
-    // 7. Check credentials and prepare Supabase client
-    const hasSupabase =
-      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-      (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
-        Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
-        Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
-      process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
-
-    const uploadedStoragePaths: string[] = [];
-
-    if (hasSupabase) {
-      try {
-        const supabase = createAdminClient();
-
-        // Check for duplicate active registration in database
-        const { data: existing } = await supabase
-          .from('pride_registrations')
-          .select('id')
-          .eq('email', email)
-          .eq('competition_id', competitionId)
-          .not('status', 'in', '("cancelled","disqualified")')
-          .maybeSingle();
-
-        if (existing) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: `Email ${email} telah terdaftar pada kompetisi ini sebelumnya. Setiap peserta hanya diperkenankan mendaftar satu kali per kompetisi.`,
-              code: 'DUPLICATE_REGISTRATION',
-            },
-            { status: 409 }
+    const uploadedPaths: string[] = [];
+    let saved = false;
+    try {
+      for (const [field, name] of requiredFiles) {
+        const objectPath = buildRegistrationStoragePath(registrationCode, name);
+        const file = uploadedFiles[field];
+        if (file) {
+          const { path, error } = await uploadRegistrationFileToSupabase(
+            supabase, file, objectPath, file.type, DEFAULT_STORAGE_BUCKET
           );
-        }
-
-        // Upload actual uploaded binary files to Supabase Storage
-        if (Object.keys(uploadedFiles).length > 0) {
-          for (const [key, file] of Object.entries(uploadedFiles)) {
-            if (file && file.size > 0) {
-              const safeName = sanitizeStorageFileName(file.name);
-              const objectPath = buildRegistrationStoragePath(registrationCode, safeName);
-              const arrayBuffer = await file.arrayBuffer();
-              const buffer = Buffer.from(arrayBuffer);
-
-              const { path: uploadedPath, error: uploadErr } =
-                await uploadRegistrationFileToSupabase(
-                  supabase,
-                  buffer,
-                  objectPath,
-                  file.type || 'application/octet-stream',
-                  DEFAULT_STORAGE_BUCKET
-                );
-
-              if (uploadErr || !uploadedPath) {
-                console.error(
-                  `[SUPABASE_STORAGE_ERROR] Failed to upload ${key} (${safeName}):`,
-                  uploadErr
-                );
-
-                // Roll back any already-uploaded files for this registration
-                if (uploadedStoragePaths.length > 0) {
-                  await deleteRegistrationFilesFromSupabase(
-                    supabase,
-                    uploadedStoragePaths,
-                    DEFAULT_STORAGE_BUCKET
-                  );
-                }
-
-                return NextResponse.json(
-                  {
-                    success: false,
-                    error: `Gagal mengunggah berkas "${file.name}" ke Supabase Storage: ${
-                      uploadErr?.message || 'Upload error'
-                    }. Pastikan berkas sesuai ketentuan.`,
-                    code: 'STORAGE_UPLOAD_FAILED',
-                  },
-                  { status: 500 }
-                );
-              }
-
-              uploadedStoragePaths.push(objectPath);
-              console.log(
-                `[SUPABASE_STORAGE_SAVED] Successfully uploaded ${key} -> ${objectPath} (${file.size} bytes)`
-              );
-
-              // AUTOMATIC WEBP CONVERSION: Generate optimized WebP derivative for web previews (preserves original intact)
-              if (isConvertibleImage(safeName, file.type)) {
-                try {
-                  const { buffer: webpBuf } = await convertBufferToWebp(buffer);
-                  if (webpBuf) {
-                    const parsed = path.parse(safeName);
-                    const webpName = `${parsed.name}.webp`;
-                    const webpPath = buildRegistrationStoragePath(registrationCode, webpName);
-                    await uploadRegistrationFileToSupabase(
-                      supabase,
-                      webpBuf,
-                      webpPath,
-                      'image/webp',
-                      DEFAULT_STORAGE_BUCKET
-                    );
-                    uploadedStoragePaths.push(webpPath);
-                  }
-                } catch (webpErr) {
-                  console.warn(`[WEBP_PIPELINE_WARN] Background WebP conversion skipped for ${safeName}:`, webpErr);
-                }
-              }
-            }
-          }
-        }
-
-        // Also save to local uploads directory in local development for offline access
-        if (Object.keys(uploadedFiles).length > 0) {
-          try {
-            const uploadDir = path.join(process.cwd(), 'public', 'uploads', registrationCode);
-            await fs.promises.mkdir(uploadDir, { recursive: true });
-            for (const [, file] of Object.entries(uploadedFiles)) {
-              if (file && file.size > 0) {
-                const safeName = sanitizeStorageFileName(file.name);
-                const targetFilePath = path.join(uploadDir, safeName);
-                const buffer = Buffer.from(await file.arrayBuffer());
-                await fs.promises.writeFile(targetFilePath, buffer);
-
-                // Local WebP derivative
-                if (isConvertibleImage(safeName, file.type)) {
-                  try {
-                    const { buffer: webpBuf } = await convertBufferToWebp(buffer);
-                    if (webpBuf) {
-                      const webpName = `${path.parse(safeName).name}.webp`;
-                      await fs.promises.writeFile(path.join(uploadDir, webpName), webpBuf);
-                    }
-                  } catch {}
-                }
-              }
-            }
-          } catch {}
-        }
-
-        const insertPayload: Record<string, unknown> = {
-          registration_code: registrationCode,
-          competition_id: competitionId,
-          full_name: fullName,
-          email,
-          phone,
-          ...specificData,
-          declaration_original: Boolean(body.declaration_original),
-          declaration_secondary: Boolean(
-            body.declaration_secondary ||
-              body.declaration_public_account ||
-              body.declaration_usage_rights
-          ),
-          declaration_terms: Boolean(body.declaration_terms),
-          status: 'confirmed',
-          check_in_status: 'not_checked_in',
-        };
-
-        const { error: insertError } = await supabase
-          .from('pride_registrations')
-          .insert(insertPayload);
-
-        if (insertError) {
-          console.error(
-            '[PRIDE_REGISTRATION_SUPABASE_ERROR]',
-            insertError.code,
-            insertError.message,
-            insertError.details,
-            insertError.hint
-          );
-
-          // If a custom column is missing in the database table, retry with core schema columns
-          let retrySuccess = false;
-          if (insertError.code === '42703') {
-            console.warn('[PRIDE_REGISTRATION] Retrying with core schema columns fallback...');
-            const corePayload: Record<string, unknown> = {
-              registration_code: registrationCode,
-              competition_id: competitionId,
-              full_name: fullName,
-              email,
-              phone,
-              declaration_original: Boolean(body.declaration_original),
-              declaration_secondary: Boolean(
-                body.declaration_secondary ||
-                  body.declaration_public_account ||
-                  body.declaration_usage_rights
-              ),
-              declaration_terms: Boolean(body.declaration_terms),
-              status: 'confirmed',
-              check_in_status: 'not_checked_in',
-            };
-
-            if (specificData.address) corePayload.address = specificData.address;
-            if (specificData.institution) corePayload.institution = specificData.institution;
-            if (specificData.product_name) corePayload.product_name = specificData.product_name;
-            if (specificData.brand_name) corePayload.brand_name = specificData.brand_name;
-            if (specificData.local_ingredients) corePayload.local_ingredients = specificData.local_ingredients;
-            if (specificData.video_category) corePayload.video_category = specificData.video_category;
-            if (specificData.video_url) corePayload.video_url = specificData.video_url;
-            if (specificData.instagram_handle) corePayload.instagram_handle = specificData.instagram_handle;
-            if (specificData.tiktok_handle) corePayload.tiktok_handle = specificData.tiktok_handle;
-
-            const { error: retryError } = await supabase
-              .from('pride_registrations')
-              .insert(corePayload);
-
-            if (!retryError) {
-              retrySuccess = true;
-              console.log('[PRIDE_REGISTRATION_SUCCESS] Inserted with core columns');
-            } else {
-              console.error('[PRIDE_REGISTRATION_RETRY_ERROR]', retryError);
-            }
-          }
-
-          if (!retrySuccess) {
-            // Database insert failed: Roll back uploaded files in Supabase Storage!
-            if (uploadedStoragePaths.length > 0) {
-              await deleteRegistrationFilesFromSupabase(
-                supabase,
-                uploadedStoragePaths,
-                DEFAULT_STORAGE_BUCKET
-              );
-            }
-
-            return NextResponse.json(
-              {
-                success: false,
-                error: `Gagal menyimpan data pendaftaran ke database: ${insertError.message}. Berkas yang diunggah telah dibatalkan secara aman.`,
-                code: 'DATABASE_INSERT_FAILED',
-              },
-              { status: 500 }
-            );
-          }
+          if (error || !path) throw error || new Error('Upload failed.');
+          uploadedPaths.push(objectPath);
         } else {
-          console.log('[PRIDE_REGISTRATION_SUCCESS] Saved to Supabase:', registrationCode);
-        }
-      } catch (err: any) {
-        console.error('[SUPABASE_CLIENT_ERROR]', err);
-        if (uploadedStoragePaths.length > 0) {
-          try {
-            const supabase = createAdminClient();
-            await deleteRegistrationFilesFromSupabase(
-              supabase,
-              uploadedStoragePaths,
-              DEFAULT_STORAGE_BUCKET
+          const { data, error } = await supabase.storage.from(DEFAULT_STORAGE_BUCKET).info(objectPath);
+          const size = data?.size ?? Number(data?.metadata?.size);
+          if (error || !data || !Number.isFinite(size) || size < 1 || size > registrationFileLimits[field]) {
+            return NextResponse.json(
+              { success: false, error: `Berkas "${name}" belum tersedia atau ukurannya tidak sesuai.` },
+              { status: 400 }
             );
-          } catch {}
+          }
         }
+      }
+
+      const { error } = await supabase.from('pride_registrations').insert({
+        registration_code: registrationCode,
+        competition_id: competitionId,
+        full_name: fullName,
+        email,
+        phone,
+        ...specificData,
+        declaration_original: true,
+        declaration_secondary: true,
+        declaration_terms: true,
+        status: 'confirmed',
+        check_in_status: 'not_checked_in',
+      });
+      if (error?.code === '23505') {
         return NextResponse.json(
-          {
-            success: false,
-            error: `Terjadi kendala saat menghubungkan ke database Supabase: ${err?.message || err}.`,
-            code: 'SUPABASE_CONNECTION_ERROR',
-          },
-          { status: 500 }
+          { success: false, error: 'Pendaftaran sudah ada atau kode tidak tersedia. Silakan periksa data Anda.', code: 'DUPLICATE_REGISTRATION' },
+          { status: 409 }
         );
       }
+      if (error) throw error;
+      saved = true;
+
+      return NextResponse.json({
+        success: true,
+        data: { registration_code: registrationCode, full_name: fullName, competition_id: competitionId, email },
+      });
+    } finally {
+      if (!saved && uploadedPaths.length) {
+        await deleteRegistrationFilesFromSupabase(supabase, uploadedPaths, DEFAULT_STORAGE_BUCKET);
+      }
     }
-
-    // 8. Always synchronize to shared in-memory store so admin & check-in immediately reflect new registrations
-    const newRecord: PrideRegistration = {
-      id: `reg-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-      registration_code: registrationCode,
-      competition_id: competitionId as 'desain-kemasan' | 'video-lokal',
-      full_name: fullName,
-      email,
-      phone,
-      status: 'confirmed',
-      check_in_status: 'not_checked_in',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      declaration_original: Boolean(body.declaration_original),
-      declaration_terms: Boolean(body.declaration_terms),
-      declaration_usage_rights: Boolean(body.declaration_usage_rights),
-      ...specificData,
-    };
-
-    addSharedRegistration(newRecord);
-
-    // 9. Return Verified Success Response
-    return NextResponse.json({
-      success: true,
-      data: {
-        registration_code: registrationCode,
-        full_name: fullName,
-        competition_id: competitionId as 'desain-kemasan' | 'video-lokal',
-        email,
-      },
-    });
   } catch (err) {
     console.error('[REGISTER_INTERNAL_ERROR]', err);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Terjadi kesalahan sistem internal. Silakan hubungi panitia.',
-      },
+      { success: false, error: 'Pendaftaran belum tersimpan. Silakan coba lagi atau hubungi panitia.' },
       { status: 500 }
     );
   }

@@ -1,17 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import { isOrganizerAdmin } from '@/lib/admin-access';
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const pathname = request.nextUrl.pathname;
 
-  // 1. Check PRIDE admin cookie session
-  const adminCookie = request.cookies.get('pride_admin_session')?.value;
-  const isPrideAdmin = adminCookie === 'authenticated';
-
-  // 2. Also check Supabase user if Supabase is properly configured
-  let isSupabaseUser = false;
+  let isAuthenticated = false;
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
@@ -25,6 +21,7 @@ export async function middleware(request: NextRequest) {
   if (isSupabaseConfigured) {
     try {
       const supabase = createServerClient(supabaseUrl!, supabaseKey!, {
+        cookieOptions: { httpOnly: true, secure: process.env.NODE_ENV === 'production' },
         cookies: {
           getAll() {
             return request.cookies.getAll();
@@ -41,16 +38,12 @@ export async function middleware(request: NextRequest) {
         },
       });
 
-      const { data } = await supabase.auth.getUser();
-      if (data?.user) {
-        isSupabaseUser = true;
-      }
+      const { data, error } = await supabase.auth.getUser();
+      isAuthenticated = !error && isOrganizerAdmin(data.user);
     } catch {
       // Ignore Supabase connection errors
     }
   }
-
-  const isAuthenticated = isPrideAdmin || isSupabaseUser;
 
   // Protect all /admin/* routes (except /admin/login)
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {

@@ -59,7 +59,7 @@ export const EVENT_CONFIG = {
         grandFinal: new Date('2026-11-28T00:00:00+07:00'),
       },
       documentPath: '/syarat-desain-kemasan.pdf',
-      assetsLink: 'https://bit.ly/PRIDE2026LogodanVisualAssets',
+      assetsLink: 'https://drive.google.com/drive/folders/1fxBjVGEq5f8Z8jcYj-XT37ixqM18clVX',
     },
     videoLokal: {
       id: 'video-lokal',
@@ -78,13 +78,13 @@ export const EVENT_CONFIG = {
         judging: '28 November 2026',
       },
       documentPath: '/syarat-video-lokal.pdf',
-      assetsLink: 'https://bit.ly/PRIDE2026LogodanVisualAssets',
+      assetsLink: 'https://drive.google.com/drive/folders/1fxBjVGEq5f8Z8jcYj-XT37ixqM18clVX',
     },
   },
 
   // Check-in time window (matches event dates)
   checkin: {
-    windowStart: new Date('2026-11-27T07:00:00+07:00'),
+    windowStart: new Date('2026-11-26T00:00:00+07:00'),
     windowEnd: new Date('2026-11-28T22:00:00+07:00'),
   },
 } as const;

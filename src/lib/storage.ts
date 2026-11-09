@@ -1,4 +1,4 @@
-import { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 export const DEFAULT_STORAGE_BUCKET =
   process.env.SUPABASE_STORAGE_BUCKET ||
@@ -62,7 +62,7 @@ export async function uploadRegistrationFileToSupabase(
       .from(bucketName)
       .upload(objectPath, fileBody, {
         contentType: safeContentType,
-        upsert: true,
+        upsert: false,
       });
 
     // Fallback if Supabase bucket rejects MIME type
@@ -71,7 +71,7 @@ export async function uploadRegistrationFileToSupabase(
         .from(bucketName)
         .upload(objectPath, fileBody, {
           contentType: 'application/octet-stream',
-          upsert: true,
+          upsert: false,
         });
       data = retry.data;
       error = retry.error;
