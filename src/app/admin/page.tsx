@@ -60,17 +60,6 @@ export default function AdminOverviewPage() {
       ? Math.round((participantCheckIns / totalCompRegistrations) * 100)
       : 0;
 
-  // 3. Status breakdown for competition entries
-  const confirmedCount = competitionRegistrations.filter(
-    (r) => r.status === 'confirmed'
-  ).length;
-  const finalistCount = competitionRegistrations.filter(
-    (r) => r.status === 'finalist'
-  ).length;
-  const pendingCount = competitionRegistrations.filter(
-    (r) => r.status === 'pending'
-  ).length;
-
   return (
     <div className="space-y-6 animate-fade-in max-w-6xl mx-auto pb-12">
       {/* ─── Top Header (Apple Minimal Style) ─── */}
@@ -106,7 +95,7 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* ─── Primary Essential Statistics (Apple Card Design) ─── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Metric 1: Total Presensi Gate */}
         <div className="p-5 rounded-2xl bg-white border border-neutral-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] space-y-3">
           <div className="flex items-center justify-between">
@@ -163,24 +152,6 @@ export default function AdminOverviewPage() {
           </div>
         </div>
 
-        {/* Metric 4: Status Verifikasi Lomba */}
-        <div className="p-5 rounded-2xl bg-white border border-neutral-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Status Berkas
-            </span>
-            <span className="px-2 py-0.5 rounded-md bg-neutral-100 text-neutral-600 font-mono text-[10px] font-medium border border-neutral-200/60">
-              Verifikasi
-            </span>
-          </div>
-          <div className="text-3xl font-semibold text-[#1d1d1f] tracking-tight tabular-nums">
-            {loading ? '...' : confirmedCount + finalistCount}
-          </div>
-          <div className="text-[11px] text-neutral-500 flex items-center justify-between pt-2 border-t border-neutral-100">
-            <span>Terkonfirmasi: <strong className="text-neutral-800 font-medium">{confirmedCount}</strong></span>
-            <span>Menunggu: <strong className="text-neutral-800 font-medium">{pendingCount}</strong></span>
-          </div>
-        </div>
       </div>
     </div>
   );

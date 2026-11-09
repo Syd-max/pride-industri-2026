@@ -192,6 +192,7 @@ function FileAttachmentItem({
 export default function RegistrationsPage() {
   const [registrations, setRegistrations] = useState<PrideRegistration[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   // Filters
   const [search, setSearch] = useState('');
@@ -207,10 +208,11 @@ export default function RegistrationsPage() {
     try {
       const res = await fetch('/api/admin/data');
       const json = await res.json();
-      if (json.success) {
-        setRegistrations(json.data || []);
-      }
+      if (!res.ok || !json.success) throw new Error('Gagal memuat pendaftaran.');
+      setRegistrations(json.data || []);
+      setLoadError(false);
     } catch (err) {
+      setLoadError(true);
       console.error('Failed to fetch registration data:', err);
     } finally {
       setLoading(false);
@@ -494,6 +496,10 @@ export default function RegistrationsPage() {
           <div className="p-8 text-center bg-white rounded-2xl border border-neutral-200/80 text-xs text-neutral-400">
             Memuat data pendaftar lomba...
           </div>
+        ) : loadError ? (
+          <div role="alert" className="p-8 text-center bg-white rounded-2xl border border-neutral-200/80 text-xs text-neutral-600">
+            Data pendaftaran gagal dimuat. Segarkan halaman untuk mencoba lagi.
+          </div>
         ) : filtered.length === 0 ? (
           <div className="p-8 text-center bg-white rounded-2xl border border-neutral-200/80 text-xs text-neutral-400">
             Tidak ditemukan pendaftar yang cocok dengan filter yang dipilih.
@@ -580,6 +586,12 @@ export default function RegistrationsPage() {
                 <tr>
                   <td colSpan={4} className="text-center py-12 text-xs font-normal text-neutral-400">
                     Memuat data pendaftar lomba...
+                  </td>
+                </tr>
+              ) : loadError ? (
+                <tr>
+                  <td colSpan={4} className="text-center py-12 text-xs font-normal text-neutral-600">
+                    <span role="alert">Data pendaftaran gagal dimuat. Segarkan halaman untuk mencoba lagi.</span>
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
@@ -739,6 +751,10 @@ export default function RegistrationsPage() {
                       </span>
                     </div>
                     <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Instansi / Asal:</span>
+                      <span className="font-medium text-neutral-900">{selectedReg.institution || '-'}</span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
                       <span className="text-neutral-500 font-normal">Nomor HP / WhatsApp:</span>
                       <a
                         href={`https://wa.me/62${selectedReg.phone.replace(/^0/, '')}`}
@@ -861,29 +877,21 @@ export default function RegistrationsPage() {
                     4. Persetujuan &amp; Komitmen Peserta
                   </h4>
                   <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2 text-neutral-700">
-                    <div className="flex items-center gap-2">
-                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
+                    <div className="flex items-start justify-between gap-3">
                       <span>Karya merupakan karya asli dan tidak melanggar hak cipta</span>
+                      <span className="font-medium">{consentLabel(selectedReg.declaration_original)}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
+                    <div className="flex items-start justify-between gap-3">
                       <span>Karya belum pernah dipublikasikan / diikutkan lomba lain</span>
+                      <span className="font-medium">{consentLabel(selectedReg.declaration_unpublished)}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
+                    <div className="flex items-start justify-between gap-3">
                       <span>Menyetujui seluruh syarat &amp; ketentuan PRIDE Industri 2026</span>
+                      <span className="font-medium">{consentLabel(selectedReg.declaration_terms)}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
+                    <div className="flex items-start justify-between gap-3">
                       <span>Menyetujui penggunaan karya untuk publikasi nonkomersial</span>
+                      <span className="font-medium">{consentLabel(selectedReg.declaration_usage_rights)}</span>
                     </div>
                   </div>
                 </div>
@@ -906,6 +914,10 @@ export default function RegistrationsPage() {
                     <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
                       <span className="text-neutral-500 font-normal">Instansi / Asal:</span>
                       <span className="font-medium text-neutral-900">{selectedReg.institution || '-'}</span>
+                    </div>
+                    <div className="flex justify-between items-start pb-2 border-b border-neutral-200/60">
+                      <span className="text-neutral-500 font-normal">Alamat Lengkap:</span>
+                      <span className="font-medium text-neutral-900 text-right max-w-[280px]">{selectedReg.address || '-'}</span>
                     </div>
                     <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
                       <span className="text-neutral-500 font-normal">Nomor WhatsApp:</span>
@@ -939,7 +951,7 @@ export default function RegistrationsPage() {
                     <div className="flex justify-between items-center pb-2 border-b border-neutral-200/60">
                       <span className="text-neutral-500 font-normal">Sub-sektor IKM:</span>
                       <span className="font-medium text-neutral-800 bg-neutral-100 px-2 py-0.5 rounded text-[11px] border border-neutral-200/60">
-                        {selectedReg.video_category || 'PRIDE 2026'}
+                        {selectedReg.video_category || '-'}
                       </span>
                     </div>
                     <div className="flex justify-between items-start pb-2 border-b border-neutral-200/60">
@@ -948,30 +960,12 @@ export default function RegistrationsPage() {
                         {selectedReg.video_title ? `“${selectedReg.video_title}”` : '-'}
                       </span>
                     </div>
-                    <div className="flex justify-between items-start pb-2 border-b border-neutral-200/60">
+                    <div className="flex justify-between items-start">
                       <span className="text-neutral-500 font-normal">Deskripsi Singkat:</span>
                       <span className="font-normal text-neutral-800 text-right max-w-[280px]">
                         {selectedReg.video_description || '-'}
                       </span>
                     </div>
-                    {selectedReg.video_url && (
-                      <div className="flex justify-between items-center pt-1">
-                        <span className="text-neutral-500 font-normal">Link Video Karya:</span>
-                        <a
-                          href={selectedReg.video_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-medium text-[#0071e3] hover:underline inline-flex items-center gap-1"
-                        >
-                          <span>Buka Video Karya</span>
-                          <svg className="w-3 h-3 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                            <polyline points="15 3 21 3 21 9" />
-                            <line x1="10" y1="14" x2="21" y2="3" />
-                          </svg>
-                        </a>
-                      </div>
-                    )}
                   </div>
                 </div>
 
@@ -1017,39 +1011,22 @@ export default function RegistrationsPage() {
                     4. Persetujuan Peserta
                   </h4>
                   <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 space-y-2 text-neutral-700">
-                    <div className="flex items-center gap-2">
-                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
+                    <div className="flex items-start justify-between gap-3">
                       <span>Karya merupakan karya asli dan tidak melanggar hak pihak lain</span>
+                      <span className="font-medium">{consentLabel(selectedReg.declaration_original)}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
+                    <div className="flex items-start justify-between gap-3">
                       <span>Menyetujui seluruh syarat &amp; ketentuan lomba video</span>
+                      <span className="font-medium">{consentLabel(selectedReg.declaration_terms)}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
+                    <div className="flex items-start justify-between gap-3">
                       <span>Menyetujui hak tayang &amp; publikasi video nonkomersial</span>
+                      <span className="font-medium">{consentLabel(selectedReg.declaration_usage_rights)}</span>
                     </div>
                   </div>
                 </div>
               </div>
             )}
-
-            {/* Gate attendance status */}
-            <div className="flex items-center justify-between p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/70 text-xs">
-              <span className="text-neutral-500 font-normal">Status Kehadiran Gate:</span>
-              <span className="px-2.5 py-0.5 rounded-full font-medium text-xs bg-neutral-100 text-neutral-700 border border-neutral-200/60 inline-flex items-center gap-1.5">
-                <span className={`w-1.5 h-1.5 rounded-full ${selectedReg.check_in_status === 'checked_in' ? 'bg-emerald-600' : 'bg-neutral-400'}`} />
-                {selectedReg.check_in_status === 'checked_in'
-                  ? 'Hadir di Lokasi'
-                  : 'Belum Hadir'}
-              </span>
-            </div>
 
             {/* Modal Bottom Actions */}
             <div className="flex items-center justify-between gap-3 pt-2">

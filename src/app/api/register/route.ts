@@ -18,6 +18,7 @@ import {
   isConvertibleImage,
 } from '@/lib/storage';
 import { convertBufferToWebp } from '@/lib/server-image';
+import { hasReadableRegistrationQr, registrationQrError, registrationQrMaxBytes } from '@/lib/registration-qr';
 import { getSharedRegistrations, addSharedRegistration } from '@/lib/store';
 import type { ApiResponse, RegistrationSuccessData, PrideRegistration } from '@/types';
 
@@ -388,6 +389,23 @@ export async function POST(
       try {
         const supabase = createAdminClient();
 
+        let qrPhoto: Blob | null = uploadedFiles.tactlink_qr_file || null;
+        if (!qrPhoto) {
+          const qrPath = buildRegistrationStoragePath(registrationCode, String(specificData.tactlink_qr_name));
+          const bucket = supabase.storage.from(DEFAULT_STORAGE_BUCKET);
+          const { data: info, error: infoError } = await bucket.info(qrPath);
+          const size = info?.size ?? Number(info?.metadata?.size);
+          if (infoError || !Number.isFinite(size) || size < 1 || size > registrationQrMaxBytes) {
+            return NextResponse.json({ success: false, error: registrationQrError }, { status: 400 });
+          }
+          const { data: photo, error: downloadError } = await bucket.download(qrPath);
+          if (downloadError) throw downloadError;
+          qrPhoto = photo;
+        }
+        if (!qrPhoto || !(await hasReadableRegistrationQr(qrPhoto))) {
+          return NextResponse.json({ success: false, error: registrationQrError }, { status: 400 });
+        }
+
         // Check for duplicate active registration in database
         const { data: existing } = await supabase
           .from('pride_registrations')
@@ -629,7 +647,14 @@ export async function POST(
       }
     }
 
-    // 8. Always synchronize to shared in-memory store so admin & check-in immediately reflect new registrations
+    if (!hasSupabase) {
+      return NextResponse.json(
+        { success: false, error: 'Penyimpanan pendaftaran belum tersedia. Silakan coba lagi.' },
+        { status: 503 }
+      );
+    }
+
+    // 8. Synchronize successful registrations to the shared store for legacy check-in.
     const newRecord: PrideRegistration = {
       id: `reg-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       registration_code: registrationCode,

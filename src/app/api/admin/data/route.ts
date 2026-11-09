@@ -1,54 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
 import {
-  getSharedRegistrations,
   updateSharedRegistration,
-  getSharedVisitors,
   deleteSharedRegistration,
   deleteSharedVisitor,
 } from '@/lib/store';
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const includeVisitors = searchParams.get('visitors') === 'true';
+  const includeVisitors = request.nextUrl.searchParams.get('visitors') === 'true';
 
-  const hasSupabase =
-    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-    (Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
-      Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
-      Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) &&
-    process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co';
+  try {
+    const { data, error } = await createAdminClient()
+      .from('pride_registrations')
+      .select('*')
+      .neq('status', 'cancelled')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
 
-  if (hasSupabase) {
-    try {
-      const supabase = createAdminClient();
-      const { data, error } = await supabase
-        .from('pride_registrations')
-        .select('*')
-        .neq('status', 'cancelled')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('[PRIDE_ADMIN_DATA_FETCH_ERROR]', error);
-      } else if (data) {
-        return NextResponse.json({
-          success: true,
-          data,
-          visitors: includeVisitors ? getSharedVisitors() : undefined,
-        });
-      }
-    } catch (err) {
-      console.warn('Supabase fetch failed, falling back to memory store:', err);
-    }
+    const visitors = includeVisitors
+      ? data.filter((entry) => entry.competition_id === 'pengunjung-umum').map((entry) => ({
+          id: entry.id,
+          visitor_type: 'umum',
+          ticket_code: entry.registration_code,
+          full_name: entry.full_name,
+          city: entry.address || entry.phone,
+          group_size: 1,
+          checked_in_at: entry.checked_in_at,
+        }))
+      : undefined;
+    return NextResponse.json({ success: true, data, visitors }, {
+      headers: { 'Cache-Control': 'private, no-store' },
+    });
+  } catch (error) {
+    console.error('[PRIDE_ADMIN_DATA_FETCH_ERROR]', error);
+    return NextResponse.json(
+      { success: false, error: 'Data peserta belum bisa dimuat. Silakan coba lagi.' },
+      { status: 503 }
+    );
   }
-
-  const memoryData = getSharedRegistrations().filter((r) => r.status !== 'cancelled');
-
-  return NextResponse.json({
-    success: true,
-    data: memoryData,
-    visitors: includeVisitors ? getSharedVisitors() : undefined,
-  });
 }
 
 export async function PATCH(request: NextRequest) {
