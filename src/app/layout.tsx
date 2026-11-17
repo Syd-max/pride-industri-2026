@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { Playfair_Display, Inter, Caveat, Plus_Jakarta_Sans, Poppins } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import 'lenis/dist/lenis.css';
 import '@/components/ui/competition-welcome-banner.css';
@@ -140,6 +141,7 @@ export default function RootLayout({
         `}</Script>
         <GoogleAnalytics />
         <SmoothScrolling>{children}</SmoothScrolling>
+        <Analytics />
       </body>
     </html>
   );
