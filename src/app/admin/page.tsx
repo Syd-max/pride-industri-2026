@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import type { PrideRegistration } from '@/types';
 import { isCompetitionParticipant } from '@/lib/check-in-visitors';
 
@@ -74,7 +75,10 @@ export default function AdminOverviewPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Link href="/admin/visitor-booths" className="rounded-xl border border-neutral-200/80 bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-neutral-50">
+            Kelola Visitor Booth
+          </Link>
           <button
             type="button"
             onClick={fetchData}
