@@ -1,5 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
+import { isOrganizerAdmin } from '@/lib/admin-access';
 
 /**
  * Server-side Supabase client for Server Components and Route Handlers.
@@ -12,6 +14,7 @@ export async function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)!,
     {
+      cookieOptions: { httpOnly: true, secure: process.env.NODE_ENV === 'production' },
       cookies: {
         getAll() {
           return cookieStore.getAll();
@@ -30,25 +33,32 @@ export async function createClient() {
   );
 }
 
+export async function hasAdminSession(): Promise<boolean> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.getUser();
+    return !error && isOrganizerAdmin(data.user);
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Server-side Supabase admin client using service role.
  * NEVER expose this to client components or public APIs.
  * Used only in secure server-side route handlers.
  */
-export function createAdminClient() {
-  const supabaseKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+export function createAdminClient(requireServiceRole = false) {
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    (requireServiceRole ? undefined : process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+  if (!supabaseKey || !process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    throw new Error('Supabase server credentials are not configured.');
+  }
 
-  return createServerClient(
+  return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    supabaseKey!,
+    supabaseKey,
     {
-      cookies: {
-        getAll: () => [],
-        setAll: () => {},
-      },
       auth: {
         autoRefreshToken: false,
         persistSession: false,

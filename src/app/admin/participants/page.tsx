@@ -1,7 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { EVENT_CONFIG } from '@/config/event';
+import { attendanceCategory, catalogLink, isCompetitionParticipant } from '@/lib/check-in-visitors';
+import { formatJakartaDateTime } from '@/lib/utils';
+import { downloadCsv } from '@/lib/csv';
 import type { PrideRegistration } from '@/types';
+
+function getGateStatus(now: Date) {
+  const { windowStart, windowEnd } = EVENT_CONFIG.checkin;
+  if (now < windowStart) return 'Gate Belum Dibuka';
+  if (now > windowEnd) return 'Gate Ditutup';
+  return 'Gate Live';
+}
 
 // Helper for real-time text highlight (Apple clean styling)
 function highlightMatch(text: string | undefined | null, query: string) {
@@ -28,8 +39,11 @@ function highlightMatch(text: string | undefined | null, query: string) {
 export default function ParticipantsPage() {
   const [participants, setParticipants] = useState<PrideRegistration[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [search, setSearch] = useState('');
   const [compFilter, setCompFilter] = useState('all');
+  const [gateStatus, setGateStatus] = useState<ReturnType<typeof getGateStatus> | null>(null);
+  const isGateLive = gateStatus === 'Gate Live';
 
   // Modals
   const [selectedParticipant, setSelectedParticipant] = useState<PrideRegistration | null>(null);
@@ -38,13 +52,15 @@ export default function ParticipantsPage() {
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const fetchData = async () => {
+    setGateStatus(getGateStatus(new Date()));
     try {
       const res = await fetch('/api/admin/data');
       const json = await res.json();
-      if (json.success) {
-        setParticipants(json.data || []);
-      }
+      if (!res.ok || !json.success) throw new Error('Gagal memuat data presensi.');
+      setParticipants(json.data || []);
+      setLoadError(false);
     } catch (err) {
+      setLoadError(true);
       console.error('Failed to fetch attendance data:', err);
     } finally {
       setLoading(false);
@@ -80,7 +96,9 @@ export default function ParticipantsPage() {
       (p.email && p.email.toLowerCase().includes(q)) ||
       p.registration_code.toLowerCase().includes(q) ||
       (p.phone && p.phone.includes(q)) ||
-      (p.address && p.address.toLowerCase().includes(q));
+      p.address?.toLowerCase().includes(q) ||
+      p.booth_business_name?.toLowerCase().includes(q) ||
+      p.booth_purpose?.toLowerCase().includes(q);
 
     const matchComp = compFilter === 'all' || p.competition_id === compFilter;
     return matchQuery && matchComp;
@@ -100,16 +118,15 @@ export default function ParticipantsPage() {
         }),
       });
 
-      if (res.ok) {
-        setParticipants((prev) =>
-          prev.map((item) =>
-            item.id === p.id
-              ? { ...item, check_in_status: 'not_checked_in', checked_in_at: undefined }
-              : item
-          )
-        );
-        setSelectedParticipant(null);
-      }
+      if (!res.ok) throw new Error('Gagal membatalkan status presensi.');
+      setParticipants((prev) =>
+        prev.map((item) =>
+          item.id === p.id
+            ? { ...item, check_in_status: 'not_checked_in', checked_in_at: undefined }
+            : item
+        )
+      );
+      setSelectedParticipant(null);
     } catch {
       alert('Gagal membatalkan status presensi.');
     }
@@ -157,36 +174,27 @@ export default function ParticipantsPage() {
       'Kontak / Asal',
       'Waktu Presensi',
       'Status',
+      'Umur (tahun)',
+      'Nama Usaha',
+      'Tujuan',
+      'Link E-Katalog Produk',
     ];
 
     const rows = filtered.map((p, idx) => [
       idx + 1,
       p.registration_code,
-      `"${p.full_name.replace(/"/g, '""')}"`,
-      p.competition_id === 'desain-kemasan'
-        ? 'Desain Kemasan'
-        : p.competition_id === 'video-lokal'
-        ? 'Video 1 Menit'
-        : 'Pengunjung Umum',
-      `"${(p.competition_id === 'pengunjung-umum' ? p.address || p.phone : p.phone || '').replace(/"/g, '""')}"`,
-      p.checked_in_at ? new Date(p.checked_in_at).toLocaleString('id-ID') : 'Terverifikasi Gate',
+      p.full_name,
+      attendanceCategory[p.competition_id],
+      (p.competition_id === 'pengunjung-umum' ? p.address || p.phone : p.phone || ''),
+      p.checked_in_at ? `${formatJakartaDateTime(p.checked_in_at)} WIB` : 'Terverifikasi Gate',
       'Hadir di Braga',
+      p.visitor_age ?? '',
+      p.booth_business_name ?? '',
+      p.booth_purpose ?? '',
+      p.booth_catalog_url ?? '',
     ]);
 
-    const csvContent =
-      'data:text/csv;charset=utf-8,\uFEFF' +
-      [headers.join(','), ...rows.map((e) => e.join(','))].join('\r\n');
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute(
-      'download',
-      `PRIDE_2026_Data_Presensi_${new Date().toISOString().slice(0, 10)}.csv`
-    );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadCsv([headers, ...rows], `PRIDE_2026_Data_Presensi_${new Date().toISOString().slice(0, 10)}.csv`);
   };
 
   return (
@@ -200,10 +208,16 @@ export default function ParticipantsPage() {
               <h1 className="text-xl sm:text-2xl font-semibold text-[#1d1d1f] tracking-tight">
                 Data Presensi
               </h1>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70 shadow-2xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Gate Live
-              </span>
+              {gateStatus && (
+                <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border shadow-2xs ${
+                  isGateLive
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200/70'
+                    : 'bg-neutral-100 text-neutral-600 border-neutral-200/70'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${isGateLive ? 'bg-emerald-500 animate-pulse' : 'bg-neutral-400'}`} />
+                  {gateStatus}
+                </span>
+              )}
             </div>
             <p className="text-xs font-normal text-neutral-500 mt-0.5 hidden sm:block">
               Data kehadiran resmi pengunjung dan peserta lomba yang telah check-in di gate Braga City Walk.
@@ -239,7 +253,7 @@ export default function ParticipantsPage() {
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Cari nama, kode registrasi, atau nomor HP..."
+              placeholder="Cari nama, usaha, kode registrasi, atau nomor HP..."
                 className="w-full text-xs py-2 rounded-xl bg-neutral-100/70 focus:bg-white border border-neutral-200/80 text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/10 transition-all"
                 style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
               />
@@ -270,6 +284,7 @@ export default function ParticipantsPage() {
               <option value="desain-kemasan">Lomba Desain Kemasan</option>
               <option value="video-lokal">Lomba Video 1 Menit</option>
               <option value="pengunjung-umum">Pengunjung Festival (Umum)</option>
+              <option value="visitor-booth">Visitor Booth</option>
             </select>
           </div>
 
@@ -292,7 +307,7 @@ export default function ParticipantsPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="p-8 text-center bg-white rounded-2xl border border-neutral-200/80 text-xs text-neutral-400">
-            {search || compFilter !== 'all'
+            {loadError ? 'Data presensi gagal dimuat. Silakan segarkan halaman.' : search || compFilter !== 'all'
               ? 'Tidak ditemukan data presensi yang sesuai pencarian.'
               : 'Belum ada data presensi yang tercatat di gate.'}
           </div>
@@ -314,11 +329,7 @@ export default function ParticipantsPage() {
                     </div>
                   </div>
                   <span className="text-[10px] font-medium px-2 py-0.5 rounded-md shrink-0 bg-neutral-100 text-neutral-700 border border-neutral-200/70">
-                    {p.competition_id === 'desain-kemasan'
-                      ? 'Desain Kemasan'
-                      : p.competition_id === 'video-lokal'
-                      ? 'Video 1 Menit'
-                      : 'Pengunjung'}
+                    {attendanceCategory[p.competition_id]}
                   </span>
                 </div>
 
@@ -330,7 +341,7 @@ export default function ParticipantsPage() {
                   </span>
                   <span className="font-mono text-[11px] text-neutral-500">
                     {p.checked_in_at
-                      ? `${new Date(p.checked_in_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB`
+                      ? `${new Date(p.checked_in_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' })} WIB`
                       : 'Terverifikasi'}
                   </span>
                 </div>
@@ -393,7 +404,7 @@ export default function ParticipantsPage() {
               ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="text-center py-12 text-xs font-normal text-neutral-400">
-                    {search || compFilter !== 'all'
+                    {loadError ? 'Data presensi gagal dimuat. Silakan segarkan halaman.' : search || compFilter !== 'all'
                       ? 'Tidak ditemukan data presensi yang sesuai kriteria pencarian.'
                       : 'Belum ada data presensi yang tercatat di gate.'}
                   </td>
@@ -419,11 +430,7 @@ export default function ParticipantsPage() {
                       {/* Column 3: Kategori */}
                       <td className="py-3.5 px-5 whitespace-nowrap">
                         <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-neutral-100 text-neutral-700 border border-neutral-200/70">
-                          {p.competition_id === 'desain-kemasan'
-                            ? 'Desain Kemasan'
-                            : p.competition_id === 'video-lokal'
-                            ? 'Video 1 Menit'
-                            : 'Pengunjung'}
+                          {attendanceCategory[p.competition_id]}
                         </span>
                       </td>
 
@@ -431,7 +438,7 @@ export default function ParticipantsPage() {
                       <td className="py-3.5 px-5 whitespace-nowrap">
                         <span className="font-mono text-xs text-neutral-600">
                           {p.checked_in_at
-                            ? `${new Date(p.checked_in_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB`
+                            ? `${new Date(p.checked_in_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' })} WIB`
                             : 'Hadir'}
                         </span>
                       </td>
@@ -523,22 +530,38 @@ export default function ParticipantsPage() {
                 <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center text-neutral-700">
                   <span className="text-neutral-500 font-normal">Waktu Presensi:</span>
                   <span className="font-mono font-medium">
-                    {new Date(selectedParticipant.checked_in_at).toLocaleString('id-ID')} WIB
+                    {formatJakartaDateTime(selectedParticipant.checked_in_at)} WIB
                   </span>
                 </div>
               )}
 
-              {selectedParticipant.competition_id === 'pengunjung-umum' ? (
+              {!isCompetitionParticipant(selectedParticipant.competition_id) ? (
                 <>
                   <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
                     <span className="text-neutral-500 font-normal">Kategori:</span>
-                    <span className="font-medium text-neutral-900">Pengunjung Festival (Umum)</span>
+                    <span className="font-medium text-neutral-900">{attendanceCategory[selectedParticipant.competition_id]}</span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
-                    <span className="text-neutral-500 font-normal">Asal Domisili:</span>
-                    <span className="font-medium text-neutral-900">{selectedParticipant.address || selectedParticipant.phone || 'Kota Bandung'}</span>
-                  </div>
+                  {(selectedParticipant.competition_id === 'visitor-booth'
+                    ? [
+                        { label: 'Nama Usaha', value: selectedParticipant.booth_business_name },
+                        { label: 'Tujuan', value: selectedParticipant.booth_purpose },
+                        { label: 'Link E-Katalog Produk', value: selectedParticipant.booth_catalog_url, href: catalogLink(selectedParticipant.booth_catalog_url) },
+                      ]
+                    : [
+                        { label: 'Asal Domisili', value: selectedParticipant.address || selectedParticipant.phone, href: undefined },
+                        { label: 'Umur (tahun)', value: selectedParticipant.visitor_age, href: undefined },
+                      ]
+                  ).map(({ label, value, href }) => (
+                    <div key={label} className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-start gap-3">
+                      <span className="text-neutral-500 font-normal">{label}</span>
+                      {href ? (
+                        <a href={href} target="_blank" rel="noopener noreferrer" className="min-w-0 break-all text-right font-medium text-blue-700 underline">{value}</a>
+                      ) : (
+                        <span className="min-w-0 break-words text-right font-medium text-neutral-900">{value ?? 'Belum tercatat'}</span>
+                      )}
+                    </div>
+                  ))}
 
                   <div className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-200/60 flex justify-between items-center">
                     <span className="text-neutral-500 font-normal">Pintu Masuk:</span>

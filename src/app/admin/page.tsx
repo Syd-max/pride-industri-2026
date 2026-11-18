@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { PrideRegistration } from '@/types';
+import { isCompetitionParticipant } from '@/lib/check-in-visitors';
 
 export default function AdminOverviewPage() {
   const [records, setRecords] = useState<PrideRegistration[]>([]);
@@ -30,7 +31,7 @@ export default function AdminOverviewPage() {
   // ─── Real Database Metrics Calculations ───
   // 1. Competition Registrations (Excluding general festival visitors)
   const competitionRegistrations = records.filter(
-    (r) => r.competition_id !== 'pengunjung-umum'
+    (r) => isCompetitionParticipant(r.competition_id)
   );
   const totalCompRegistrations = competitionRegistrations.length;
 
@@ -48,11 +49,11 @@ export default function AdminOverviewPage() {
   ).length;
 
   const visitorCheckIns = records.filter(
-    (r) => r.competition_id === 'pengunjung-umum' && r.check_in_status === 'checked_in'
+    (r) => !isCompetitionParticipant(r.competition_id) && r.check_in_status === 'checked_in'
   ).length;
 
   const participantCheckIns = records.filter(
-    (r) => r.competition_id !== 'pengunjung-umum' && r.check_in_status === 'checked_in'
+    (r) => isCompetitionParticipant(r.competition_id) && r.check_in_status === 'checked_in'
   ).length;
 
   const compAttendanceRate =

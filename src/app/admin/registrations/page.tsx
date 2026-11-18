@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import type { PrideRegistration } from '@/types';
+import { isCompetitionParticipant } from '@/lib/check-in-visitors';
 
 function consentLabel(value?: boolean) {
   return value === true ? 'Ya' : value === false ? 'Tidak' : '-';
@@ -335,7 +336,7 @@ export default function RegistrationsPage() {
 
     const matchComp =
       compFilter === 'all'
-        ? r.competition_id !== 'pengunjung-umum'
+        ? isCompetitionParticipant(r.competition_id)
         : r.competition_id === compFilter;
     return matchSearch && matchComp;
   });
@@ -483,7 +484,7 @@ export default function RegistrationsPage() {
           <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100/80 border border-neutral-200/60 text-[11px] font-medium text-neutral-600 whitespace-nowrap ml-auto">
             <span>Menampilkan</span>
             <span className="text-neutral-900 font-semibold">{filtered.length}</span>
-            <span>dari {registrations.filter((r) => r.competition_id !== 'pengunjung-umum').length} Pendaftar</span>
+            <span>dari {registrations.filter((r) => isCompetitionParticipant(r.competition_id)).length} Pendaftar</span>
           </div>
         </div>
       </div>

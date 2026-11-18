@@ -4,15 +4,26 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-type VisitorTab = 'umum' | 'peserta';
+type VisitorTab = 'umum' | 'peserta' | 'booth';
+
+const boothFields = [
+  { name: 'full_name', label: 'Nama', type: 'text' },
+  { name: 'business_name', label: 'Nama Usaha', type: 'text' },
+  { name: 'purpose', label: 'Tujuan', type: 'text' },
+  { name: 'catalog_url', label: 'Link E-Katalog Produk (Halaman Etalase Produk)', type: 'url' },
+] as const;
 
 interface CheckInResult {
-  visitor_type: 'umum' | 'peserta';
+  visitor_type: VisitorTab;
   full_name: string;
   ticket_code?: string;
   registration_code?: string;
   competition_id?: string;
-  city?: string;
+  address?: string;
+  visitor_age?: number;
+  booth_business_name?: string;
+  booth_purpose?: string;
+  booth_catalog_url?: string;
   checked_in_at: string;
   gate_name?: string;
 }
@@ -84,7 +95,7 @@ export default function CheckInPage() {
         setHasScanned(true);
       }
       const initialTab = params.get('type');
-      if (initialTab === 'peserta' || initialTab === 'umum') {
+      if (initialTab === 'peserta' || initialTab === 'umum' || initialTab === 'booth') {
         setActiveTab(initialTab);
       }
       const codeParam = params.get('code');
@@ -123,7 +134,7 @@ export default function CheckInPage() {
         if (codeParam) {
           setPesertaCode(codeParam.toUpperCase());
           setActiveTab('peserta');
-        } else if (typeParam === 'peserta' || typeParam === 'umum') {
+        } else if (typeParam === 'peserta' || typeParam === 'umum' || typeParam === 'booth') {
           setActiveTab(typeParam);
         }
       } else if (scannedText.startsWith('PRIDE-')) {
@@ -260,9 +271,13 @@ export default function CheckInPage() {
     } catch {}
   };
 
-  // Handle General Visitor Check-In
-  const handleCheckInUmum = async (e: React.FormEvent) => {
+  const handleCheckInVisitor = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (loading) return;
+    const form = new FormData(e.currentTarget);
+    const visitor = activeTab === 'booth'
+      ? Object.fromEntries(form)
+      : { full_name: umumName, city: umumCity, age: Number(form.get('age') || NaN) };
     setLoading(true);
     setErrorMsg(null);
     setInfoMsg(null);
@@ -272,9 +287,8 @@ export default function CheckInPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          visitor_type: 'umum',
-          full_name: umumName.trim() || 'Pengunjung Umum',
-          city: umumCity.trim() || 'Kota Bandung',
+          ...visitor,
+          visitor_type: activeTab,
         }),
       });
 
@@ -611,8 +625,7 @@ export default function CheckInPage() {
               </p>
             </div>
 
-            {/* Segmented Choice Buttons (Visitor Umum vs Visitor Peserta) */}
-            <div className="grid grid-cols-2 p-1.5 bg-slate-100 rounded-2xl border border-slate-200/80 gap-1.5">
+            <div className="grid grid-cols-3 p-1.5 bg-slate-100 rounded-2xl border border-slate-200/80 gap-1.5">
               <button
                 type="button"
                 onClick={() => {
@@ -652,6 +665,24 @@ export default function CheckInPage() {
                 </svg>
                 <span>Peserta Lomba</span>
               </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('booth');
+                  setErrorMsg(null);
+                  setInfoMsg(null);
+                }}
+                className={`py-3 px-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center justify-center text-center gap-1.5 cursor-pointer ${
+                  activeTab === 'booth'
+                    ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80'
+                    : 'text-slate-500 hover:text-slate-900 hover:bg-white/50'
+                }`}
+              >
+                <svg className={`w-5 h-5 shrink-0 ${activeTab === 'booth' ? 'text-blue-600' : 'text-slate-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M3 10h18l-2-5H5zM5 10v9h14v-9M9 19v-5h6v5" />
+                </svg>
+                <span>Visitor Booth</span>
+              </button>
             </div>
 
             {/* Error Notification */}
@@ -669,7 +700,7 @@ export default function CheckInPage() {
             {/* TAB 1: VISITOR UMUM */}
             {activeTab === 'umum' && (
               <form
-                onSubmit={handleCheckInUmum}
+                onSubmit={handleCheckInVisitor}
                 className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs space-y-5 animate-in fade-in-50 duration-200"
               >
                 <div className="space-y-1">
@@ -705,8 +736,23 @@ export default function CheckInPage() {
                     <input
                       type="text"
                       value={umumCity}
+                      required
                       onChange={(e) => setUmumCity(e.target.value)}
                       placeholder="Kota Bandung"
+                      className="w-full bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-slate-900 rounded-xl text-xs sm:text-sm py-2.5 px-4 transition-all outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label htmlFor="visitor-age" className="block text-xs font-bold text-slate-700">Umur (tahun)</label>
+                    <input
+                      id="visitor-age"
+                      name="age"
+                      type="number"
+                      inputMode="numeric"
+                      min={0}
+                      max={120}
+                      step={1}
+                      required
                       className="w-full bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-slate-900 rounded-xl text-xs sm:text-sm py-2.5 px-4 transition-all outline-none"
                     />
                   </div>
@@ -722,6 +768,30 @@ export default function CheckInPage() {
                   ) : (
                     <span>Konfirmasi Masuk Festival</span>
                   )}
+                </button>
+              </form>
+            )}
+
+            {activeTab === 'booth' && (
+              <form onSubmit={handleCheckInVisitor} className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs space-y-5">
+                <h2 className="text-base sm:text-lg font-bold text-slate-900">Visitor Booth</h2>
+                <div className="space-y-4">
+                  {boothFields.map(({ name, label, type }) => (
+                    <div key={name} className="space-y-1.5">
+                      <label htmlFor={`booth-${name}`} className="block text-xs font-bold text-slate-700">{label}</label>
+                      <input
+                        id={`booth-${name}`}
+                        name={name}
+                        type={type}
+                        required
+                        placeholder={type === 'url' ? 'https://' : undefined}
+                        className="w-full bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-slate-900 rounded-xl text-xs sm:text-sm py-2.5 px-4 transition-all outline-none"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <button type="submit" disabled={loading} className="w-full py-3.5 px-6 rounded-2xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 transition-all cursor-pointer">
+                  {loading ? 'Memproses Presensi...' : 'Check-In Visitor Booth'}
                 </button>
               </form>
             )}
@@ -856,17 +926,26 @@ export default function CheckInPage() {
                       {successResult.ticket_code}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center border-b border-slate-200/80 pb-2">
-                    <span className="text-slate-500 font-medium">Asal Domisili:</span>
-                    <span className="font-semibold text-slate-800">{successResult.city}</span>
-                  </div>
+                  {(successResult.visitor_type === 'booth'
+                    ? [
+                        ['Nama Usaha', successResult.booth_business_name],
+                        ['Tujuan', successResult.booth_purpose],
+                        ['Link E-Katalog Produk', successResult.booth_catalog_url],
+                      ]
+                    : [['Asal Domisili', successResult.address], ['Umur (tahun)', successResult.visitor_age]]
+                  ).map(([label, value]) => (
+                    <div key={label} className="flex justify-between items-start gap-3 border-b border-slate-200/80 pb-2">
+                      <span className="text-slate-500 font-medium">{label}</span>
+                      <span className="min-w-0 break-words text-right font-semibold text-slate-800">{value}</span>
+                    </div>
+                  ))}
                 </>
               )}
 
               <div className="flex justify-between items-center pt-0.5">
                 <span className="text-slate-500 font-medium">Waktu Presensi:</span>
                 <span className="font-mono text-slate-700 font-semibold">
-                  {new Date(successResult.checked_in_at).toLocaleTimeString('id-ID')} WIB
+                  {new Date(successResult.checked_in_at).toLocaleTimeString('id-ID', { timeZone: 'Asia/Jakarta' })} WIB
                 </span>
               </div>
             </div>

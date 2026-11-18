@@ -84,7 +84,7 @@ export const EVENT_CONFIG = {
 
   // Check-in time window (matches event dates)
   checkin: {
-    windowStart: new Date('2026-11-27T07:00:00+07:00'),
+    windowStart: new Date('2026-11-26T00:00:00+07:00'),
     windowEnd: new Date('2026-11-28T22:00:00+07:00'),
   },
 } as const;

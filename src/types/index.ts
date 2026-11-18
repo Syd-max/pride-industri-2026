@@ -1,6 +1,6 @@
 // ─── Competition & Registration Types ───────────────────────────────────────
 
-export type CompetitionSlug = 'desain-kemasan' | 'video-lokal' | 'pengunjung-umum';
+export type CompetitionSlug = 'desain-kemasan' | 'video-lokal' | 'pengunjung-umum' | 'visitor-booth';
 
 export type RegistrationStatus =
   | 'pending'
@@ -24,6 +24,10 @@ export interface PrideRegistration {
   product_name?: string;
   brand_name?: string;
   address?: string;
+  visitor_age?: number | null;
+  booth_business_name?: string | null;
+  booth_purpose?: string | null;
+  booth_catalog_url?: string | null;
   local_ingredients?: string;
   design_concept?: string;
   design_file_name?: string;
