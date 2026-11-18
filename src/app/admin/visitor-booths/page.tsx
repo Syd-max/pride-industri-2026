@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { boothAssetExtension, boothAssetRules, boothBucket, boothColumns, normalizeBoothWhatsApp, type BoothAsset, type VisitorBooth } from '@/lib/visitor-booths';
+import { boothAssetExtension, boothAssetRules, boothBucket, boothCatalogMaxMb, boothColumns, normalizeBoothWhatsApp, type BoothAsset, type VisitorBooth } from '@/lib/visitor-booths';
 
 const endpoint = '/api/admin/visitor-booths';
 const button = 'inline-flex min-h-10 items-center justify-center rounded-xl border border-neutral-200 px-3 py-2 text-sm font-medium disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600';
@@ -64,8 +64,11 @@ export default function AdminVisitorBoothsPage() {
         setError(`${label} wajib diunggah.`);
         return;
       }
-      if (file.size > boothAssetRules[asset].limit || !boothAssetExtension(asset, file.type)) {
-        setError(`${label} melebihi batas ukuran atau formatnya tidak sesuai.`);
+      const tooLarge = file.size > boothAssetRules[asset].limit;
+      if (tooLarge || !boothAssetExtension(asset, file.type)) {
+        setError(tooLarge && asset === 'catalog'
+          ? `Katalog PDF maksimal ${boothCatalogMaxMb} MB.`
+          : `${label} melebihi batas ukuran atau formatnya tidak sesuai.`);
         return;
       }
     }
@@ -156,7 +159,7 @@ export default function AdminVisitorBoothsPage() {
                 )}
               </div>
               <div className="min-w-0 text-sm font-medium">
-                <label htmlFor="booth-catalog">Katalog brand (PDF, maks. 20 MB)</label>
+                <label htmlFor="booth-catalog">Katalog brand (PDF, maks. {boothCatalogMaxMb} MB)</label>
                 <input id="booth-catalog" name="catalog" type="file" accept="application/pdf,.pdf" className={input} required={!editing} />
                 {editing && editingStorage && (
                   <a href={editingStorage.getPublicUrl(editing.catalog_path).data.publicUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-blue-700 underline">Lihat katalog saat ini</a>

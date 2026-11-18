@@ -1,8 +1,9 @@
 export const boothBucket = 'pride-visitor-booths';
 export const boothColumns = 'id, brand_name, logo_path, catalog_path, whatsapp_number';
+export const boothCatalogMaxMb = 10;
 export const boothAssetRules = {
   logo: { limit: 2 * 1024 * 1024, formats: { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' } },
-  catalog: { limit: 20 * 1024 * 1024, formats: { 'application/pdf': 'pdf' } },
+  catalog: { limit: boothCatalogMaxMb * 1024 * 1024, formats: { 'application/pdf': 'pdf' } },
 };
 
 export type BoothAsset = keyof typeof boothAssetRules;
