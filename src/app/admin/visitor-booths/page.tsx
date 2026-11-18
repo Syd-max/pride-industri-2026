@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { boothAssetExtension, boothAssetRules, boothBucket, boothCatalogMaxMb, boothColumns, normalizeBoothWhatsApp, type BoothAsset, type VisitorBooth } from '@/lib/visitor-booths';
 
 const endpoint = '/api/admin/visitor-booths';
-const button = 'inline-flex min-h-10 items-center justify-center rounded-xl border border-neutral-200 px-3 py-2 text-sm font-medium disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600';
+const pageSize = 8;
+const button = 'inline-flex min-h-10 cursor-pointer items-center justify-center rounded-xl border border-neutral-200 px-3 py-2 text-sm font-medium disabled:cursor-default disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600';
 const input = 'mt-1.5 block w-full min-w-0 rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm focus:border-[#0071e3] focus:outline-none';
 
 function mutate(method: 'POST' | 'PUT' | 'DELETE', data: object) {
@@ -22,33 +23,65 @@ async function errorFrom(response: Response) {
 }
 
 export default function AdminVisitorBoothsPage() {
-  const [booths, setBooths] = useState<VisitorBooth[] | null>(null);
-  const [editing, setEditing] = useState<VisitorBooth | null>(null);
+  const [listing, setListing] = useState<{ booths: VisitorBooth[]; count: number } | null>(null);
+  const [listingRequest, setListingRequest] = useState({ page: 0 });
+  const [editor, setEditor] = useState<{ booth: VisitorBooth | null } | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const { page } = listingRequest;
+  const editing = editor?.booth;
+  const pageCount = Math.ceil((listing?.count ?? 0) / pageSize);
 
   useEffect(() => {
     const controller = new AbortController();
+    const start = listingRequest.page * pageSize;
     async function load() {
       try {
-        const { data, error } = await createClient().from('visitor_booths').select(boothColumns)
-          .order('created_at').order('id').abortSignal(controller.signal).returns<VisitorBooth[]>();
-        if (error) throw error;
-        if (!controller.signal.aborted) setBooths(data);
+        const { data, count, error, status } = await createClient().from('visitor_booths').select(boothColumns, { count: 'exact' })
+          .order('created_at').order('id').range(start, start + pageSize - 1).abortSignal(controller.signal).returns<VisitorBooth[]>();
+        if (controller.signal.aborted) return;
+        if (start > 0 && (status === 416 || (!error && !data?.length))) {
+          setListingRequest({ page: 0 });
+          return;
+        }
+        if (error || !data || count === null) throw error ?? new Error('Daftar booth tidak tersedia.');
+        setListing({ booths: data, count });
       } catch {
         if (!controller.signal.aborted) setLoadFailed(true);
       }
     }
     void load();
     return () => controller.abort();
-  }, []);
+  }, [listingRequest]);
+
+  useEffect(() => {
+    if (editor && dialog.current && !dialog.current.open) dialog.current.showModal();
+  }, [editor]);
+
+  function showPage(requestedPage: number) {
+    setListing(null);
+    setLoadFailed(false);
+    setError('');
+    setListingRequest({ page: requestedPage });
+  }
+
+  function openEditor(booth: VisitorBooth | null) {
+    setError('');
+    setEditor({ booth });
+  }
+
+  function closeEditor() {
+    dialog.current?.close();
+    setEditor(null);
+    setError('');
+  }
 
   async function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy || !booths) return;
-    const formElement = event.currentTarget;
-    const form = new FormData(formElement);
+    if (busy || !listing || !editor) return;
+    const form = new FormData(event.currentTarget);
     const brandName = String(form.get('brand_name') || '').trim();
     const whatsapp = normalizeBoothWhatsApp(String(form.get('whatsapp_number') || ''));
     if (!brandName || !whatsapp) {
@@ -96,12 +129,8 @@ export default function AdminVisitorBoothsPage() {
         canDiscard = response.status < 500;
         throw await errorFrom(response);
       }
-      const { booth }: { booth: VisitorBooth } = await response.json();
-      setBooths(previous => previous && (editing
-        ? previous.map(row => row.id === booth.id ? booth : row)
-        : [...previous, booth]));
-      formElement.reset();
-      setEditing(null);
+      closeEditor();
+      showPage(editing ? page : Math.floor(listing.count / pageSize));
     } catch (error) {
       if (canDiscard && Object.keys(assets).length) {
         await mutate('DELETE', { id, discard: true, ...assets }).catch(() => {});
@@ -113,14 +142,13 @@ export default function AdminVisitorBoothsPage() {
   }
 
   async function remove(booth: VisitorBooth) {
-    if (busy || !window.confirm(`Hapus booth "${booth.brand_name}"?`)) return;
+    if (busy || !listing || !window.confirm(`Hapus booth "${booth.brand_name}"?`)) return;
     setBusy(true);
     setError('');
     try {
       const response = await mutate('DELETE', { id: booth.id });
       if (!response.ok) throw await errorFrom(response);
-      setBooths(previous => previous?.filter(row => row.id !== booth.id) ?? null);
-      if (editing?.id === booth.id) setEditing(null);
+      showPage(page > 0 && listing.booths.length === 1 ? page - 1 : page);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Booth gagal dihapus.');
     } finally {
@@ -132,16 +160,58 @@ export default function AdminVisitorBoothsPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-12">
-      <h1 className="text-2xl font-semibold tracking-tight text-[#1d1d1f] sm:text-3xl">Visitor Booth</h1>
-      {error && <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-semibold tracking-tight text-[#1d1d1f] sm:text-3xl">Visitor Booth</h1>
+        <button type="button" aria-haspopup="dialog" disabled={busy || !listing} className={button + ' border-blue-700 bg-blue-700 text-white'} onClick={() => openEditor(null)}>Tambah Brand</button>
+      </div>
+      {!editor && error && <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
       {loadFailed ? (
         <p role="alert" className="rounded-2xl border border-neutral-200/80 bg-white p-5 text-sm text-neutral-700">Daftar booth gagal dimuat. Segarkan halaman untuk mencoba lagi.</p>
-      ) : !booths ? (
+      ) : !listing ? (
         <p role="status" className="text-sm text-neutral-600">Memuat booth…</p>
+      ) : listing.booths.length === 0 ? (
+        <p className="rounded-2xl border border-neutral-200/80 bg-white p-5 text-sm text-neutral-600">Belum ada booth tersedia.</p>
       ) : (
-        <>
-          <form key={editing?.id ?? 'create'} onSubmit={save} className="rounded-2xl border border-neutral-200/80 bg-white p-4 shadow-2xs sm:p-5">
-            <h2 className="mb-4 text-base font-semibold">{editing ? 'Edit Brand' : 'Tambah Brand'}</h2>
+        <div className="rounded-2xl border border-neutral-200/80 bg-white">
+          <ul aria-label="Daftar brand" className="divide-y divide-neutral-200/80">
+            {listing.booths.map(booth => (
+              <li key={booth.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+                <div className="min-w-0">
+                  <h2 className="break-words text-sm font-semibold">{booth.brand_name}</h2>
+                  <p className="mt-0.5 text-sm text-neutral-600">+{booth.whatsapp_number}</p>
+                </div>
+                <div className="flex gap-2">
+                  <button type="button" aria-haspopup="dialog" disabled={busy} className={button + ' hover:bg-neutral-50'} onClick={() => openEditor(booth)}>Edit</button>
+                  <button type="button" disabled={busy} className={button + ' text-rose-700 hover:bg-rose-50'} onClick={() => void remove(booth)}>Hapus</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+          {pageCount > 1 && (
+            <nav aria-label="Halaman daftar brand" className="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200/80 px-4 py-3">
+              <span className="text-sm text-neutral-600">Halaman {page + 1} dari {pageCount}</span>
+              <div className="flex flex-wrap gap-2">
+                <button type="button" disabled={busy || page === 0} className={button} onClick={() => showPage(page - 1)}>Sebelumnya</button>
+                <button type="button" disabled={busy || page + 1 >= pageCount} className={button} onClick={() => showPage(page + 1)}>Berikutnya</button>
+              </div>
+            </nav>
+          )}
+        </div>
+      )}
+
+      <dialog
+        ref={dialog}
+        aria-labelledby="booth-editor-title"
+        onCancel={event => {
+          event.preventDefault();
+          if (!busy) closeEditor();
+        }}
+        className="fixed inset-0 m-auto max-h-[calc(100dvh_-_2rem)] w-[calc(100%_-_2rem)] max-w-2xl overflow-y-auto overscroll-contain rounded-2xl border border-neutral-200/80 bg-white p-4 text-[#1d1d1f] shadow-xl backdrop:bg-black/45 sm:p-6"
+      >
+        {editor && (
+          <form onSubmit={save}>
+            <h2 id="booth-editor-title" className="mb-4 text-lg font-semibold">{editing ? 'Edit Brand' : 'Tambah Brand'}</h2>
+            {error && <p role="alert" className="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
             <fieldset disabled={busy} className="grid min-w-0 gap-4 sm:grid-cols-2">
               <label className="min-w-0 text-sm font-medium">
                 Nama brand
@@ -165,32 +235,14 @@ export default function AdminVisitorBoothsPage() {
                   <a href={editingStorage.getPublicUrl(editing.catalog_path).data.publicUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-blue-700 underline">Lihat katalog saat ini</a>
                 )}
               </div>
-              <div className="flex flex-wrap gap-2 sm:col-span-2">
+              <div className="flex flex-wrap justify-end gap-2 sm:col-span-2">
+                <button type="button" onClick={closeEditor} className={button}>Batal</button>
                 <button type="submit" className={button + ' border-blue-700 bg-blue-700 text-white'}>{busy ? 'Memproses…' : 'Simpan'}</button>
-                {editing && <button type="button" onClick={() => { setEditing(null); setError(''); }} className={button}>Batal</button>}
               </div>
             </fieldset>
           </form>
-          {booths.length === 0 ? (
-            <p className="rounded-2xl border border-neutral-200/80 bg-white p-5 text-sm text-neutral-600">Belum ada booth tersedia.</p>
-          ) : (
-            <ul aria-label="Daftar brand" className="divide-y divide-neutral-200/80 rounded-2xl border border-neutral-200/80 bg-white">
-              {booths.map(booth => (
-                <li key={booth.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
-                  <div className="min-w-0">
-                    <h3 className="break-words text-sm font-semibold">{booth.brand_name}</h3>
-                    <p className="mt-0.5 text-sm text-neutral-600">+{booth.whatsapp_number}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button type="button" disabled={busy} className={button} onClick={() => { setEditing(booth); setError(''); }}>Edit</button>
-                    <button type="button" disabled={busy} className={button + ' text-rose-700'} onClick={() => void remove(booth)}>Hapus</button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </>
-      )}
+        )}
+      </dialog>
     </div>
   );
 }
