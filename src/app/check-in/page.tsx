@@ -788,21 +788,6 @@ export default function CheckInPage() {
               </form>
             )}
 
-            {/* Bottom Help Notice */}
-            <div className="text-center pt-2 text-xs text-slate-500 space-y-1">
-              <p>Butuh bantuan saat check-in?</p>
-              <p>
-                Kunjungi Meja Panitia Braga City Walk atau WhatsApp{' '}
-                <a
-                  href="https://wa.me/6281223456789"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 font-bold hover:underline"
-                >
-                  0812-2345-6789
-                </a>
-              </p>
-            </div>
           </div>
         )}
 
