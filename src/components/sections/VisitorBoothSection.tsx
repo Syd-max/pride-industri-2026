@@ -33,9 +33,9 @@ function BoothLogoGrid({ booths, preview, onSelect }: { booths: PublicBooth[]; p
     <ul className="grid grid-cols-3 gap-2.5 sm:grid-cols-4 sm:gap-3 lg:grid-cols-5 lg:gap-4">
       {booths.map((booth, index) => (
         <li key={booth.id} className={preview && index >= 6 ? (index >= 8 ? 'hidden lg:block' : 'hidden sm:block') : undefined}>
-          <button type="button" aria-label={booth.brand_name} aria-haspopup="dialog" onClick={() => onSelect(booth)} className="flex h-20 w-full cursor-pointer items-center justify-center rounded-xl border border-slate-200/90 bg-white p-2 shadow-2xs hover:border-slate-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 sm:h-24 sm:p-3 lg:h-28">
+          <button type="button" aria-label={booth.brand_name} aria-haspopup="dialog" onClick={() => onSelect(booth)} className="flex h-20 w-full min-w-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-slate-200/90 bg-white p-2 shadow-2xs hover:border-slate-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 sm:h-24 sm:p-3 lg:h-28">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={booth.logoUrl} alt="" loading="lazy" decoding="async" width={160} height={96} className="h-full w-full object-contain" />
+            <img src={booth.logoUrl} alt="" loading="lazy" decoding="async" width={160} height={96} className="w-full object-contain" style={{ height: '100%' }} />
           </button>
         </li>
       ))}
@@ -156,7 +156,7 @@ export default function VisitorBoothSection() {
               {selected ? (
                 <>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={selected.logoUrl} alt="" decoding="async" width={240} height={128} className="mx-auto mb-4 h-32 w-full object-contain" />
+                  <img src={selected.logoUrl} alt="" decoding="async" width={240} height={128} className="mx-auto mb-4 w-full object-contain" style={{ height: '8rem' }} />
                   <div className="grid gap-2">
                     <a href={selected.catalogUrl} target="_blank" rel="noopener noreferrer" className={button + ' border border-slate-200 bg-slate-50 text-slate-800 hover:bg-slate-100'}>View Catalog</a>
                     <a href={`https://wa.me/${selected.whatsapp_number}`} target="_blank" rel="noopener noreferrer" className={button + ' bg-emerald-700 text-white hover:bg-emerald-800'}>Pre-Order via WhatsApp</a>

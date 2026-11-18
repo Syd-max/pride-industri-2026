@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { boothAssetExtension, boothAssetRules, boothBucket, boothCatalogMaxMb, boothColumns, normalizeBoothWhatsApp, type BoothAsset, type VisitorBooth } from '@/lib/visitor-booths';
 
@@ -20,6 +21,39 @@ function mutate(method: 'POST' | 'PUT' | 'DELETE', data: object) {
 async function errorFrom(response: Response) {
   const body = await response.json().catch(() => null);
   return new Error(body?.error || 'Perubahan booth gagal diproses. Silakan coba lagi.');
+}
+
+function BoothFileInput({ asset, label, accept, currentUrl }: { asset: BoothAsset; label: string; accept: string; currentUrl?: string }) {
+  const [fileName, setFileName] = useState('');
+  const id = `booth-${asset}`;
+  const fileLabel = fileName || (currentUrl ? 'File sudah tersimpan' : 'Belum ada file dipilih');
+
+  return (
+    <div className="min-w-0 text-sm font-medium">
+      <label htmlFor={id}>{label}</label>
+      <div className="relative mt-1.5 flex min-h-11 items-center gap-2 rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2 focus-within:border-blue-600">
+        <input
+          id={id}
+          name={asset}
+          type="file"
+          accept={accept}
+          required={!currentUrl}
+          aria-describedby={`${id}-file-name`}
+          className="absolute inset-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-default"
+          onChange={event => setFileName(event.currentTarget.files?.[0]?.name ?? '')}
+        />
+        <span aria-hidden="true" className="shrink-0 rounded-md border border-neutral-200 bg-white px-2 py-1 text-xs font-semibold">
+          {fileName || currentUrl ? 'Ganti file' : 'Pilih file'}
+        </span>
+        <span id={`${id}-file-name`} className="min-w-0 break-all text-neutral-600">{fileLabel}</span>
+      </div>
+      {currentUrl && (
+        <a href={currentUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-blue-700 underline">
+          {asset === 'logo' ? 'Lihat logo saat ini' : 'Lihat katalog saat ini'}
+        </a>
+      )}
+    </div>
+  );
 }
 
 export default function AdminVisitorBoothsPage() {
@@ -161,7 +195,15 @@ export default function AdminVisitorBoothsPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-12">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight text-[#1d1d1f] sm:text-3xl">Visitor Booth</h1>
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <Link href="/admin" aria-label="Kembali ke Overview" className={button + ' shrink-0 gap-2 bg-white hover:bg-neutral-50'}>
+            <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            <span className="hidden sm:inline">Kembali</span>
+          </Link>
+          <h1 className="text-2xl font-semibold tracking-tight text-[#1d1d1f] sm:text-3xl">Visitor Booth</h1>
+        </div>
         <button type="button" aria-haspopup="dialog" disabled={busy || !listing} className={button + ' border-blue-700 bg-blue-700 text-white'} onClick={() => openEditor(null)}>Tambah Brand</button>
       </div>
       {!editor && error && <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
@@ -221,20 +263,18 @@ export default function AdminVisitorBoothsPage() {
                 Nomor WhatsApp
                 <input name="whatsapp_number" type="tel" defaultValue={editing ? '+' + editing.whatsapp_number : undefined} placeholder="08… atau +62…" className={input} required />
               </label>
-              <div className="min-w-0 text-sm font-medium">
-                <label htmlFor="booth-logo">Logo brand (JPG, PNG, WebP, maks. 2 MB)</label>
-                <input id="booth-logo" name="logo" type="file" accept="image/jpeg,image/png,image/webp" className={input} required={!editing} />
-                {editing && editingStorage && (
-                  <a href={editingStorage.getPublicUrl(editing.logo_path).data.publicUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-blue-700 underline">Lihat logo saat ini</a>
-                )}
-              </div>
-              <div className="min-w-0 text-sm font-medium">
-                <label htmlFor="booth-catalog">Katalog brand (PDF, maks. {boothCatalogMaxMb} MB)</label>
-                <input id="booth-catalog" name="catalog" type="file" accept="application/pdf,.pdf" className={input} required={!editing} />
-                {editing && editingStorage && (
-                  <a href={editingStorage.getPublicUrl(editing.catalog_path).data.publicUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-blue-700 underline">Lihat katalog saat ini</a>
-                )}
-              </div>
+              <BoothFileInput
+                asset="logo"
+                label="Logo brand (JPG, PNG, WebP, maks. 2 MB)"
+                accept="image/jpeg,image/png,image/webp"
+                currentUrl={editing && editingStorage ? editingStorage.getPublicUrl(editing.logo_path).data.publicUrl : undefined}
+              />
+              <BoothFileInput
+                asset="catalog"
+                label={`Katalog brand (PDF, maks. ${boothCatalogMaxMb} MB)`}
+                accept="application/pdf,.pdf"
+                currentUrl={editing && editingStorage ? editingStorage.getPublicUrl(editing.catalog_path).data.publicUrl : undefined}
+              />
               <div className="flex flex-wrap justify-end gap-2 sm:col-span-2">
                 <button type="button" onClick={closeEditor} className={button}>Batal</button>
                 <button type="submit" className={button + ' border-blue-700 bg-blue-700 text-white'}>{busy ? 'Memproses…' : 'Simpan'}</button>
