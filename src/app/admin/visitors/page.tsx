@@ -142,8 +142,8 @@ export default function AdminVisitorsPage() {
                   <div><dt className="text-neutral-500">Umur (tahun)</dt><dd className="mt-1 font-medium">{selected.age}</dd></div>
                 </>
               )}
-              <div><dt className="text-neutral-500">Link PO WhatsApp</dt><dd className="mt-1 break-all"><a href={selected.whatsapp_url} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">{selected.whatsapp_url}</a></dd></div>
-              <div><dt className="text-neutral-500">Link E-Katalog</dt><dd className="mt-1 break-all"><a href={selected.catalog_url} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">{selected.catalog_url}</a></dd></div>
+              {selected.whatsapp_url && <div><dt className="text-neutral-500">Link PO WhatsApp</dt><dd className="mt-1 break-all"><a href={selected.whatsapp_url} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">{selected.whatsapp_url}</a></dd></div>}
+              {selected.catalog_url && <div><dt className="text-neutral-500">Link E-Katalog</dt><dd className="mt-1 break-all"><a href={selected.catalog_url} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">{selected.catalog_url}</a></dd></div>}
               <div><dt className="text-neutral-500">Waktu pengiriman</dt><dd className="mt-1 font-medium">{formatJakartaDateTime(selected.created_at)}</dd></div>
             </dl>
             <div className="mt-6 border-t border-neutral-200 pt-4">

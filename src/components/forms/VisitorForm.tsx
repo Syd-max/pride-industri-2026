@@ -106,14 +106,12 @@ export default function VisitorForm({ type }: { type: VisitorFormType }) {
                     </label>
                   </div>
                 )}
-                <label className="min-w-0 text-sm font-semibold">
-                  Link PO WhatsApp
-                  <input name="whatsapp_url" type="url" inputMode="url" maxLength={2048} placeholder="https://wa.me/..." autoCapitalize="none" spellCheck={false} className={inputClass} required />
-                </label>
-                <label className="min-w-0 text-sm font-semibold">
-                  Link E-Katalog
-                  <input name="catalog_url" type="url" inputMode="url" maxLength={2048} autoCapitalize="none" spellCheck={false} className={inputClass} required />
-                </label>
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm">
+                  <p className="text-slate-700">Showcase dapat diakses melalui laman utama PRIDE Industri.</p>
+                  <a href="https://prideindustri.web.id/" target="_blank" rel="noopener noreferrer" className="mt-2 inline-block break-all font-semibold text-blue-700 underline underline-offset-2">
+                    https://prideindustri.web.id/
+                  </a>
+                </div>
                 <button type="submit" className="mt-1 min-h-12 cursor-pointer rounded-xl bg-blue-700 px-5 py-3 text-base font-semibold text-white hover:bg-blue-800 disabled:cursor-wait disabled:opacity-60">{busy ? 'Mengirim…' : 'Kirim'}</button>
               </fieldset>
             </form>

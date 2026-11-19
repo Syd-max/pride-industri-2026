@@ -28,8 +28,8 @@ export interface VisitorFormSubmission {
   consultation_topic: string | null;
   domicile: string | null;
   age: number | null;
-  whatsapp_url: string;
-  catalog_url: string;
+  whatsapp_url: string | null;
+  catalog_url: string | null;
   created_at: string;
 }
 
@@ -54,12 +54,14 @@ export function validateVisitorForm(body: unknown): { values: VisitorFormValues;
   if (type !== 'booth' && type !== 'umum') return { error: 'Jenis visitor tidak valid.' };
   const name = sanitizeString(fields.full_name);
   if (!name || name.length > 160) return { error: 'Isi nama lengkap, maksimal 160 karakter.' };
-  const whatsapp = typeof fields.whatsapp_url === 'string' ? visitorWhatsAppLink(fields.whatsapp_url.trim()) : undefined;
-  const catalog = typeof fields.catalog_url === 'string' ? catalogLink(fields.catalog_url.trim()) : undefined;
-  if (!whatsapp || whatsapp.length > 2048) return { error: 'Isi link PO WhatsApp yang valid, misalnya https://wa.me/ diikuti nomor internasional.' };
-  if (!catalog || catalog.length > 2048) return { error: 'Isi link E-Katalog yang valid dengan awalan https:// atau http://.' };
+  const whatsappInput = sanitizeString(fields.whatsapp_url);
+  const catalogInput = sanitizeString(fields.catalog_url);
+  const whatsapp = whatsappInput ? visitorWhatsAppLink(whatsappInput) : null;
+  const catalog = catalogInput ? catalogLink(catalogInput) : null;
+  if (whatsappInput && (!whatsapp || whatsapp.length > 2048)) return { error: 'Link PO WhatsApp tidak valid.' };
+  if (catalogInput && (!catalog || catalog.length > 2048)) return { error: 'Link E-Katalog tidak valid.' };
 
-  const common = { visitor_type: type, full_name: name, whatsapp_url: whatsapp, catalog_url: catalog };
+  const common = { visitor_type: type, full_name: name, whatsapp_url: whatsapp ?? null, catalog_url: catalog ?? null };
   if (type === 'booth') {
     const brand = sanitizeString(fields.brand_name);
     const product = sanitizeString(fields.product_name);
