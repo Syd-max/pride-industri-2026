@@ -30,7 +30,7 @@ const REGISTRATION_LINKS = [
   },
 ] as const;
 
-// 26 November 2026, 00:00 WIB.
+// Follow the configured opening time for attendance.
 const CHECK_IN_VISIBLE_AT = EVENT_CONFIG.checkin.windowStart.getTime();
 
 export default function Navbar() {
@@ -195,7 +195,7 @@ export default function Navbar() {
               }`}
             />
 
-            {/* Registration CTAs become check-in access on 26 November 2026. */}
+            {/* Registration CTAs become check-in access when attendance opens. */}
             {checkInAvailable ? (
               <Link
                 href="/check-in"

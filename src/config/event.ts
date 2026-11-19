@@ -82,9 +82,9 @@ export const EVENT_CONFIG = {
     },
   },
 
-  // Check-in time window (matches event dates)
+  // Check-in is available early at the organizer's request.
   checkin: {
-    windowStart: new Date('2026-11-26T00:00:00+07:00'),
+    windowStart: new Date('2026-11-19T00:00:00+07:00'),
     windowEnd: new Date('2026-11-28T22:00:00+07:00'),
   },
 } as const;
