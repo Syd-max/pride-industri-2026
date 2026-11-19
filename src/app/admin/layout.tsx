@@ -86,6 +86,21 @@ export default function AdminLayout({
       ),
     },
     {
+      label: 'Data Visitor',
+      href: '/admin/visitors',
+      iconColor: 'text-blue-600',
+      activeClass: 'bg-white text-blue-900 shadow-xs font-semibold border-b-2 border-blue-600',
+      hoverClass: 'hover:text-blue-700 hover:bg-white/60',
+      drawerActive: 'bg-blue-600 text-white font-semibold shadow-xs',
+      icon: (
+        <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M17 8h4m-2-2v4" />
+        </svg>
+      ),
+    },
+    {
       label: 'Data Daftar Lomba',
       href: '/admin/registrations',
       iconColor: 'text-violet-600',
@@ -135,7 +150,7 @@ export default function AdminLayout({
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className="md:hidden p-2 rounded-xl text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 border border-neutral-200/80 transition-colors flex items-center gap-2 cursor-pointer group"
+            className="xl:hidden p-2 rounded-xl text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 border border-neutral-200/80 transition-colors flex items-center gap-2 cursor-pointer group"
             aria-label="Buka menu navigasi admin"
           >
             <svg className="w-5 h-5 text-neutral-600 group-hover:text-neutral-900 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -176,7 +191,7 @@ export default function AdminLayout({
           </Link>
 
           {/* Desktop Navigation Tabs (Apple Segmented Style with Brand Color Accents) */}
-          <nav className="hidden md:flex items-center gap-1 ml-4 lg:ml-6 bg-neutral-100/90 p-1 rounded-xl border border-neutral-200/70" aria-label="Navigasi Utama Admin">
+          <nav className="hidden xl:flex items-center gap-1 ml-4 lg:ml-6 bg-neutral-100/90 p-1 rounded-xl border border-neutral-200/70" aria-label="Navigasi Utama Admin">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (

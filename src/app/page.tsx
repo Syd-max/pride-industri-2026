@@ -4,6 +4,7 @@ import HeroSection from '@/components/sections/HeroSection';
 import AboutSection from '@/components/sections/AboutSection';
 import ActivitiesDeckSection from '@/components/sections/ActivitiesDeckSection';
 import VisitorBoothSection from '@/components/sections/VisitorBoothSection';
+import VisitorFormLinks from '@/components/sections/VisitorFormLinks';
 import ProgramSection from '@/components/sections/ProgramSection';
 import CompetitionSection from '@/components/sections/CompetitionSection';
 import LocationSection from '@/components/sections/LocationSection';
@@ -75,6 +76,7 @@ export default function HomePage() {
           <AboutSection />
           <ActivitiesDeckSection />
           <VisitorBoothSection />
+          <VisitorFormLinks />
           <ProgramSection />
           <CompetitionSection />
           <LocationSection />
