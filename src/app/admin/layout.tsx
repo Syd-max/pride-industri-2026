@@ -101,6 +101,19 @@ export default function AdminLayout({
       ),
     },
     {
+      label: 'Kelola Visitor Booth',
+      href: '/admin/visitor-booths',
+      iconColor: 'text-emerald-600',
+      activeClass: 'bg-white text-emerald-900 shadow-xs font-semibold border-b-2 border-emerald-600',
+      hoverClass: 'hover:text-emerald-700 hover:bg-white/60',
+      drawerActive: 'bg-emerald-600 text-white font-semibold shadow-xs',
+      icon: (
+        <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 9h18l-2-6H5L3 9zm2 0v12h14V9M9 21v-7h6v7" />
+        </svg>
+      ),
+    },
+    {
       label: 'Data Daftar Lomba',
       href: '/admin/registrations',
       iconColor: 'text-violet-600',

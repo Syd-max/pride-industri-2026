@@ -111,8 +111,8 @@ export default function VisitorBoothSection() {
   return (
     <section id="visitor-booth" aria-labelledby="visitor-booth-heading" className="relative py-10 sm:py-14 lg:py-16">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <h2 id="visitor-booth-heading" className="mb-6 text-center text-3xl font-black leading-tight tracking-tight text-slate-900 sm:mb-8 sm:text-4xl lg:text-5xl">
-          Visitor Booth
+        <h2 id="visitor-booth-heading" className="mb-6 text-center text-5xl leading-tight tracking-tight text-slate-900 sm:mb-8 sm:text-6xl" style={{ fontFamily: 'var(--font-playfair), Georgia, serif', fontWeight: 500, fontStyle: 'italic' }}>
+          Showcase
         </h2>
         {failed ? (
           <p role="status" className="text-center text-sm text-slate-700">Booth belum bisa dimuat. Segarkan halaman untuk mencoba lagi.</p>
@@ -144,7 +144,7 @@ export default function VisitorBoothSection() {
         {overlay && (
           <>
             <div className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3 sm:px-6">
-              <h3 ref={dialogTitle} id="visitor-booth-dialog-title" tabIndex={-1} className="min-w-0 self-center break-words text-lg font-bold text-slate-900 focus:outline-none">{selected?.brand_name ?? 'Visitor Booth'}</h3>
+              <h3 ref={dialogTitle} id="visitor-booth-dialog-title" tabIndex={-1} className="min-w-0 self-center break-words text-lg font-bold text-slate-900 focus:outline-none">{selected?.brand_name ?? 'Showcase'}</h3>
               <div className="flex shrink-0 gap-2">
                 {overlay.kind === 'brand' && overlay.fromGallery && (
                   <button type="button" onClick={openGallery} className={button + ' cursor-pointer text-slate-700 hover:bg-slate-100'}>Kembali</button>

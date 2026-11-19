@@ -1,16 +1,24 @@
 import Link from 'next/link';
+import { ChefHatIcon, SewingMachineIcon } from '@/components/ui/CompetitionWelcomeBanner';
+import './visitor-form-links.css';
 
 export default function VisitorFormLinks() {
   return (
-    <section id="visitor-forms" aria-label="Form visitor PRIDE Industri 2026" className="relative px-4 pb-10 sm:px-6 sm:pb-14">
-      <div className="mx-auto grid max-w-5xl gap-3 sm:grid-cols-2 lg:px-8">
-        <Link href="/visitor-booth" className="flex min-h-20 items-center justify-between gap-4 rounded-2xl border border-emerald-700/15 bg-emerald-50 px-5 py-4 text-emerald-900 hover:bg-emerald-100">
-          <span><span className="block text-xs font-semibold">Isi Form</span><span className="mt-1 block text-lg font-bold">Visitor Booth</span></span>
-          <span aria-hidden="true" className="text-2xl">↗</span>
+    <section id="visitor-forms" aria-label="Form visitor PRIDE Industri 2026" className="visitor-form-links">
+      <div className="visitor-form-links-grid">
+        <Link href="/visitor-booth" className="visitor-form-card visitor-form-card-booth">
+          <span className="visitor-form-card-content">
+            <span className="visitor-form-card-title">Visitor<br />Booth</span>
+            <span className="visitor-form-card-action">Isi Form</span>
+          </span>
+          <span aria-hidden="true" className="visitor-form-card-art"><SewingMachineIcon /></span>
         </Link>
-        <Link href="/visitor-umum" className="flex min-h-20 items-center justify-between gap-4 rounded-2xl border border-blue-700/15 bg-blue-50 px-5 py-4 text-blue-900 hover:bg-blue-100">
-          <span><span className="block text-xs font-semibold">Isi Form</span><span className="mt-1 block text-lg font-bold">Visitor Umum</span></span>
-          <span aria-hidden="true" className="text-2xl">↗</span>
+        <Link href="/visitor-umum" className="visitor-form-card visitor-form-card-umum">
+          <span className="visitor-form-card-content">
+            <span className="visitor-form-card-title">Visitor<br />Umum</span>
+            <span className="visitor-form-card-action">Isi Form</span>
+          </span>
+          <span aria-hidden="true" className="visitor-form-card-art"><ChefHatIcon /></span>
         </Link>
       </div>
     </section>

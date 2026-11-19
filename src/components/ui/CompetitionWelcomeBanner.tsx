@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
    Ultra-crisp HD vector rendering with pure geometric precision.
 ─────────────────────────────────────────────────────────────────────────────── */
 
-function SewingMachineIcon() {
+export function SewingMachineIcon() {
   return (
     <svg viewBox="0 0 100 85" fill="none" aria-hidden="true">
       <g transform="rotate(-4, 50, 42)">
@@ -39,7 +39,7 @@ function SewingMachineIcon() {
   );
 }
 
-function ChefHatIcon() {
+export function ChefHatIcon() {
   return (
     <svg viewBox="0 0 100 90" fill="none" aria-hidden="true">
       <g transform="rotate(6, 50, 45)">

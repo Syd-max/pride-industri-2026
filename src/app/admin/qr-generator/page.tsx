@@ -70,6 +70,24 @@ export default function QrGeneratorPage() {
       badgeClass: 'bg-neutral-100 text-neutral-700 border-neutral-200/70',
     },
     {
+      id: 'visitor-booth',
+      title: 'Form Visitor Booth',
+      category: 'Form Visitor',
+      path: 'https://prideindustri.web.id/visitor-booth',
+      description: 'Data usaha, konsultasi, link PO WhatsApp dan E-Katalog.',
+      badge: 'Visitor Booth',
+      badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200/70',
+    },
+    {
+      id: 'visitor-umum',
+      title: 'Form Visitor Umum',
+      category: 'Form Visitor',
+      path: 'https://prideindustri.web.id/visitor-umum',
+      description: 'Nama, domisili, umur, link PO WhatsApp dan E-Katalog.',
+      badge: 'Visitor Umum',
+      badgeClass: 'bg-blue-50 text-blue-800 border-blue-200/70',
+    },
+    {
       id: 'website-utama',
       title: 'Website Utama PRIDE Industri 2026',
       category: 'Portal Resmi Festival',
@@ -87,7 +105,7 @@ export default function QrGeneratorPage() {
       const urls: Record<string, string> = {};
       for (const comp of competitionList) {
         try {
-          urls[comp.id] = await QRCode.toDataURL(`${currentHost}${comp.path}`, {
+          urls[comp.id] = await QRCode.toDataURL(new URL(comp.path, currentHost).href, {
             width: 450,
             margin: 2,
             color: { dark: '#000000', light: '#ffffff' },
@@ -129,7 +147,7 @@ export default function QrGeneratorPage() {
             QR Code Generator
           </h1>
           <p className="text-xs sm:text-sm font-normal text-neutral-500 mt-1">
-            Generate QR Code operasional resmi untuk presensi gerbang Braga City Walk dan pendaftaran kompetisi.
+            QR Code untuk presensi, pendaftaran kompetisi, form visitor dan website PRIDE.
           </p>
         </div>
 
@@ -295,16 +313,16 @@ export default function QrGeneratorPage() {
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#0071e3]" />
           <h2 className="text-sm sm:text-base font-semibold text-[#1d1d1f]">
-            B. QR Code Pendaftaran Kompetisi
+            B. QR Code Form &amp; Website
           </h2>
           <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-700 border border-neutral-200/70">
-            Pendaftaran Resmi
+            Link Resmi PRIDE
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {competitionList.map((comp) => {
-            const targetUrl = `${currentHost}${comp.path}`;
+            const targetUrl = new URL(comp.path, currentHost).href;
             const qrImg = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(
               targetUrl
             )}&bgcolor=ffffff&color=000000&margin=10`;
