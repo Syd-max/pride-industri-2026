@@ -23,3 +23,22 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'Data visitor belum bisa dimuat. Coba lagi.' }, { status: 503 });
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  if (!(await hasAdminSession())) {
+    return NextResponse.json({ success: false, error: 'Silakan login sebagai admin.' }, { status: 401 });
+  }
+  const body = await request.json().catch(() => null);
+  const id = body?.id;
+  if (typeof id !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+    return NextResponse.json({ success: false, error: 'ID data visitor tidak valid.' }, { status: 400 });
+  }
+  try {
+    const { error } = await createAdminClient(true).from('visitor_form_submissions').delete().eq('id', id);
+    if (error) throw error;
+    return NextResponse.json({ success: true }, { headers: { 'Cache-Control': 'private, no-store' } });
+  } catch (error) {
+    console.error('[VISITOR_FORMS_ADMIN_DELETE]', error);
+    return NextResponse.json({ success: false, error: 'Data visitor belum berhasil dihapus. Coba lagi.' }, { status: 503 });
+  }
+}

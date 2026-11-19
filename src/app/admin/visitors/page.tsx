@@ -11,6 +11,8 @@ export default function AdminVisitorsPage() {
   const [listing, setListing] = useState<{ data: VisitorFormSubmission[]; count: number } | null>(null);
   const [error, setError] = useState('');
   const [selected, setSelected] = useState<VisitorFormSubmission | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
   const dialog = useRef<HTMLDialogElement>(null);
   const pages = Math.max(1, Math.ceil((listing?.count ?? 0) / 20));
 
@@ -24,6 +26,10 @@ export default function AdminVisitorsPage() {
         });
         const body = await response.json();
         if (!response.ok || !body.success) throw new Error(body.error || 'Data visitor gagal dimuat.');
+        if (!controller.signal.aborted && query.page > 0 && body.data.length === 0) {
+          setQuery({ type: query.type, page: 0 });
+          return;
+        }
         if (!controller.signal.aborted) setListing({ data: body.data, count: body.count });
       } catch (error) {
         if (!controller.signal.aborted) setError(error instanceof Error ? error.message : 'Data visitor gagal dimuat.');
@@ -44,8 +50,32 @@ export default function AdminVisitorsPage() {
   }
 
   function closeDetails() {
+    if (deleting) return;
     dialog.current?.close();
     setSelected(null);
+    setDeleteError('');
+  }
+
+  async function deleteVisitor() {
+    if (!selected || deleting || !window.confirm(`Hapus permanen data ${visitorFormTitles[selected.visitor_type]} untuk "${selected.full_name}"? Tindakan ini tidak dapat dibatalkan.`)) return;
+    setDeleting(true);
+    setDeleteError('');
+    try {
+      const response = await fetch('/api/admin/visitor-forms', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: selected.id }),
+      });
+      const body = await response.json();
+      if (!response.ok || !body.success) throw new Error(body.error || 'Data visitor belum berhasil dihapus.');
+      dialog.current?.close();
+      setSelected(null);
+      navigate(query.type, query.page > 0 && listing?.data.length === 1 ? query.page - 1 : query.page);
+    } catch (error) {
+      setDeleteError(error instanceof Error ? error.message : 'Koneksi terputus. Coba lagi.');
+    } finally {
+      setDeleting(false);
+    }
   }
 
   return (
@@ -96,7 +126,7 @@ export default function AdminVisitorsPage() {
           <>
             <div className="mb-5 flex items-center justify-between gap-3">
               <h2 id="visitor-details-heading" className="text-lg font-semibold">{visitorFormTitles[selected.visitor_type]}</h2>
-              <button type="button" onClick={closeDetails} className={button}>Tutup</button>
+              <button type="button" onClick={closeDetails} disabled={deleting} className={button}>Tutup</button>
             </div>
             <dl className="space-y-4 text-sm">
               <div><dt className="text-neutral-500">Nama</dt><dd className="mt-1 break-words font-medium">{selected.full_name}</dd></div>
@@ -116,6 +146,12 @@ export default function AdminVisitorsPage() {
               <div><dt className="text-neutral-500">Link E-Katalog</dt><dd className="mt-1 break-all"><a href={selected.catalog_url} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">{selected.catalog_url}</a></dd></div>
               <div><dt className="text-neutral-500">Waktu pengiriman</dt><dd className="mt-1 font-medium">{formatJakartaDateTime(selected.created_at)}</dd></div>
             </dl>
+            <div className="mt-6 border-t border-neutral-200 pt-4">
+              {deleteError && <p role="alert" className="mb-3 text-sm text-rose-700">{deleteError}</p>}
+              <button type="button" disabled={deleting} onClick={() => void deleteVisitor()} className={button + ' border-rose-200 text-rose-700 hover:bg-rose-50'}>
+                {deleting ? 'Menghapus…' : 'Hapus Data Visitor'}
+              </button>
+            </div>
           </>
         )}
       </dialog>

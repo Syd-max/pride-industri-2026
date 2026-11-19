@@ -6,8 +6,8 @@
 .visitor-form-links-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-  max-width: 960px;
+  gap: 16px;
+  max-width: 880px;
   margin: 0 auto;
 }
 
@@ -15,12 +15,12 @@
   position: relative;
   display: flex;
   min-width: 0;
-  min-height: 220px;
+  min-height: 160px;
   overflow: hidden;
   isolation: isolate;
-  padding: 24px;
+  padding: 20px;
   border: 2px solid #142d27;
-  border-radius: 24px 40px 24px 24px;
+  border-radius: 20px 32px 20px 20px;
   color: #fff;
   box-shadow: 0 5px 0 #142d27;
   text-decoration: none;
@@ -33,7 +33,7 @@
 
 .visitor-form-card-umum {
   border-color: #123149;
-  border-radius: 40px 24px 24px 24px;
+  border-radius: 32px 20px 20px 20px;
   background: #125b91;
   box-shadow: 0 5px 0 #123149;
 }
@@ -45,13 +45,13 @@
   align-items: flex-start;
   flex-direction: column;
   justify-content: space-between;
-  gap: 20px;
+  gap: 12px;
 }
 
 .visitor-form-card-title {
   display: block;
   color: #fff;
-  font-size: clamp(28px, 2.8vw, 36px);
+  font-size: clamp(24px, 2.1vw, 28px);
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1.08;
@@ -62,12 +62,12 @@
   align-items: center;
   justify-content: center;
   min-height: 44px;
-  padding: 10px 16px;
+  padding: 8px 14px;
   border: 1.5px solid #182719;
   border-radius: 10px;
   background: #ffd023;
   color: #182719;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
   line-height: 1.2;
 }
@@ -75,14 +75,14 @@
 .visitor-form-card-art {
   position: absolute;
   z-index: 1;
-  top: 26px;
-  right: 12px;
+  top: 18px;
+  right: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42%;
-  max-width: 190px;
-  height: 162px;
+  width: 38%;
+  max-width: 148px;
+  height: 120px;
   pointer-events: none;
   transform: rotate(5deg);
 }
@@ -128,35 +128,35 @@
   }
 
   .visitor-form-card {
-    min-height: 200px;
-    padding: 20px;
+    min-height: 152px;
+    padding: 18px;
   }
 
   .visitor-form-card-art {
-    top: 34px;
-    right: 4px;
-    height: 128px;
+    top: 18px;
+    right: 8px;
+    height: 112px;
   }
 }
 
 @media (max-width: 599px) {
   .visitor-form-links-grid {
     grid-template-columns: minmax(0, 1fr);
-    max-width: 480px;
+    max-width: 420px;
   }
 
   .visitor-form-card {
-    min-height: 184px;
+    min-height: 148px;
   }
 
   .visitor-form-card-content {
-    gap: 14px;
+    gap: 10px;
   }
 
   .visitor-form-card-art {
     top: 14px;
     right: 14px;
-    height: 150px;
+    height: 112px;
   }
 }
 
