@@ -149,7 +149,11 @@ export default function VisitorBoothSection() {
                 {overlay.kind === 'brand' && overlay.fromGallery && (
                   <button type="button" onClick={openGallery} className={button + ' cursor-pointer text-slate-700 hover:bg-slate-100'}>Kembali</button>
                 )}
-                <button type="button" onClick={closeOverlay} className={button + ' cursor-pointer border border-slate-200 text-slate-700 hover:bg-slate-100'}>Tutup</button>
+                <button type="button" onClick={closeOverlay} aria-label="Tutup" className={button + ' w-11 shrink-0 cursor-pointer border border-slate-200 text-slate-700 hover:bg-slate-100'}>
+                  <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <path d="m6 6 12 12M18 6 6 18" />
+                  </svg>
+                </button>
               </div>
             </div>
             <div className="p-4 sm:p-6">

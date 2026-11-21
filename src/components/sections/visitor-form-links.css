@@ -1,28 +1,30 @@
 .visitor-form-links {
   position: relative;
-  padding: 0 16px 48px;
+  padding: 0 16px 36px;
 }
 
 .visitor-form-links-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
-  max-width: 880px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
 .visitor-form-card {
   position: relative;
   display: flex;
+  align-items: center;
+  gap: 14px;
   min-width: 0;
-  min-height: 160px;
+  min-height: 88px;
   overflow: hidden;
   isolation: isolate;
-  padding: 20px;
-  border: 2px solid #142d27;
-  border-radius: 20px 32px 20px 20px;
+  padding: 14px 16px;
+  border: 1px solid #142d27;
+  border-radius: 16px;
   color: #fff;
-  box-shadow: 0 5px 0 #142d27;
+  box-shadow: 0 2px 0 #142d27;
   text-decoration: none;
   transition: transform 140ms ease, box-shadow 140ms ease;
 }
@@ -33,17 +35,17 @@
 
 .visitor-form-card-umum {
   border-color: #123149;
-  border-radius: 32px 20px 20px 20px;
   background: #125b91;
-  box-shadow: 0 5px 0 #123149;
+  box-shadow: 0 2px 0 #123149;
 }
 
 .visitor-form-card-content {
   position: relative;
   z-index: 2;
   display: flex;
-  align-items: flex-start;
-  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
@@ -51,20 +53,22 @@
 .visitor-form-card-title {
   display: block;
   color: #fff;
-  font-size: clamp(24px, 2.1vw, 28px);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.08;
+  min-width: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
 }
 
 .visitor-form-card-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 8px 14px;
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 8px 12px;
   border: 1.5px solid #182719;
-  border-radius: 10px;
+  border-radius: 8px;
   background: #ffd023;
   color: #182719;
   font-size: 13px;
@@ -73,28 +77,16 @@
 }
 
 .visitor-form-card-art {
-  position: absolute;
-  z-index: 1;
-  top: 18px;
-  right: 14px;
+  position: relative;
+  order: -1;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38%;
-  max-width: 148px;
-  height: 120px;
+  width: 56px;
+  height: 56px;
   pointer-events: none;
   transform: rotate(5deg);
-}
-
-.visitor-form-card-art::before {
-  position: absolute;
-  inset: 13px 4px;
-  z-index: -1;
-  border: 1px solid #ffffff24;
-  border-radius: 50%;
-  background: #ffffff0d;
-  content: '';
 }
 
 .visitor-form-card-art > svg {
@@ -109,12 +101,12 @@
 }
 
 .visitor-form-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 7px 0 #142d27;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 #142d27;
 }
 
 .visitor-form-card-umum:hover {
-  box-shadow: 0 7px 0 #123149;
+  box-shadow: 0 3px 0 #123149;
 }
 
 .visitor-form-card:focus-visible {
@@ -124,39 +116,33 @@
 
 @media (max-width: 767px) {
   .visitor-form-links-grid {
-    gap: 16px;
+    gap: 12px;
   }
 
   .visitor-form-card {
-    min-height: 152px;
-    padding: 18px;
+    min-height: 76px;
+    padding: 12px;
+    gap: 10px;
   }
 
   .visitor-form-card-art {
-    top: 18px;
-    right: 8px;
-    height: 112px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .visitor-form-card-title {
+    font-size: 16px;
+  }
+
+  .visitor-form-card-action {
+    padding: 8px 10px;
+    font-size: 12px;
   }
 }
 
 @media (max-width: 599px) {
   .visitor-form-links-grid {
     grid-template-columns: minmax(0, 1fr);
-    max-width: 420px;
-  }
-
-  .visitor-form-card {
-    min-height: 148px;
-  }
-
-  .visitor-form-card-content {
-    gap: 10px;
-  }
-
-  .visitor-form-card-art {
-    top: 14px;
-    right: 14px;
-    height: 112px;
   }
 }
 
