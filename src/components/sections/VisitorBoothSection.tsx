@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { boothBucket, boothCategories, boothColumns, isBoothCategory, type BoothCategory, type VisitorBooth } from '@/lib/visitor-booths';
 
@@ -29,20 +29,33 @@ async function loadBooths(start: number, size: number, signal: AbortSignal, cate
   };
 }
 
-function CategoryFilter({ value, onChange, inDialog = false }: { value: BoothCategory | 'All'; onChange: (value: string) => void; inDialog?: boolean }) {
+function CategoryFilter({ value, onChange }: { value: BoothCategory | 'All'; onChange: (value: string) => void }) {
   const [open, setOpen] = useState(false);
   const container = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
+  const menu = useRef<HTMLDivElement>(null);
   const menuId = useId();
+  const positionMenu = useCallback(() => {
+    if (!trigger.current || !menu.current?.matches(':popover-open')) return;
+    const anchor = trigger.current.getBoundingClientRect();
+    const bounds = trigger.current.closest('dialog')?.getBoundingClientRect();
+    const { width, height } = menu.current.getBoundingClientRect();
+    const left = Math.max((bounds?.left ?? 0) + 12, Math.min(anchor.right - width, (bounds?.right ?? window.innerWidth) - width - 12));
+    const top = anchor.bottom + height + 20 <= window.innerHeight ? anchor.bottom + 8 : Math.max(12, anchor.top - height - 8);
+    menu.current.style.left = `${left}px`;
+    menu.current.style.top = `${top}px`;
+  }, []);
   useEffect(() => {
     if (!open) return;
+    positionMenu();
     container.current?.querySelector<HTMLButtonElement>('[aria-selected="true"]')?.focus();
-    function dismiss(event: PointerEvent) {
-      if (!container.current?.contains(event.target as Node)) setOpen(false);
-    }
-    document.addEventListener('pointerdown', dismiss);
-    return () => document.removeEventListener('pointerdown', dismiss);
-  }, [open]);
+    window.addEventListener('resize', positionMenu);
+    document.addEventListener('scroll', positionMenu, true);
+    return () => {
+      window.removeEventListener('resize', positionMenu);
+      document.removeEventListener('scroll', positionMenu, true);
+    };
+  }, [open, positionMenu]);
 
   return (
     <div ref={container} className="relative w-11 shrink-0" onKeyDown={event => {
@@ -50,7 +63,7 @@ function CategoryFilter({ value, onChange, inDialog = false }: { value: BoothCat
       if (event.key === 'Escape') {
         event.preventDefault();
         event.stopPropagation();
-        setOpen(false);
+        menu.current?.hidePopover();
         trigger.current?.focus();
       } else if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
         event.preventDefault();
@@ -60,17 +73,19 @@ function CategoryFilter({ value, onChange, inDialog = false }: { value: BoothCat
         options[next]?.focus();
       }
     }}>
-      <button ref={trigger} type="button" aria-label="Kategori Showcase" title={`Kategori Showcase: ${value}`} aria-haspopup="listbox" aria-expanded={open} aria-controls={menuId} onClick={() => setOpen(!open)} className={`flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${open || value !== 'All' ? 'border-blue-200 bg-blue-50 text-blue-700' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'}`}>
+      <button ref={trigger} type="button" popoverTarget={menuId} aria-label="Kategori Showcase" title={`Kategori Showcase: ${value}`} aria-haspopup="listbox" aria-expanded={open} aria-controls={menuId} onClick={() => requestAnimationFrame(positionMenu)} className={`flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${open || value !== 'All' ? 'border-blue-200 bg-blue-50 text-blue-700' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'}`}>
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round">
           <path d="M3 4h18l-7 8v7l-4 2v-9L3 4Z" />
         </svg>
       </button>
-      {open && (
-        <div id={menuId} role="listbox" aria-label="Kategori Showcase" className={`${inDialog ? 'relative right-[calc(11rem-2.75rem)] sm:right-[calc(12rem-2.75rem)]' : 'absolute right-0 top-full'} z-30 mt-2 w-44 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-lg shadow-slate-900/10 sm:w-48`}>
+        <div ref={menu} id={menuId} popover="auto" role="listbox" aria-label="Kategori Showcase" onToggle={event => {
+          positionMenu();
+          setOpen(event.currentTarget.matches(':popover-open'));
+        }} className="fixed inset-auto m-0 max-h-[calc(100dvh-1.5rem)] w-44 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-1.5 shadow-lg shadow-slate-900/10 sm:w-48">
           {(['All', ...boothCategories] as const).map(category => (
             <button key={category} type="button" role="option" aria-selected={value === category} onClick={() => {
               onChange(category);
-              setOpen(false);
+              menu.current?.hidePopover();
               trigger.current?.focus();
             }} className={`flex min-h-11 w-full cursor-pointer items-center justify-between rounded-xl px-3 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 ${value === category ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}>
               {category}
@@ -78,7 +93,6 @@ function CategoryFilter({ value, onChange, inDialog = false }: { value: BoothCat
             </button>
           ))}
         </div>
-      )}
     </div>
   );
 }
@@ -216,7 +230,7 @@ export default function VisitorBoothSection() {
             <div className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3 sm:px-6">
               <h3 ref={dialogTitle} id="visitor-booth-dialog-title" tabIndex={-1} className="min-w-0 break-words pt-2 text-lg font-bold text-slate-900 focus:outline-none">{selected?.brand_name ?? (category === 'All' ? 'Showcase' : `Showcase · ${category}`)}</h3>
               <div className="flex shrink-0 items-start gap-2">
-                {galleryOpen && <CategoryFilter value={category} onChange={changeCategory} inDialog />}
+                {galleryOpen && <CategoryFilter value={category} onChange={changeCategory} />}
                 {overlay.kind === 'brand' && overlay.fromGallery && (
                   <button type="button" onClick={openGallery} className={button + ' cursor-pointer text-slate-700 hover:bg-slate-100'}>Kembali</button>
                 )}
