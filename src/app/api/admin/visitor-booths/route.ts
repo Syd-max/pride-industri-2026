@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { isOrganizerAdmin } from '@/lib/admin-access';
 import { sanitizeString } from '@/lib/utils';
-import { boothAssetExtension, boothAssetRules, boothBucket, boothColumns, normalizeBoothWhatsApp, type BoothAsset, type VisitorBooth } from '@/lib/visitor-booths';
+import { boothAssetExtension, boothAssetRules, boothBucket, boothColumns, isBoothCategory, normalizeBoothWhatsApp, type BoothAsset, type VisitorBooth } from '@/lib/visitor-booths';
 
 type Supabase = Awaited<ReturnType<typeof createClient>>;
 const uuidPattern = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
@@ -109,6 +109,9 @@ export async function PUT(request: Request) {
     if (lookupError) throw lookupError;
     if (body.editing !== Boolean(previous)) return fail('Data booth sudah berubah. Muat ulang halaman.', 409);
 
+    const category = body.category === undefined ? previous?.category ?? null : body.category;
+    if (body.category !== undefined && !isBoothCategory(category)) return fail('Pilih kategori Kuliner, Fesyen, atau Kriya.', 400);
+
     const logoPath = body.logo_path ?? previous?.logo_path;
     const catalogPath = body.catalog_path ?? previous?.catalog_path;
     if (!matchesPath(logoPath, id, 'logo') || !matchesPath(catalogPath, id, 'catalog')) {
@@ -124,12 +127,13 @@ export async function PUT(request: Request) {
       }
     }
 
-    const values = { brand_name: brandName, logo_path: logoPath, catalog_path: catalogPath, whatsapp_number: whatsapp };
+    const values = { brand_name: brandName, logo_path: logoPath, catalog_path: catalogPath, whatsapp_number: whatsapp, category };
     const table = supabase.from('visitor_booths');
-    const mutation = previous
+    let mutation = previous
       ? table.update(values).eq('id', id).eq('logo_path', previous.logo_path).eq('catalog_path', previous.catalog_path)
         .eq('brand_name', previous.brand_name).eq('whatsapp_number', previous.whatsapp_number)
       : table.insert({ id, ...values });
+    if (previous) mutation = previous.category === null ? mutation.is('category', null) : mutation.eq('category', previous.category);
     const { data, error } = await mutation.select(boothColumns).maybeSingle<VisitorBooth>();
     if (error?.code === '23505' || (!error && !data)) return fail('Data booth sudah berubah. Muat ulang halaman.', 409);
     if (error || !data) throw error;

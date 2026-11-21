@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { boothAssetExtension, boothAssetRules, boothBucket, boothCatalogMaxMb, boothColumns, boothSearchPattern, normalizeBoothWhatsApp, type BoothAsset, type VisitorBooth } from '@/lib/visitor-booths';
+import { boothAssetExtension, boothAssetRules, boothBucket, boothCatalogMaxMb, boothCategories, boothColumns, boothSearchPattern, isBoothCategory, normalizeBoothWhatsApp, type BoothAsset, type VisitorBooth } from '@/lib/visitor-booths';
 
 const endpoint = '/api/admin/visitor-booths';
 const pageSize = 8;
@@ -145,6 +145,11 @@ export default function AdminVisitorBoothsPage() {
       }
     }
 
+    const category = form.get('category');
+    if (!isBoothCategory(category)) {
+      setError('Pilih kategori brand.');
+      return;
+    }
     const id = editing?.id ?? crypto.randomUUID();
     const assets: { logo_path?: string; catalog_path?: string } = {};
     let canDiscard = true;
@@ -163,7 +168,7 @@ export default function AdminVisitorBoothsPage() {
       }
 
       canDiscard = false;
-      const response = await mutate('PUT', { id, editing: Boolean(editing), brand_name: brandName, whatsapp_number: whatsapp, ...assets });
+      const response = await mutate('PUT', { id, editing: Boolean(editing), brand_name: brandName, whatsapp_number: whatsapp, category, ...assets });
       if (!response.ok) {
         canDiscard = response.status < 500;
         throw await errorFrom(response);
@@ -309,6 +314,13 @@ export default function AdminVisitorBoothsPage() {
               <label className="min-w-0 text-sm font-medium">
                 Nomor WhatsApp
                 <input name="whatsapp_number" type="tel" defaultValue={editing ? '+' + editing.whatsapp_number : undefined} placeholder="08… atau +62…" className={input} required />
+              </label>
+              <label className="min-w-0 text-sm font-medium sm:col-span-2">
+                Kategori
+                <select name="category" defaultValue={editing?.category ?? ''} className={input} required>
+                  <option value="" disabled>Pilih kategori</option>
+                  {boothCategories.map(category => <option key={category} value={category}>{category}</option>)}
+                </select>
               </label>
               <BoothFileInput
                 asset="logo"

@@ -1,5 +1,11 @@
 export const boothBucket = 'pride-visitor-booths';
-export const boothColumns = 'id, brand_name, logo_path, catalog_path, whatsapp_number';
+export const boothColumns = 'id, brand_name, logo_path, catalog_path, whatsapp_number, category';
+export const boothCategories = ['Kuliner', 'Fesyen', 'Kriya'] as const;
+export type BoothCategory = typeof boothCategories[number];
+
+export function isBoothCategory(value: unknown): value is BoothCategory {
+  return boothCategories.some(category => category === value);
+}
 export const boothCatalogMaxMb = 10;
 export const boothAssetRules = {
   logo: { limit: 2 * 1024 * 1024, formats: { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' } },
@@ -14,6 +20,7 @@ export interface VisitorBooth {
   logo_path: string;
   catalog_path: string;
   whatsapp_number: string;
+  category: BoothCategory | null;
 }
 
 export function boothSearchPattern(value: string): string {
