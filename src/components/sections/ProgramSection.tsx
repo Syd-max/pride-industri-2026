@@ -3,221 +3,54 @@
 import { useState } from 'react';
 
 interface ScheduleItem {
-  id: string;
-  step: string;
-  title: string;
-  location: string;
-  venueKey: 'braga';
-  desc: string;
   category: string;
-  theme: {
-    badgeBg: string;
-    badgeText: string;
-    badgeBorder: string;
-    dotColor: string;
-    accentRing: string;
-  };
-  highlights: string[];
+  title: string;
 }
 
+type ScheduleDay = 'day1' | 'day2' | 'day3';
+
+const scheduleByDay: Record<ScheduleDay, ScheduleItem[]> = {
+  day1: [
+    { category: 'Business Matching', title: 'Business Matching (Amanda Group)' },
+    { category: 'Industry Experience', title: 'Industry Experience (Queen Craft, Studio AKS, Sepatu Custom, Makiik.kin, KEMILAU)' },
+    { category: 'Registrasi Lomba', title: 'Registrasi Lomba Video' },
+    { category: 'Opening Ceremony', title: 'Opening Ceremony' },
+    { category: 'Seminar', title: 'Seminar (Sosialisasi Barang dalam Keadaan Terbungkus)' },
+    { category: 'Booth Activity', title: 'Booth Activity' },
+  ],
+  day2: [
+    { category: 'Booth Activity', title: 'Booth Activity' },
+    { category: 'Workshop', title: 'Workshop (Pengolahan Limbah Kayu)' },
+    { category: 'Presentasi', title: 'Presentasi Peserta Lomba Desain Kemasan' },
+  ],
+  day3: [
+    { category: 'Booth Activity', title: 'Booth Activity' },
+    { category: 'Talkshow', title: 'Talkshow (Bahan Baku Naik Kelas by Amanda Group)' },
+    { category: 'Diskusi Panel', title: 'Diskusi Panel (UMKM Forward 2027)' },
+    { category: 'Presentasi dan Pengumuman', title: 'Presentasi Peserta Lomba Desain Kemasan dan Pengumuman Pemenang' },
+    { category: 'Closing Ceremony', title: 'Closing Ceremony' },
+    { category: 'Art Performance', title: 'Art Performance (Sunda Fusion)' },
+    { category: 'PRIDE Appreciation', title: 'PRIDE Appreciation' },
+    { category: 'Kerjasama', title: 'Penandatanganan Kerjasama' },
+    { category: 'Launching', title: 'Launching Anthem Disdagin' },
+    { category: 'Fashion Show', title: 'Fashion Show' },
+    { category: 'Lomba Video', title: 'Showing Hasil Lomba Video dan Pengumuman Pemenang' },
+    { category: 'Sertifikat', title: 'Penyerahan Sertifikat' },
+  ],
+};
+
+const scheduleThemes = [
+  { badgeBg: 'bg-rose-50', badgeText: 'text-rose-700', badgeBorder: 'border-rose-200/80', dotColor: 'bg-rose-600', accentRing: 'ring-rose-100' },
+  { badgeBg: 'bg-emerald-50', badgeText: 'text-emerald-700', badgeBorder: 'border-emerald-200/80', dotColor: 'bg-emerald-600', accentRing: 'ring-emerald-100' },
+  { badgeBg: 'bg-blue-50', badgeText: 'text-blue-700', badgeBorder: 'border-blue-200/80', dotColor: 'bg-blue-600', accentRing: 'ring-blue-100' },
+  { badgeBg: 'bg-teal-50', badgeText: 'text-teal-700', badgeBorder: 'border-teal-200/80', dotColor: 'bg-teal-600', accentRing: 'ring-teal-100' },
+  { badgeBg: 'bg-purple-50', badgeText: 'text-purple-700', badgeBorder: 'border-purple-200/80', dotColor: 'bg-purple-600', accentRing: 'ring-purple-100' },
+  { badgeBg: 'bg-amber-50', badgeText: 'text-amber-800', badgeBorder: 'border-amber-200/80', dotColor: 'bg-amber-600', accentRing: 'ring-amber-100' },
+];
+
 export default function ProgramSection() {
-  const [activeDay, setActiveDay] = useState<'day1' | 'day2' | 'day3'>('day1');
-
-  const scheduleDay1: ScheduleItem[] = [
-    {
-      id: 'd1-1',
-      step: '01',
-      category: 'Art Performance',
-      title: 'Sunda Fusion',
-      location: 'Main Stage · Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Pertunjukan seni pembuka perpaduan harmoni musik etnik Sunda kontemporer dan instrumen modern menyemarakkan pembukaan resmi PRIDE Industri 2026.',
-      theme: {
-        badgeBg: 'bg-rose-50',
-        badgeText: 'text-rose-700',
-        badgeBorder: 'border-rose-200/80',
-        dotColor: 'bg-rose-600',
-        accentRing: 'ring-rose-100',
-      },
-      highlights: ['Sunda Fusion Etnik', 'Harmoni Rampak Kendang', 'Pembukaan Resmi'],
-    },
-    {
-      id: 'd1-2',
-      step: '02',
-      category: 'Pride Appreciation',
-      title: 'Penyerahan Sertifikat Kelulusan Program 2026',
-      location: 'Main Stage · Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Seremonial simbolis penyerahan sertifikat jaminan mutu dan kelulusan program Disdagin: 46 Sertifikat Uji Mutu, 25 Sertifikat Halal, dan 96 Sertifikat Kelas Online Program KEMILAU.',
-      theme: {
-        badgeBg: 'bg-emerald-50',
-        badgeText: 'text-emerald-700',
-        badgeBorder: 'border-emerald-200/80',
-        dotColor: 'bg-emerald-600',
-        accentRing: 'ring-emerald-100',
-      },
-      highlights: ['46 Sertifikat Uji Mutu', '25 Sertifikat Halal', '96 Sertifikat Kelas Online KEMILAU'],
-    },
-    {
-      id: 'd1-3',
-      step: '03',
-      category: 'Innovation Walk',
-      title: 'Peninjauan Booth - Showcase Kemasan IKM',
-      location: 'Atrium & Koridor Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Peninjauan booth pameran showcase hasil pendampingan desain kemasan IKM binaan Disdagin Kota Bandung serta display produk inovasi lokal.',
-      theme: {
-        badgeBg: 'bg-blue-50',
-        badgeText: 'text-blue-700',
-        badgeBorder: 'border-blue-200/80',
-        dotColor: 'bg-blue-600',
-        accentRing: 'ring-blue-100',
-      },
-      highlights: ['Showcase Kemasan IKM Binaan', 'Pameran Produk Lokal', 'Inovasi Kemasan Ramah Lingkungan'],
-    },
-    {
-      id: 'd1-4',
-      step: '04',
-      category: 'Innovation Walk',
-      title: 'Peninjauan Booth - Workshop Industry Experience',
-      location: 'Area Workshop & Booth · Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Peninjauan booth interaktif workshop industry experience dan consultation corner bersama praktisi ahli dan mitra industri Kota Bandung.',
-      theme: {
-        badgeBg: 'bg-teal-50',
-        badgeText: 'text-teal-700',
-        badgeBorder: 'border-teal-200/80',
-        dotColor: 'bg-teal-600',
-        accentRing: 'ring-teal-100',
-      },
-      highlights: ['Workshop Industry Experience', 'Consultation Corner', 'Pendampingan Praktis'],
-    },
-    {
-      id: 'd1-5',
-      step: '05',
-      category: 'Pride Inspiration Stage',
-      title: 'Talkshow Inovasi',
-      location: 'Main Stage · Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Talkshow pelaku industri bersama praktisi membahas dinamika perkembangan industri Kota Bandung serta strategi inovasi packaging & display (2 sesi).',
-      theme: {
-        badgeBg: 'bg-purple-50',
-        badgeText: 'text-purple-700',
-        badgeBorder: 'border-purple-200/80',
-        dotColor: 'bg-purple-600',
-        accentRing: 'ring-purple-100',
-      },
-      highlights: ['Perkembangan Industri Bandung', 'Packaging & Display (2 Sesi)', 'Narasumber & Praktisi Ahli'],
-    },
-    {
-      id: 'd1-6',
-      step: '06',
-      category: 'Presentasi Finalis',
-      title: 'Lomba Desain',
-      location: 'Main Stage · Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Presentasi langsung karya inovasi finalis Lomba Desain Kemasan dan pemutaran karya video kreatif di hadapan dewan juri ahli dan audiens festival.',
-      theme: {
-        badgeBg: 'bg-amber-50',
-        badgeText: 'text-amber-800',
-        badgeBorder: 'border-amber-200/80',
-        dotColor: 'bg-amber-600',
-        accentRing: 'ring-amber-100',
-      },
-      highlights: ['Presentasi Finalis Kemasan', 'Screening Video 1 Menit', 'Penjurian Terbuka'],
-    },
-  ];
-
-  const scheduleDay2: ScheduleItem[] = [
-    {
-      id: 'd2-1',
-      step: '01',
-      category: 'Pride Innovation Challenge',
-      title: 'Business Matching',
-      location: 'Area Business Matching · Braga City Walk',
-      venueKey: 'braga',
-      desc: '20 IKM program KEMILAU terpilih dari 3 sektor industri (Fesyen, Kuliner, Kriya) melakukan pitching eksklusif di hadapan calon mitra bisnis, agregator, dan investor.',
-      theme: {
-        badgeBg: 'bg-amber-50',
-        badgeText: 'text-amber-800',
-        badgeBorder: 'border-amber-200/80',
-        dotColor: 'bg-amber-600',
-        accentRing: 'ring-amber-100',
-      },
-      highlights: ['20 IKM Kemilau Terpilih', 'Pitching 3 Sektor Industri', 'Calon Mitra & Investor'],
-    },
-    {
-      id: 'd2-2',
-      step: '02',
-      category: 'Pride Inspiration Stage',
-      title: 'Branding Produk',
-      location: 'Main Stage · Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Sesi inspirasi dan edukasi praktis mengenai strategi branding produk lokal, identitas visual merek, serta kesiapan menembus pasar ritel modern.',
-      theme: {
-        badgeBg: 'bg-teal-50',
-        badgeText: 'text-teal-700',
-        badgeBorder: 'border-teal-200/80',
-        dotColor: 'bg-teal-600',
-        accentRing: 'ring-teal-100',
-      },
-      highlights: ['Strategi Branding Produk', 'Identitas Visual Merek', 'Kesiapan Pasar Ritel'],
-    },
-    {
-      id: 'd2-3',
-      step: '03',
-      category: 'Pride Fashion Show',
-      title: 'Pergelaran Karya Pelatihan Fashion Disdagin',
-      location: 'Main Runway Stage · Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Peragaan busana spektakuler hasil karya peserta Pelatihan Desain Fashion Binaan Disdagin Kota Bandung: Kelas Intermediate (15 IKM) & Advance (18 IKM).',
-      theme: {
-        badgeBg: 'bg-purple-50',
-        badgeText: 'text-purple-700',
-        badgeBorder: 'border-purple-200/80',
-        dotColor: 'bg-purple-600',
-        accentRing: 'ring-purple-100',
-      },
-      highlights: ['Kelas Intermediate: 15 IKM', 'Kelas Advance: 18 IKM', 'Runway Desain Kontemporer'],
-    },
-    {
-      id: 'd2-4',
-      step: '04',
-      category: 'Pride Inspiration Stage',
-      title: 'Industry Experience',
-      location: 'Main Stage & Exhibition Area · Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Kegiatan interaktif ini menjadi salah satu daya tarik utama untuk memperkenalkan potensi dan ragam industri kreatif Kota Bandung kepada masyarakat luas.',
-      theme: {
-        badgeBg: 'bg-blue-50',
-        badgeText: 'text-blue-700',
-        badgeBorder: 'border-blue-200/80',
-        dotColor: 'bg-blue-600',
-        accentRing: 'ring-blue-100',
-      },
-      highlights: ['Potensi Industri Kreatif Bandung', 'Interaksi Praktis IKM', 'Koneksi Komunitas'],
-    },
-    {
-      id: 'd2-5',
-      step: '05',
-      category: 'Closing Ceremony',
-      title: 'Pengumuman Juara Desain, Pembagian Sertifikat',
-      location: 'Main Stage · Braga City Walk',
-      venueKey: 'braga',
-      desc: 'Malam puncak penutupan PRIDE Industri 2026: pengumuman pemenang lomba desain, penyerahan apresiasi kejuaraan, pembagian sertifikat, serta selebrasi penutupan resmi.',
-      theme: {
-        badgeBg: 'bg-emerald-50',
-        badgeText: 'text-emerald-700',
-        badgeBorder: 'border-emerald-200/80',
-        dotColor: 'bg-emerald-600',
-        accentRing: 'ring-emerald-100',
-      },
-      highlights: ['Pengumuman Juara Desain', 'Penyerahan Apresiasi', 'Pembagian Sertifikat'],
-    },
-  ];
-
-  const currentSchedule = activeDay === 'day1' ? scheduleDay1 : activeDay === 'day2' ? scheduleDay2 : [];
-  const filteredSchedule = currentSchedule;
+  const [activeDay, setActiveDay] = useState<ScheduleDay>('day1');
+  const currentSchedule = scheduleByDay[activeDay];
 
   return (
     <section
@@ -309,31 +142,17 @@ export default function ProgramSection() {
         <div className="relative space-y-2.5 sm:space-y-6">
           
           {/* Continuous vertical timeline connector (Desktop only) */}
-          {activeDay !== 'day3' && (
-            <div
-              className="hidden sm:block absolute left-[106px] top-6 bottom-6 w-[2px] bg-slate-200/90 pointer-events-none"
-              aria-hidden="true"
-            />
-          )}
+          <div
+            className="hidden sm:block absolute left-[106px] top-6 bottom-6 w-[2px] bg-slate-200/90 pointer-events-none"
+            aria-hidden="true"
+          />
 
-          {activeDay === 'day3' ? (
-            <div className="text-center py-16 px-6 bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-[0_2px_12px_rgba(15,23,42,0.03)] max-w-xl mx-auto my-4 space-y-3">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200/80">
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                <span>Rundown Day 3 · Minggu, 29 Nov 2026</span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                TO BE ANNOUNCE
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed font-medium">
-                Susunan rangkaian acara untuk hari ke-3 akan segera diumumkan oleh panitia pelaksana.
-              </p>
-            </div>
-          ) : (
-            filteredSchedule.map((item) => {
+          {currentSchedule.map((item, index) => {
+              const theme = scheduleThemes[index % scheduleThemes.length];
+              const step = String(index + 1).padStart(2, '0');
               return (
                 <div
-                  key={item.id}
+                  key={activeDay + '-' + index}
                   className="relative flex flex-col sm:flex-row items-stretch sm:items-start sm:gap-7 group"
                 >
                   {/* Desktop-only: Left Column Sequence Number */}
@@ -342,7 +161,7 @@ export default function ProgramSection() {
                       SESI
                     </span>
                     <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-slate-900 leading-none group-hover:text-blue-600 transition-colors">
-                      {item.step}
+                      {step}
                     </div>
                   </div>
 
@@ -352,7 +171,7 @@ export default function ProgramSection() {
                     aria-hidden="true"
                   >
                     <div
-                      className={`w-4 h-4 rounded-full border-2 border-white ring-4 ${item.theme.accentRing} ${item.theme.dotColor} shadow-xs transition-transform group-hover:scale-125`}
+                      className={`w-4 h-4 rounded-full border-2 border-white ring-4 ${theme.accentRing} ${theme.dotColor} shadow-xs transition-transform group-hover:scale-125`}
                     />
                   </div>
 
@@ -365,7 +184,7 @@ export default function ProgramSection() {
                           SESI
                         </span>
                         <span className="text-base font-black font-mono text-slate-900 leading-tight mt-0.5 group-hover:text-blue-600 transition-colors">
-                          {item.step}
+                          {step}
                         </span>
                       </div>
 
@@ -373,9 +192,9 @@ export default function ProgramSection() {
                       <div className="flex-1 min-w-0 flex flex-col gap-1 sm:gap-2">
                         <div>
                           <span
-                            className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[9.5px] sm:text-[11px] font-bold tracking-wide border ${item.theme.badgeBg} ${item.theme.badgeText} ${item.theme.badgeBorder}`}
+                            className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[9.5px] sm:text-[11px] font-bold tracking-wide border ${theme.badgeBg} ${theme.badgeText} ${theme.badgeBorder}`}
                           >
-                            <span className={`w-1.5 h-1.5 rounded-full ${item.theme.dotColor}`} />
+                            <span className={`w-1.5 h-1.5 rounded-full ${theme.dotColor}`} />
                             <span>{item.category}</span>
                           </span>
                         </div>
@@ -388,16 +207,9 @@ export default function ProgramSection() {
                   </div>
                 </div>
               );
-            })
-          )}
+          })}
 
-          {activeDay !== 'day3' && filteredSchedule.length === 0 && (
-            <div className="text-center py-12 bg-white rounded-3xl border border-slate-200/80 p-8">
-              <p className="text-xs sm:text-sm text-slate-500">
-                Tidak ada agenda yang berlangsung di lokasi filter ini. Silakan pilih &ldquo;Semua Lokasi&rdquo;.
-              </p>
-            </div>
-          )}
+
         </div>
 
         {/* Bottom Helpful Note */}

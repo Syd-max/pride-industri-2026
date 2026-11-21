@@ -66,6 +66,8 @@ export default function AdminVisitorBoothsPage() {
   const { page } = listingRequest;
   const editing = editor?.booth;
   const pageCount = Math.ceil((listing?.count ?? 0) / pageSize);
+  const firstVisiblePage = Math.max(0, Math.min(page - 2, pageCount - 5));
+  const pageNumbers = Array.from({ length: Math.min(pageCount, 5) }, (_, index) => firstVisiblePage + index);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -73,7 +75,7 @@ export default function AdminVisitorBoothsPage() {
     async function load() {
       try {
         const { data, count, error, status } = await createClient().from('visitor_booths').select(boothColumns, { count: 'exact' })
-          .order('created_at').order('id').range(start, start + pageSize - 1).abortSignal(controller.signal).returns<VisitorBooth[]>();
+          .order('brand_name', { ascending: true }).order('id').range(start, start + pageSize - 1).abortSignal(controller.signal).returns<VisitorBooth[]>();
         if (controller.signal.aborted) return;
         if (start > 0 && (status === 416 || (!error && !data?.length))) {
           setListingRequest({ page: 0 });
@@ -162,8 +164,19 @@ export default function AdminVisitorBoothsPage() {
         canDiscard = response.status < 500;
         throw await errorFrom(response);
       }
+      const { booth: savedBooth }: { booth: VisitorBooth } = await response.json();
+      const supabase = createClient();
+      const positionCounts = await Promise.all([
+        supabase.from('visitor_booths').select('id', { count: 'exact', head: true }).lt('brand_name', savedBooth.brand_name),
+        supabase.from('visitor_booths').select('id', { count: 'exact', head: true }).eq('brand_name', savedBooth.brand_name).lt('id', savedBooth.id),
+      ]).catch(() => null);
+      let savedPage = editing ? page : 0;
+      if (positionCounts && positionCounts.every(result => !result.error && result.count !== null)) {
+        const position = (positionCounts[0].count ?? 0) + (positionCounts[1].count ?? 0);
+        savedPage = Math.floor(position / pageSize);
+      }
       closeEditor();
-      showPage(editing ? page : Math.floor(listing.count / pageSize));
+      showPage(savedPage);
     } catch (error) {
       if (canDiscard && Object.keys(assets).length) {
         await mutate('DELETE', { id, discard: true, ...assets }).catch(() => {});
@@ -224,9 +237,32 @@ export default function AdminVisitorBoothsPage() {
           </ul>
           {pageCount > 1 && (
             <nav aria-label="Halaman daftar brand" className="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200/80 px-4 py-3">
-              <span className="text-sm text-neutral-600">Halaman {page + 1} dari {pageCount}</span>
-              <div className="flex flex-wrap gap-2">
+              <div className="text-sm text-neutral-600">
+                <p>Menampilkan {page * pageSize + 1}–{Math.min((page + 1) * pageSize, listing.count)} dari {listing.count} brand</p>
+                <p className="mt-1 text-xs text-neutral-500">Halaman {page + 1} dari {pageCount}</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
                 <button type="button" disabled={busy || page === 0} className={button} onClick={() => showPage(page - 1)}>Sebelumnya</button>
+                <div className="hidden items-center gap-1 sm:flex">
+                  {firstVisiblePage > 0 && (
+                    <>
+                      <button type="button" disabled={busy} aria-label="Halaman pertama" className={button + ' min-w-10'} onClick={() => showPage(0)}>1</button>
+                      {firstVisiblePage > 1 && <span aria-hidden="true" className="px-1 text-neutral-400">…</span>}
+                    </>
+                  )}
+                  {pageNumbers.map(pageNumber => (
+                    <button type="button" key={pageNumber} disabled={busy} aria-label={'Halaman ' + (pageNumber + 1)} aria-current={pageNumber === page ? 'page' : undefined} className={button + (pageNumber === page ? ' min-w-10 border-blue-700 bg-blue-700 text-white' : ' min-w-10 hover:bg-neutral-50')} onClick={() => showPage(pageNumber)}>{pageNumber + 1}</button>
+                  ))}
+                  {firstVisiblePage + pageNumbers.length < pageCount && (
+                    <>
+                      {firstVisiblePage + pageNumbers.length < pageCount - 1 && <span aria-hidden="true" className="px-1 text-neutral-400">…</span>}
+                      <button type="button" disabled={busy} aria-label="Halaman terakhir" className={button + ' min-w-10'} onClick={() => showPage(pageCount - 1)}>{pageCount}</button>
+                    </>
+                  )}
+                </div>
+                <select aria-label="Lompat ke halaman" disabled={busy} value={page} onChange={event => showPage(Number(event.target.value))} className="min-h-10 rounded-xl border border-neutral-200 bg-white px-2 text-sm sm:hidden">
+                  {Array.from({ length: pageCount }, (_, index) => <option key={index} value={index}>{index + 1}</option>)}
+                </select>
                 <button type="button" disabled={busy || page + 1 >= pageCount} className={button} onClick={() => showPage(page + 1)}>Berikutnya</button>
               </div>
             </nav>
