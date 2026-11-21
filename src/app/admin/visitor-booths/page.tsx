@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { boothAssetExtension, boothAssetRules, boothBucket, boothCatalogMaxMb, boothColumns, normalizeBoothWhatsApp, type BoothAsset, type VisitorBooth } from '@/lib/visitor-booths';
+import { boothAssetExtension, boothAssetRules, boothBucket, boothCatalogMaxMb, boothColumns, boothSearchPattern, normalizeBoothWhatsApp, type BoothAsset, type VisitorBooth } from '@/lib/visitor-booths';
 
 const endpoint = '/api/admin/visitor-booths';
 const pageSize = 8;
@@ -57,13 +57,13 @@ function BoothFileInput({ asset, label, accept, currentUrl }: { asset: BoothAsse
 
 export default function AdminVisitorBoothsPage() {
   const [listing, setListing] = useState<{ booths: VisitorBooth[]; count: number } | null>(null);
-  const [listingRequest, setListingRequest] = useState({ page: 0 });
+  const [listingRequest, setListingRequest] = useState({ page: 0, search: '' });
   const [editor, setEditor] = useState<{ booth: VisitorBooth | null } | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
-  const { page } = listingRequest;
+  const { page, search } = listingRequest;
   const editing = editor?.booth;
   const pageCount = Math.ceil((listing?.count ?? 0) / pageSize);
   const firstVisiblePage = Math.max(0, Math.min(page - 2, pageCount - 5));
@@ -75,10 +75,11 @@ export default function AdminVisitorBoothsPage() {
     async function load() {
       try {
         const { data, count, error, status } = await createClient().from('visitor_booths').select(boothColumns, { count: 'exact' })
+          .ilike('brand_name', boothSearchPattern(listingRequest.search))
           .order('brand_name', { ascending: true }).order('id').range(start, start + pageSize - 1).abortSignal(controller.signal).returns<VisitorBooth[]>();
         if (controller.signal.aborted) return;
         if (start > 0 && (status === 416 || (!error && !data?.length))) {
-          setListingRequest({ page: 0 });
+          setListingRequest({ page: 0, search: listingRequest.search });
           return;
         }
         if (error || !data || count === null) throw error ?? new Error('Daftar booth tidak tersedia.');
@@ -87,19 +88,22 @@ export default function AdminVisitorBoothsPage() {
         if (!controller.signal.aborted) setLoadFailed(true);
       }
     }
-    void load();
-    return () => controller.abort();
+    const timer = setTimeout(() => void load(), listingRequest.search ? 250 : 0);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [listingRequest]);
 
   useEffect(() => {
     if (editor && dialog.current && !dialog.current.open) dialog.current.showModal();
   }, [editor]);
 
-  function showPage(requestedPage: number) {
+  function showPage(requestedPage: number, requestedSearch = search) {
     setListing(null);
     setLoadFailed(false);
     setError('');
-    setListingRequest({ page: requestedPage });
+    setListingRequest({ page: requestedPage, search: requestedSearch });
   }
 
   function openEditor(booth: VisitorBooth | null) {
@@ -166,9 +170,11 @@ export default function AdminVisitorBoothsPage() {
       }
       const { booth: savedBooth }: { booth: VisitorBooth } = await response.json();
       const supabase = createClient();
+      const savedSearch = savedBooth.brand_name.toLocaleLowerCase('id').includes(search.trim().toLocaleLowerCase('id')) ? search : '';
+      const savedSearchPattern = boothSearchPattern(savedSearch);
       const positionCounts = await Promise.all([
-        supabase.from('visitor_booths').select('id', { count: 'exact', head: true }).lt('brand_name', savedBooth.brand_name),
-        supabase.from('visitor_booths').select('id', { count: 'exact', head: true }).eq('brand_name', savedBooth.brand_name).lt('id', savedBooth.id),
+        supabase.from('visitor_booths').select('id', { count: 'exact', head: true }).ilike('brand_name', savedSearchPattern).lt('brand_name', savedBooth.brand_name),
+        supabase.from('visitor_booths').select('id', { count: 'exact', head: true }).ilike('brand_name', savedSearchPattern).eq('brand_name', savedBooth.brand_name).lt('id', savedBooth.id),
       ]).catch(() => null);
       let savedPage = editing ? page : 0;
       if (positionCounts && positionCounts.every(result => !result.error && result.count !== null)) {
@@ -176,7 +182,7 @@ export default function AdminVisitorBoothsPage() {
         savedPage = Math.floor(position / pageSize);
       }
       closeEditor();
-      showPage(savedPage);
+      showPage(savedPage, savedSearch);
     } catch (error) {
       if (canDiscard && Object.keys(assets).length) {
         await mutate('DELETE', { id, discard: true, ...assets }).catch(() => {});
@@ -212,13 +218,25 @@ export default function AdminVisitorBoothsPage() {
         </div>
         <button type="button" aria-haspopup="dialog" disabled={busy || !listing} className={button + ' border-blue-700 bg-blue-700 text-white'} onClick={() => openEditor(null)}>Tambah Brand</button>
       </div>
+      <div role="search">
+        <label htmlFor="booth-search" className="sr-only">Cari nama brand</label>
+        <input
+          id="booth-search"
+          type="search"
+          value={search}
+          disabled={busy}
+          placeholder="Cari nama brand…"
+          onChange={event => showPage(0, event.currentTarget.value)}
+          className="block min-h-12 w-full rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-blue-600 focus:outline-2 focus:outline-offset-2 focus:outline-blue-600 disabled:opacity-60"
+        />
+      </div>
       {!editor && error && <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
       {loadFailed ? (
         <p role="alert" className="rounded-2xl border border-neutral-200/80 bg-white p-5 text-sm text-neutral-700">Daftar booth gagal dimuat. Segarkan halaman untuk mencoba lagi.</p>
       ) : !listing ? (
         <p role="status" className="text-sm text-neutral-600">Memuat booth…</p>
       ) : listing.booths.length === 0 ? (
-        <p className="rounded-2xl border border-neutral-200/80 bg-white p-5 text-sm text-neutral-600">Belum ada booth tersedia.</p>
+        <p role="status" className="rounded-2xl border border-neutral-200/80 bg-white p-5 text-sm text-neutral-600">{search.trim() ? 'Brand tidak ditemukan.' : 'Belum ada booth tersedia.'}</p>
       ) : (
         <div className="rounded-2xl border border-neutral-200/80 bg-white">
           <ul aria-label="Daftar brand" className="divide-y divide-neutral-200/80">

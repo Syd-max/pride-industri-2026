@@ -24,12 +24,12 @@ export default function TactlinkBanner({
         borderTop: '4px solid #F5A623',
       }}
     >
-      <div className="p-4 sm:p-5">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="p-3 sm:p-5">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4">
           {/* Left: Logo + Content */}
-          <div className="flex items-start sm:items-center gap-3.5 min-w-0">
+          <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
             {/* Tactlink Logo Container */}
-            <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white border border-slate-200/90 shadow-2xs flex-shrink-0 p-1 flex items-center justify-center overflow-hidden">
+            <div className="relative w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-white border border-slate-200/90 shadow-2xs flex-shrink-0 p-1 flex items-center justify-center overflow-hidden">
               <Image
                 src="/LOGO_TACTLINK_CROPPED.png"
                 alt="Tactlink Logo"
@@ -54,18 +54,19 @@ export default function TactlinkBanner({
                   isDark ? 'text-slate-300' : 'text-slate-600'
                 }`}
               >
-                Situs resmi didukung oleh Tactlink. Unduh aplikasinya untuk kartu nama digital &amp; jejaring bisnis cerdas.
+                <span className="sm:hidden">Kartu nama digital &amp; jejaring bisnis.</span>
+                <span className="hidden sm:inline">Situs resmi didukung oleh Tactlink. Unduh aplikasinya untuk kartu nama digital &amp; jejaring bisnis cerdas.</span>
               </p>
             </div>
           </div>
 
           {/* Right: Actions & Badges Compact */}
-          <div className="flex flex-wrap items-center gap-2 shrink-0 pt-1 lg:pt-0">
+          <div className="grid grid-cols-3 gap-1.5 sm:flex sm:flex-wrap sm:items-center sm:gap-2 shrink-0 sm:pt-1 lg:pt-0">
             <a
               href="https://apps.apple.com/id/app/tactlink/id1469516661"
               target="_blank"
               rel="noopener noreferrer"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all hover:scale-102 cursor-pointer shadow-2xs ${
+              className={`inline-flex min-h-9 sm:min-h-0 items-center justify-center gap-1 sm:gap-1.5 px-1 sm:px-3 py-1.5 rounded-lg text-[10px] sm:text-xs whitespace-nowrap font-bold border transition-all hover:scale-102 cursor-pointer shadow-2xs ${
                 isDark
                   ? 'bg-slate-900 hover:bg-slate-950 text-white border-slate-700'
                   : 'bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200'
@@ -83,7 +84,7 @@ export default function TactlinkBanner({
               href="https://play.google.com/store/apps/details?id=com.tactlink.app"
               target="_blank"
               rel="noopener noreferrer"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all hover:scale-102 cursor-pointer shadow-2xs ${
+              className={`inline-flex min-h-9 sm:min-h-0 items-center justify-center gap-1 sm:gap-1.5 px-1 sm:px-3 py-1.5 rounded-lg text-[10px] sm:text-xs whitespace-nowrap font-bold border transition-all hover:scale-102 cursor-pointer shadow-2xs ${
                 isDark
                   ? 'bg-slate-900 hover:bg-slate-950 text-white border-slate-700'
                   : 'bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200'
@@ -102,7 +103,7 @@ export default function TactlinkBanner({
               href="https://www.tactlink.com/id"
               target="_blank"
               rel="noopener noreferrer"
-              className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg border font-bold text-xs transition-all hover:scale-102 shadow-2xs cursor-pointer ${
+              className={`inline-flex min-h-9 sm:min-h-0 items-center justify-center gap-1 sm:gap-1.5 px-1 sm:px-3.5 py-1.5 rounded-lg border font-bold text-[10px] sm:text-xs whitespace-nowrap transition-all hover:scale-102 shadow-2xs cursor-pointer ${
                 isDark
                   ? 'border-white text-white hover:bg-white hover:text-slate-900'
                   : 'border-slate-900 text-white bg-slate-900 hover:bg-slate-800'

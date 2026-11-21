@@ -81,8 +81,8 @@ export default function ActivitiesDeckSection() {
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  const [activeLogicalIndex, setActiveLogicalIndex] = useState(0);
-  const [isAutoMotionActive, setIsAutoMotionActive] = useState(true);
+  const [activeSlot, setActiveSlot] = useState(TOTAL_BASE);
+  const activeLogicalIndex = activeSlot % TOTAL_BASE;
 
   // Physics & Animation State Refs
   const currentXRef = useRef(0);
@@ -111,7 +111,7 @@ export default function ActivitiesDeckSection() {
 
   const rafRef = useRef<number | null>(null);
   const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const activeLogicalRef = useRef(0);
+  const activeSlotRef = useRef(TOTAL_BASE);
 
   // Triple set of cards for seamless infinite horizontal rail
   const clonedCards = useMemo(() => {
@@ -159,23 +159,21 @@ export default function ActivitiesDeckSection() {
     }
   }, []);
 
-  // Recenter infinite loop when slot drifts outside middle set
+  // Wrap the visible rail so autoplay and long drags stay inside the cloned sets.
   const recenterIfNeeded = useCallback(() => {
-    const total = TOTAL_BASE;
+    const step = stepWidthRef.current;
     const setWidth = singleSetWidthRef.current;
-    if (setWidth <= 0) return;
-
-    const minSlot = total;
-    const maxSlot = (SETS_COUNT - 1) * total;
-
-    if (currentSlotRef.current < minSlot) {
-      currentSlotRef.current += total;
-      currentXRef.current -= setWidth;
-      targetXRef.current -= setWidth;
-    } else if (currentSlotRef.current >= maxSlot) {
-      currentSlotRef.current -= total;
-      currentXRef.current += setWidth;
-      targetXRef.current += setWidth;
+    if (step <= 0 || setWidth <= 0) return;
+    const visibleSlot = Math.round((centerOffsetRef.current - currentXRef.current) / step);
+    if (!isSnappingRef.current) {
+      currentSlotRef.current = visibleSlot;
+      targetXRef.current = centerOffsetRef.current - visibleSlot * step;
+    }
+    const setShift = Math.floor((visibleSlot - TOTAL_BASE) / TOTAL_BASE);
+    if (setShift !== 0) {
+      currentSlotRef.current -= setShift * TOTAL_BASE;
+      currentXRef.current += setShift * setWidth;
+      targetXRef.current += setShift * setWidth;
     }
   }, []);
 
@@ -224,7 +222,6 @@ export default function ActivitiesDeckSection() {
     const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
       isAutoPlayingRef.current = false;
-      setIsAutoMotionActive(false);
     }
 
     function loop() {
@@ -238,13 +235,13 @@ export default function ActivitiesDeckSection() {
             currentXRef.current = targetXRef.current;
             velocityXRef.current = 0;
             isSnappingRef.current = false;
-            recenterIfNeeded();
           }
         } else if (isAutoPlayingRef.current && !isHoveredRef.current && !prefersReducedMotion) {
           currentXRef.current += AUTO_SPEED;
-          recenterIfNeeded();
         }
       }
+
+      recenterIfNeeded();
 
       if (trackRef.current) {
         trackRef.current.style.transform = `translate3d(${currentXRef.current.toFixed(2)}px, 0, 0)`;
@@ -254,13 +251,9 @@ export default function ActivitiesDeckSection() {
       const step = stepWidthRef.current || 404;
       const slotFloat = (centerOffsetRef.current - currentXRef.current) / step;
       const nearestSlot = Math.round(slotFloat);
-      const logical = ((nearestSlot % TOTAL_BASE) + TOTAL_BASE) % TOTAL_BASE;
-
-      if (logical !== activeLogicalRef.current) {
-        activeLogicalRef.current = logical;
-        setActiveLogicalIndex(logical);
-
-        // Update card active classes
+      if (nearestSlot !== activeSlotRef.current) {
+        activeSlotRef.current = nearestSlot;
+        setActiveSlot(nearestSlot);
         if (trackRef.current) {
           const cards = trackRef.current.querySelectorAll('.activities-card');
           cards.forEach((card, idx) => {
@@ -286,7 +279,7 @@ export default function ActivitiesDeckSection() {
     updateLayout(true);
 
     const onResize = () => {
-      updateLayout(false);
+      updateLayout(true);
     };
 
     window.addEventListener('resize', onResize);
@@ -312,7 +305,7 @@ export default function ActivitiesDeckSection() {
     viewportRef.current?.classList.add('is-dragging');
     try {
       (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    } catch (err) {}
+    } catch {}
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
@@ -352,7 +345,7 @@ export default function ActivitiesDeckSection() {
 
     try {
       (e.target as HTMLElement).releasePointerCapture(e.pointerId);
-    } catch (err) {}
+    } catch {}
 
     const step = stepWidthRef.current || 404;
     const centerOffset = centerOffsetRef.current;
@@ -406,12 +399,6 @@ export default function ActivitiesDeckSection() {
     resumeAutoPlayDelayed();
   };
 
-  const toggleAutoMotion = () => {
-    const nextState = !isAutoMotionActive;
-    setIsAutoMotionActive(nextState);
-    isAutoPlayingRef.current = nextState;
-  };
-
   return (
     <div className="activities-scroll-driver" id="programUnggulan">
       <section
@@ -437,7 +424,7 @@ export default function ActivitiesDeckSection() {
           {/* Horizontal Track of Infinite Seamless Cards */}
           <div className="activities-carousel-track" ref={trackRef}>
             {clonedCards.map(({ item, globalSlot }) => {
-              const isActive = globalSlot === currentSlotRef.current;
+              const isActive = globalSlot === activeSlot;
 
               if (item.isCover) {
                 return (

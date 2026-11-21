@@ -16,6 +16,10 @@ export interface VisitorBooth {
   whatsapp_number: string;
 }
 
+export function boothSearchPattern(value: string): string {
+  return '%' + value.trim().replace(/[\\%_]/g, '\\$&') + '%';
+}
+
 export function boothAssetExtension(asset: BoothAsset, contentType: string): string | undefined {
   const formats: Record<string, string> = boothAssetRules[asset].formats;
   return Object.hasOwn(formats, contentType) ? formats[contentType] : undefined;
