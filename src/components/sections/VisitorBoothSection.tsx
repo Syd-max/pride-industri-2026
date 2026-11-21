@@ -49,9 +49,13 @@ function CategoryFilter({ value, onChange }: { value: BoothCategory | 'All'; onC
     if (!open) return;
     positionMenu();
     container.current?.querySelector<HTMLButtonElement>('[aria-selected="true"]')?.focus();
+    const observer = new ResizeObserver(positionMenu);
+    const surface = container.current?.closest('dialog, section');
+    if (surface) observer.observe(surface);
     window.addEventListener('resize', positionMenu);
     document.addEventListener('scroll', positionMenu, true);
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', positionMenu);
       document.removeEventListener('scroll', positionMenu, true);
     };
