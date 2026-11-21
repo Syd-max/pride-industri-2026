@@ -66,7 +66,7 @@ function CategoryFilter({ value, onChange, inDialog = false }: { value: BoothCat
         </svg>
       </button>
       {open && (
-        <div id={menuId} role="listbox" aria-label="Kategori Showcase" className={`${inDialog ? 'relative right-[calc(12rem-2.75rem)]' : 'absolute right-0 top-full'} z-30 mt-2 w-48 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-lg shadow-slate-900/10`}>
+        <div id={menuId} role="listbox" aria-label="Kategori Showcase" className={`${inDialog ? 'relative right-[calc(11rem-2.75rem)] sm:right-[calc(12rem-2.75rem)]' : 'absolute right-0 top-full'} z-30 mt-2 w-44 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-lg shadow-slate-900/10 sm:w-48`}>
           {(['All', ...boothCategories] as const).map(category => (
             <button key={category} type="button" role="option" aria-selected={value === category} onClick={() => {
               onChange(category);
