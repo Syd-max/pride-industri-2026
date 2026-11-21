@@ -50,6 +50,7 @@ export async function GET(request: Request) {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)!, { auth: { persistSession: false, autoRefreshToken: false } });
     const storage = supabase.storage.from(boothBucket);
     const booths: VisitorBooth[] = [];
+    const fallback: VisitorBooth[] = [];
     let count = 0;
     for (let start = 0; start === 0 || start < count; start += 100) {
       let query = supabase.from('visitor_booths').select(boothColumns, { count: 'exact' });
@@ -63,18 +64,23 @@ export async function GET(request: Request) {
           try {
             const catalog = storage.getPublicUrl(booth.catalog_path).data.publicUrl;
             const logo = storage.getPublicUrl(booth.logo_path).data.publicUrl;
-            return await hasCatalog(catalog) && await hasVisibleLogo(logo) ? booth : null;
+            const complete = await hasCatalog(catalog);
+            if (!complete && fallback.length >= 10) return null;
+            return await hasVisibleLogo(logo) ? { booth, complete } : null;
           } catch {
             return null;
           }
         }));
-        booths.push(...ready.filter((booth): booth is VisitorBooth => booth !== null));
+        for (const entry of ready) {
+          if (entry?.complete) booths.push(entry.booth);
+          else if (entry && fallback.length < 10) fallback.push(entry.booth);
+        }
         if (booths.length >= 10) break;
       }
       if (booths.length >= 10 || result.data.length < 100) break;
     }
     return NextResponse.json({
-      booths: booths.slice(0, 10).map(booth => ({ ...booth, logoUrl: storage.getPublicUrl(booth.logo_path).data.publicUrl, catalogUrl: storage.getPublicUrl(booth.catalog_path).data.publicUrl })),
+      booths: [...booths, ...fallback].slice(0, 10).map(booth => ({ ...booth, logoUrl: storage.getPublicUrl(booth.logo_path).data.publicUrl, catalogUrl: storage.getPublicUrl(booth.catalog_path).data.publicUrl })),
       count,
     }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
